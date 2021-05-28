@@ -112,8 +112,8 @@ include BASE_PATH . 'views/header.php';
           </div>
         </div>
 
-        <div class="form-group">
-          <label for="medConDisDetails">If yes give details</label>
+        <div class="mb-3">
+          <label class="form-label" for="medConDisDetails">If yes give details</label>
           <textarea class="form-control" id="medConDisDetails" name="medConDisDetails" rows="3" <?php if ($yes == "") { ?>disabled<?php } ?>><?php if ($medical) { ?><?= htmlspecialchars($medical['Conditions']) ?><?php } ?></textarea>
         </div>
 
@@ -140,8 +140,8 @@ include BASE_PATH . 'views/header.php';
           </div>
         </div>
 
-        <div class="form-group">
-          <label for="allergiesDetails">If yes give details</label>
+        <div class="mb-3">
+          <label class="form-label" for="allergiesDetails">If yes give details</label>
           <textarea class="form-control" id="allergiesDetails" name="allergiesDetails" rows="3" <?php if ($yes == "") { ?>disabled<?php } ?>><?php if ($medical) { ?><?= htmlspecialchars($medical['Allergies']) ?><?php } ?></textarea>
         </div>
 
@@ -168,8 +168,8 @@ include BASE_PATH . 'views/header.php';
           </div>
         </div>
 
-        <div class="form-group">
-          <label for="medConDisDetails">If yes give details</label>
+        <div class="mb-3">
+          <label class="form-label" for="medConDisDetails">If yes give details</label>
           <textarea class="form-control" id="medicineDetails" name="medicineDetails" rows="3" <?php if ($yes == "") { ?>disabled<?php } ?>><?php if ($medical) { ?><?= htmlspecialchars($medical['Medication']) ?><?php } ?></textarea>
         </div>
 

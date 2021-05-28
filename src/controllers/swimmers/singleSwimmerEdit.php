@@ -283,34 +283,34 @@ if ($update) {
 </div>';
 }
 $content .= "
-<div class=\"form-group\">
+<div class=\"mb-3\">
 	<label for=\"forename\">Forename</label>
 	<input type=\"text\" class=\"form-control\" id=\"forename\" name=\"forename\" placeholder=\"Enter a forename\" value=\"" . htmlspecialchars($rowSwim['MForename']) . "\" required>
 </div>";
 $content .= "
-<div class=\"form-group\">
+<div class=\"mb-3\">
 	<label for=\"middlenames\">Middle Names</label>
 	<input type=\"text\" class=\"form-control\" id=\"middlenames\" name=\"middlenames\" placeholder=\"Enter a middlename\" value=\"" . htmlspecialchars($rowSwim['MMiddleNames']) . "\">
 </div>";
 $content .= "
-<div class=\"form-group\">
+<div class=\"mb-3\">
 	<label for=\"surname\">Surname</label>
 	<input type=\"text\" class=\"form-control\" id=\"surname\" name=\"surname\" placeholder=\"Enter a surname\" value=\"" . htmlspecialchars($rowSwim['MSurname']) . "\" required>
 </div>";
 $content .= "
-<div class=\"form-group\">
+<div class=\"mb-3\">
 	<label for=\"datebirth\">Date of Birth</label>
 	<input type=\"date\" class=\"form-control\" id=\"datebirth\" name=\"datebirth\" pattern=\"[0-9]{4}-[0-9]{2}-[0-9]{2}\" placeholder=\"YYYY-MM-DD\" value=\"" . htmlspecialchars($rowSwim['DateOfBirth']) . "\" required>
 </div>";
 $content .= "
-<div class=\"form-group\">
+<div class=\"mb-3\">
 	<label for=\"asa\">Swim England Registration Number</label>
 	<input type=\"test\" class=\"form-control\" id=\"asa\" name=\"asa\" placeholder=\"Swim England Registration Numer\" value=\"" . htmlspecialchars($rowSwim['ASANumber']) . "\">
 </div>";
 $cat = ['', '', '', ''];
 $cat[$rowSwim['ASACategory']] = " selected ";
 $content .= "
-<div class=\"form-group\">
+<div class=\"mb-3\">
 	<label for=\"cat\">Swim England Membership Category</label>
 	<select class=\"custom-select\" id=\"cat\" name=\"cat\" placeholder=\"Select\">
 		<option value=\"0\" " . $cat[0] . ">Not a Swim England Member</option>
@@ -322,7 +322,7 @@ $content .= "
 
 // $clubCategory = $getClubCategories->fetch(PDO::FETCH_ASSOC)
 $content .= "
-<div class=\"form-group\">
+<div class=\"mb-3\">
 	<label for=\"club-cat\">Club Membership Category</label>
 	<select class=\"custom-select\" id=\"club-cat\" name=\"club-cat\" placeholder=\"Select\" required>";
 do {
@@ -338,7 +338,7 @@ $content .= "
 
 if ($rowSwim['Gender'] == "Male") {
 	$content .= "
-	<div class=\"form-group\">
+	<div class=\"mb-3\">
 		<label for=\"sex\">Sex</label>
 		<select class=\"custom-select\" id=\"sex\" name=\"sex\" placeholder=\"Select\">
 			<option value=\"Male\" selected>Male</option>
@@ -347,7 +347,7 @@ if ($rowSwim['Gender'] == "Male") {
 	</div>";
 } else {
 	$content .= "
-	<div class=\"form-group\">
+	<div class=\"mb-3\">
 		<label for=\"sex\">Sex</label>
 		<select class=\"custom-select\" id=\"sex\" name=\"sex\" placeholder=\"Select\">
 			<option value=\"Male\">Male</option>
@@ -357,7 +357,7 @@ if ($rowSwim['Gender'] == "Male") {
 }
 
 $content .= "
-<div class=\"form-group\">
+<div class=\"mb-3\">
 	<label for=\"country\">Home Nations Country</label>
 	<select class=\"custom-select\" id=\"country\" name=\"country\" placeholder=\"Select\">";
 foreach ($countries as $key => $value) {
@@ -377,7 +377,7 @@ $cp = [
 ];
 $cp[$rowSwim['ASAPaid']] = " selected ";
 $content .= "
-<div class=\"form-group\">
+<div class=\"mb-3\">
 	<label for=\"sep\">Club pays Swim England fees?</label>
 	<select class=\"custom-select\" id=\"sep\" name=\"sep\" placeholder=\"Select\">
 		<option value=\"0\" " . $cp[0] . ">No</option>
@@ -391,7 +391,7 @@ $cp = [
 ];
 $cp[$rowSwim['ClubPaid']] = " selected ";
 $content .= "
-<div class=\"form-group\">
+<div class=\"mb-3\">
 	<label for=\"cp\">Club pays Club Membership fees?</label>
 	<select class=\"custom-select\" id=\"cp\" name=\"cp\" placeholder=\"Select\">
 		<option value=\"0\" " . $cp[0] . ">No</option>
@@ -399,12 +399,12 @@ $content .= "
 	</select>
 </div>";
 
-$content .= '<div class="form-group"> <label>Medical Notes</label>';
+$content .= '<div class="mb-3"> <label>Medical Notes</label>';
 $content .= '<a class="d-block" href="' . autoUrl("members/" . $id . "/medical") . '"
 target="_self">Edit medical notes</a>';
 $content .= '</div>';
 $content .= "
-<div class=\"form-group\">
+<div class=\"mb-3\">
 	<label for=\"otherNotes\">Other Notes</label>
 	<textarea class=\"form-control\" id=\"otherNotes\" name=\"otherNotes\" rows=\"3\" placeholder=\"Tell us any other notes for coaches\">" . htmlspecialchars($rowSwim['OtherNotes']) . "</textarea>
 </div>";
@@ -418,7 +418,7 @@ if ($access == "Admin") {
 		$statusB = "selected";
 	}
 	$content .= "
-		<div class=\"form-group\">
+		<div class=\"mb-3\">
 			<label for=\"swimmerStatus\">Swimmer Membership Status</label>
 			<select class=\"custom-select\" id=\"swimmerStatus\" name=\"swimmerStatus\" aria-describedby=\"swimmerStatusHelp\">
         <option value=\"1\" " . $statusA . ">Active</option>

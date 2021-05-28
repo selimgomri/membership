@@ -138,8 +138,8 @@ include BASE_PATH . 'views/header.php';
                 </div>
 
                 <div class="d-none pt-3" id="confirmed-infection-more">
-                  <div class="form-group mb-0">
-                    <label for="confirmed-infection-more-textarea">Please provide details:</label>
+                  <div class="mb-3 mb-0">
+                    <label class="form-label" for="confirmed-infection-more-textarea">Please provide details:</label>
                     <textarea class="form-control" name="confirmed-infection-more-textarea" id="confirmed-infection-more-textarea" rows="4"></textarea>
                     <div class="invalid-feedback">
                       Please provide details.
@@ -181,8 +181,8 @@ include BASE_PATH . 'views/header.php';
                 </div>
 
                 <div class="d-none pt-3" id="exposure-more">
-                  <div class="form-group mb-0">
-                    <label for="exposure-more-textarea">Please provide details:</label>
+                  <div class="mb-3 mb-0">
+                    <label class="form-label" for="exposure-more-textarea">Please provide details:</label>
                     <textarea class="form-control" name="exposure-more-textarea" id="exposure-more-textarea" rows="4"></textarea>
                     <div class="invalid-feedback">
                       Please provide details.
@@ -227,8 +227,8 @@ include BASE_PATH . 'views/header.php';
                 </div>
 
                 <div class="d-none pt-3" id="underlying-medical-more">
-                  <div class="form-group mb-0">
-                    <label for="underlying-medical-more-textarea">Please provide details:</label>
+                  <div class="mb-3 mb-0">
+                    <label class="form-label" for="underlying-medical-more-textarea">Please provide details:</label>
                     <textarea class="form-control" name="underlying-medical-more-textarea" id="underlying-medical-more-textarea" rows="4"></textarea>
                     <div class="invalid-feedback">
                       Please provide details.
@@ -270,8 +270,8 @@ include BASE_PATH . 'views/header.php';
                 </div>
 
                 <div class="d-none pt-3" id="live-with-shielder-more">
-                  <div class="form-group mb-0">
-                    <label for="live-with-shielder-more-textarea">Please provide details:</label>
+                  <div class="mb-3 mb-0">
+                    <label class="form-label" for="live-with-shielder-more-textarea">Please provide details:</label>
                     <textarea class="form-control" name="live-with-shielder-more-textarea" id="live-with-shielder-more-textarea" rows="4"></textarea>
                     <div class="invalid-feedback">
                       Please provide details.
@@ -313,8 +313,8 @@ include BASE_PATH . 'views/header.php';
                 </div>
 
                 <div class="d-none pt-3" id="understand-return-more">
-                  <div class="form-group mb-0">
-                    <label for="understand-return-more-textarea">Please provide details:</label>
+                  <div class="mb-3 mb-0">
+                    <label class="form-label" for="understand-return-more-textarea">Please provide details:</label>
                     <textarea class="form-control" name="understand-return-more-textarea" id="understand-return-more-textarea" rows="4"></textarea>
                     <div class="invalid-feedback">
                       Please provide details.
@@ -406,8 +406,8 @@ include BASE_PATH . 'views/header.php';
                 </div>
 
                 <div class="d-none pt-3" id="advice-received-more">
-                  <div class="form-group mb-0">
-                    <label for="advice-received-more-textarea">Please provide details:</label>
+                  <div class="mb-3 mb-0">
+                    <label class="form-label" for="advice-received-more-textarea">Please provide details:</label>
                     <textarea class="form-control" name="advice-received-more-textarea" id="advice-received-more-textarea" rows="4"></textarea>
                     <div class="invalid-feedback">
                       Please provide details.

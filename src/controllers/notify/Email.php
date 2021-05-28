@@ -137,7 +137,7 @@ include BASE_PATH . "views/notifyMenu.php";
 
   <form method="post" id="notify-form" onkeypress="return event.keyCode != 13;" enctype="multipart/form-data" novalidate>
 
-    <div class="form-group">
+    <div class="mb-3">
       <label>To members in the following targeted lists...</label>
       <div class="row">
         <?php while ($list = $lists->fetch(PDO::FETCH_ASSOC)) { ?>
@@ -172,7 +172,7 @@ include BASE_PATH . "views/notifyMenu.php";
       </div>
     </div>
 
-    <div class="form-group">
+    <div class="mb-3">
       <label>To members in the following squads...</label>
       <div class="row">
         <?php while ($squad = $squads->fetch(PDO::FETCH_ASSOC)) { ?>
@@ -189,7 +189,7 @@ include BASE_PATH . "views/notifyMenu.php";
     </div>
 
     <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Parent') { ?>
-      <div class="form-group">
+      <div class="mb-3">
         <label>To members entered in the following galas...</label>
         <div class="row">
           <?php while ($gala = $galas->fetch(PDO::FETCH_ASSOC)) { ?>
@@ -208,8 +208,8 @@ include BASE_PATH . "views/notifyMenu.php";
 
     <div class="row">
       <div class="col-md">
-        <div class="form-group">
-          <label for="from">Send message as</label>
+        <div class="mb-3">
+          <label class="form-label" for="from">Send message as</label>
           <div class="custom-control custom-radio">
             <input type="radio" id="from-club" name="from" class="custom-control-input" value="club-sending-account" <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Parent') { ?>checked<?php } ?> required>
             <label class="custom-control-label" for="from-club"><?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?></label>
@@ -225,8 +225,8 @@ include BASE_PATH . "views/notifyMenu.php";
       </div>
 
       <div class="col-md">
-        <div class="form-group">
-          <label for="ReplyToMe">Send replies to</label>
+        <div class="mb-3">
+          <label class="form-label" for="ReplyToMe">Send replies to</label>
           <div class="custom-control custom-radio">
             <input type="radio" id="ReplyTo-Club" name="ReplyToMe" class="custom-control-input" value="0" checked required>
             <label class="custom-control-label" for="ReplyTo-Club">Main club address</label>
@@ -245,16 +245,16 @@ include BASE_PATH . "views/notifyMenu.php";
       </div>
     </div>
 
-    <div class="form-group">
-      <label for="subject">Message Subject</label>
+    <div class="mb-3">
+      <label class="form-label" for="subject">Message Subject</label>
       <input type="text" class="form-control" name="subject" id="subject" placeholder="Message Subject" autocomplete="off" required <?= fieldValue('subject') ?>>
       <div class="invalid-feedback">
         Please include a message subject
       </div>
     </div>
 
-    <div class="form-group">
-      <label for="message">Your Message</label>
+    <div class="mb-3">
+      <label class="form-label" for="message">Your Message</label>
       <p>
         <em>
           Your message will begin with "Hello
@@ -266,7 +266,7 @@ include BASE_PATH . "views/notifyMenu.php";
 
     <input type="hidden" name="MAX_FILE_SIZE" value="10485760">
 
-    <div class="form-group">
+    <div class="mb-3">
       <label>Select files to attach</label>
       <div class="custom-file">
         <input type="file" class="custom-file-input" id="file-upload" name="file-upload[]" multiple data-max-total-file-size="10485760" data-max-file-size="10485760" data-error-message-id="file-upload-invalid-feedback" aria-describedby="file-upload-multi-info">
@@ -282,7 +282,7 @@ include BASE_PATH . "views/notifyMenu.php";
 
     <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Admin" || $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Galas") { ?>
 
-      <div class="form-group">
+      <div class="mb-3">
         <div class="custom-control custom-checkbox">
           <input type="checkbox" class="custom-control-input" aria-describedby="forceHelp" id="force" name="force" value="1">
           <label class="custom-control-label" for="force">Force Send</label>
@@ -294,7 +294,7 @@ include BASE_PATH . "views/notifyMenu.php";
 
     <?php } ?>
 
-    <div class="form-group">
+    <div class="mb-3">
       <div class="custom-control custom-checkbox">
         <input type="checkbox" class="custom-control-input" aria-describedby="coach-help" id="coach-send" name="coach-send" value="1" checked>
         <label class="custom-control-label" for="coach-send">Send to coaches</label>

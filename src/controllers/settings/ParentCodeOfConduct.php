@@ -58,8 +58,8 @@ include BASE_PATH . 'views/header.php';
           <div class="alert alert-danger">Changes were not saved.</div>
           <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['PCC-ERROR']); } ?>
 
-          <div class="form-group">
-            <label for="CodeOfConduct">Squad Code of Conduct</label>
+          <div class="mb-3">
+            <label class="form-label" for="CodeOfConduct">Squad Code of Conduct</label>
             <select class="custom-select" id="CodeOfConduct" name="CodeOfConduct" aria-describedby="conductSelectHelpBlock">
               <option <?php if ($parentCode == $null) { ?>selected<?php } ?>>
                 Select an option

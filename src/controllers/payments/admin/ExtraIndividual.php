@@ -56,8 +56,8 @@ include BASE_PATH . "views/paymentsMenu.php";
           Add members to extra
         </div>
         <form class="card-body">
-          <div class="form-group">
-            <label for="squadSelect">Select squad</label>
+          <div class="mb-3">
+            <label class="form-label" for="squadSelect">Select squad</label>
             <select class="custom-select" id="squadSelect" name="squadSelect">
               <option selected value="" disabled>Choose...</option>
               <option value="all-members">All members</option>
@@ -68,8 +68,8 @@ include BASE_PATH . "views/paymentsMenu.php";
               <?php } ?>
             </select>
           </div>
-          <div class="form-group">
-            <label for="swimmerSelect">Select member</label>
+          <div class="mb-3">
+            <label class="form-label" for="swimmerSelect">Select member</label>
             <select disabled class="custom-select" id="swimmerSelect" name="swimmerSelect">
               <option value="null " selected>Please select a squad</option>
             </select>

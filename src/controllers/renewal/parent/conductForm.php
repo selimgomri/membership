@@ -280,7 +280,7 @@ if (isset($id)) {
             <?php } ?>
 
             <div class="cell">
-              <div class="form-group">
+              <div class="mb-3">
                 <div class="custom-control custom-checkbox">
                   <input type="checkbox" class="custom-control-input" id="agree" name="agree" value="1" required>
                   <label class="custom-control-label" for="agree">

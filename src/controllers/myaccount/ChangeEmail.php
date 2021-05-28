@@ -12,8 +12,8 @@
 <form method="post" action="password">
 	<p class="mb-0">Your email address is currently <?= $_SESSION['TENANT-' . app()->tenant->getId()]['EmailAddress'] ?></p>
    <hr>
-   <div class="form-group">
-      <label for="newemail">New Email Address</label>
+   <div class="mb-3">
+      <label class="form-label" for="newemail">New Email Address</label>
       <input type="newemail" class="form-control" name="newemail" id="newemail" placeholder="hello@example.com">
   </div>
   <p><input type="submit" name="submit" id="submit" class="btn btn-outline-dark" value="Save Changes"></p>

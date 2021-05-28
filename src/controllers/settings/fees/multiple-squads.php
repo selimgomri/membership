@@ -49,8 +49,8 @@ include BASE_PATH . 'views/header.php';
         <form method="post">
 
           <p>When a new member is assigned to multiple squads, what should we charge them?.</p>
-          <div class="form-group">
-            <label for="upgrade">Options</label>
+          <div class="mb-3">
+            <label class="form-label" for="upgrade">Options</label>
             <div class="custom-control custom-radio">
               <input type="radio" id="full-fee" value="Full" name="fee-option" class="custom-control-input" <?php if ($option == 'Full') { ?>checked<?php } ?>>
               <label class="custom-control-label" for="full-fee">Charge the full fee for all squads</label>

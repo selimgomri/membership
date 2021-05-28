@@ -111,7 +111,7 @@ include BASE_PATH . 'views/header.php';
         <!-- FOR EACH SWIMMER AND THEIR UNIQUE IDENTIFIER, SHOW A CHECKBOX -->
         <?php foreach ($swimmers as $swimmer) {
           $id = $swimmer['ID'] . '-tc-confirm'; ?>
-          <div class="form-group">
+          <div class="mb-3">
 						<div class="custom-control custom-checkbox">
 							<input type="checkbox" value="1" class="custom-control-input" name="<?=$id?>" id="<?=$id?>" <?=$selected[$id]?> required>
 							<label class="custom-control-label" for="<?=$id?>">

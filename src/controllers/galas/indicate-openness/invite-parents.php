@@ -66,7 +66,7 @@ include BASE_PATH . 'views/header.php';
         <div class="row">
         <?php while ($squad = $squads->fetch(PDO::FETCH_ASSOC)) { ?>
           <div class="col-6 col-sm-6 col-md-4 col-lg-3">
-            <div class="form-group">
+            <div class="mb-3">
               <div class="custom-control custom-checkbox">
                 <input type="checkbox" class="custom-control-input" id="squad-<?=$squad['id']?>" name="squad-<?=$squad['id']?>">
                 <label class="custom-control-label" for="squad-<?=$squad['id']?>"><?=htmlspecialchars($squad['name'])?></label>
@@ -80,7 +80,7 @@ include BASE_PATH . 'views/header.php';
 
         <div class="row">
           <div class="col-6 col-md-4 col-lg-3">
-            <div class="form-group">
+            <div class="mb-3">
               <div class="input-group mb-3">
                 <input type="num" min="0" max="150" value="9" class="form-control" placeholder="Age" id="min-age" name="min-age" aria-label="Minimum age of swimmers">
                 <div class="input-group-append">

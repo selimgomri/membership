@@ -270,7 +270,7 @@ include BASE_PATH . 'views/header.php';
 
         <?php } ?>
 
-        <div class="form-group">
+        <div class="mb-3">
           <div class="custom-control custom-checkbox">
             <input type="checkbox" value="1" class="custom-control-input" name="agreement" id="agreement" required>
             <label class="custom-control-label" for="agreement">

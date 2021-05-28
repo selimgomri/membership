@@ -53,7 +53,7 @@ include BASE_PATH . "views/root/head.php";
             <a href="<?= htmlspecialchars(autoUrl('payments-admin/payment-methods/' . $paymentMethod['ID'])) ?>" class="list-group-item list-group-item-action">
               <div class="row align-items-center mb-2 text-dark">
                 <div class="col-auto">
-                  <img src="<?= htmlspecialchars(autoUrl("public/img/stripe/" . $typeData->brand . ".png")) ?>" srcset="<?= htmlspecialchars(autoUrl("public/img/stripe/" . $typeData->brand . "@2x.png")) ?> 2x, <?= htmlspecialchars(autoUrl("public/img/stripe/" . $typeData->brand . "@3x.png")) ?> 3x" style="width:40px;"> <span class="sr-only"><?= htmlspecialchars(getCardBrand($typeData->brand)) ?></span>
+                  <img src="<?= htmlspecialchars(autoUrl("public/img/stripe/" . $typeData->brand . ".png")) ?>" srcset="<?= htmlspecialchars(autoUrl("public/img/stripe/" . $typeData->brand . "@2x.png")) ?> 2x, <?= htmlspecialchars(autoUrl("public/img/stripe/" . $typeData->brand . "@3x.png")) ?> 3x" style="width:40px;"> <span class="visually-hidden"><?= htmlspecialchars(getCardBrand($typeData->brand)) ?></span>
                 </div>
                 <div class="col-auto">
                   <h2 class="h1 my-0">

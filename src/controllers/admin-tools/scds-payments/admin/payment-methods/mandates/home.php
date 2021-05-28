@@ -126,7 +126,7 @@ include BASE_PATH . "views/root/head.php";
         </div>
         <div class="card-body">
           <form method="post">
-            <div class="form-group">
+            <div class="mb-3">
               <select class="custom-select" id="default-mandate" name="default-mandate">
                 <option <?php if ($default == null) { ?>selected<?php } ?> disabled value="nothing">Select a default mandate</option>
                 <?php while ($mandate = $getUsableMandates->fetch(PDO::FETCH_ASSOC)) {

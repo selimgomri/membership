@@ -73,13 +73,13 @@ include BASE_PATH . 'views/header.php';
       <?php } ?>
 
       <form method="post">
-        <div class="form-group">
-          <label for="comments">Comments on Swimmer</label>
+        <div class="mb-3">
+          <label class="form-label" for="comments">Comments on Swimmer</label>
           <textarea class="form-control" id="comments" name="comments" rows="3"><?=$swimmer['Comments']?></textarea>
         </div>
 
-        <div class="form-group">
-          <label for="squad">Recommended Squad</label>
+        <div class="mb-3">
+          <label class="form-label" for="squad">Recommended Squad</label>
           <select class="custom-select" name="squad" id="squad" required>
 
             <?php if ($swimmer['SquadSuggestion'] == null) { ?>

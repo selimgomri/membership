@@ -38,9 +38,9 @@ if (isset($_POST['squad'])) {
       $tenant->getId()
     ]);
     ?>
-    <div class="form-row">
+    <div class="row">
       <div class="col-md-6 mb-3">
-        <label class="sr-only" for="squad">Select a Squad</label>
+        <label class="visually-hidden" for="squad">Select a Squad</label>
         <select class="custom-select" placeholder="Select a Squad" id="squad" name="squad">
           <option value="allSquads">Show All Squads</option>;
           <?php while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
@@ -49,7 +49,7 @@ if (isset($_POST['squad'])) {
                                                                                                                                                       } ?>
         </select></div>
       <div class="col-md-6 mb-3">
-        <label class="sr-only" for="search">Search by Name</label>
+        <label class="visually-hidden" for="search">Search by Name</label>
         <input class="form-control" placeholder="Search by name" id="search" name="search" value="<?= htmlspecialchars($search) ?>">
       </div>
 

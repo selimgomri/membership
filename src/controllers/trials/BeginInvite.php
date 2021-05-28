@@ -78,8 +78,8 @@ include BASE_PATH . 'views/header.php';
           account.
         </p>
 
-        <div class="form-group">
-          <label for="email-addr">Email address</label>
+        <div class="mb-3">
+          <label class="form-label" for="email-addr">Email address</label>
           <input type="email" class="form-control" id="email-addr" name="email-addr" placeholder="name@example.com" value="<?=htmlspecialchars($parent['Email'])?>">
         </div>
 

@@ -143,15 +143,15 @@ include BASE_PATH . "views/notifyMenu.php";
   } ?>
 
   <form method="post" onkeypress="return event.keyCode != 13;" class="needs-validation" novalidate id="notify-form" enctype="multipart/form-data">
-    <div class="form-group">
-      <label for="recipient">To</label>
+    <div class="mb-3">
+      <label class="form-label" for="recipient">To</label>
       <input type="text" class="form-control" name="recipient" id="recipient" placeholder="Recipient" autocomplete="off" value="<?= htmlspecialchars($name . " <" . $email . ">") ?>" disabled>
     </div>
 
     <div class="row">
       <div class="col-md">
-        <div class="form-group">
-          <label for="from">Send message as</label>
+        <div class="mb-3">
+          <label class="form-label" for="from">Send message as</label>
           <div class="custom-control custom-radio">
             <input type="radio" id="from-club" name="from" class="custom-control-input" value="club-sending-account" <?php if ($from == "club-sending-account") { ?>checked<?php } ?> required>
             <label class="custom-control-label" for="from-club"><?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?></label>
@@ -167,8 +167,8 @@ include BASE_PATH . "views/notifyMenu.php";
       </div>
 
       <div class="col-md">
-        <div class="form-group">
-          <label for="ReplyToMe">Send replies to</label>
+        <div class="mb-3">
+          <label class="form-label" for="ReplyToMe">Send replies to</label>
           <div class="custom-control custom-radio">
             <input type="radio" id="ReplyTo-Club" name="ReplyToMe" class="custom-control-input" value="0" <?php if ($reply == "0") { ?>checked<?php } ?> required>
             <label class="custom-control-label" for="ReplyTo-Club">Main club address</label>
@@ -187,16 +187,16 @@ include BASE_PATH . "views/notifyMenu.php";
       </div>
     </div>
 
-    <div class="form-group">
-      <label for="subject">Message Subject</label>
+    <div class="mb-3">
+      <label class="form-label" for="subject">Message Subject</label>
       <input type="text" class="form-control" name="subject" id="subject" placeholder="Message Subject" autocomplete="off" value="<?= htmlspecialchars($subject) ?>" required>
       <div class="invalid-feedback">
         You must enter a subject
       </div>
     </div>
 
-    <div class="form-group">
-      <label for="message">Your Message</label>
+    <div class="mb-3">
+      <label class="form-label" for="message">Your Message</label>
       <textarea class="form-control" id="message" name="message" rows="10" required><?= htmlspecialchars($content) ?></textarea>
       <small id="messageHelp" class="form-text text-muted">
         Styling will be stripped from this message
@@ -208,7 +208,7 @@ include BASE_PATH . "views/notifyMenu.php";
 
     <input type="hidden" name="MAX_FILE_SIZE" value="3145728">
 
-    <div class="form-group">
+    <div class="mb-3">
       <label>Select files to attach</label>
       <div class="custom-file">
         <input type="file" class="custom-file-input" id="file-upload" name="file-upload[]" multiple data-max-total-file-size="10485760" data-max-file-size="3145728" data-error-message-id="file-upload-invalid-feedback">
@@ -220,7 +220,7 @@ include BASE_PATH . "views/notifyMenu.php";
     </div>
 
     <?php if (isset($swimmer)) { ?>
-      <div class="form-group">
+      <div class="mb-3">
         <div class="custom-control custom-checkbox">
           <input type="checkbox" class="custom-control-input" aria-describedby="coach-help" id="coach-send" name="coach-send" value="1" checked>
           <label class="custom-control-label" for="coach-send">BCC coaches</label>

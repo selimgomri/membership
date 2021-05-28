@@ -35,10 +35,10 @@ include BASE_PATH . 'views/header.php';
 
       <form method="post" class="needs-validation" novalidate>
 
-        <div class="form-row">
+        <div class="row">
           <div class="col">
-            <div class="form-group">
-              <label for="first">First name</label>
+            <div class="mb-3">
+              <label class="form-label" for="first">First name</label>
               <input type="text" class="form-control" id="first" name="first" placeholder="First" required value="<?=htmlspecialchars($first)?>">
               <div class="invalid-feedback">
                 Please enter a first name.
@@ -46,8 +46,8 @@ include BASE_PATH . 'views/header.php';
             </div>
           </div>
           <div class="col">
-            <div class="form-group">
-              <label for="last">Last name</label>
+            <div class="mb-3">
+              <label class="form-label" for="last">Last name</label>
               <input type="text" class="form-control" id="last" name="last" placeholder="Last" required value="<?=htmlspecialchars($last)?>">
               <div class="invalid-feedback">
                 Please enter a last name.
@@ -56,16 +56,16 @@ include BASE_PATH . 'views/header.php';
           </div>
         </div>
 
-        <div class="form-group">
-          <label for="email-address">Email Address</label>
+        <div class="mb-3">
+          <label class="form-label" for="email-address">Email Address</label>
           <input disabled type="email" class="form-control text-lowercase" id="email-address" name="email-address" placeholder="name@example.com" required value="<?=htmlspecialchars($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegUserEmail'])?>">
           <div class="invalid-feedback">
             Please enter a valid email address.
           </div>
         </div>
 
-        <div class="form-group">
-          <label for="phone">Mobile Number</label>
+        <div class="mb-3">
+          <label class="form-label" for="phone">Mobile Number</label>
           <input type="tel" pattern="\+{0,1}[0-9]*" class="form-control" id="phone" name="phone" placeholder="01234 567891" required value="<?=htmlspecialchars($mobile)?>">
           <div class="invalid-feedback">
             Please enter a valid mobile number.

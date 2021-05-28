@@ -78,8 +78,8 @@ include BASE_PATH . 'views/header.php';
       <?php if ($qualification) { ?>
         <form method="post" class="needs-validation" novalidate>
 
-          <div class="form-group">
-            <label for="qualification">Select qualification</label>
+          <div class="mb-3">
+            <label class="form-label" for="qualification">Select qualification</label>
             <select class="custom-select" name="qualification" id="qualification" required data-ajax-url="<?= htmlspecialchars(autoUrl('qualifications/lookup')) ?>">
               <option selected disabled>Choose qualification</option>
               <?php do { ?>
@@ -91,15 +91,15 @@ include BASE_PATH . 'views/header.php';
             </div>
           </div>
 
-          <div class="form-group">
-            <label for="valid-from">Valid since</label>
+          <div class="mb-3">
+            <label class="form-label" for="valid-from">Valid since</label>
             <input type="date" name="valid-from" id="valid-from" class="form-control" required value="<?= htmlspecialchars($date->format('Y-m-d')) ?>" max="<?= htmlspecialchars($date->format('Y-m-d')) ?>">
             <div class="invalid-feedback">
               Please enter the date this qualification is valid from
             </div>
           </div>
 
-          <div class="form-group" id="expires-selector">
+          <div class="mb-3" id="expires-selector">
             <div class="custom-control custom-radio custom-control-inline">
               <input type="radio" id="expires-yes" name="expires" class="custom-control-input" value="yes" checked>
               <label class="custom-control-label" for="expires-yes">Qualification expires</label>
@@ -110,16 +110,16 @@ include BASE_PATH . 'views/header.php';
             </div>
           </div>
 
-          <div class="form-group" id="valid-thru-box">
-            <label for="valid-to">Valid until</label>
+          <div class="mb-3" id="valid-thru-box">
+            <label class="form-label" for="valid-to">Valid until</label>
             <input type="date" name="valid-to" id="valid-to" class="form-control" value="<?= htmlspecialchars($date->format('Y-m-d')) ?>" min="<?= htmlspecialchars($date->format('Y-m-d')) ?>">
             <div class="invalid-feedback">
               Please enter the date this qualification is valid from
             </div>
           </div>
 
-          <div class="form-group">
-            <label for="notes">Notes</label>
+          <div class="mb-3">
+            <label class="form-label" for="notes">Notes</label>
             <textarea name="notes" id="notes" class="form-control" rows="4"></textarea>
           </div>
 

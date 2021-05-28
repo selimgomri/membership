@@ -55,7 +55,7 @@ include BASE_PATH . 'views/header.php';
             $swimmer['id']
           ]);
         ?>
-          <div class="form-group">
+          <div class="mb-3">
             <div class="custom-control custom-checkbox">
               <input type="checkbox" class="custom-control-input" id="member-<?= htmlspecialchars($swimmer['id']) ?>" name="member-<?= htmlspecialchars($swimmer['id']) ?>">
               <label class="custom-control-label" for="member-<?= htmlspecialchars($swimmer['id']) ?>">

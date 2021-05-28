@@ -37,16 +37,16 @@ include BASE_PATH . 'views/header.php';
         <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['NewCategoryError']);
         } ?>
 
-        <div class="form-group">
-          <label for="category-name">Category name</label>
+        <div class="mb-3">
+          <label class="form-label" for="category-name">Category name</label>
           <input class="form-control" type="text" name="category-name" id="category-name" required>
           <div class="invalid-feedback">
             Please provide a name for this category.
           </div>
         </div>
 
-        <div class="form-group">
-          <label for="category-description">Category description</label>
+        <div class="mb-3">
+          <label class="form-label" for="category-description">Category description</label>
           <input class="form-control" type="text" name="category-description" id="category-description" required>
           <div class="invalid-feedback">
             Please provide a description for this category, such as what it is for.

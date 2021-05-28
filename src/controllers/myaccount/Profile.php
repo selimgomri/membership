@@ -215,22 +215,22 @@ if (app('request')->method == "POST") {
             <div class="">
               <h2>Your Details</h2>
               <form method="post">
-                <div class="form-row">
+                <div class="row">
                   <div class="col-md">
-                    <div class="form-group">
-                      <label for="forename">Name</label>
+                    <div class="mb-3">
+                      <label class="form-label" for="forename">Name</label>
                       <input type="text" class="form-control" name="forename" id="forename" placeholder="Forename" value="<?= htmlspecialchars($forename) ?>">
                     </div>
                   </div>
                   <div class="col-md">
-                    <div class="form-group">
-                      <label for="surname">Surname</label>
+                    <div class="mb-3">
+                      <label class="form-label" for="surname">Surname</label>
                       <input type="text" class="form-control" name="surname" id="surname" placeholder="Surname" value="<?= htmlspecialchars($surname) ?>">
                     </div>
                   </div>
                 </div>
-                <div class="form-group">
-                  <label for="email">Email</label>
+                <div class="mb-3">
+                  <label class="form-label" for="email">Email</label>
                   <input readonly type="email" class="form-control" disabled name="email" id="emailbox" placeholder="Email Address" value="<?= htmlspecialchars($email) ?>" aria-describedby="emailHelp">
                   <p class="mb-0 mt-3">
                     <a href="<?= autoUrl("my-account/email") ?>" class="btn btn-secondary">
@@ -238,19 +238,19 @@ if (app('request')->method == "POST") {
                     </a>
                   </p>
                 </div>
-                <div class="form-group">
+                <div class="mb-3">
                   <div class="custom-control custom-switch">
                     <input type="checkbox" class="custom-control-input" value="1" id="emailContactOK" aria-describedby="emailContactOKHelp" name="emailContactOK" <?= $emailChecked ?>>
                     <label class="custom-control-label" for="emailContactOK">Receive news by email</label>
                     <small id="emailContactOKHelp" class="form-text text-muted">You'll still receive emails relating to your account if you don't receive news</small>
                   </div>
                 </div>
-                <div class="form-group">
-                  <label for="mobile">Mobile Number</label>
+                <div class="mb-3">
+                  <label class="form-label" for="mobile">Mobile Number</label>
                   <input type="tel" class="form-control" name="mobile" id="mobile" aria-describedby="mobileHelp" placeholder="<?= htmlspecialchars($examplePhone) ?>" value="<?= htmlspecialchars($mobile->format(PhoneNumberFormat::E164)) ?>">
                   <small id="mobileHelp" class="form-text text-muted">If you don't have a mobile, use your landline number. By default, we will assume your number is a GB phone number. If it is an international number, please include your country code (e.g. +1).</small>
                 </div>
-                <div class="form-group">
+                <div class="mb-3">
                   <div class="custom-control custom-switch">
                     <input type="checkbox" class="custom-control-input" value="1" id="smsContactOK" aria-describedby="smsContactOKHelp" name="smsContactOK" <?= $mobileChecked ?>>
                     <label class="custom-control-label" for="smsContactOK">Receive text messages</label>
@@ -258,8 +258,8 @@ if (app('request')->method == "POST") {
                   </div>
                 </div>
                 <!--
-          <div class="form-group" id="gravitar">
-            <label for="mobile" class="d-block">Account Image</label>
+          <div class="mb-3" id="gravitar">
+            <label class="form-label" for="mobile" class="d-block">Account Image</label>
             <?php
             $grav_url = "https://www.gravatar.com/avatar/" . md5(mb_strtolower(trim($_SESSION['TENANT-' . app()->tenant->getId()]['EmailAddress']))) . "?d=" . urlencode("https://www.chesterlestreetasc.co.uk/apple-touch-icon-ipad-retina.png") . "&s=240";
             ?>

@@ -78,16 +78,16 @@ include BASE_PATH . 'views/header.php';
 
         <h2>Basic details</h2>
 
-        <div class="form-row">
-          <div class="form-group col-md-6">
-            <label for="first-name">First name</label>
+        <div class="row">
+          <div class="mb-3 col-md-6">
+            <label class="form-label" for="first-name">First name</label>
             <input type="text" required class="form-control" name="first-name" id="first-name" placeholder="First" value="<?= htmlspecialchars(valueOrString('first-name')) ?>">
             <div class="invalid-feedback">
               Please provide a first name
             </div>
           </div>
-          <div class="form-group col-md-6">
-            <label for="last-name">Last name</label>
+          <div class="mb-3 col-md-6">
+            <label class="form-label" for="last-name">Last name</label>
             <input type="text" required class="form-control" name="last-name" id="last-name" placeholder="Last" value="<?= htmlspecialchars(valueOrString('last-name')) ?>">
             <div class="invalid-feedback">
               Please provide a last name
@@ -95,33 +95,33 @@ include BASE_PATH . 'views/header.php';
           </div>
         </div>
 
-        <div class="form-group">
-          <label for="email-address">Email address</label>
+        <div class="mb-3">
+          <label class="form-label" for="email-address">Email address</label>
           <input type="email" required class="form-control" name="email-address" id="email-address" placeholder="first.last@example.com" value="<?= htmlspecialchars(valueOrString('email-address')) ?>">
           <div class="invalid-feedback">
             Please provide a valid email address
           </div>
         </div>
 
-        <div class="form-group">
-          <label for="phone">Mobile number</label>
+        <div class="mb-3">
+          <label class="form-label" for="phone">Mobile number</label>
           <input type="tel" pattern="\+{0,1}[0-9]*" required class="form-control" name="phone" id="phone" placeholder="<?= htmlspecialchars($examplePhone) ?>" value="<?= htmlspecialchars(valueOrString('phone')) ?>">
           <div class="invalid-feedback">
             You must provide a valid UK phone number
           </div>
         </div>
 
-        <div class="form-row" id="password-form-row">
-          <div class="form-group col-md-6">
-            <label for="password-1">Password</label>
+        <div class="row" id="password-row">
+          <div class="mb-3 col-md-6">
+            <label class="form-label" for="password-1">Password</label>
             <input type="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" required class="form-control" name="password-1" id="password-1" aria-describedby="pwHelp">
             <small id="pwHelp" class="form-text text-muted">Use 8 characters or more, with at least one lowercase letter, at least one uppercase letter and at least one number</small>
             <div class="invalid-feedback">
               You must provide password that is at least 8 characters long with at least one lowercase letter, at least one uppercase letter and at least one number
             </div>
           </div>
-          <div class="form-group col-md-6">
-            <label for="password-2">Confirm password</label>
+          <div class="mb-3 col-md-6">
+            <label class="form-label" for="password-2">Confirm password</label>
             <input type="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" required class="form-control" name="password-2" id="password-2">
             <div class="invalid-feedback">
               Passwords do not match
@@ -140,7 +140,7 @@ include BASE_PATH . 'views/header.php';
 
         <h2>Access permissions</h2>
 
-        <div class="form-group">
+        <div class="mb-3">
           <p>
             Select access permissions for this user
           </p>

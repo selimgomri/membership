@@ -75,21 +75,21 @@ include BASE_PATH . "views/head.php";
       } ?>
 
       <form method="post" action="<?= htmlspecialchars(autoUrl("login")) ?>" name="loginform" id="loginform" class="needs-validation" novalidate>
-        <div class="form-group">
-          <label for="email-address">Email address</label>
+        <div class="mb-3">
+          <label class="form-label" for="email-address">Email address</label>
           <input type="email" name="email-address" id="email-address" class="form-control form-control-lg text-lowercase" <?php if ($errorState) { ?> value="<?= htmlspecialchars($username) ?>" <?php } ?> required <?php if (!$username) { ?>autofocus<?php } ?> placeholder="yourname@example.com" autocomplete="email">
           <div class="invalid-feedback">
             Please enter a valid email address.
           </div>
         </div>
-        <div class="form-group">
-          <label for="password">Password</label>
+        <div class="mb-3">
+          <label class="form-label" for="password">Password</label>
           <input type="password" name="password" id="password" class="form-control form-control-lg" required placeholder="Password" <?php if ($username) { ?>autofocus<?php } ?> autocomplete="current-password">
           <div class="invalid-feedback">
             Please enter a password.
           </div>
         </div>
-        <div class="form-group">
+        <div class="mb-3">
           <div class="custom-control custom-checkbox">
             <input type="checkbox" class="custom-control-input" name="RememberMe" id="RememberMe" checked aria-describedby="RememberMeHelp" value="1">
             <label class="custom-control-label" for="RememberMe">Keep me logged in</label>

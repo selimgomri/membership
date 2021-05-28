@@ -94,7 +94,7 @@ include BASE_PATH . 'views/header.php';
                 <div class="mb-3 d-md-none"></div>
               </div>
               <div class="col-md">
-                <label for="<?=htmlspecialchars("se-cat-" . $member['id'])?>" class="d-none">
+                <label class="form-label" for="<?=htmlspecialchars("se-cat-" . $member['id'])?>" class="d-none">
                   Swim England Membership Category
                 </label>
                 <select class="custom-select" id="<?=htmlspecialchars("se-cat-" . $member['id'])?>" name="<?=htmlspecialchars("se-cat-" . $member['id'])?>">

@@ -76,8 +76,8 @@
 
       @if $enable-validation-icons {
         $form-feedback-icon: if($state == "valid", $form-feedback-icon-valid, $form-feedback-icon-invalid);
-        padding-right: $custom-select-feedback-icon-padding-right;
-        background: $custom-select-background, $form-feedback-icon no-repeat $custom-select-feedback-icon-position / $custom-select-feedback-icon-size;
+        // padding-right: $custom-select-feedback-icon-padding-right;
+        // background: $custom-select-background, $form-feedback-icon no-repeat $custom-select-feedback-icon-position / $custom-select-feedback-icon-size;
       }
 
       &:focus {

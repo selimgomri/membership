@@ -9,10 +9,10 @@ $date = new DateTime('now', new DateTimeZone('Europe/London'));
 
 <form action="<?=autoUrl("payments/confirmation/form-2")?>" method="post">
 
-  <div class="form-row">
+  <div class="row">
     <div class="col-6">
-      <div class="form-group">
-        <label for="payment-amount">Amount</label>
+      <div class="mb-3">
+        <label class="form-label" for="payment-amount">Amount</label>
         <div class="input-group">
           <div class="input-group-prepend">
             <div class="input-group-text mono">&pound;</div>
@@ -26,8 +26,8 @@ $date = new DateTime('now', new DateTimeZone('Europe/London'));
     </div>
 
     <div class="col-6">
-      <div class="form-group">
-        <label for="payment-name">Surname</label>
+      <div class="mb-3">
+        <label class="form-label" for="payment-name">Surname</label>
         <input type="text" class="mono form-control" id="payment-name" name="payment-name" aria-describedby="payment-name-help" placeholder="eg <?=htmlspecialchars($_SESSION['TENANT-' . app()->tenant->getId()]['Surname'])?>">
         <small id="payment-date-help" class="form-text text-muted">
           Enter the surname of the name shown on your bank statement*

@@ -42,13 +42,13 @@ include BASE_PATH . "views/postsMenu.php";
 			<div class="col-md-8">
 				<div>
 					<h1>Editing <?= htmlspecialchars($row['Title']) ?></h1>
-					<div class="form-group">
-						<label for="title">Title</label>
+					<div class="mb-3">
+						<label class="form-label" for="title">Title</label>
 						<input type="text" class="form-control" name="title" id="title" placeholder="Post Title" autocomplete="off" value="<?= htmlentities($row['Title']) ?>">
 					</div>
 
-					<div class="form-group mb-0">
-						<label for="content">Content</label>
+					<div class="mb-3 mb-0">
+						<label class="form-label" for="content">Content</label>
 						<textarea class="form-control auto-grow mono" id="content" name="content" oninput="autoGrow(this)"><?= htmlspecialchars($row['Content']) ?></textarea>
 						<small id="contentHelp" class="form-text text-muted">
 							Posts are written in <a href="https://www.markdownguide.org" target="_blank">Markdown</a>. HTML is not allowed for security reasons.
@@ -77,19 +77,19 @@ include BASE_PATH . "views/postsMenu.php";
 
 				<div class="card card-body mb-3">
 					<h3>Meta</h3>
-					<div class="form-group">
-						<label for="path">Path</label>
+					<div class="mb-3">
+						<label class="form-label" for="path">Path</label>
 						<p class="small mb-1">
 							<?= htmlspecialchars(autoUrl("pages/")) ?>
 						</p>
 						<input type="text" class="form-control" name="path" id="path" placeholder="Leave blank to use Page ID" autocomplete="off" value="<?= htmlentities($row['Path']) ?>">
 					</div>
-					<div class="form-group">
-						<label for="date">Date</label>
+					<div class="mb-3">
+						<label class="form-label" for="date">Date</label>
 						<input type="datetime-local" class="form-control" name="date" id="date" value="<?= $date->format("c") ?>" disabled>
 					</div>
-					<div class="form-group">
-						<label for="type">Type</label>
+					<div class="mb-3">
+						<label class="form-label" for="type">Type</label>
 						<select class="custom-select" name="type">
 							<?php for ($i = 0; $i < sizeof($post_types); $i++) {
 								$s = null;
@@ -102,8 +102,8 @@ include BASE_PATH . "views/postsMenu.php";
 							<?php } ?>
 						</select>
 					</div>
-					<div class="form-group mb-0">
-						<label for="mime">MIME Type</label>
+					<div class="mb-3 mb-0">
+						<label class="form-label" for="mime">MIME Type</label>
 						<select class="custom-select" name="mime">
 							<?php for ($i = 0; $i < sizeof($mimes); $i++) {
 								$s = null;
@@ -120,8 +120,8 @@ include BASE_PATH . "views/postsMenu.php";
 
 				<div class="card card-body">
 					<h3>SEO</h3>
-					<div class="form-group mb-0">
-						<label for="excerpt">Excerpt</label>
+					<div class="mb-3 mb-0">
+						<label class="form-label" for="excerpt">Excerpt</label>
 						<textarea class="form-control" name="excerpt" id="excerpt" placeholder="This is about" autocomplete="off"><?= htmlentities($row['Excerpt']) ?></textarea>
 					</div>
 				</div>

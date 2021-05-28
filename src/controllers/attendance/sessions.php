@@ -83,8 +83,8 @@ include "attendanceMenu.php";
       <div class="card card-body h-100">
         <h2>Select a Squad to Manage its Sessions</h2>
         <form>
-          <div class="form-group">
-            <label for="squad">Select Squad</label>
+          <div class="mb-3">
+            <label class="form-label" for="squad">Select Squad</label>
             <select class="custom-select" name="squad" id="squad">
               <option value="" selected disabled>Choose a squad</option>
               <?php do { ?>
@@ -144,16 +144,16 @@ include "attendanceMenu.php";
           <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['AddSessionError']);
           } ?>
 
-          <div class="form-group">
-            <label for="session-name">Session Name</label>
+          <div class="mb-3">
+            <label class="form-label" for="session-name">Session Name</label>
             <input class="form-control add-session-form-reset-input" type="text" name="session-name" id="session-name" required placeholder="e.g. Swimming, Land Training, Diving, Water Polo" data-default-value="">
             <div class="invalid-feedback">
               You must provide a name for this session such as <em>Swimming</em>, <em>Land Training</em>, <em>Diving</em> or <em>Water Polo</em>
             </div>
           </div>
 
-          <div class="form-group">
-            <label for="session-venue">Session Venue</label>
+          <div class="mb-3">
+            <label class="form-label" for="session-venue">Session Venue</label>
             <select class="custom-select add-session-form-reset-input" name="session-venue" id="session-venue" required data-default-value="">
               <option selected disabled value="">Select a Venue</option>
               <?php if ($venue) { ?>
@@ -167,7 +167,7 @@ include "attendanceMenu.php";
             </div>
           </div>
 
-          <div class="form-group" id="recurrence-radios">
+          <div class="mb-3" id="recurrence-radios">
             <p class="mb-2">
               Recurrence
             </p>
@@ -181,10 +181,10 @@ include "attendanceMenu.php";
             </div>
           </div>
 
-          <div class="form-row">
+          <div class="row">
             <div class="col">
-              <div class="form-group">
-                <label for="session-date">Session Date</label>
+              <div class="mb-3">
+                <label class="form-label" for="session-date">Session Date</label>
                 <input type="date" class="form-control add-session-form-reset-input" name="session-date" id="session-date" placeholder="<?= htmlspecialchars($dateToday->format('Y-m-d')) ?>" value="<?= htmlspecialchars($dateToday->format('Y-m-d')) ?>" required data-default-value="<?= htmlspecialchars($dateToday->format('Y-m-d')) ?>" min="<?= htmlspecialchars($dateToday->format('Y-m-d')) ?>">
                 <div class="invalid-feedback">
                   You must provide a date for this session
@@ -193,8 +193,8 @@ include "attendanceMenu.php";
             </div>
 
             <div class="col" id="show-until-container">
-              <div class="form-group">
-                <label for="session-end-date">Show Until</label>
+              <div class="mb-3">
+                <label class="form-label" for="session-end-date">Show Until</label>
                 <input type="date" aria-labelledby="session-end-date-help" class="form-control add-session-form-reset-input" name="session-end-date" id="session-end-date" placeholder="<?= htmlspecialchars($datePlusYear->format('Y-m-d')) ?>" value="<?= htmlspecialchars($datePlusYear->format('Y-m-d')) ?>" data-default-value="<?= htmlspecialchars($datePlusYear->format('Y-m-d')) ?>" min="<?= htmlspecialchars($dateToday->format('Y-m-d')) ?>">
                 <div class="invalid-feedback">
                   You must provide a valid end date for this session
@@ -206,10 +206,10 @@ include "attendanceMenu.php";
             </div>
           </div>
 
-          <div class="form-row">
+          <div class="row">
             <div class="col">
-              <div class="form-group">
-                <label for="session-start-time">Start Time</label>
+              <div class="mb-3">
+                <label class="form-label" for="session-start-time">Start Time</label>
                 <input type="time" class="form-control add-session-form-reset-input" name="session-start-time" id="session-start-time" placeholder="0" value="18:00" required data-default-value="18:00">
                 <small id="session-start-time-help" class="form-text text-muted">
                   Make sure to use 24 Hour Time
@@ -217,8 +217,8 @@ include "attendanceMenu.php";
               </div>
             </div>
             <div class="col">
-              <div class="form-group">
-                <label for="session-end-time">End Time</label>
+              <div class="mb-3">
+                <label class="form-label" for="session-end-time">End Time</label>
                 <input type="time" class="form-control add-session-form-reset-input" name="session-end-time" id="session-end-time" placeholder="0" value="18:30" required data-default-value="18:30">
                 <small id="session-end-time-help" class="form-text text-muted">
                   Make sure to use 24 Hour Time
@@ -252,7 +252,7 @@ include "attendanceMenu.php";
             </p>
           <?php } ?>
 
-          <div class="form-group mb-0">
+          <div class="mb-3 mb-0">
             <p class="mb-2">
               Attendance monitoring
             </p>
@@ -266,7 +266,7 @@ include "attendanceMenu.php";
             </div>
           </div>
 
-          <div class="d-none show-if-one-off form-group mb-0 mt-3">
+          <div class="d-none show-if-one-off mb-3 mb-0 mt-3">
             <p class="mb-2">
               Require booking for this session
             </p>

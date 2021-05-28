@@ -52,7 +52,7 @@ if (isset($customBackground) && $customBackground) {
     </div>
   <?php } ?>
 
-  <div class="sr-only sr-only-focusable">
+  <div class="visually-hidden visually-hidden-focusable">
     <a href="#maincontent">Skip to main content</a>
   </div>
 
@@ -201,14 +201,14 @@ if (isset($customBackground) && $customBackground) {
           <span class="mr-2">
             <a href="https://www.twitter.com/CLSASC" target="_blank" class="text-white" title="Twitter">
               <i class="fa fa-twitter fa-fw" aria-hidden="true"></i>
-              <span class="sr-only">Chester-le-Street ASC on Twitter</span>
+              <span class="visually-hidden">Chester-le-Street ASC on Twitter</span>
             </a>
           </span>
 
           <span class="mr-2">
             <a href="https://www.facebook.com/CLSASC" target="_blank" class="text-white" title="Facebook">
               <i class="fa fa-facebook fa-fw" aria-hidden="true"></i>
-              <span class="sr-only">Chester-le-Street ASC on Facebook</span>
+              <span class="visually-hidden">Chester-le-Street ASC on Facebook</span>
             </a>
           </span>
         </div>
@@ -252,13 +252,13 @@ if (isset($customBackground) && $customBackground) {
     <div class="collapse" id="mobSearch">
       <div class="text-white py-3 d-lg-none bg-primary-darker">
         <form class="container" action="https://www.chesterlestreetasc.co.uk" id="head-search" method="get">
-          <label for="s" class="sr-only">Search</label>
+          <label class="form-label" for="s" class="visually-hidden">Search</label>
           <div class="input-group">
             <input class="form-control bg-primary text-white border-primary" id="s" name="s" placeholder="Search the site" type="search">
             <div class="input-group-append">
               <button type="submit" class="btn btn-primary">
                 <i class="fa fa-search"></i>
-                <span class="sr-only">
+                <span class="visually-hidden">
                   Search
                 </span>
               </button>

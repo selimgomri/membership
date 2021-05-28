@@ -1,7 +1,7 @@
 <form method="post" class="needs-validation" novalidate>
 	<?=\SCDS\CSRF::write()?>
-	<div class="form-group">
-		<label for="event">Select an Event</label>
+	<div class="mb-3">
+		<label class="form-label" for="event">Select an Event</label>
 		<div class="row mb-2">
 			<div class="col-6 col-md-2">
 				<div class="custom-control custom-radio">
@@ -119,8 +119,8 @@
     </div>
 	</div>
 
-	<div class="form-group">
-		<label for="source">Convert From</label>
+	<div class="mb-3">
+		<label class="form-label" for="source">Convert From</label>
 		<div class="row">
 			<div class="col-6 col-md-2">
 				<div class="custom-control custom-radio">
@@ -142,7 +142,7 @@
 
     <div class="row">
       <div class="col-md-8">
-        <div class="form-group">
+        <div class="mb-3">
         <label>Time</label>
           <div class="input-group">
             <input type="number" max="100" min="0" name="mins" pattern="[0-9]*" inputmode="numeric" class="form-control" placeholder="Minutes">

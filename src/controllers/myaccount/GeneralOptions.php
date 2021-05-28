@@ -61,7 +61,7 @@ include BASE_PATH . "views/header.php";
             Cookies and Software Settings
           </h2>
 
-          <div class="form-group">
+          <div class="mb-3">
       			<div class="custom-control custom-switch">
       				<input type="checkbox" class="custom-control-input" value="1" id="tracking-cookies" aria-describedby="tracking-cookies-help" name="tracking-cookies" <?=$trackersChecked?> >
               <label class="custom-control-label" for="tracking-cookies">Disable tracking cookies</label>
@@ -69,7 +69,7 @@ include BASE_PATH . "views/header.php";
       			</div>
       		</div>
 
-          <div class="form-group">
+          <div class="mb-3">
       			<div class="custom-control custom-switch">
       				<input type="checkbox" class="custom-control-input" value="1" id="beta-features" aria-describedby="beta-features-help" name="beta-features" <?=$betasChecked?> >
               <label class="custom-control-label" for="beta-features">Enable beta features</label>
@@ -78,7 +78,7 @@ include BASE_PATH . "views/header.php";
       		</div>
 
           <?php if (app()->tenant->isCLS()) { ?>
-          <div class="form-group">
+          <div class="mb-3">
       			<div class="custom-control custom-switch">
       				<input type="checkbox" class="custom-control-input" value="1" id="generic-theme" aria-describedby="generic-theme-help" name="generic-theme" <?=$genericThemeChecked?> >
               <label class="custom-control-label" for="generic-theme">Use the generic theme</label>
@@ -97,7 +97,7 @@ include BASE_PATH . "views/header.php";
           <h2>
             Advanced Payment Options
           </h2>
-      		<div class="form-group">
+      		<div class="mb-3">
       			<div class="custom-control custom-switch">
       				<input type="checkbox" class="custom-control-input" value="1" id="gala-dd-opt-out" aria-describedby="gala-dd-opt-out-Help" name="gala-dd-opt-out" <?=$notGalaDDChecked?> >
               <label class="custom-control-label" for="gala-dd-opt-out">Opt out of Direct Debit gala payments</label>
@@ -112,7 +112,7 @@ include BASE_PATH . "views/header.php";
             Account Security
           </h2>
           <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Parent") { ?>
-      		<div class="form-group">
+      		<div class="mb-3">
       			<div class="custom-control custom-switch">
       				<input type="checkbox" class="custom-control-input" value="1" id="2FA" aria-describedby="2FAHelp" name="2FA" <?=$twofaChecked?> >
               <label class="custom-control-label" for="2FA">Enable two-factor authentication</label>

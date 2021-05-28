@@ -113,10 +113,10 @@ include BASE_PATH . "views/swimmersMenu.php";
 
         <h2>Basic Information</h2>
 
-        <div class="form-row">
+        <div class="row">
           <div class="col">
-            <div class="form-group">
-              <label for="forename">First name</label>
+            <div class="mb-3">
+              <label class="form-label" for="forename">First name</label>
               <input type="text" name="forename" id="forename" class="form-control" required min="1" max="255" value="<?= htmlspecialchars($row['MForename']) ?>">
               <div class="invalid-feedback">
                 You must enter a first name
@@ -125,15 +125,15 @@ include BASE_PATH . "views/swimmersMenu.php";
           </div>
 
           <div class="col">
-            <div class="form-group">
-              <label for="middle-names">Middle names</label>
+            <div class="mb-3">
+              <label class="form-label" for="middle-names">Middle names</label>
               <input type="text" name="middle-names" id="foremiddle-namesname" class="form-control" max="255" value="<?= htmlspecialchars($row['MMiddleNames']) ?>">
             </div>
           </div>
 
           <div class="col">
-            <div class="form-group">
-              <label for="surname">Last name</label>
+            <div class="mb-3">
+              <label class="form-label" for="surname">Last name</label>
               <input type="text" name="surname" id="surname" class="form-control" required min="1" max="255" value="<?= htmlspecialchars($row['MSurname']) ?>">
               <div class="invalid-feedback">
                 You must enter a last name
@@ -142,15 +142,15 @@ include BASE_PATH . "views/swimmersMenu.php";
           </div>
         </div>
 
-        <div class="form-group">
-          <label for="dob">Date of birth</label>
+        <div class="mb-3">
+          <label class="form-label" for="dob">Date of birth</label>
           <input type="date" name="dob" id="dob" class="form-control" required max="<?= htmlspecialchars($date->format("Y-m-d")) ?>" pattern="[0-9]{4}-[0-1]{1}[0-9]{1}-[0-3]{1}[0-9]{1}" placeholder="YYYY-MM-DD" value="<?= htmlspecialchars($row['DateOfBirth']) ?>">
           <div class="invalid-feedback">
             You must enter a valid date - If you have not been shown a date picker, enter the date in the format YYYY-MM-DD
           </div>
         </div>
 
-        <div class="form-group">
+        <div class="mb-3">
           <p class="mb-2">
             Sex (for the purposes of competition) <a tabindex="0" data-toggle="popover" data-trigger="focus" title="" data-content="<?php if ($isMemberUser) { ?>Please select the sex you compete under, even if this is not the same as your gender identity. You can select your gender identity (for use internally at <?= htmlspecialchars(app()->tenant->getName()) ?>) below.<?php } else { ?>Select the sex <?= htmlspecialchars($row['MForename']) ?> competes under, even if this is not the same as their gender identity. They can select their gender identity (for use internally at <?= htmlspecialchars(app()->tenant->getName()) ?>) if they visit this page themselves.<?php } ?>" data-original-title="What does this mean?"><i class="fa fa-question-circle" aria-hidden="true"></i></a>
           </p>
@@ -165,10 +165,10 @@ include BASE_PATH . "views/swimmersMenu.php";
         </div>
 
         <?php if ($isMemberUser) { ?>
-          <div class="form-row mb-1">
+          <div class="row mb-1">
             <div class="col-lg">
               <div class="card card-body mb-2">
-                <div class="form-group" id="gender-radio">
+                <div class="mb-3" id="gender-radio">
                   <p class="mb-2">
                     Gender <a tabindex="0" data-toggle="popover" data-trigger="focus" title="" data-content="Your gender identity is a way to describe how you feel about your gender. You might identify your gender as a boy or a girl or something different. This is different from your sex, which is related to your physical body and biology." data-original-title="What is gender identity?"><i class="fa fa-question-circle" aria-hidden="true"></i></a>
                   </p>
@@ -195,8 +195,8 @@ include BASE_PATH . "views/swimmersMenu.php";
                   </div>
                 </div>
 
-                <div class="form-group mb-0">
-                  <label for="gender-custom">Other...</label>
+                <div class="mb-3 mb-0">
+                  <label class="form-label" for="gender-custom">Other...</label>
                   <input type="text" name="gender-custom" id="gender-custom" class="form-control" <?php if (!$other) { ?>disabled<?php } else { ?>required value="<?= htmlspecialchars($row['GenderIdentity']) ?>" <?php } ?> max="256">
                   <div class="invalid-feedback">
                     Please enter a custom gender identity.
@@ -207,7 +207,7 @@ include BASE_PATH . "views/swimmersMenu.php";
 
             <div class="col-lg">
               <div class="card card-body mb-2">
-                <div class="form-group" id="gender-pronoun-radio">
+                <div class="mb-3" id="gender-pronoun-radio">
                   <p class="mb-2">
                     Gender pronouns <a tabindex="0" data-toggle="popover" data-trigger="focus" title="" data-content="The words we use to refer to someone like, ‘he’, ‘she’ and ‘they’. We allow you to choose your pronouns so that you're never mis-gendered." data-original-title="What are pronouns?"><i class="fa fa-question-circle" aria-hidden="true"></i></a>
                   </p>
@@ -234,8 +234,8 @@ include BASE_PATH . "views/swimmersMenu.php";
                   </div>
                 </div>
 
-                <div class="form-group mb-0">
-                  <label for="gender-pronoun-custom">Other...</label>
+                <div class="mb-3 mb-0">
+                  <label class="form-label" for="gender-pronoun-custom">Other...</label>
                   <input type="text" name="gender-pronoun-custom" id="gender-pronoun-custom" class="form-control" <?php if (!$other) { ?>disabled<?php } else { ?>required value="<?= htmlspecialchars($row['GenderPronouns']) ?>" <?php } ?> max="256">
                   <div class="invalid-feedback">
                     Please enter a custom pronoun. Where appropriate, use a similar format to those above.
@@ -245,7 +245,7 @@ include BASE_PATH . "views/swimmersMenu.php";
             </div>
           </div>
 
-          <div class="form-group">
+          <div class="mb-3">
             <p class="mb-2">
               Show my gender and pronouns to club staff throughout the membership system <a tabindex="0" data-toggle="popover" data-trigger="focus" title="" data-content="Choosing to show your pronouns to club staff helps us make sure you're not mis-gendered. If you do, places we'll show your information include registers, squad lists and gala information (internally). If you choose no, we'll completely hide your chosen gender and pronouns from all club staff." data-original-title="Why show our staff your pronouns?"><i class="fa fa-question-circle" aria-hidden="true"></i></a>
             </p>
@@ -264,16 +264,16 @@ include BASE_PATH . "views/swimmersMenu.php";
         <?php if ($admin) { ?>
           <h2>Membership Details</h2>
 
-          <div class="form-row">
+          <div class="row">
             <div class="col">
-              <div class="form-group">
-                <label for="asa">Swim England Registration Number</label>
+              <div class="mb-3">
+                <label class="form-label" for="asa">Swim England Registration Number</label>
                 <input type="text" name="asa" id="asa" class="form-control" value="<?= htmlspecialchars($row['ASANumber']) ?>">
               </div>
             </div>
             <div class="col">
-              <div class="form-group">
-                <label for="cat">Swim England Membership Category</label>
+              <div class="mb-3">
+                <label class="form-label" for="cat">Swim England Membership Category</label>
                 <select class="custom-select overflow-hidden" id="cat" name="cat" placeholder="Select">
                   <option value="0" <?php if ($row['ASACategory'] == 0) { ?>selected<?php } ?>>Not a Swim England Member</option>
                   <option value="1" <?php if ($row['ASACategory'] == 1) { ?>selected<?php } ?>>Category 1</option>
@@ -284,8 +284,8 @@ include BASE_PATH . "views/swimmersMenu.php";
             </div>
           </div>
 
-          <div class="form-group">
-            <label for="club-cat">Club Membership Category</label>
+          <div class="mb-3">
+            <label class="form-label" for="club-cat">Club Membership Category</label>
             <select class="custom-select overflow-hidden" id="club-cat" name="club-cat" placeholder="Select" required>
               <?php do {
                 $selected = '';
@@ -297,8 +297,8 @@ include BASE_PATH . "views/swimmersMenu.php";
             </select>
           </div>
 
-          <div class="form-group">
-            <label for="country">Home Nations Country</label>
+          <div class="mb-3">
+            <label class="form-label" for="country">Home Nations Country</label>
             <select class="custom-select overflow-hidden" id="country" name="country" placeholder="Select">
               <?php foreach ($countries as $key => $value) {
                 $selected = '';
@@ -310,9 +310,9 @@ include BASE_PATH . "views/swimmersMenu.php";
             </select>
           </div>
 
-          <div class="form-row">
+          <div class="row">
             <div class="col-lg">
-              <div class="form-group">
+              <div class="mb-3">
                 <p class="mb-2">
                   Club pays Swim England fees?
                 </p>
@@ -328,7 +328,7 @@ include BASE_PATH . "views/swimmersMenu.php";
             </div>
 
             <div class="col-lg">
-              <div class="form-group">
+              <div class="mb-3">
                 <p class="mb-2">
                   Club pays Club Membership fees?
                 </p>
@@ -344,7 +344,7 @@ include BASE_PATH . "views/swimmersMenu.php";
             </div>
 
             <div class="col-lg">
-              <div class="form-group">
+              <div class="mb-3">
                 <p class="mb-2">
                   Swimmer membership status
                 </p>
@@ -363,13 +363,13 @@ include BASE_PATH . "views/swimmersMenu.php";
 
         <h2>Notes</h2>
 
-        <div class="form-group">
+        <div class="mb-3">
           <label>Medical notes</label>
           <a class="d-block" href="<?= htmlspecialchars(autoUrl("members/$id/medical")) ?>" target="_self">Edit medical notes</a>
         </div>
 
-        <div class="form-group">
-          <label for="other-notes">Other Notes</label>
+        <div class="mb-3">
+          <label class="form-label" for="other-notes">Other Notes</label>
           <textarea class="form-control" id="other-notes" name="other-notes" rows="3" placeholder="Tell us any other notes for coaches"><?= htmlspecialchars($row['OtherNotes']) ?></textarea>
         </div>
 
@@ -393,7 +393,7 @@ include BASE_PATH . "views/swimmersMenu.php";
               If you do not give your consent, please also inform <?= htmlspecialchars($row['MForename']) ?> so that they know, if possible, not to get into any photos.
             </p>
 
-            <div class="form-group">
+            <div class="mb-3">
               <div class="custom-control custom-checkbox">
                 <input type="checkbox" value="1" class="custom-control-input" name="webPhoto" id="webPhoto" <?php if (isset($photo['Website']) && $photo['Website']) { ?>checked<?php } ?>>
                 <label class="custom-control-label" for="webPhoto">

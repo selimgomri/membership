@@ -82,8 +82,8 @@ include BASE_PATH . "views/head.php";
       <?php } ?>
 
       <form method="post" action="<?= autoUrl("2fa") ?>" name="2faform" id="2faform" class="needs-validation" novalidate>
-        <div class="form-group">
-          <label for="auth">Authentication Code</label>
+        <div class="mb-3">
+          <label class="form-label" for="auth">Authentication Code</label>
           <input type="number" name="auth" id="auth" class="form-control form-control-lg" required autofocus placeholder="654321" pattern="[0-9]*" inputmode="numeric" min="0" max="999999" step="1">
           <div class="invalid-feedback">
             Please enter a numeric authentication code.
@@ -91,7 +91,7 @@ include BASE_PATH . "views/head.php";
         </div>
         <input type="hidden" name="target" value="<?= htmlspecialchars($target) ?>">
 
-        <div class="form-group">
+        <div class="mb-3">
           <div class="custom-control custom-checkbox">
             <input type="checkbox" class="custom-control-input" name="RememberMe" id="RememberMe" <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['2FAUserRememberMe']) && bool($_SESSION['TENANT-' . app()->tenant->getId()]['2FAUserRememberMe'])) { ?>checked<?php } ?> aria-describedby="RememberMeHelp" value="1">
             <label class="custom-control-label" for="RememberMe">Keep me logged in</label>
@@ -102,7 +102,7 @@ include BASE_PATH . "views/head.php";
         </div>
 
         <?php if (!isset($_SESSION['TENANT-' . app()->tenant->getId()]['TWO_FACTOR_GOOGLE']) || $_SESSION['TENANT-' . app()->tenant->getId()]['TWO_FACTOR_GOOGLE'] !== true) { ?>
-          <div class="form-group">
+          <div class="mb-3">
             <div class="custom-control custom-checkbox">
               <input type="checkbox" class="custom-control-input" name="setup-time-based-codes" id="setup-time-based-codes" aria-describedby="setup-time-based-codes-help">
               <label class="custom-control-label" for="setup-time-based-codes">Set up an authenticator app</label>

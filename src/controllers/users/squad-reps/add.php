@@ -63,8 +63,8 @@ include BASE_PATH . "views/header.php";
 
       <?php if ($squad != null) { ?>
       <form method="post">
-        <div class="form-group">
-          <label for="squad-select">
+        <div class="mb-3">
+          <label class="form-label" for="squad-select">
             Choose squad
           </label>
           <select class="custom-select" id="squad-select" name="squad-select">

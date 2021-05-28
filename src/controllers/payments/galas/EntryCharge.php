@@ -188,8 +188,8 @@ include BASE_PATH . 'views/header.php';
 								</div>
 								<?php } ?>
 
-								<div class="form-group mb-0">
-									<label for="<?=$entry['EntryID']?>-amount">
+								<div class="mb-3 mb-0">
+									<label class="form-label" for="<?=$entry['EntryID']?>-amount">
 										Amount to charge
 									</label>
 									<div class="input-group">

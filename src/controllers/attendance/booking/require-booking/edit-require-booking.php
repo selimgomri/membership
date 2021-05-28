@@ -158,19 +158,19 @@ include BASE_PATH . 'views/header.php';
           </div>
         <?php } ?>
 
-        <div class="form-group">
-          <label for="session-text-description">Session</label>
+        <div class="mb-3">
+          <label class="form-label" for="session-text-description">Session</label>
           <input type="text" id="session-text-description" name="session-text-description" readonly class="form-control" value="<?= htmlspecialchars('#' . $session['SessionID'] . ' - ' . $session['SessionName']) ?>" <?php if ($bookingClosed) { ?>disabled<?php } ?>>
         </div>
 
         <input type="hidden" name="session" value="<?= htmlspecialchars($session['SessionID']) ?>">
 
-        <div class="form-group">
-          <label for="date">Date</label>
+        <div class="mb-3">
+          <label class="form-label" for="date">Date</label>
           <input type="date" id="date" name="date" readonly class="form-control" value="<?= htmlspecialchars($date->format('Y-m-d')) ?>" <?php if ($bookingClosed) { ?>disabled<?php } ?>>
         </div>
 
-        <div class="form-group" id="number-limit">
+        <div class="mb-3" id="number-limit">
           <div class="custom-control custom-radio">
             <input type="radio" id="unlimited-numbers" name="number-limit" class="custom-control-input" value="0" required <?php if (!$session['MaxPlaces']) { ?>checked<?php } ?> <?php if ($bookingClosed) { ?>disabled<?php } ?>>
             <label class="custom-control-label" for="unlimited-numbers">Unlimited numbers</label>
@@ -182,8 +182,8 @@ include BASE_PATH . 'views/header.php';
         </div>
 
         <div class="<?php if (!$session['MaxPlaces']) { ?>d-none<?php } ?>" id="max-places-container">
-          <div class="form-group">
-            <label for="max-count">Maximum places</label>
+          <div class="mb-3">
+            <label class="form-label" for="max-count">Maximum places</label>
             <input type="number" id="max-count" name="max-count" min="1" step="1" class="form-control" value="<?php if ($session['MaxPlaces']) { ?><?= htmlspecialchars($session['MaxPlaces']) ?><?php } ?>" <?php if ($bookingClosed) { ?>disabled<?php } ?>>
             <div class="invalid-feedback">
               Please provide a positive integer
@@ -195,7 +195,7 @@ include BASE_PATH . 'views/header.php';
           </p>
         </div>
 
-        <div class="form-group">
+        <div class="mb-3">
           <div class="custom-control custom-radio">
             <input type="radio" id="open-to-squads" name="open-to" class="custom-control-input" value="0" required <?php if (!bool($session['AllSquads'])) { ?>checked<?php } ?> <?php if ($bookingClosed) { ?>disabled<?php } ?>>
             <label class="custom-control-label" for="open-to-squads">Open to this session's scheduled squads</label>
@@ -210,7 +210,7 @@ include BASE_PATH . 'views/header.php';
           We will generate a register for this session based on bookings rather than squad membership.
         </p>
 
-        <div class="form-group" id="open-bookings">
+        <div class="mb-3" id="open-bookings">
           <div class="custom-control custom-radio">
             <input type="radio" id="open-bookings-now" name="open-bookings" class="custom-control-input" value="0" required <?php if ($bookingClosed) { ?>disabled<?php } ?> <?php if (!$session['BookingOpens']) { ?>checked<?php } ?>>
             <label class="custom-control-label" for="open-bookings-now">Opening bookings immediately</label>
@@ -222,10 +222,10 @@ include BASE_PATH . 'views/header.php';
         </div>
 
         <div class="<?php if (!$session['BookingOpens']) { ?>d-none<?php } ?>" id="open-bookings-at-container">
-          <div class="form-row">
+          <div class="row">
             <div class="col">
-              <div class="form-group">
-                <label for="open-booking-at-date">Opens date</label>
+              <div class="mb-3">
+                <label class="form-label" for="open-booking-at-date">Opens date</label>
                 <input type="date" id="open-booking-at-date" name="open-booking-at-date" min="<?= htmlspecialchars($min->format("Y-m-d")) ?>" max="<?= htmlspecialchars($date->format("Y-m-d")) ?>" class="form-control" value="<?= htmlspecialchars($bookingOpensTime->format("Y-m-d")) ?>" <?php if ($bookingClosed) { ?>disabled<?php } ?>>
                 <div class="invalid-feedback">
                   Please provide a date
@@ -233,8 +233,8 @@ include BASE_PATH . 'views/header.php';
               </div>
             </div>
             <div class="col">
-              <div class="form-group">
-                <label for="open-booking-at-time">Opens time</label>
+              <div class="mb-3">
+                <label class="form-label" for="open-booking-at-time">Opens time</label>
                 <input type="time" id="open-booking-at-time" name="open-booking-at-time" class="form-control" <?php if ($bookingClosed) { ?>disabled<?php } ?> value="<?= htmlspecialchars($bookingOpensTime->format("H:i")) ?>">
                 <div class="invalid-feedback">
                   Please provide a time (24 hour format)
@@ -248,7 +248,7 @@ include BASE_PATH . 'views/header.php';
           </p>
         </div>
 
-        <div class="form-group" id="booking-fees">
+        <div class="mb-3" id="booking-fees">
           <div class="custom-control custom-radio">
             <input type="radio" id="booking-fees-no" name="booking-fees" class="custom-control-input" value="0" required <?php if ($bookingClosed) { ?>disabled<?php } ?> <?php if ($session['BookingFee'] == 0) { ?>checked<?php } ?>>
             <label class="custom-control-label" for="booking-fees-no">Session is free</label>
@@ -260,10 +260,10 @@ include BASE_PATH . 'views/header.php';
         </div>
 
         <div class="<?php if ($session['BookingFee'] == 0) { ?>d-none<?php } ?>" id="booking-fees-container">
-          <div class="form-row">
+          <div class="row">
             <div class="col">
-              <div class="form-group">
-                <label for="booking-fees-amount">Booking fee</label>
+              <div class="mb-3">
+                <label class="form-label" for="booking-fees-amount">Booking fee</label>
                 <div class="input-group">
                   <div class="input-group-prepend">
                     <span class="input-group-text">&pound;</span>

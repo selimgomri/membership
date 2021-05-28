@@ -104,8 +104,8 @@ include BASE_PATH . "views/swimmersMenu.php";
 			</a>
 		</p>
     <!-- <form method="post">
-      <div class="form-group">
-        <label for="emailAddr">Send to email address</label>
+      <div class="mb-3">
+        <label class="form-label" for="emailAddr">Send to email address</label>
         <input type="email" class="form-control" id="emailAddr" name="emailAddr" aria-describedby="emailAddrHelp"
           placeholder="Enter email">
         <small id="emailAddrHelp" class="form-text text-muted">Sends a one-off email.</small>

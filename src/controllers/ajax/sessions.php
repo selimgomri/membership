@@ -304,17 +304,17 @@ function sessionManagement($squadID, $old = null)
 
 				<div id="status-message"></div>
 
-				<div class="form-group">
-					<label for="newSessionName">Session Name</label>
+				<div class="mb-3">
+					<label class="form-label" for="newSessionName">Session Name</label>
 					<input type="text" class="form-control" name="newSessionName" id="newSessionName" placeholder="Name">
 					<small id="newSessionStartDateHelp" class="form-text text-muted">
 						e.g. <em>Swimming</em>, <em>Land Training</em>
 					</small>
 				</div>
-				<div class="form-row">
+				<div class="row">
 					<div class="col">
-						<div class="form-group">
-							<label for="newSessionDay">Session Day</label>
+						<div class="mb-3">
+							<label class="form-label" for="newSessionDay">Session Day</label>
 							<select class="custom-select" name="newSessionDay" id="newSessionDay">
 								<option value="9" selected>Select a Day</option>
 								<option value="0">Sunday</option>
@@ -328,8 +328,8 @@ function sessionManagement($squadID, $old = null)
 						</div>
 					</div>
 					<div class="col">
-						<div class="form-group">
-							<label for="newSessionVenue">Session Venue</label>
+						<div class="mb-3">
+							<label class="form-label" for="newSessionVenue">Session Venue</label>
 							<select class="custom-select" name="newSessionVenue" id="newSessionVenue">
 								<option selected value="0">Select a Venue</option>
 								<?php while ($venue = $venues->fetch(PDO::FETCH_ASSOC)) { ?>
@@ -342,8 +342,8 @@ function sessionManagement($squadID, $old = null)
 						</div>
 					</div>
 				</div>
-				<div class="form-group">
-					<label for="newSessionMS">Include in attendance count</label>
+				<div class="mb-3">
+					<label class="form-label" for="newSessionMS">Include in attendance count</label>
 					<div class="custom-control custom-radio">
 						<input type="radio" id="newSessionMSYes" name="newSessionMS" class="custom-control-input" value="1" checked>
 						<label class="custom-control-label" for="newSessionMSYes">
@@ -357,10 +357,10 @@ function sessionManagement($squadID, $old = null)
 						</label>
 					</div>
 				</div>
-				<div class="form-row">
+				<div class="row">
 					<div class="col">
-						<div class="form-group">
-							<label for="newSessionStartTime">Start Time</label>
+						<div class="mb-3">
+							<label class="form-label" for="newSessionStartTime">Start Time</label>
 							<input type="time" class="form-control" name="newSessionStartTime" id="newSessionStartTime" placeholder="0" value="18:00">
 							<small id="newSessionStartTimeHelp" class="form-text text-muted">
 								Make sure to use 24 Hour Time
@@ -368,8 +368,8 @@ function sessionManagement($squadID, $old = null)
 						</div>
 					</div>
 					<div class="col">
-						<div class="form-group">
-							<label for="newSessionEndTime">End Time</label>
+						<div class="mb-3">
+							<label class="form-label" for="newSessionEndTime">End Time</label>
 							<input type="time" class="form-control" name="newSessionEndTime" id="newSessionEndTime" placeholder="0" value="18:30">
 							<small id="newSessionEndTimeHelp" class="form-text text-muted">
 								Make sure to use 24 Hour Time
@@ -377,10 +377,10 @@ function sessionManagement($squadID, $old = null)
 						</div>
 					</div>
 				</div>
-				<div class="form-row">
+				<div class="row">
 					<div class="col">
-						<div class="form-group">
-							<label for="newSessionStartDate">Show From</label>
+						<div class="mb-3">
+							<label class="form-label" for="newSessionStartDate">Show From</label>
 							<input type="date" aria-labelledby="newSessionStartDateHelp" class="form-control" name="newSessionStartDate" id="newSessionStartDate" placeholder="<?= date("Y-m-d") ?>" value="<?= date("Y-m-d") ?>">
 							<small id="newSessionStartDateHelp" class="form-text text-muted">
 								The date from which the session will appear in the registers
@@ -388,8 +388,8 @@ function sessionManagement($squadID, $old = null)
 						</div>
 					</div>
 					<div class="col">
-						<div class="form-group">
-							<label for="newSessionEndDate">Show Until</label>
+						<div class="mb-3">
+							<label class="form-label" for="newSessionEndDate">Show Until</label>
 							<input type="date" aria-labelledby="newSessionStartDateHelp" class="form-control" name="newSessionEndDate" id="newSessionEndDate" placeholder="<?= date("Y-m-d", strtotime('+1 year')) ?>" value="<?= date("Y-m-d", strtotime('+1 year')) ?>">
 							<small id="newSessionEndDateHelp" class="form-text text-muted">
 								If you know when this session will stop running, enter the last date here

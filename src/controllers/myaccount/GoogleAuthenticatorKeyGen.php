@@ -59,8 +59,8 @@ include BASE_PATH . 'views/header.php';
       <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['G2FA_VerifyError']);
       } ?>
       <form method="post" class="needs-validation" novalidate>
-        <div class="form-group">
-          <label for="verify">Verify Code</label>
+        <div class="mb-3">
+          <label class="form-label" for="verify">Verify Code</label>
           <input type="text" class="form-control" id="verify" name="verify" aria-describedby="verifyHelp" placeholder="654321" pattern="[0-9]*" inputmode="numeric" min="0" max="999999" step="1" required>
           <div class="invalid-feedback">
             You must enter a valid code

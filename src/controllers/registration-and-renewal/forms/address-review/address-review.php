@@ -108,37 +108,37 @@ include BASE_PATH . 'views/header.php';
 
         <div class="row">
           <div class="col-md-6">
-            <div class="form-group">
-              <label for="street-and-number">Address line 1 (street and number)</label>
+            <div class="mb-3">
+              <label class="form-label" for="street-and-number">Address line 1 (street and number)</label>
               <input class="form-control" name="street-and-number" id="street-and-number" type="text" autocomplete="address-line1" <?php if (isset($addr->streetAndNumber)) { ?>value="<?= htmlspecialchars($addr->streetAndNumber) ?>" <?php } ?> required>
               <div class="invalid-feedback">
                 Please provide your street and house number/name.
               </div>
             </div>
 
-            <div class="form-group">
-              <label for="flat-building">Address line 2 (optional)</label>
+            <div class="mb-3">
+              <label class="form-label" for="flat-building">Address line 2 (optional)</label>
               <input class="form-control" name="flat-building" id="flat-building" type="text" autocomplete="address-line2" <?php if (isset($addr->flatOrBuilding)) { ?>value="<?= htmlspecialchars($addr->flatOrBuilding) ?>" <?php } ?>>
             </div>
 
-            <div class="form-group">
-              <label for="town-city">Town/City</label>
+            <div class="mb-3">
+              <label class="form-label" for="town-city">Town/City</label>
               <input class="form-control" name="town-city" id="town-city" type="text" autocomplete="address-level2" <?php if (isset($addr->city)) { ?>value="<?= htmlspecialchars($addr->city) ?>" <?php } ?> required>
               <div class="invalid-feedback">
                 Please provide your postal town/city.
               </div>
             </div>
 
-            <div class="form-group">
-              <label for="county-province">County</label>
+            <div class="mb-3">
+              <label class="form-label" for="county-province">County</label>
               <input class="form-control" name="county-province" id="county-province" type="text" autocomplete="address-level1" <?php if (isset($addr->county)) { ?>value="<?= htmlspecialchars($addr->county) ?>" <?php } ?> required>
               <div class="invalid-feedback">
                 Please provide your county.
               </div>
             </div>
 
-            <div class="form-group">
-              <label for="post-code">Post Code</label>
+            <div class="mb-3">
+              <label class="form-label" for="post-code">Post Code</label>
               <input class="form-control" name="post-code" id="post-code" type="text" autocomplete="postal-code" <?php if (isset($addr->postCode)) { ?>value="<?= htmlspecialchars($addr->postCode) ?>" <?php } ?> required>
               <div class="invalid-feedback">
                 Please provide your UK or British Forces post code.

@@ -223,7 +223,7 @@ if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Committee" 
         }
         $no_parent = "";
         if (date("m-d", strtotime($row['DateOfBirth'])) == date("m-d", $sessionDate)) {
-          $no_parent .= '<span class="sr-only"><em>Birthday is today</em></span><span class="badge badge-success"><i class="fa fa-birthday-cake" aria-hidden="true"></i> ' . $ageOnSession . ' today</span>';
+          $no_parent .= '<span class="visually-hidden"><em>Birthday is today</em></span><span class="badge badge-success"><i class="fa fa-birthday-cake" aria-hidden="true"></i> ' . $ageOnSession . ' today</span>';
         }
         if ($row['UserID'] == null && $age < 18) {
           $no_parent .= "<span class=\"badge badge-primary\">NO PARENT</span>";

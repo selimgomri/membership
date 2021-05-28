@@ -55,15 +55,15 @@ include BASE_PATH . "views/squadMenu.php"; ?>
       <div class="">
         <form method="post" action="<?= htmlspecialchars(autoUrl("squads/new")) ?>" class="needs-validation" novalidate>
 
-          <div class="form-group">
-            <label for="squadName">Squad Name</label>
+          <div class="mb-3">
+            <label class="form-label" for="squadName">Squad Name</label>
             <input type="text" class="form-control" id="squadName" name="squadName" placeholder="Name" required>
             <div class="invalid-feedback">
               Please provide a squad name.
             </div>
           </div>
-          <div class="form-group">
-            <label for="squadFee" class="form-label">Squad Fee</label>
+          <div class="mb-3">
+            <label class="form-label" for="squadFee" class="form-label">Squad Fee</label>
             <div class="input-group">
               <div class="input-group-prepend">
                 <span class="input-group-text">&pound;</span>
@@ -75,16 +75,16 @@ include BASE_PATH . "views/squadMenu.php"; ?>
             </div>
             <small id="squadFeeHelp" class="form-text text-muted">A squad can have a fee of &pound;0.00 if it represents a group for non paying members</small>
           </div>
-          <div class="form-group d-none">
-            <label for="squadCoach">Squad Coach</label>
+          <div class="mb-3 d-none">
+            <label class="form-label" for="squadCoach">Squad Coach</label>
             <input type="text" class="form-control" id="squadCoach" name="squadCoach" placeholder="Enter Squad Coach">
           </div>
-          <!-- <div class="form-group">
-            <label for="squadTimetable">Squad Timetable</label>
+          <!-- <div class="mb-3">
+            <label class="form-label" for="squadTimetable">Squad Timetable</label>
             <input type="url" class="form-control" id="squadTimetable" name="squadTimetable" placeholder="Enter Squad Timetable Address">
           </div> -->
-          <div class="form-group">
-            <label for="squadCoC">Squad Code of Conduct</label>
+          <div class="mb-3">
+            <label class="form-label" for="squadCoC">Squad Code of Conduct</label>
             <select class="custom-select" id="squadCoC" name="squadCoC" aria-describedby="conductSelectHelpBlock">
               <option>No code of conduct</option>
               <option selected>Select a code of conduct</option>

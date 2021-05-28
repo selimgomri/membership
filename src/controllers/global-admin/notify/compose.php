@@ -83,7 +83,7 @@ include BASE_PATH . "views/root/header.php";
 
   <form method="post" id="notify-form" onkeypress="return event.keyCode != 13;" enctype="multipart/form-data" novalidate>
 
-    <div class="form-group">
+    <div class="mb-3">
       <label>To users in the following tenants...</label>
       <div class="row">
         <?php while ($list = $lists->fetch(PDO::FETCH_ASSOC)) { ?>
@@ -99,16 +99,16 @@ include BASE_PATH . "views/root/header.php";
       </div>
     </div>
 
-    <div class="form-group">
-      <label for="subject">Message Subject</label>
+    <div class="mb-3">
+      <label class="form-label" for="subject">Message Subject</label>
       <input type="text" class="form-control" name="subject" id="subject" placeholder="Message Subject" autocomplete="off" required <?= fieldValue('subject') ?>>
       <div class="invalid-feedback">
         Please include a message subject
       </div>
     </div>
 
-    <div class="form-group">
-      <label for="message">Your Message</label>
+    <div class="mb-3">
+      <label class="form-label" for="message">Your Message</label>
       <p>
         <em>
           Your message will begin with "Hello
@@ -120,7 +120,7 @@ include BASE_PATH . "views/root/header.php";
 
     <input type="hidden" name="MAX_FILE_SIZE" value="10485760">
 
-    <div class="form-group">
+    <div class="mb-3">
       <label>Select files to attach</label>
       <div class="custom-file">
         <input type="file" class="custom-file-input" id="file-upload" name="file-upload[]" multiple data-max-total-file-size="10485760" data-max-file-size="10485760" data-error-message-id="file-upload-invalid-feedback" aria-describedby="file-upload-multi-info">
@@ -134,7 +134,7 @@ include BASE_PATH . "views/root/header.php";
       </div>
     </div>
 
-    <div class="form-group">
+    <div class="mb-3">
       <div class="custom-control custom-checkbox">
         <input type="checkbox" class="custom-control-input" aria-describedby="forceHelp" id="force" name="force" value="1">
         <label class="custom-control-label" for="force">Force Send</label>

@@ -55,10 +55,10 @@ include BASE_PATH . 'views/header.php';
       <form method="post" class="needs-validation" novalidate>
         <h2>About You</h2>
 
-        <div class="form-row">
+        <div class="row">
           <div class="col">
-            <div class="form-group">
-              <label for="first">First name</label>
+            <div class="mb-3">
+              <label class="form-label" for="first">First name</label>
               <input class="form-control" type="text" id="first" name="first" placeholder="First name" required>
               <div class="invalid-feedback">
                 Please provide a first name
@@ -67,8 +67,8 @@ include BASE_PATH . 'views/header.php';
           </div>
 
           <div class="col">
-            <div class="form-group">
-              <label for="last">Last name</label>
+            <div class="mb-3">
+              <label class="form-label" for="last">Last name</label>
               <input class="form-control" type="text" id="last" name="last" placeholder="Last name" required>
               <div class="invalid-feedback">
                 Please provide a last name
@@ -77,8 +77,8 @@ include BASE_PATH . 'views/header.php';
           </div>
         </div>
 
-        <div class="form-group">
-          <label for="dob">Date of birth</label>
+        <div class="mb-3">
+          <label class="form-label" for="dob">Date of birth</label>
           <input class="form-control" type="date" id="dob" name="dob" pattern="[0-9]{4}-[0-1]{1}[0-9]{1}-[0-3]{1}[0-9]{1}" placeholder="YYYY-MM-DD" required max="<?= htmlspecialchars($now->format('Y-m-d')) ?>">
           <div class="invalid-feedback">
             Please provide a date of birth
@@ -89,8 +89,8 @@ include BASE_PATH . 'views/header.php';
         <p>
           Do you have a Swim England (ASA) or other UK aquatics governing body registration number? If so we may be able to use this in future to get information from the British Rankings Database.
         </p>
-        <div class="form-group">
-          <label for="<?= htmlspecialchars('swim-england') ?>">Swim England/Swim Wales/Scottish Swimming Number</label>
+        <div class="mb-3">
+          <label class="form-label" for="<?= htmlspecialchars('swim-england') ?>">Swim England/Swim Wales/Scottish Swimming Number</label>
           <input type="text" aria-describedby="<?= htmlspecialchars('help-swim-england') ?>" name="<?= htmlspecialchars('swim-england') ?>" id="<?= htmlspecialchars('swim-england') ?>" class="form-control">
           <small class="text-muted" id="<?= htmlspecialchars('help-swim-england') ?>">You can skip this field if you don't know or have a UK NGB registration number</small>
         </div>
@@ -114,8 +114,8 @@ include BASE_PATH . 'views/header.php';
           Your login details
         </h2>
 
-        <div class="form-group">
-          <label for="email-address">Sheffield Email Address</label>
+        <div class="mb-3">
+          <label class="form-label" for="email-address">Sheffield Email Address</label>
           <input class="form-control" type="email" id="email-address" name="email-address" pattern="[a-z0-9._%+-]+@sheffield.ac.uk" placeholder="name1@sheffield.ac.uk" required>
           <div class="invalid-feedback">
             Please use a University of Sheffield email address (ending <em>sheffield.ac.uk</em>)
@@ -123,8 +123,8 @@ include BASE_PATH . 'views/header.php';
         </div>
 
         <!-- Mobile -->
-        <div class="form-group">
-          <label for="mobile-number">Mobile phone number</label>
+        <div class="mb-3">
+          <label class="form-label" for="mobile-number">Mobile phone number</label>
           <input type="tel" class="form-control" name="mobile-number" id="mobile-number" required placeholder="<?= htmlspecialchars($examplePhone) ?>" aria-describedby="mobile-number-help">
           <div class="invalid-feedback">
             You must provide a valid phone number (with no spaces).
@@ -134,10 +134,10 @@ include BASE_PATH . 'views/header.php';
           </small>
         </div>
 
-        <div class="form-row" id="password-form-row">
+        <div class="row" id="password-row">
           <div class="col-sm">
-            <div class="form-group">
-              <label for="password-1">Create a password</label>
+            <div class="mb-3">
+              <label class="form-label" for="password-1">Create a password</label>
               <input type="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" class="form-control" id="password-1" name="password-1" autocomplete="new-password" required aria-describedby="pwHelp">
               <small id="pwHelp" class="form-text text-muted">
                 Use 8 characters or more, with at least one lowercase letter, at least one uppercase letter and at least one number
@@ -149,8 +149,8 @@ include BASE_PATH . 'views/header.php';
           </div>
 
           <div class="col-sm">
-            <div class="form-group">
-              <label for="password-2">Confirm your password</label>
+            <div class="mb-3">
+              <label class="form-label" for="password-2">Confirm your password</label>
               <input type="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" class="form-control" id="password-2" name="password-2" autocomplete="new-password" required aria-describedby="pwConfirmHelp">
               <small id="pwConfirmHelp" class="form-text text-muted">Repeat your password</small>
               <div class="invalid-feedback" id="password-2-invalid-feedback">
@@ -175,7 +175,7 @@ include BASE_PATH . 'views/header.php';
 
         <div class="row">
           <div class="col-md-8 col-lg-6">
-            <div class="form-group">
+            <div class="mb-3">
               <div class="custom-control custom-checkbox">
                 <input type="checkbox" class="custom-control-input" name="emailAuthorise" id="emailAuthorise" value="1" <?= $email ?>>
                 <label class="custom-control-label" for="emailAuthorise">
@@ -185,7 +185,7 @@ include BASE_PATH . 'views/header.php';
               </div>
             </div>
 
-            <!-- <div class="form-group">
+            <!-- <div class="mb-3">
               <div class="custom-control custom-checkbox">
                 <input type="checkbox" class="custom-control-input" name="smsAuthorise" id="smsAuthorise" value="1" <?= $sms ?>>
                 <label class="custom-control-label" for="smsAuthorise">

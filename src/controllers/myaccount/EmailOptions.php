@@ -114,15 +114,15 @@ include BASE_PATH . "views/header.php";
 
     	<div class="cell">
     		<form method="post">
-    			<div class="form-group">
-    		    <label for="EmailAddress">Your email address</label>
+    			<div class="mb-3">
+    		    <label class="form-label" for="EmailAddress">Your email address</label>
     		    <input type="email" class="form-control" id="EmailAddress" name="EmailAddress" placeholder="name@example.com" value="<?=htmlentities($email)?>">
     				<?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['EmailUpdateNew'])) { ?>
     				<small class="form-text">Once verified, your account email address will change to <?=htmlentities($_SESSION['TENANT-' . app()->tenant->getId()]['EmailUpdateNew'])?></small>
     				<?php } ?>
     		  </div>
 
-    			<div class="form-group">
+    			<div class="mb-3">
     				<div class="custom-control custom-switch">
     					<input type="checkbox" class="custom-control-input" value="1" id="EmailComms" aria-describedby="EmailCommsHelp" name="EmailComms" <?=$emailChecked?> >
               <label class="custom-control-label" for="EmailComms">Receive squad updates by email</label>
@@ -131,7 +131,7 @@ include BASE_PATH . "views/header.php";
     			</div>
 
 					<?php if ($currentUser->hasPermission('Parent')) { ?>
-    			<div class="form-group">
+    			<div class="mb-3">
     				<div class="custom-control custom-switch">
     					<input type="checkbox" class="custom-control-input" value="1" id="SecurityComms" aria-describedby="SecurityCommsHelp" name="SecurityComms" <?=$emailChecked_security?> >
               <label class="custom-control-label" for="SecurityComms">Receive account security emails</label>
@@ -139,7 +139,7 @@ include BASE_PATH . "views/header.php";
     				</div>
     			</div>
 
-    			<div class="form-group">
+    			<div class="mb-3">
     				<div class="custom-control custom-switch">
     					<input type="checkbox" class="custom-control-input" value="1" id="PaymentComms" aria-describedby="PaymentCommsHelp" name="PaymentComms" <?php echo $emailChecked_payments; ?> >
               <label class="custom-control-label" for="PaymentComms">Receive payment emails</label>
@@ -149,7 +149,7 @@ include BASE_PATH . "views/header.php";
 					<?php } ?>
 
     			<?php if ($currentUser->hasPermission('Admin')) { ?>
-    			<div class="form-group">
+    			<div class="mb-3">
     				<div class="custom-control custom-switch">
     					<input type="checkbox" class="custom-control-input" value="1" id="NewMemberComms" aria-describedby="NewMemberCommsHelp" name="NewMemberComms" <?php echo $emailChecked_new_member; ?> >
               <label class="custom-control-label" for="NewMemberComms">Receive new member emails</label>
@@ -211,16 +211,16 @@ include BASE_PATH . "views/header.php";
 						</div>
 					<?php } ?>
 
-          <div class="form-row">
+          <div class="row">
             <div class="col-md">
-              <div class="form-group">
-                <label for="new-cc-name">Name</label>
+              <div class="mb-3">
+                <label class="form-label" for="new-cc-name">Name</label>
                 <input type="text" class="form-control" id="new-cc-name" name="new-cc-name" placeholder="Joe Bloggs" required>
               </div>
             </div>
             <div class="col-md">
-              <div class="form-group">
-                <label for="new-cc">CC Email Address</label>
+              <div class="mb-3">
+                <label class="form-label" for="new-cc">CC Email Address</label>
                 <input type="email" class="form-control" id="new-cc" name="new-cc" placeholder="joe.bloggs@example.com" required>
               </div>
             </div>

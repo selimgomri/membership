@@ -92,7 +92,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
                                           foreach ($pageHead['body'] as $item) { ?> <?= $item ?> <?php }
                                                                                               } ?>>
 
-  <div class="sr-only sr-only-focusable">
+  <div class="visually-hidden visually-hidden-focusable">
     <a href="#maincontent">Skip to main content</a>
   </div>
 

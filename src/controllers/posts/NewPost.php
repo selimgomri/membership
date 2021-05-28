@@ -15,13 +15,13 @@ include BASE_PATH . "views/postsMenu.php";
 			<div class="col-md-8">
 				<div>
 					<h1>New Post</h1>
-					<div class="form-group">
-						<label for="title">Title</label>
+					<div class="mb-3">
+						<label class="form-label" for="title">Title</label>
 						<input type="text" class="form-control" name="title" id="title" placeholder="Post Title" autocomplete="off" <?php if ($people) { ?>value="<?= getUserName($_SESSION['TENANT-' . app()->tenant->getId()]['UserID']) ?>" readonly <?php } ?>>
 					</div>
 
-					<div class="form-group mb-0">
-						<label for="content">Content</label>
+					<div class="mb-3 mb-0">
+						<label class="form-label" for="content">Content</label>
 						<textarea class="form-control auto-grow mono" id="content" name="content" oninput="autoGrow(this)">
 			      </textarea>
 						<small id="contentHelp" class="form-text text-muted">
@@ -44,19 +44,19 @@ include BASE_PATH . "views/postsMenu.php";
 
 				<div class="card card-body mb-3">
 					<h3>Meta</h3>
-					<div class="form-group">
-						<label for="path">Path</label>
+					<div class="mb-3">
+						<label class="form-label" for="path">Path</label>
 						<p class="small mb-1">
 							<?= htmlspecialchars(autoUrl("pages/")) ?>
 						</p>
 						<input type="text" class="form-control" name="path" id="path" placeholder="Leave blank to use Post ID" autocomplete="off">
 					</div>
-					<div class="form-group">
-						<label for="date">Date and time</label>
+					<div class="mb-3">
+						<label class="form-label" for="date">Date and time</label>
 						<input type="datetime-local" class="form-control" name="date" id="date" value="<?= htmlspecialchars($date->format("c")) ?>">
 					</div>
-					<div class="form-group">
-						<label for="type">Type</label>
+					<div class="mb-3">
+						<label class="form-label" for="type">Type</label>
 						<select class="custom-select" name="type">
 							<?php for ($i = 0; $i < sizeof($post_types); $i++) { ?>
 								<option value="<?= $post_types[$i]['value'] ?>">
@@ -65,8 +65,8 @@ include BASE_PATH . "views/postsMenu.php";
 							<?php } ?>
 						</select>
 					</div>
-					<div class="form-group mb-0">
-						<label for="mime">MIME Type</label>
+					<div class="mb-3 mb-0">
+						<label class="form-label" for="mime">MIME Type</label>
 						<select class="custom-select" name="mime">
 							<option value="text/html">text/html</option>
 							<option value="text/plain">text/plain</option>
@@ -77,8 +77,8 @@ include BASE_PATH . "views/postsMenu.php";
 
 				<div class="card card-body">
 					<h3>SEO</h3>
-					<div class="form-group mb-0">
-						<label for="excerpt">Excerpt</label> <textarea class="form-control" name="excerpt" id="excerpt" placeholder="This is about" autocomplete="off"></textarea>
+					<div class="mb-3 mb-0">
+						<label class="form-label" for="excerpt">Excerpt</label> <textarea class="form-control" name="excerpt" id="excerpt" placeholder="This is about" autocomplete="off"></textarea>
 					</div>
 				</div>
 			</div>

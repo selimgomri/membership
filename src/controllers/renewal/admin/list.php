@@ -181,7 +181,7 @@ include BASE_PATH . "views/swimmersMenu.php";
 								<?php if (!bool($renewalItem['Renewed'])) { ?>
 									Not yet renewed
 								<?php } else if (bool($renewalItem['StripePaid'])) { ?>
-									<img src="<?= autoUrl("public/img/stripe/" . $renewalItem['Brand'] . ".svg") ?>" style="height: 1rem; width: 1.5rem;"> Paid by <span class="sr-only"><?= htmlspecialchars(getCardBrand($renewalItem['Brand'])) ?></span> <?= htmlspecialchars($renewalItem['Funding']) ?> card &middot;&middot;&middot;&middot; <?= htmlspecialchars($renewalItem['Last4']) ?> - <a class="font-weight-bold text-success" href="<?= htmlspecialchars(autoUrl("payments/card-transactions/" . $renewalItem['StripeDBID'])) ?>">SPM<?= htmlspecialchars($renewalItem['StripeDBID']) ?></a>
+									<img src="<?= autoUrl("public/img/stripe/" . $renewalItem['Brand'] . ".svg") ?>" style="height: 1rem; width: 1.5rem;"> Paid by <span class="visually-hidden"><?= htmlspecialchars(getCardBrand($renewalItem['Brand'])) ?></span> <?= htmlspecialchars($renewalItem['Funding']) ?> card &middot;&middot;&middot;&middot; <?= htmlspecialchars($renewalItem['Last4']) ?> - <a class="font-weight-bold text-success" href="<?= htmlspecialchars(autoUrl("payments/card-transactions/" . $renewalItem['StripeDBID'])) ?>">SPM<?= htmlspecialchars($renewalItem['StripeDBID']) ?></a>
 								<?php } else if ($renewalItem['Status'] == "") { ?>
 									Payment not yet processed
 								<?php } else { ?>

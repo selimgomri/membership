@@ -98,7 +98,7 @@ include BASE_PATH . 'views/header.php';
         <?php } ?>
         <?php if ($user && $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Parent') { ?>
           <div class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               Quick actions
             </button>
             <div class="dropdown-menu dropdown-menu-lg-end" aria-labelledby="dropdownMenuButton">

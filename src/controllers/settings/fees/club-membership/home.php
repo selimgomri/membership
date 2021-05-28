@@ -76,8 +76,8 @@ include BASE_PATH . 'views/header.php';
           <form method="post">
             <?php $getClasses->execute(); ?>
             <?php $class = $getClasses->fetch(PDO::FETCH_ASSOC); ?>
-            <div class="form-group">
-              <label for="default-class">Select default membership class</label>
+            <div class="mb-3">
+              <label class="form-label" for="default-class">Select default membership class</label>
               <select class="custom-select" id="default-class" name="default-class">
                 <option selected disabled>Open this select menu</option>
                 <?php do { ?>

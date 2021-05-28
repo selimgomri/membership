@@ -152,7 +152,7 @@ include BASE_PATH . 'views/header.php';
 								<div class="d-sm-none mb-3"></div>
 								<?php if ($entry['Intent'] != null && bool($entry['StripePaid'])) { ?>
 								<p>
-									<strong><i class="fa <?=htmlspecialchars(getCardFA($entry['Brand']))?>" aria-hidden="true"></i> <span class="sr-only"><?=htmlspecialchars(getCardBrand($entry['Brand']))?></span> &#0149;&#0149;&#0149;&#0149; <?=htmlspecialchars($entry['Last4'])?></strong>
+									<strong><i class="fa <?=htmlspecialchars(getCardFA($entry['Brand']))?>" aria-hidden="true"></i> <span class="visually-hidden"><?=htmlspecialchars(getCardBrand($entry['Brand']))?></span> &#0149;&#0149;&#0149;&#0149; <?=htmlspecialchars($entry['Last4'])?></strong>
 								</p>
 								<?php } ?>
 
@@ -202,10 +202,10 @@ include BASE_PATH . 'views/header.php';
 								</div>
 								<?php } ?>
 
-								<div class="form-row">
+								<div class="row">
 									<div class="col-xs col-sm-12 col-xl-6">
-										<div class="form-group mb-0">
-											<label for="<?=$entry['EntryID']?>-amount">
+										<div class="mb-3 mb-0">
+											<label class="form-label" for="<?=$entry['EntryID']?>-amount">
 												Amount charged
 											</label>
 											<div class="input-group">
@@ -219,8 +219,8 @@ include BASE_PATH . 'views/header.php';
 									</div>
 
 									<div class="col-xs col-sm-12 col-xl-6">
-										<div class="form-group mb-0">
-											<label for="<?=$entry['EntryID']?>-refund">
+										<div class="mb-3 mb-0">
+											<label class="form-label" for="<?=$entry['EntryID']?>-refund">
 												Amount to refund
 											</label>
 											<div class="input-group">

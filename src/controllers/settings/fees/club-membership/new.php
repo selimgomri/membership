@@ -35,16 +35,16 @@ include BASE_PATH . 'views/header.php';
 
         <form method="post" class="needs-validation" novalidate>
 
-          <div class="form-group">
-            <label for="class-name">Class Name</label>
+          <div class="mb-3">
+            <label class="form-label" for="class-name">Class Name</label>
             <input type="text" name="class-name" id="class-name" class="form-control" required>
             <div class="invalid-feedback">
               Please provide a name for this type of membership
             </div>
           </div>
 
-          <div class="form-group">
-            <label for="class-description">Description (optional)</label>
+          <div class="mb-3">
+            <label class="form-label" for="class-description">Description (optional)</label>
             <textarea class="form-control" name="class-description" id="class-description" rows="5"></textarea>
           </div>
 

@@ -33,15 +33,15 @@ include "galaMenu.php"; ?>
   <div class="row">
     <div class="col-md-6">
       <form method="post">
-        <div class="form-group row">
-          <label for="galaname" class="col-sm-4 col-form-label">Gala Name</label>
+        <div class="mb-3 row">
+          <label class="form-label" for="galaname" class="col-sm-4 col-form-label">Gala Name</label>
           <div class="col-sm-8">
             <input type="text" class="form-control" id="galaname" name="galaname" placeholder="<?=htmlspecialchars('e.g. ' . app()->tenant->getKey('CLUB_NAME') . ' Open Meet')?>" value="<?=htmlspecialchars($row['GalaName'])?>" required>
           </div>
         </div>
 
-        <div class="form-group row">
-          <label for="description" class="col-sm-4 col-form-label">Description (optional)</label>
+        <div class="mb-3 row">
+          <label class="form-label" for="description" class="col-sm-4 col-form-label">Description (optional)</label>
           <div class="col-sm-8">
             <textarea name="description" id="description" class="form-control mono" aria-describedby="descriptionHelp"><?=htmlspecialchars($row['Description'])?></textarea>
             <small id="descriptionHelp" class="form-text text-muted">
@@ -50,8 +50,8 @@ include "galaMenu.php"; ?>
           </div>
         </div>
 
-        <div class="form-group row">
-          <label for="length" class="col-sm-4 col-form-label">Course Length</label>
+        <div class="mb-3 row">
+          <label class="form-label" for="length" class="col-sm-4 col-form-label">Course Length</label>
           <div class="col-sm-8">
             <select class="custom-select" name="length" id="length" required>";
             <?php for ($i=0; $i<sizeof($course); $i++) {
@@ -68,28 +68,28 @@ include "galaMenu.php"; ?>
             </select>
           </div>
         </div>
-        <div class="form-group row">
-          <label for="venue" class="col-sm-4 col-form-label">Gala Venue</label>
+        <div class="mb-3 row">
+          <label class="form-label" for="venue" class="col-sm-4 col-form-label">Gala Venue</label>
           <div class="col-sm-8">
             <input type="text" class="form-control" id="venue" name="venue" value="<?=htmlspecialchars($row['GalaVenue'])?>" placeholder="<?=htmlspecialchars('e.g. ' . app()->tenant->getKey('CLUB_NAME') . ' Pool')?>" required>
           </div>
         </div>
-        <div class="form-group row">
-          <label for="closingDate" class="col-sm-4 col-form-label">Closing Date</label>
+        <div class="mb-3 row">
+          <label class="form-label" for="closingDate" class="col-sm-4 col-form-label">Closing Date</label>
           <div class="col-sm-8">
             <input type="date" class="form-control" id="closingDate" name="closingDate" placeholder="YYYY-MM-DD" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}" value="<?=htmlspecialchars($row['ClosingDate'])?>" required>
           </div>
         </div>
-        <div class="form-group row">
-          <label for="lastDate" class="col-sm-4 col-form-label">Last Day of Gala</label>
+        <div class="mb-3 row">
+          <label class="form-label" for="lastDate" class="col-sm-4 col-form-label">Last Day of Gala</label>
           <div class="col-sm-8">
             <input type="date" class="form-control" id="galaDate" name="galaDate" placeholder="YYYY-MM-DD" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}" value="<?=htmlspecialchars($row['GalaDate'])?>" required>
           </div>
         </div>
         
         <?php if ($row['HyTek'] == 1) { ?>
-        <div class="form-group row">
-          <label for="HyTek" class="col-sm-4 col-form-label">Require times?</label>
+        <div class="mb-3 row">
+          <label class="form-label" for="HyTek" class="col-sm-4 col-form-label">Require times?</label>
           <div class="col-sm-8">
             <div class="custom-control custom-checkbox mt-2">
               <input type="checkbox" value="1" class="custom-control-input" checked id="HyTek" name="HyTek">
@@ -98,8 +98,8 @@ include "galaMenu.php"; ?>
           </div>
         </div>
         <?php } else { ?>
-        <div class="form-group row">
-          <label for="HyTek" class="col-sm-4 col-form-label">Require times?</label>
+        <div class="mb-3 row">
+          <label class="form-label" for="HyTek" class="col-sm-4 col-form-label">Require times?</label>
           <div class="col-sm-8">
             <div class="custom-control custom-checkbox mt-2">
               <input type="checkbox" value="1" class="custom-control-input" id="HyTek" name="HyTek">
@@ -109,8 +109,8 @@ include "galaMenu.php"; ?>
         </div>
         <?php } ?>
 
-        <div class="form-group row">
-          <label for="coachDecides" class="col-sm-4 col-form-label">Coach decides entries?</label>
+        <div class="mb-3 row">
+          <label class="form-label" for="coachDecides" class="col-sm-4 col-form-label">Coach decides entries?</label>
           <div class="col-sm-8">
             <div class="custom-control custom-checkbox mt-2">
         <input type="checkbox" value="1" class="custom-control-input" <?php if ($row['CoachEnters']) { ?>checked<?php } ?> id="coachDecides" name="coachDecides">
@@ -119,8 +119,8 @@ include "galaMenu.php"; ?>
           </div>
         </div>
 
-        <div class="form-group row">
-          <label for="approvalNeeded" class="col-sm-4 col-form-label">Approval needed?</label>
+        <div class="mb-3 row">
+          <label class="form-label" for="approvalNeeded" class="col-sm-4 col-form-label">Approval needed?</label>
           <div class="col-sm-8">
             <div class="custom-control custom-checkbox mt-2">
         <input type="checkbox" value="1" class="custom-control-input" <?php if ($row['RequiresApproval']) { ?>checked<?php } ?> id="approvalNeeded" name="approvalNeeded">

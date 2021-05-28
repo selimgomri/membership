@@ -324,14 +324,14 @@ include BASE_PATH . 'views/header.php';
         } ?>
       </div>
 
-      <div class="form-group">
+      <div class="mb-3">
         <div class="custom-control custom-checkbox">
           <input type="checkbox" value="1" class="custom-control-input" id="parent-veto" name="parent-veto">
           <label class="custom-control-label" for="parent-veto">Allow parents to reject your entries and not enter the gala</label>
         </div>
       </div>
 
-      <div class="form-group">
+      <div class="mb-3">
         <div class="custom-control custom-checkbox">
           <input type="checkbox" value="1" class="custom-control-input" id="lock-entry" name="lock-entry">
           <label class="custom-control-label" for="lock-entry">Prevent parents from editing your entries</label>

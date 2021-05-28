@@ -182,7 +182,7 @@ $countries = getISOAlpha2Countries();
       <h2>Card information</h2>
       <dl class="row">
         <dt class="col-sm-5 col-md-4">Card</dt>
-        <dd class="col-sm-7 col-md-8"><i class="fa <?=htmlspecialchars(getCardFA($card->brand))?>" aria-hidden="true"></i> <span class="sr-only"><?=htmlspecialchars(getCardBrand($card->brand))?></span> &#0149;&#0149;&#0149;&#0149; <?=htmlspecialchars($card->last4)?></dd>
+        <dd class="col-sm-7 col-md-8"><i class="fa <?=htmlspecialchars(getCardFA($card->brand))?>" aria-hidden="true"></i> <span class="visually-hidden"><?=htmlspecialchars(getCardBrand($card->brand))?></span> &#0149;&#0149;&#0149;&#0149; <?=htmlspecialchars($card->last4)?></dd>
 
         <dt class="col-sm-5 col-md-4">Type</dt>
         <dd class="col-sm-7 col-md-8"><?=htmlspecialchars(mb_convert_case ($card->funding, MB_CASE_TITLE))?></dd>

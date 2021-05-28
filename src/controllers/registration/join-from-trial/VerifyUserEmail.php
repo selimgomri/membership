@@ -52,8 +52,8 @@ include BASE_PATH . 'views/header.php';
         <?php
         unset($_SESSION['TENANT-' . app()->tenant->getId()]['AC-Registration']['EmailModified']); } ?>
 
-        <div class="form-group">
-          <label for="verify-code">Verification Code</label>
+        <div class="mb-3">
+          <label class="form-label" for="verify-code">Verification Code</label>
           <input type="number" name="verify-code" id="verify-code"
           class="form-control form-control-lg" placeholder="123456" required
           autofocus pattern="[0-9]*" inputmode="numeric">
@@ -74,8 +74,8 @@ include BASE_PATH . 'views/header.php';
       <div class="cell">
         <form action="<?=autoUrl("register/ac/verify-email/modify")?>" method="post" class="needs-validation" novalidate>
           <h2>Made a mistake?</h2>
-          <div class="form-group">
-            <label for="email">Email address</label>
+          <div class="mb-3">
+            <label class="form-label" for="email">Email address</label>
             <input type="email" name="email-addr" id="email-addr" class="form-control" placeholder="abc@example.com" required>
             <div class="invalid-feedback">
               Please enter a valid email.

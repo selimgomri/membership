@@ -78,8 +78,8 @@ include BASE_PATH . 'views/header.php';
             <h2><?= htmlspecialchars(date('F', $month)) ?></h2>
             <div class="row">
               <div class="col-lg-6">
-                <div class="form-group">
-                  <label for="se-<?= htmlspecialchars(date('m', $month)) ?>">
+                <div class="mb-3">
+                  <label class="form-label" for="se-<?= htmlspecialchars(date('m', $month)) ?>">
                     Swim England Membership Discount
                   </label>
                   <div class="input-group">
@@ -92,8 +92,8 @@ include BASE_PATH . 'views/header.php';
               </div>
 
               <div class="col-lg-6">
-                <div class="form-group">
-                  <label for="club-<?= htmlspecialchars(date('m', $month)) ?>">
+                <div class="mb-3">
+                  <label class="form-label" for="club-<?= htmlspecialchars(date('m', $month)) ?>">
                     Club Membership Discount
                   </label>
                   <div class="input-group">

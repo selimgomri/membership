@@ -36,14 +36,14 @@ include BASE_PATH . "views/notifyMenu.php";
       }
       ?>
       <form method="post">
-        <div class="form-group">
-          <label for="name">List Name</label>
+        <div class="mb-3">
+          <label class="form-label" for="name">List Name</label>
           <input type="text" class="form-control" id="name" name="name" aria-describedby="nameHelp" placeholder="Enter name">
           <small id="nameHelp" class="form-text text-muted">You will look for this name to send messages to the group</small>
         </div>
 
-        <div class="form-group">
-          <label for="desc">Description</label>
+        <div class="mb-3">
+          <label class="form-label" for="desc">Description</label>
           <input type="text" class="form-control" id="desc" name="desc" placeholder="Describe this group">
         </div>
 

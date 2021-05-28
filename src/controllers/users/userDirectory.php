@@ -27,7 +27,7 @@ include BASE_PATH . "views/header.php";
 
 <div class="container">
 
-  <div class="form-group row">
+  <div class="mb-3 row">
     <label class="col-sm-4 col-md-3 col-lg-2" for="search">Search by Name</label>
     <div class="col-sm-8 col-md-9 col-lg-10">
       <input class="form-control" id="search" name="search" value="<?= htmlspecialchars($search) ?>">

@@ -55,10 +55,10 @@ include BASE_PATH . "controllers/attendance/attendanceMenu.php"; ?>
     </div>
     <div class="card-body">
       <form id="search-form" action="" class="needs-validation" novalidate>
-        <div class="form-row">
+        <div class="row">
           <div class="col">
-            <div class="form-group">
-              <label for="from-date">From</label>
+            <div class="mb-3">
+              <label class="form-label" for="from-date">From</label>
               <input class="form-control" type="date" name="from-date" id="from-date" value="<?= htmlspecialchars($dateMinus4->format('Y-m-d')) ?>" max="<?= htmlspecialchars($date->format('Y-m-d')) ?>" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}" placeholder="YYYY-MM-DD">
               <div class="invalid-feedback">
                 Please enter a valid date
@@ -66,8 +66,8 @@ include BASE_PATH . "controllers/attendance/attendanceMenu.php"; ?>
             </div>
           </div>
           <div class="col">
-            <div class="form-group">
-              <label for="to-date">Until</label>
+            <div class="mb-3">
+              <label class="form-label" for="to-date">Until</label>
               <input class="form-control" type="date" name="to-date" id="to-date" value="<?= htmlspecialchars($date->format('Y-m-d')) ?>" max="<?= htmlspecialchars($date->format('Y-m-d')) ?>" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}" placeholder="YYYY-MM-DD">
               <div class="invalid-feedback">
                 Please enter a valid date

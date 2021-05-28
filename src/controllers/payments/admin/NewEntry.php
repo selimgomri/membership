@@ -16,13 +16,13 @@ include BASE_PATH . "views/paymentsMenu.php";
   <div class="row">
     <div class="col-lg-8">
       <form>
-        <div class="form-group">
-          <label for="name">Extra Name</label>
+        <div class="mb-3">
+          <label class="form-label" for="name">Extra Name</label>
           <input type="text" class="form-control" id="name" name="name" placeholder="Enter name">
         </div>
 
-        <div class="form-group">
-          <label for="price">Price</label>
+        <div class="mb-3">
+          <label class="form-label" for="price">Price</label>
           <div class="input-group mb-3">
             <div class="input-group-prepend">
               <span class="input-group-text" id="basic-addon3">&pound;</span>

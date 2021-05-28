@@ -16,8 +16,8 @@ include BASE_PATH . 'views/header.php';
       <h1>Pay a fee</h1>
 
       <form method="post">
-        <div class="form-group">
-          <label for="amount-to-pay">Amount</label>
+        <div class="mb-3">
+          <label class="form-label" for="amount-to-pay">Amount</label>
           <div class="input-group mb-3">
             <div class="input-group-prepend">
               <label class="input-group-text">&pound;</label>
@@ -26,13 +26,13 @@ include BASE_PATH . 'views/header.php';
           </div>
         </div>
 
-        <div class="form-group">
+        <div class="mb-3">
         <label>Select a card</label>
         <?php while ($pm = $paymentMethods->fetch(PDO::FETCH_ASSOC)) { ?>
         <div class="custom-control custom-radio">
           <input type="radio" id="select-card-<?=$pm['ID']?>" name="select-card" class="custom-control-input" value="<?=$pm['ID']?>">
           <label class="custom-control-label" for="select-card-<?=$pm['ID']?>">
-            <i class="fa <?=htmlspecialchars(getCardFA($pm['Brand']))?>" aria-hidden="true"></i> <span class="sr-only"><?=htmlspecialchars($pm['Brand'])?></span> <?=htmlspecialchars($pm['Name'] . ' (Card ending ' . $pm['Last4'] . ')')?>
+            <i class="fa <?=htmlspecialchars(getCardFA($pm['Brand']))?>" aria-hidden="true"></i> <span class="visually-hidden"><?=htmlspecialchars($pm['Brand'])?></span> <?=htmlspecialchars($pm['Name'] . ' (Card ending ' . $pm['Last4'] . ')')?>
           </label>
         </div>
         <?php } ?>

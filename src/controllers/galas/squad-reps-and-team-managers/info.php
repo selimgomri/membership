@@ -82,8 +82,8 @@ include BASE_PATH . 'views/header.php';
       <div class="cell">
         <h2>Select a squad</h2>
         <p class="lead">Select a squad to view entries for</p>
-        <div class="form-group mb-0">
-          <label for="squad-select">
+        <div class="mb-3 mb-0">
+          <label class="form-label" for="squad-select">
             Choose squad
           </label>
           <select class="custom-select" id="squad-select" name="squad-select" data-gala-id="<?=htmlspecialchars($id)?>" data-page="<?=htmlspecialchars(autoUrl(''))?>" data-ajax-url="<?=htmlspecialchars(autoUrl('galas/squad-reps/entry-states'))?>">
@@ -187,7 +187,7 @@ include BASE_PATH . 'views/header.php';
                 <strong>
                   Paid with
                 </strong><br>
-                <i class="fa <?=htmlspecialchars(getCardFA($entry->payment_intent->brand))?>" aria-hidden="true"></i> <span class="sr-only"><?=htmlspecialchars(getCardBrand($entry->payment_intent->brand))?></span> &#0149;&#0149;&#0149;&#0149; <?=htmlspecialchars($entry->payment_intent->last4)?>
+                <i class="fa <?=htmlspecialchars(getCardFA($entry->payment_intent->brand))?>" aria-hidden="true"></i> <span class="visually-hidden"><?=htmlspecialchars(getCardBrand($entry->payment_intent->brand))?></span> &#0149;&#0149;&#0149;&#0149; <?=htmlspecialchars($entry->payment_intent->last4)?>
               </p>
               <?php } ?>
 

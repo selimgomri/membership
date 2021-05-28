@@ -95,10 +95,10 @@ include BASE_PATH . 'views/header.php';
       <form method="post" id="main-form" class="needs-validation" novalidate>
         <h2>Personal details</h2>
 
-        <div class="form-row">
+        <div class="row">
           <div class="col">
-            <div class="form-group">
-              <label for="first-name">First name</label>
+            <div class="mb-3">
+              <label class="form-label" for="first-name">First name</label>
               <input type="text" class="form-control" id="first-name" name="first-name" placeholder="First" value="<?= htmlspecialchars($info['Forename']) ?>" required>
               <div class="invalid-feedback">
                 Please provide a first name.
@@ -106,8 +106,8 @@ include BASE_PATH . 'views/header.php';
             </div>
           </div>
           <div class="col">
-            <div class="form-group">
-              <label for="last-name">Last name</label>
+            <div class="mb-3">
+              <label class="form-label" for="last-name">Last name</label>
               <input type="text" class="form-control" id="last-name" name="last-name" placeholder="Last" value="<?= htmlspecialchars($info['Surname']) ?>" required>
               <div class="invalid-feedback">
                 Please provide a surname name.
@@ -116,16 +116,16 @@ include BASE_PATH . 'views/header.php';
           </div>
         </div>
 
-        <div class="form-group">
-          <label for="email-address">Email address</label>
+        <div class="mb-3">
+          <label class="form-label" for="email-address">Email address</label>
           <input type="email" class="form-control" id="email-address" name="email-address" value="<?= htmlspecialchars($info['EmailAddress']) ?>" required data-valid="true" data-ajax-url="<?= htmlspecialchars(autoUrl("users/" . $id . "/edit/email")) ?>">
           <div class="invalid-feedback" id="email-error-message">
             Please provide a valid email address.
           </div>
         </div>
 
-        <div class="form-group">
-          <label for="mobile-phone">Mobile</label>
+        <div class="mb-3">
+          <label class="form-label" for="mobile-phone">Mobile</label>
           <input type="tel" class="form-control" id="mobile-phone" name="mobile-phone" value="<?= htmlspecialchars($info['Mobile']) ?>" aria-describedby="phone-help" required>
           <small id="phone-help" class="form-text text-muted">You must use a UK phone number.</small>
           <div class="invalid-feedback">
@@ -135,7 +135,7 @@ include BASE_PATH . 'views/header.php';
 
         <h2>Access permissions</h2>
 
-        <div class="form-group">
+        <div class="mb-3">
           <p>
             Select access permissions for <?= htmlspecialchars($info['Forename']) ?>
           </p>

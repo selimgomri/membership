@@ -53,14 +53,14 @@ include BASE_PATH . 'views/header.php';
             By default, the direct debit option is enabled if you have set up a legacy GoCardless connection.
           </p>
 
-          <div class="form-group">
+          <div class="mb-3">
             <div class="custom-control custom-switch">
               <input type="checkbox" class="custom-control-input" id="MEMBERSHIP_FEE_PM_CARD" name="MEMBERSHIP_FEE_PM_CARD" <?php if ($tenant->getBooleanKey('MEMBERSHIP_FEE_PM_CARD') && $tenant->getStripeAccount()) { ?>checked<?php } ?> <?php if (!$tenant->getStripeAccount()) { ?>disabled<?php } ?>>
               <label class="custom-control-label" for="MEMBERSHIP_FEE_PM_CARD">Credit/debit card payments</label>
             </div>
           </div>
 
-          <div class="form-group">
+          <div class="mb-3">
             <div class="custom-control custom-switch">
               <input type="checkbox" class="custom-control-input" id="MEMBERSHIP_FEE_PM_DD" name="MEMBERSHIP_FEE_PM_DD" <?php if ($tenant->getBooleanKey('MEMBERSHIP_FEE_PM_DD') && ($tenant->getStripeAccount() || $tenant->getGoCardlessAccessToken()) && $tenant->getKey('USE_DIRECT_DEBIT')) { ?>checked<?php } ?> <?php if (!$tenant->getStripeAccount() && !$tenant->getGoCardlessAccessToken()) { ?>disabled<?php } ?>>
               <label class="custom-control-label" for="MEMBERSHIP_FEE_PM_DD">Direct debit</label>
@@ -71,21 +71,21 @@ include BASE_PATH . 'views/header.php';
             Support for the following payment methods is coming soon;
           </p>
 
-          <div class="form-group">
+          <div class="mb-3">
             <div class="custom-control custom-switch">
               <input type="checkbox" class="custom-control-input" id="MEMBERSHIP_FEE_PM_BACS" name="MEMBERSHIP_FEE_PM_BACS" <?php if ($tenant->getBooleanKey('MEMBERSHIP_FEE_PM_BACS')) { ?>checked<?php } ?> disabled>
               <label class="custom-control-label" for="MEMBERSHIP_FEE_PM_BACS">Bank transfer</label>
             </div>
           </div>
 
-          <div class="form-group">
+          <div class="mb-3">
             <div class="custom-control custom-switch">
               <input type="checkbox" class="custom-control-input" id="MEMBERSHIP_FEE_PM_CASH" name="MEMBERSHIP_FEE_PM_CASH" <?php if ($tenant->getBooleanKey('MEMBERSHIP_FEE_PM_CASH')) { ?>checked<?php } ?> disabled>
               <label class="custom-control-label" for="MEMBERSHIP_FEE_PM_CASH">Cash</label>
             </div>
           </div>
 
-          <div class="form-group">
+          <div class="mb-3">
             <div class="custom-control custom-switch">
               <input type="checkbox" class="custom-control-input" id="MEMBERSHIP_FEE_PM_CHEQUE" name="MEMBERSHIP_FEE_PM_CHEQUE" <?php if ($tenant->getBooleanKey('MEMBERSHIP_FEE_PM_CHEQUE')) { ?>checked<?php } ?> disabled>
               <label class="custom-control-label" for="MEMBERSHIP_FEE_PM_CHEQUE">Cheque</label>

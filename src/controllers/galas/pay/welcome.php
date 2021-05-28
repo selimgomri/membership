@@ -130,7 +130,7 @@
                         </p>
                       <?php } ?>
 
-                      <div class="form-group">
+                      <div class="mb-3">
                         <div class="custom-control custom-checkbox">
                           <input type="checkbox" id="<?= $entry['EntryID'] ?>-pay" name="<?= $entry['EntryID'] ?>-pay" class="custom-control-input">
                           <label class="custom-control-label" for="<?= $entry['EntryID'] ?>-pay">Pay for this entry</label>
@@ -138,8 +138,8 @@
                       </div>
 
                       <!-- USER INPUT IS LEGACY TO BE REMOVED IN FUTURE ONCE OLD GALAS CLEAR -->
-                      <div class="form-group mb-0">
-                        <label for="<?= $entry['EntryID'] ?>-amount">
+                      <div class="mb-3 mb-0">
+                        <label class="form-label" for="<?= $entry['EntryID'] ?>-amount">
                           Amount to pay
                         </label>
                         <div class="input-group">

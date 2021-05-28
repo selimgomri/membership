@@ -69,37 +69,37 @@ include BASE_PATH . "views/header.php";
     	<form method="post" class="needs-validation" novalidate>
         <div class="row">
           <div class="col-md-6">
-            <div class="form-group">
-              <label for="street-and-number">Address line 1 (street and number)</label>
+            <div class="mb-3">
+              <label class="form-label" for="street-and-number">Address line 1 (street and number)</label>
               <input class="form-control" name="street-and-number" id="street-and-number" type="text" autocomplete="address-line1" <?php if (isset($address->streetAndNumber)) { ?>value="<?=htmlspecialchars($address->streetAndNumber)?>"<?php } ?> required>
               <div class="invalid-feedback">
                 Please enter your street and number.
               </div>
             </div>
 
-            <div class="form-group">
-              <label for="flat-building">Address line 2 (optional)</label>
+            <div class="mb-3">
+              <label class="form-label" for="flat-building">Address line 2 (optional)</label>
               <input class="form-control" name="flat-building" id="flat-building" type="text" autocomplete="address-line2" <?php if (isset($address->flatOrBuilding)) { ?>value="<?=htmlspecialchars($address->flatOrBuilding)?>"<?php } ?>>
             </div>
 
-            <div class="form-group">
-              <label for="town-city">Town/City</label>
+            <div class="mb-3">
+              <label class="form-label" for="town-city">Town/City</label>
               <input class="form-control" name="town-city" id="town-city" type="text" autocomplete="address-level2" <?php if (isset($address->city)) { ?>value="<?=htmlspecialchars($address->city)?>"<?php } ?> required>
               <div class="invalid-feedback">
                 Please enter your town or city.
               </div>
             </div>
 
-            <div class="form-group">
-              <label for="county-province">County</label>
+            <div class="mb-3">
+              <label class="form-label" for="county-province">County</label>
               <input class="form-control" name="county-province" id="county-province" type="text" autocomplete="address-level1" <?php if (isset($address->county)) { ?>value="<?=htmlspecialchars($address->county)?>"<?php } ?> required>
               <div class="invalid-feedback">
                 Please enter your county (historic or ceremonial).
               </div>
             </div>
 
-            <div class="form-group">
-              <label for="post-code">Post Code</label>
+            <div class="mb-3">
+              <label class="form-label" for="post-code">Post Code</label>
               <input class="form-control" name="post-code" id="post-code" type="text" autocomplete="postal-code" <?php if (isset($address->postCode)) { ?>value="<?=htmlspecialchars($address->postCode)?>"<?php } ?> required pattern="[A-Za-z]{1,2}[0-9Rr][0-9A-Za-z]?[\s]{0,1}[0-9][ABD-HJLNP-UW-Zabd-hjlnp-uw-z]{2}">
               <div class="invalid-feedback">
                 Please enter a valid post code.

@@ -62,7 +62,7 @@ include BASE_PATH . 'views/header.php';
           While we accept PNG and JPEG file uploads, we recommend you upload your logos an icons as PNG files as these are much better quality than JPEG files, which become noisy around text.
         </p>
 
-        <div class="form-group">
+        <div class="mb-3">
           <label>Upload logo</label>
           <div class="custom-file">
             <input type="file" class="custom-file-input" accept="image/png,image/jpeg" id="file-upload" name="file-upload" data-max-total-file-size="10485760" data-max-file-size="3145728" data-error-message-id="file-upload-invalid-feedback" required>
@@ -73,7 +73,7 @@ include BASE_PATH . 'views/header.php';
           </div>
         </div>
 
-        <div class="form-group">
+        <div class="mb-3">
           <label>Upload icon <small class="text-muted">Optional</small></label>
           <div class="custom-file">
             <input type="file" class="custom-file-input" accept="image/png,image/jpeg" id="icon-upload" name="icon-upload" data-max-total-file-size="10485760" data-max-file-size="3145728" data-error-message-id="icon-upload-invalid-feedback">

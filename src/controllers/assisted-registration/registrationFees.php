@@ -107,8 +107,8 @@ include BASE_PATH . 'views/header.php';
         </p>
         <?php } ?>
 
-        <div class="form-group">
-          <label for="membership-fee">Club membership fee</label>
+        <div class="mb-3">
+          <label class="form-label" for="membership-fee">Club membership fee</label>
           <div class="input-group">
             <div class="input-group-prepend">
               <span class="input-group-text" id="membership-fee-prepend">&pound;</span>
@@ -126,8 +126,8 @@ include BASE_PATH . 'views/header.php';
           } else {
             $asaFeesString = (string) (\Brick\Math\BigDecimal::of((string) $asaFees[$i]))->withPointMovedLeft(2)->toScale(2);
           } ?>
-          <div class="form-group">
-          <label for="<?=htmlspecialchars($member[$id]['MemberID'])?>-se-fee"><?=htmlspecialchars($member[$i]['MForename'] . " " . $member[$i]['MSurname'])?> Swim England Fee</label>
+          <div class="mb-3">
+          <label class="form-label" for="<?=htmlspecialchars($member[$id]['MemberID'])?>-se-fee"><?=htmlspecialchars($member[$i]['MForename'] . " " . $member[$i]['MSurname'])?> Swim England Fee</label>
           <div class="input-group">
             <div class="input-group-prepend">
               <span class="input-group-text" id="<?=htmlspecialchars($member[$id]['MemberID'])?>-se-fee-prepend">&pound;</span>

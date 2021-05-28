@@ -85,16 +85,16 @@ include BASE_PATH . 'views/header.php';
         <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['AddSessionError']);
         } ?>
 
-        <div class="form-group">
-          <label for="session-name">Session Name</label>
+        <div class="mb-3">
+          <label class="form-label" for="session-name">Session Name</label>
           <input class="form-control" type="text" name="session-name" id="session-name" required placeholder="e.g. Swimming, Land Training, Diving, Water Polo">
           <div class="invalid-feedback">
             You must provide a name for this session such as <em>Swimming</em>, <em>Land Training</em>, <em>Diving</em> or <em>Water Polo</em>
           </div>
         </div>
 
-        <div class="form-group">
-          <label for="session-venue">Session Venue</label>
+        <div class="mb-3">
+          <label class="form-label" for="session-venue">Session Venue</label>
           <select class="custom-select" name="session-venue" id="session-venue" required>
             <option selected value="">Select a Venue</option>
             <?php if ($venue) { ?>
@@ -108,7 +108,7 @@ include BASE_PATH . 'views/header.php';
           </div>
         </div>
 
-        <div class="form-group" id="recurrence-radios">
+        <div class="mb-3" id="recurrence-radios">
           <p class="mb-2">
             Recurrence
           </p>
@@ -122,10 +122,10 @@ include BASE_PATH . 'views/header.php';
           </div>
         </div>
 
-        <div class="form-row">
+        <div class="row">
           <div class="col">
-            <div class="form-group">
-              <label for="session-date">Session Date</label>
+            <div class="mb-3">
+              <label class="form-label" for="session-date">Session Date</label>
               <input type="date" class="form-control" name="session-date" id="session-date" placeholder="<?= htmlspecialchars($dateToday->format('Y-m-d')) ?>" value="<?= htmlspecialchars($dateToday->format('Y-m-d')) ?>" required>
               <div class="invalid-feedback">
                 You must provide a date for this session
@@ -134,8 +134,8 @@ include BASE_PATH . 'views/header.php';
           </div>
 
           <div class="col d-none" id="show-until-container">
-            <div class="form-group">
-              <label for="session-end-date">Show Until</label>
+            <div class="mb-3">
+              <label class="form-label" for="session-end-date">Show Until</label>
               <input type="date" aria-labelledby="session-end-date-help" class="form-control" name="session-end-date" id="session-end-date" placeholder="<?= htmlspecialchars($datePlusYear->format('Y-m-d')) ?>" value="<?= htmlspecialchars($datePlusYear->format('Y-m-d')) ?>">
               <div class="invalid-feedback">
                 You must provide a valid end date for this session
@@ -147,10 +147,10 @@ include BASE_PATH . 'views/header.php';
           </div>
         </div>
 
-        <div class="form-row">
+        <div class="row">
           <div class="col">
-            <div class="form-group">
-              <label for="session-start-time">Start Time</label>
+            <div class="mb-3">
+              <label class="form-label" for="session-start-time">Start Time</label>
               <input type="time" class="form-control" name="session-start-time" id="session-start-time" placeholder="0" value="18:00" required>
               <small id="session-start-time-help" class="form-text text-muted">
                 Make sure to use 24 Hour Time
@@ -158,8 +158,8 @@ include BASE_PATH . 'views/header.php';
             </div>
           </div>
           <div class="col">
-            <div class="form-group">
-              <label for="session-end-time">End Time</label>
+            <div class="mb-3">
+              <label class="form-label" for="session-end-time">End Time</label>
               <input type="time" class="form-control" name="session-end-time" id="session-end-time" placeholder="0" value="18:30" required>
               <small id="session-end-time-help" class="form-text text-muted">
                 Make sure to use 24 Hour Time

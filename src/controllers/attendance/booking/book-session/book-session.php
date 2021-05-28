@@ -400,27 +400,27 @@ include BASE_PATH . 'views/header.php';
 
         <div class="row no-gutters sharing">
           <div class="col">
-            <a target="_blank" class="btn btn-dark btn-block dismiss-share-box" href="mailto:?subject=<?= rawurlencode($theTitle); ?>&body=<?= rawurlencode($theLink); ?>"><i class="fa  fa-envelope" aria-hidden="true"></i><span class="sr-only sr-only-focusable">Share by Email</span></a>
+            <a target="_blank" class="btn btn-dark btn-block dismiss-share-box" href="mailto:?subject=<?= rawurlencode($theTitle); ?>&body=<?= rawurlencode($theLink); ?>"><i class="fa  fa-envelope" aria-hidden="true"></i><span class="visually-hidden visually-hidden-focusable">Share by Email</span></a>
           </div>
 
           <div class="col">
-            <a target="_self" class="btn btn-dark btn-block" id="print-this-page"><i class="fa fa-print" aria-hidden="true"></i><span class="sr-only sr-only-focusable">Print</span></a>
+            <a target="_self" class="btn btn-dark btn-block" id="print-this-page"><i class="fa fa-print" aria-hidden="true"></i><span class="visually-hidden visually-hidden-focusable">Print</span></a>
           </div>
 
           <div class="col">
-            <a target="_blank" class="btn btn-fb btn-block dismiss-share-box" href="http://www.facebook.com/sharer.php?u=<?= rawurlencode($theLink); ?>&amp;t=<?= ($theTitle); ?>"><i class="fa fa-facebook" aria-hidden="true"></i><span class="sr-only sr-only-focusable">Share on Facebook</span></a>
+            <a target="_blank" class="btn btn-fb btn-block dismiss-share-box" href="http://www.facebook.com/sharer.php?u=<?= rawurlencode($theLink); ?>&amp;t=<?= ($theTitle); ?>"><i class="fa fa-facebook" aria-hidden="true"></i><span class="visually-hidden visually-hidden-focusable">Share on Facebook</span></a>
           </div>
 
           <div class="col">
-            <a target="_blank" class="btn btn-tweet btn-block dismiss-share-box" href="https://twitter.com/intent/tweet?text=<?= rawurlencode($theTitle); ?>&url=<?= rawurlencode($theLink); ?>"><i class="fa fa-twitter" aria-hidden="true"></i><span class="sr-only sr-only-focusable">Share on Twitter</span></a>
+            <a target="_blank" class="btn btn-tweet btn-block dismiss-share-box" href="https://twitter.com/intent/tweet?text=<?= rawurlencode($theTitle); ?>&url=<?= rawurlencode($theLink); ?>"><i class="fa fa-twitter" aria-hidden="true"></i><span class="visually-hidden visually-hidden-focusable">Share on Twitter</span></a>
           </div>
 
           <div class="col">
-            <a target="_blank" class="btn btn-whatsapp btn-block dismiss-share-box" href="https://wa.me/?text=<?= rawurlencode($theLink); ?>" data-action="share/whatsapp/share"><i class="fa fa-whatsapp" aria-hidden="true"></i><span class="sr-only sr-only-focusable">Share with Whatsapp</span></a>
+            <a target="_blank" class="btn btn-whatsapp btn-block dismiss-share-box" href="https://wa.me/?text=<?= rawurlencode($theLink); ?>" data-action="share/whatsapp/share"><i class="fa fa-whatsapp" aria-hidden="true"></i><span class="visually-hidden visually-hidden-focusable">Share with Whatsapp</span></a>
           </div>
 
           <div class="col">
-            <a target="_blank" class="btn btn-linkedin btn-block dismiss-share-box" href="https://www.linkedin.com/shareArticle?mini=true&url=<?= rawurlencode($theLink); ?>&title=<?= rawurlencode($theTitle); ?>&source=<?= rawurlencode($tenant->getName() . ' / SCDS Membership') ?>"><i class="fa fa-linkedin" aria-hidden="true"></i><span class="sr-only sr-only-focusable">Share on Linked In</span></a>
+            <a target="_blank" class="btn btn-linkedin btn-block dismiss-share-box" href="https://www.linkedin.com/shareArticle?mini=true&url=<?= rawurlencode($theLink); ?>&title=<?= rawurlencode($theTitle); ?>&source=<?= rawurlencode($tenant->getName() . ' / SCDS Membership') ?>"><i class="fa fa-linkedin" aria-hidden="true"></i><span class="visually-hidden visually-hidden-focusable">Share on Linked In</span></a>
           </div>
         </div>
 

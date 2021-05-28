@@ -90,10 +90,10 @@ include BASE_PATH . "views/header.php";
           Select session
         </div>
         <div class="card-body">
-          <form id="session-selection-form" class="form-row" class="needs-validation" novalidate>
+          <form id="session-selection-form" class="row" class="needs-validation" novalidate>
             <div class="col-md">
-              <div class="form-group mb-0">
-                <label for="session-date">Date</label>
+              <div class="mb-3 mb-0">
+                <label class="form-label" for="session-date">Date</label>
                 <input type="date" name="session-date" id="session-date" class="form-control" value="<?= htmlspecialchars($date->format("Y-m-d")) ?>" max="<?= htmlspecialchars($dateToday->format("Y-m-d")) ?>" required>
                 <div class="invalid-feedback">
                   Please supply a valid date
@@ -102,8 +102,8 @@ include BASE_PATH . "views/header.php";
               </div>
             </div>
             <div class="col">
-              <div class="form-group mb-0">
-                <label for="session-select">Select a session</label>
+              <div class="mb-3 mb-0">
+                <label class="form-label" for="session-select">Select a session</label>
                 <select class="custom-select overflow-hidden" name="session-select" id="session-select" required>
                   <?= registerSessionSelectGenerator($date, $sessionId) ?>
                 </select>
@@ -137,7 +137,7 @@ include BASE_PATH . "views/header.php";
           <dl class="row mb-0">
             <dt class="col-sm-3">
               <span class="badge badge-sm badge-success">
-                HS <i class="fa fa-check-circle" aria-hidden="true"></i><span class="sr-only">Survey submitted and approved</span>
+                HS <i class="fa fa-check-circle" aria-hidden="true"></i><span class="visually-hidden">Survey submitted and approved</span>
               </span>
             </dt>
             <dd class="col-sm-9">
@@ -145,7 +145,7 @@ include BASE_PATH . "views/header.php";
             </dd>
             <dt class="col-sm-3">
               <span class="badge badge-sm badge-danger">
-                HS <i class="fa fa-times-circle" aria-hidden="true"></i><span class="sr-only">Survey submitted and rejected or new survey submission requested</span>
+                HS <i class="fa fa-times-circle" aria-hidden="true"></i><span class="visually-hidden">Survey submitted and rejected or new survey submission requested</span>
               </span>
             </dt>
             <dd class="col-sm-9">
@@ -153,7 +153,7 @@ include BASE_PATH . "views/header.php";
             </dd>
             <dt class="col-sm-3">
               <span class="badge badge-sm badge-warning">
-                HS <i class="fa fa-minus-circle" aria-hidden="true"></i><span class="sr-only">Survey submitted pending approval</span>
+                HS <i class="fa fa-minus-circle" aria-hidden="true"></i><span class="visually-hidden">Survey submitted pending approval</span>
               </span>
             </dt>
             <dd class="col-sm-9">
@@ -161,7 +161,7 @@ include BASE_PATH . "views/header.php";
             </dd>
             <dt class="col-sm-3">
               <span class="badge badge-sm badge-danger">
-                NO HS <span class="sr-only"> submitted</span>
+                NO HS <span class="visually-hidden"> submitted</span>
               </span>
             </dt>
             <dd class="col-sm-9 mb-0">
@@ -178,7 +178,7 @@ include BASE_PATH . "views/header.php";
           <dl class="row mb-0">
             <dt class="col-sm-3">
               <span class="badge badge-sm badge-success">
-                RA <i class="fa fa-check-circle" aria-hidden="true"></i> <span class="sr-only">Valid declaration</span>
+                RA <i class="fa fa-check-circle" aria-hidden="true"></i> <span class="visually-hidden">Valid declaration</span>
               </span>
             </dt>
             <dd class="col-sm-9">
@@ -186,7 +186,7 @@ include BASE_PATH . "views/header.php";
             </dd>
             <dt class="col-sm-3">
               <span class="badge badge-sm badge-danger">
-                RA <i class="fa fa-times-circle" aria-hidden="true"></i> <span class="sr-only">form not submitted or new submission required</span>
+                RA <i class="fa fa-times-circle" aria-hidden="true"></i> <span class="visually-hidden">form not submitted or new submission required</span>
               </span>
             </dt>
             <dd class="col-sm-9 mb-0">

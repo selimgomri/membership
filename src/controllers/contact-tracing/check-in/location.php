@@ -128,8 +128,8 @@ include BASE_PATH . 'views/header.php';
 
             <form action="<?= htmlspecialchars(autoUrl('contact-tracing/check-in/' . $id)) ?>" method="get">
 
-              <div class="form-group">
-                <label for="squad-list">Select squad</label>
+              <div class="mb-3">
+                <label class="form-label" for="squad-list">Select squad</label>
                 <select class="custom-select" id="squad-list" name="squad">
                   <?php do { ?>
                     <option value="<?= htmlspecialchars($squad['SquadID']) ?>"><?= htmlspecialchars($squad['SquadName']) ?></option>
@@ -265,8 +265,8 @@ include BASE_PATH . 'views/header.php';
             </p>
             <div class="collapse" id="member-collapse">
               <div class="cell">
-                <div class="form-group">
-                  <label for="squad">Squad</label>
+                <div class="mb-3">
+                  <label class="form-label" for="squad">Squad</label>
                   <select class="custom-select" id="squad" name="squad">
                     <option selected>Select a squad</option>
                     <?php do { ?>
@@ -275,8 +275,8 @@ include BASE_PATH . 'views/header.php';
                   </select>
                 </div>
 
-                <div class="form-group mb-0">
-                  <label for="date-of-birth">Date of birth</label>
+                <div class="mb-3 mb-0">
+                  <label class="form-label" for="date-of-birth">Date of birth</label>
                   <input type="date" name="date-of-birth" id="date-of-birth" class="form-control">
                 </div>
               </div>

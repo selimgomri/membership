@@ -27,7 +27,7 @@ include 'head.php';
       <img src="<?= htmlspecialchars(autoUrl("img/corporate/scds.png")) ?>" class="img-fluid rounded-top" style="height: 75px;">
     </div>
     <div class="col-auto d-none d-md-flex">
-      <h1 class="sr-only">
+      <h1 class="visually-hidden">
         SCDS Membership Software
       </h1>
     </div>
@@ -55,7 +55,7 @@ include 'head.php';
         </li>
         <?php if (isset($_SESSION['SCDS-SuperUser'])) { ?>
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               Admin
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">

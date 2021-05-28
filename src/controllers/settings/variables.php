@@ -129,7 +129,7 @@ include BASE_PATH . 'views/header.php';
             </div>
           </div>
 
-          <div class="form-group">
+          <div class="mb-3">
             <label>Message type</label>
             <div class="custom-control custom-radio">
               <input type="radio" value="NONE" id="EMERGENCY_MESSAGE_TYPE_NONE" name="EMERGENCY_MESSAGE_TYPE" class="custom-control-input" <?php if ($vars['EMERGENCY_MESSAGE_TYPE'] == 'NONE') { ?>checked<?php } ?> <?= $disabled['EMERGENCY_MESSAGE_TYPE'] ?>>
@@ -149,8 +149,8 @@ include BASE_PATH . 'views/header.php';
             </div>
           </div>
 
-          <div class="form-group">
-            <label for="EMERGENCY_MESSAGE">Emergency message</label>
+          <div class="mb-3">
+            <label class="form-label" for="EMERGENCY_MESSAGE">Emergency message</label>
             <textarea class="form-control mono" rows="7" name="EMERGENCY_MESSAGE" id="EMERGENCY_MESSAGE" <?= $disabled['EMERGENCY_MESSAGE'] ?>><?= htmlspecialchars($vars['EMERGENCY_MESSAGE']) ?></textarea>
           </div>
 
@@ -162,8 +162,8 @@ include BASE_PATH . 'views/header.php';
 
           <h2>Name and Code</h2>
 
-          <div class="form-group">
-            <label for="CLUB_INFO">Select club</label>
+          <div class="mb-3">
+            <label class="form-label" for="CLUB_INFO">Select club</label>
             <select class="custom-select" name="CLUB_INFO" id="CLUB_INFO">
               <?php foreach ($clubs as $club) { ?>
                 <option <?php if ($club['Code'] == app()->tenant->getKey('ASA_CLUB_CODE')) { ?>selected<?php } ?> value="<?= htmlspecialchars($club['Code']) ?>">
@@ -174,38 +174,38 @@ include BASE_PATH . 'views/header.php';
             <small id="CLUB_ADDRESS_HELP" class="form-text text-muted">Selecting your club from this list lets us automatically fill out your clubs details including Swim England code, short name, county and district. We use your county and district to show useful links to your users. You can change your club name once you've selected it.</small>
           </div>
 
-          <div class="form-group">
-            <label for="CLUB_NAME">Club Name</label>
+          <div class="mb-3">
+            <label class="form-label" for="CLUB_NAME">Club Name</label>
             <input class="form-control" type="text" name="CLUB_NAME" id="CLUB_NAME" value="<?= htmlspecialchars($vars['CLUB_NAME']) ?>" <?= $disabled['CLUB_NAME'] ?>>
           </div>
 
-          <div class="form-group">
-            <label for="CLUB_SHORT_NAME">Club Short Name</label>
+          <div class="mb-3">
+            <label class="form-label" for="CLUB_SHORT_NAME">Club Short Name</label>
             <input class="form-control" type="text" name="CLUB_SHORT_NAME" id="CLUB_SHORT_NAME" value="<?= htmlspecialchars($vars['CLUB_SHORT_NAME']) ?>" <?= $disabled['CLUB_SHORT_NAME'] ?>>
           </div>
 
-          <div class="form-group">
-            <label for="ASA_CLUB_CODE">Swim England Club Code</label>
+          <div class="mb-3">
+            <label class="form-label" for="ASA_CLUB_CODE">Swim England Club Code</label>
             <input class="form-control mono" type="text" name="ASA_CLUB_CODE" id="CLUB_SHORT_NAME" value="<?= htmlspecialchars($vars['ASA_CLUB_CODE']) ?>" <?= $disabled['ASA_CLUB_CODE'] ?>>
           </div>
 
-          <div class="form-group">
-            <label for="ASA_COUNTY">Swim England County</label>
+          <div class="mb-3">
+            <label class="form-label" for="ASA_COUNTY">Swim England County</label>
             <input class="form-control" type="url" name="ASA_COUNTY" id="ASA_COUNTY" value="<?= htmlspecialchars($counties[$vars['ASA_COUNTY']]['name']) ?>" disabled>
           </div>
 
-          <div class="form-group">
-            <label for="ASA_DISTRICT">Swim England District</label>
+          <div class="mb-3">
+            <label class="form-label" for="ASA_DISTRICT">Swim England District</label>
             <input class="form-control" type="url" name="ASA_DISTRICT" id="ASA_DISTRICT" value="<?= htmlspecialchars($districts[$vars['ASA_DISTRICT']]['name']) ?>" disabled>
           </div>
 
-          <div class="form-group">
-            <label for="CLUB_WEBSITE">Club Website</label>
+          <div class="mb-3">
+            <label class="form-label" for="CLUB_WEBSITE">Club Website</label>
             <input class="form-control mono" type="url" name="CLUB_WEBSITE" id="CLUB_WEBSITE" value="<?= htmlspecialchars($vars['CLUB_WEBSITE']) ?>" <?= $disabled['CLUB_WEBSITE'] ?>>
           </div>
 
-          <div class="form-group">
-            <label for="CLUB_ADDRESS">Club Primary Address</label>
+          <div class="mb-3">
+            <label class="form-label" for="CLUB_ADDRESS">Club Primary Address</label>
             <textarea class="form-control" rows="5" id="CLUB_ADDRESS" name="CLUB_ADDRESS" aria-describedby="CLUB_ADDRESS_HELP" <?= $disabled['CLUB_ADDRESS'] ?>><?php
                                                                                                                                                                 if ($vars['CLUB_ADDRESS']) {
                                                                                                                                                                   for ($i = 0; $i < sizeof($vars['CLUB_ADDRESS']); $i++) {
@@ -221,18 +221,18 @@ include BASE_PATH . 'views/header.php';
 
           <h2>Email Options</h2>
 
-          <div class="form-group">
-            <label for="CLUB_EMAIL">Main Club Email Address</label>
+          <div class="mb-3">
+            <label class="form-label" for="CLUB_EMAIL">Main Club Email Address</label>
             <input class="form-control" type="email" name="CLUB_EMAIL" id="CLUB_EMAIL" value="<?= htmlspecialchars($vars['CLUB_EMAIL']) ?>" <?= $disabled['CLUB_EMAIL'] ?>>
           </div>
 
-          <div class="form-group">
-            <label for="CLUB_TRIAL_EMAIL">Trial Request Email Address</label>
+          <div class="mb-3">
+            <label class="form-label" for="CLUB_TRIAL_EMAIL">Trial Request Email Address</label>
             <input class="form-control" type="email" name="CLUB_TRIAL_EMAIL" id="CLUB_TRIAL_EMAIL" value="<?= htmlspecialchars($vars['CLUB_TRIAL_EMAIL']) ?>" <?= $disabled['CLUB_TRIAL_EMAIL'] ?>>
           </div>
 
-          <div class="form-group">
-            <label for="EMAIL_DOMAIN">Email Domain</label>
+          <div class="mb-3">
+            <label class="form-label" for="EMAIL_DOMAIN">Email Domain</label>
             <div class="input-group">
               <div class="input-group-prepend">
                 <span class="input-group-text">@</span>
@@ -243,15 +243,15 @@ include BASE_PATH . 'views/header.php';
           </div>
 
           <?php if (!getenv('SENDGRID_API_KEY')) { ?>
-            <div class="form-group">
-              <label for="EMAIL_DOMAIN">Twilio SendGrid API Key</label>
+            <div class="mb-3">
+              <label class="form-label" for="EMAIL_DOMAIN">Twilio SendGrid API Key</label>
               <input class="form-control mono" type="text" name="SENDGRID_API_KEY" id="SENDGRID_API_KEY" value="<?= htmlspecialchars($vars['SENDGRID_API_KEY']) ?>" <?= $disabled['SENDGRID_API_KEY'] ?>>
             </div>
           <?php } else { ?>
             <p>Your <a href="https://sendgrid.com/">Twilio SendGrid API key</a> is set at system level and cannot be viewed or modified here.</p>
           <?php } ?>
 
-          <div class="form-group">
+          <div class="mb-3">
             <div class="custom-control custom-switch">
               <input type="checkbox" class="custom-control-input" id="BLOCK_SQUAD_REPS_FROM_NOTIFY" name="BLOCK_SQUAD_REPS_FROM_NOTIFY" <?php if (!bool($vars['BLOCK_SQUAD_REPS_FROM_NOTIFY'])) { ?>checked<?php } ?> <?= $disabled['BLOCK_SQUAD_REPS_FROM_NOTIFY'] ?>>
               <label class="custom-control-label" for="BLOCK_SQUAD_REPS_FROM_NOTIFY">Allow squad reps to use Notify</label>
@@ -259,7 +259,7 @@ include BASE_PATH . 'views/header.php';
           </div>
 
           <h2>Display options</h2>
-          <div class="form-group">
+          <div class="mb-3">
             <div class="custom-control custom-switch">
               <input type="checkbox" class="custom-control-input" id="HIDE_MEMBER_ATTENDANCE" name="HIDE_MEMBER_ATTENDANCE" <?php if (!bool($vars['HIDE_MEMBER_ATTENDANCE'])) { ?>checked<?php } ?> <?= $disabled['HIDE_MEMBER_ATTENDANCE'] ?>>
               <label class="custom-control-label" for="HIDE_MEMBER_ATTENDANCE">Show member attendance percentage to parents</label>
@@ -267,7 +267,7 @@ include BASE_PATH . 'views/header.php';
           </div>
 
           <?php if ($vars['LOGO_DIR']) { ?>
-            <div class="form-group">
+            <div class="mb-3">
               <div class="custom-control custom-switch">
                 <input type="checkbox" class="custom-control-input" id="SHOW_LOGO" value="1" name="SHOW_LOGO" <?php if (bool($vars['SHOW_LOGO'])) { ?>checked<?php } ?> <?= $disabled['SHOW_LOGO'] ?>>
                 <label class="custom-control-label" for="SHOW_LOGO">Show organisation logo in header</label>
@@ -275,7 +275,7 @@ include BASE_PATH . 'views/header.php';
             </div>
           <?php } ?>
 
-          <div class="form-group">
+          <div class="mb-3">
             <div class="custom-control custom-switch">
               <input type="checkbox" class="custom-control-input" id="HIDE_CONTACT_TRACING_FROM_PARENTS" value="1" name="HIDE_CONTACT_TRACING_FROM_PARENTS" <?php if (!bool($vars['HIDE_CONTACT_TRACING_FROM_PARENTS'])) { ?>checked<?php } ?> <?= $disabled['HIDE_CONTACT_TRACING_FROM_PARENTS'] ?>>
               <label class="custom-control-label" for="HIDE_CONTACT_TRACING_FROM_PARENTS">Show contact tracing links to all member users</label>
@@ -283,14 +283,14 @@ include BASE_PATH . 'views/header.php';
           </div>
 
           <h2>Registration and renewal global options</h2>
-          <div class="form-group">
+          <div class="mb-3">
             <div class="custom-control custom-switch">
               <input type="checkbox" class="custom-control-input" id="REQUIRE_FULL_REGISTRATION" value="1" name="REQUIRE_FULL_REGISTRATION" <?php if (bool($vars['REQUIRE_FULL_REGISTRATION'])) { ?>checked<?php } ?> <?= $disabled['REQUIRE_FULL_REGISTRATION'] ?>>
               <label class="custom-control-label" for="REQUIRE_FULL_REGISTRATION">Require users to complete all registration forms</label>
             </div>
           </div>
 
-          <div class="form-group">
+          <div class="mb-3">
             <div class="custom-control custom-switch">
               <input type="checkbox" class="custom-control-input" id="REQUIRE_FULL_RENEWAL" value="1" name="REQUIRE_FULL_RENEWAL" <?php if (bool($vars['REQUIRE_FULL_RENEWAL'])) { ?>checked<?php } ?> <?= $disabled['REQUIRE_FULL_RENEWAL'] ?>>
               <label class="custom-control-label" for="REQUIRE_FULL_RENEWAL">Require users to complete all renewal forms. If off renewal jumps direct to membership fees page.</label>
@@ -298,7 +298,7 @@ include BASE_PATH . 'views/header.php';
           </div>
 
           <h2>Billing options</h2>
-          <div class="form-group">
+          <div class="mb-3">
             <div class="custom-control custom-switch">
               <input type="checkbox" class="custom-control-input" id="ENABLE_BILLING_SYSTEM" value="1" name="ENABLE_BILLING_SYSTEM" <?php if (bool($vars['ENABLE_BILLING_SYSTEM'])) { ?>checked<?php } ?> <?= $disabled['ENABLE_BILLING_SYSTEM'] ?>>
               <label class="custom-control-label" for="ENABLE_BILLING_SYSTEM">Enable the automated billing system (for Direct Debit)</label>
@@ -309,18 +309,18 @@ include BASE_PATH . 'views/header.php';
 
           <p>GoCardless is our legacy Direct Debit system. We're phasing it out and will replace it with Stripe, who we already partner with for card payments. We'll get in touch when you need to make changes.</a></p>
 
-          <div class="form-group">
-            <label for="GOCARDLESS_ACCESS_TOKEN">GoCardless Access Token</label>
+          <div class="mb-3">
+            <label class="form-label" for="GOCARDLESS_ACCESS_TOKEN">GoCardless Access Token</label>
             <input class="form-control mono" type="text" name="GOCARDLESS_ACCESS_TOKEN" id="GOCARDLESS_ACCESS_TOKEN" value="<?= htmlspecialchars($vars['GOCARDLESS_ACCESS_TOKEN']) ?>" <?= $disabled['GOCARDLESS_ACCESS_TOKEN'] ?>>
           </div>
 
-          <div class="form-group">
-            <label for="GOCARDLESS_WEBHOOK_KEY">GoCardless Webhook Key</label>
+          <div class="mb-3">
+            <label class="form-label" for="GOCARDLESS_WEBHOOK_KEY">GoCardless Webhook Key</label>
             <input class="form-control mono" type="text" name="GOCARDLESS_WEBHOOK_KEY" id="GOCARDLESS_WEBHOOK_KEY" value="<?= htmlspecialchars($vars['GOCARDLESS_WEBHOOK_KEY']) ?>" <?= $disabled['GOCARDLESS_WEBHOOK_KEY'] ?>>
           </div>
 
           <p>Your GoCardless webhook endpoint URL is</p>
-          <div class="form-group">
+          <div class="mb-3">
             <input class="form-control mono" type="text" readonly value="<?= autoUrl("payments/webhooks") ?>">
           </div>
 
@@ -335,8 +335,8 @@ include BASE_PATH . 'views/header.php';
           <h2>Customisation</h2>
 
           <?php if (!app()->tenant->isCLS()) { ?>
-            <div class="form-group">
-              <label for="SYSTEM_COLOUR">Primary Colour</label>
+            <div class="mb-3">
+              <label class="form-label" for="SYSTEM_COLOUR">Primary Colour</label>
               <input class="form-control" type="color" name="SYSTEM_COLOUR" id="SYSTEM_COLOUR" value="<?= htmlspecialchars($vars['SYSTEM_COLOUR']) ?>" <?= $disabled['SYSTEM_COLOUR'] ?> aria-describedby="SYSTEM_COLOUR_HELP">
               <small id="SYSTEM_COLOUR_HELP" class="form-text text-muted">The system primary colour is used in PDF documents generated by the membership system.</small>
             </div>
@@ -353,16 +353,16 @@ include BASE_PATH . 'views/header.php';
             Get your personal key from the <a href="https://www.swimmingresults.org/member_options/">swimmingresults.org</a> website.
           </p>
 
-          <div class="form-group">
-            <label for="GLOBAL_PERSONAL_KEY_ID_NUMBER">Membership Number</label>
+          <div class="mb-3">
+            <label class="form-label" for="GLOBAL_PERSONAL_KEY_ID_NUMBER">Membership Number</label>
             <input class="form-control mono" type="number" name="GLOBAL_PERSONAL_KEY_ID_NUMBER" id="GLOBAL_PERSONAL_KEY_ID_NUMBER" value="<?= htmlspecialchars($vars['GLOBAL_PERSONAL_KEY_ID_NUMBER']) ?>" <?= $disabled['GLOBAL_PERSONAL_KEY_ID_NUMBER'] ?> min="0">
             <div class="invalid-feedback">
               Please enter a Swim England, Swim Wales or Scottish Swimming membership number
             </div>
           </div>
 
-          <div class="form-group">
-            <label for="GLOBAL_PERSONAL_KEY">Personal Key</label>
+          <div class="mb-3">
+            <label class="form-label" for="GLOBAL_PERSONAL_KEY">Personal Key</label>
             <input class="form-control mono" type="text" name="GLOBAL_PERSONAL_KEY" id="GLOBAL_PERSONAL_KEY" value="<?= htmlspecialchars($vars['GLOBAL_PERSONAL_KEY']) ?>" <?= $disabled['GLOBAL_PERSONAL_KEY'] ?> pattern="[a-f0-9]{8}-[a-f0-9]{8}-[a-f0-9]{8}-[a-f0-9]{8}">
             <div class="invalid-feedback">
               Please enter your personal key in the corrent format

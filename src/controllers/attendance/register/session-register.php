@@ -137,30 +137,30 @@ function registerSheetGenerator($date, $sessionId)
                         <div class="<?php if (sizeof($row['medical']) > 0 || sizeof($row['photo']) > 0 || $row['notes'] || sizeof($row['contacts']) > 0) { ?>mb-1<?php } ?> text-right">
                           <?php if ($cvRALatest && bool($cvRALatest['MemberAgreement'])) { ?>
                             <span class="badge badge-sm badge-success">
-                              RA <i class="fa fa-check-circle" aria-hidden="true"></i> <span class="sr-only">Valid declaration</span>
+                              RA <i class="fa fa-check-circle" aria-hidden="true"></i> <span class="visually-hidden">Valid declaration</span>
                             </span>
                           <?php } else { ?>
                             <span class="badge badge-sm badge-danger">
-                              RA <i class="fa fa-times-circle" aria-hidden="true"></i> <span class="sr-only">form not submitted or new submission required</span>
+                              RA <i class="fa fa-times-circle" aria-hidden="true"></i> <span class="visually-hidden">form not submitted or new submission required</span>
                             </span>
                           <?php } ?>
                           <?php if ($cvLatest) { ?>
                             <?php if (bool($cvLatest['OfficerApproval'])) { ?>
                               <span class="badge badge-sm badge-success">
-                                HS <i class="fa fa-check-circle" aria-hidden="true"></i><span class="sr-only">Survey submitted and approved</span>
+                                HS <i class="fa fa-check-circle" aria-hidden="true"></i><span class="visually-hidden">Survey submitted and approved</span>
                               </span>
                             <?php } else if (!bool($cvLatest['OfficerApproval']) && $cvLatest['ApprovedBy']) { ?>
                               <span class="badge badge-sm badge-danger">
-                                HS <i class="fa fa-times-circle" aria-hidden="true"></i><span class="sr-only">Survey submitted and rejected</span>
+                                HS <i class="fa fa-times-circle" aria-hidden="true"></i><span class="visually-hidden">Survey submitted and rejected</span>
                               </span>
                             <?php } else if (!bool($cvLatest['OfficerApproval']) && !$cvLatest['ApprovedBy']) { ?>
                               <span class="badge badge-sm badge-warning">
-                                HS <i class="fa fa-minus-circle" aria-hidden="true"></i><span class="sr-only">Survey submitted pending approval</span>
+                                HS <i class="fa fa-minus-circle" aria-hidden="true"></i><span class="visually-hidden">Survey submitted pending approval</span>
                               </span>
                             <?php } ?>
                           <?php } else { ?>
                             <span class="badge badge-sm badge-danger">
-                              NO HS <span class="sr-only">Survey submitted</span>
+                              NO HS <span class="visually-hidden">Survey submitted</span>
                             </span>
                           <?php } ?>
                         </div>

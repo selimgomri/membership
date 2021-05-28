@@ -87,10 +87,10 @@ include BASE_PATH . 'views/header.php';
         <form method="post">
 
           <h2>County fees</h2>
-          <div class="form-row">
+          <div class="row">
             <div class="col">
-              <div class="form-group">
-                <label for="county-1">Level 1 fee</label>
+              <div class="mb-3">
+                <label class="form-label" for="county-1">Level 1 fee</label>
                 <div class="input-group mono">
                   <div class="input-group-prepend">
                     <span class="input-group-text">&pound;</span>
@@ -101,8 +101,8 @@ include BASE_PATH . 'views/header.php';
             </div>
 
             <div class="col">
-              <div class="form-group">
-                <label for="county-2">Level 2 fee</label>
+              <div class="mb-3">
+                <label class="form-label" for="county-2">Level 2 fee</label>
                 <div class="input-group mono">
                   <div class="input-group-prepend">
                     <span class="input-group-text">&pound;</span>
@@ -113,8 +113,8 @@ include BASE_PATH . 'views/header.php';
             </div>
 
             <div class="col">
-              <div class="form-group">
-                <label for="county">Level 3 fee</label>
+              <div class="mb-3">
+                <label class="form-label" for="county">Level 3 fee</label>
                 <div class="input-group mono">
                   <div class="input-group-prepend">
                     <span class="input-group-text">&pound;</span>
@@ -126,10 +126,10 @@ include BASE_PATH . 'views/header.php';
           </div>
 
           <h2>Regional fees</h2>
-          <div class="form-row">
+          <div class="row">
             <div class="col">
-              <div class="form-group">
-                <label for="region-1">Level 1 fee</label>
+              <div class="mb-3">
+                <label class="form-label" for="region-1">Level 1 fee</label>
                 <div class="input-group mono">
                   <div class="input-group-prepend">
                     <span class="input-group-text">&pound;</span>
@@ -140,8 +140,8 @@ include BASE_PATH . 'views/header.php';
             </div>
 
             <div class="col">
-              <div class="form-group">
-                <label for="region-2">Level 2 fee</label>
+              <div class="mb-3">
+                <label class="form-label" for="region-2">Level 2 fee</label>
                 <div class="input-group mono">
                   <div class="input-group-prepend">
                     <span class="input-group-text">&pound;</span>
@@ -152,8 +152,8 @@ include BASE_PATH . 'views/header.php';
             </div>
 
             <div class="col">
-              <div class="form-group">
-                <label for="region-3">Level 3 fee</label>
+              <div class="mb-3">
+                <label class="form-label" for="region-3">Level 3 fee</label>
                 <div class="input-group mono">
                   <div class="input-group-prepend">
                     <span class="input-group-text">&pound;</span>
@@ -166,10 +166,10 @@ include BASE_PATH . 'views/header.php';
 
           <h2>National fees</h2>
 
-          <div class="form-row">
+          <div class="row">
             <div class="col">
-              <div class="form-group">
-                <label for="national-1">Level 1 fee</label>
+              <div class="mb-3">
+                <label class="form-label" for="national-1">Level 1 fee</label>
                 <div class="input-group mono">
                   <div class="input-group-prepend">
                     <span class="input-group-text">&pound;</span>
@@ -180,8 +180,8 @@ include BASE_PATH . 'views/header.php';
             </div>
 
             <div class="col">
-              <div class="form-group">
-                <label for="national-2">Level 2 fee</label>
+              <div class="mb-3">
+                <label class="form-label" for="national-2">Level 2 fee</label>
                 <div class="input-group mono">
                   <div class="input-group-prepend">
                     <span class="input-group-text">&pound;</span>
@@ -192,8 +192,8 @@ include BASE_PATH . 'views/header.php';
             </div>
 
             <div class="col">
-              <div class="form-group">
-                <label for="national-3">Level 3 fee</label>
+              <div class="mb-3">
+                <label class="form-label" for="national-3">Level 3 fee</label>
                 <div class="input-group mono">
                   <div class="input-group-prepend">
                     <span class="input-group-text">&pound;</span>

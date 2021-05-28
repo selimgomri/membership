@@ -30,16 +30,16 @@ include BASE_PATH . "views/paymentsMenu.php";
         }
         ?>
         <form method="post" class="needs-validation" novalidate>
-          <div class="form-group">
-            <label for="name">Extra Name</label>
+          <div class="mb-3">
+            <label class="form-label" for="name">Extra Name</label>
             <input type="text" class="form-control" id="name" name="name" placeholder="Enter name" required>
             <div class="invalid-feedback">
               Provide a name for this monthly extra
             </div>
           </div>
 
-          <div class="form-group">
-            <label for="price">Amount</label>
+          <div class="mb-3">
+            <label class="form-label" for="price">Amount</label>
             <div class="input-group mb-3">
               <div class="input-group-prepend">
                 <span class="input-group-text" id="basic-addon3">&pound;</span>
@@ -51,7 +51,7 @@ include BASE_PATH . "views/paymentsMenu.php";
             </div>
           </div>
 
-          <div class="form-group">
+          <div class="mb-3">
             <label>Monthly payment or refund</label>
             <div class="custom-control custom-radio">
               <input type="radio" id="type-pay" name="pay-credit-type" class="custom-control-input" value="Payment" required>

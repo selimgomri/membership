@@ -58,19 +58,19 @@ include BASE_PATH . "views/root/head.php";
               </p>
 
               <form action="<?= htmlspecialchars(autoUrl($club->getCodeId() . "/login", false)) ?>" method="post" id="login-form" class="needs-validation" novalidate data-prefilled="<?= htmlspecialchars((int) isset($_GET['user'])) ?>" data-ajax-login-url="<?= htmlspecialchars(autoUrl("login", false)) ?>" data-ajax-two-factor-url="<?= htmlspecialchars(autoUrl("login/2fa", false)) ?>">
-                <div class="form-group">
-                  <label for="email-address">Email address</label>
+                <div class="mb-3">
+                  <label class="form-label" for="email-address">Email address</label>
                   <input type="email" class="form-control form-control-lg text-lowercase" id="email-address" name="email-address" placeholder="yourname@example.com" required autocomplete="email" <?php if (isset($_GET['user'])) { ?>value="<?= htmlspecialchars(urldecode($_GET['user'])) ?>" <?php } else { ?> autofocus <?php } ?>>
                 </div>
 
-                <div class="form-group">
-                  <label for="password">Password</label>
+                <div class="mb-3">
+                  <label class="form-label" for="password">Password</label>
                   <input type="password" name="password" id="password" class="form-control form-control-lg" required placeholder="Password" autocomplete="current-password" <?php if (isset($_GET['user'])) { ?> autofocus <?php } ?>>
                 </div>
 
                 <input type="hidden" name="target" value="<?= htmlspecialchars($target) ?>">
 
-                <div class="form-group">
+                <div class="mb-3">
                   <div class="custom-control custom-checkbox">
                     <input type="checkbox" class="custom-control-input" name="remember-me" id="remember-me" checked aria-describedby="remember-me-help">
                     <label class="custom-control-label" for="remember-me">Keep me logged in</label>

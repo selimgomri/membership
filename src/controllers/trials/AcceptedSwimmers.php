@@ -60,7 +60,7 @@ include BASE_PATH . 'views/header.php';
         </p>
         <?php } ?>
 
-        <div class="form-row mb-1">
+        <div class="row mb-1">
           <div class="col-md">
             <a href="<?=autoUrl($url_path . $parent['Hash'] . "/invite")?>" class="btn btn-block btn-dark">
               Invite Parent
@@ -81,7 +81,7 @@ include BASE_PATH . 'views/header.php';
 
           <div class="col-md">
             <div class="dropdown">
-              <button class="btn btn-block btn-danger dropdown-toggle" type="button" id="deleteDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <button class="btn btn-block btn-danger dropdown-toggle" type="button" id="deleteDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Advanced
               </button>
               <div class="dropdown-menu dropdown-menu-right" aria-labelledby="deleteDropdown">

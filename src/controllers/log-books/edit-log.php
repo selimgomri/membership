@@ -110,16 +110,16 @@ include BASE_PATH . 'views/header.php';
         <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['EditLogSuccessMessage']); } ?>
 
         <h2>Log entry</h2>
-        <div class="form-group">
-          <label for="title">Log title</label>
+        <div class="mb-3">
+          <label class="form-label" for="title">Log title</label>
           <input type="text" required class="form-control" id="title" name="title" placeholder="e.g. Swimming training" value="<?=htmlspecialchars($title)?>">
           <div class="invalid-feedback">
             You must give this log entry a title.
           </div>
         </div>
 
-        <div class="form-group">
-          <label for="entry">Log entry</label>
+        <div class="mb-3">
+          <label class="form-label" for="entry">Log entry</label>
           <textarea rows="15" required class="form-control" id="entry" name="entry" placeholder="e.g.&#13;&#10;5 x 200m free&#13;&#10;10 x 50m back"><?=htmlspecialchars($entry)?></textarea>
           <div class="invalid-feedback">
             You must fill out the log entry.
@@ -133,24 +133,24 @@ include BASE_PATH . 'views/header.php';
           <p>
             You can edit the time and date for this activity.
           </p>
-          <div class="form-group">
-            <label for="date">Date</label>
+          <div class="mb-3">
+            <label class="form-label" for="date">Date</label>
             <input class="form-control" id="date" name="date" type="date" value="<?=htmlspecialchars($date)?>">
             <div class="invalid-feedback">
               You must enter a valid date.
             </div>
           </div>
 
-          <div class="form-group">
-            <label for="time">Time</label>
+          <div class="mb-3">
+            <label class="form-label" for="time">Time</label>
             <input class="form-control" id="time" name="time" type="time" value="<?=htmlspecialchars($time)?>">
             <div class="invalid-feedback">
               You must enter a valid time.
             </div>
           </div>
 
-          <div class="form-group mb-0">
-            <label for="content-type">Content type</label>
+          <div class="mb-3 mb-0">
+            <label class="form-label" for="content-type">Content type</label>
             <select required class="custom-select" id="content-type" name="content-type" aria-describedby="content-type-help">
               <option value="text/plain" <?php if ($contentType == 'text/plain') { ?>selected<?php } ?> >Plain text</option>
               <option value="text/plain-monospace" <?php if ($contentType == 'text/plain-monospace') { ?>selected<?php } ?> >Monospaced plain text</option>

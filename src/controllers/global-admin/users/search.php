@@ -36,8 +36,8 @@ include BASE_PATH . "views/root/header.php";
   <p class="lead">Search for a user by email.</p>
 
   <form method="get" class="needs-validation" novalidate>
-    <div class="form-group">
-      <label for="email-address">Email</label>
+    <div class="mb-3">
+      <label class="form-label" for="email-address">Email</label>
       <input type="email" id="email-address" name="email-address" class="form-control" placeholder="name@example.com" <?php if (isset($_GET['email-address'])) { ?>value="<?= htmlspecialchars($_GET['email-address']) ?>" <?php } ?> required>
       <div class="invalid-feedback">
         Please enter a valid email address

@@ -65,8 +65,8 @@ include BASE_PATH . 'views/header.php';
           <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['PCC-ERROR']);
           } ?>
 
-          <div class="form-group">
-            <label for="TermsAndConditions">Terms and Conditions Document</label>
+          <div class="mb-3">
+            <label class="form-label" for="TermsAndConditions">Terms and Conditions Document</label>
             <select class="custom-select" id="TermsAndConditions" name="TermsAndConditions" aria-describedby="TermsAndConditionsBlock">
               <option <?php if ($terms == null) { ?>selected<?php } ?>>
                 Select an option
@@ -82,8 +82,8 @@ include BASE_PATH . 'views/header.php';
             </small>
           </div>
 
-          <div class="form-group">
-            <label for="PrivacyPolicy">Privacy Policy Document</label>
+          <div class="mb-3">
+            <label class="form-label" for="PrivacyPolicy">Privacy Policy Document</label>
             <select class="custom-select" id="PrivacyPolicy" name="PrivacyPolicy" aria-describedby="PrivacyPolicyBlock">
               <option <?php if ($privacy == null) { ?>selected<?php } ?>>
                 Select an option
@@ -99,8 +99,8 @@ include BASE_PATH . 'views/header.php';
             </small>
           </div>
 
-          <div class="form-group">
-            <label for="WelcomeLetter">Welcome letter</label>
+          <div class="mb-3">
+            <label class="form-label" for="WelcomeLetter">Welcome letter</label>
             <select class="custom-select" id="WelcomeLetter" name="WelcomeLetter" aria-describedby="WelcomeLetterBlock">
               <option <?php if ($welcome == null) { ?>selected<?php } ?>>
                 Select an option

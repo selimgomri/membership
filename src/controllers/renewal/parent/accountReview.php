@@ -34,38 +34,38 @@ include BASE_PATH . "views/renewalTitleBar.php";
 	<form method="post" class="needs-validation" novalidate>
 		<div class="">
 			<h2>Your Details</h2>
-			<div class="form-group">
-				<label for="forename">Name</label>
+			<div class="mb-3">
+				<label class="form-label" for="forename">Name</label>
 				<input type="text" class="form-control" name="forename" id="forename" placeholder="Forename" value="<?= htmlspecialchars($forename) ?>" required>
 				<div class="invalid-feedback">
 					You must provide your name
 				</div>
 			</div>
-			<div class="form-group">
-				<label for="surname">Surname</label>
+			<div class="mb-3">
+				<label class="form-label" for="surname">Surname</label>
 				<input type="text" class="form-control" name="surname" id="surname" placeholder="Surname" value="<?= htmlspecialchars($surname) ?>" required>
 				<div class="invalid-feedback">
 					You must provide your surname
 				</div>
 			</div>
-			<div class="form-group">
-				<label for="email-input">Email</label>
+			<div class="mb-3">
+				<label class="form-label" for="email-input">Email</label>
 				<input type="email" class="form-control" name="email" id="email-input" aria-describedby="email-help" placeholder="Email Address" value="<?= htmlspecialchars($email) ?>" disabled>
 				<small id="email-help" class="form-text text-muted">You can only change your email address in account settings.</small>
 			</div>
-			<div class="form-group">
+			<div class="mb-3">
 				<div class="custom-control custom-checkbox">
 					<input type="checkbox" class="custom-control-input" value="1" id="emailContactOK" aria-describedby="emailContactOKHelp" name="emailContactOK" <?= $emailChecked ?>>
 					<label class="custom-control-label" for="emailContactOK">I would like to receive important news and messages from squad coaches by email</label>
 					<small id="emailContactOKHelp" class="form-text text-muted">You'll still receive emails relating to your account if you don't receive news</small>
 				</div>
 			</div>
-			<div class="form-group">
-				<label for="mobile">Mobile Number</label>
+			<div class="mb-3">
+				<label class="form-label" for="mobile">Mobile Number</label>
 				<input type="tel" class="form-control" name="mobile" id="mobile" aria-describedby="mobileHelp" placeholder="Mobile Number" value="<?= htmlspecialchars($mobile) ?>" required>
 				<small id="mobileHelp" class="form-text text-muted">If you don't have a mobile, use your landline number.</small>
 			</div>
-			<div class="form-group">
+			<div class="mb-3">
 				<div class="custom-control custom-checkbox">
 					<input type="checkbox" class="custom-control-input" value="1" id="smsContactOK" aria-describedby="smsContactOKHelp" name="smsContactOK" <?= $mobileChecked ?>>
 					<label class="custom-control-label" for="smsContactOK">I would like to receive important text messages</label>

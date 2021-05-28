@@ -96,8 +96,8 @@ include "galaMenu.php";
     <div>
       <form method="post">
       <h2>Select Swimmer and Gala</h2>
-      <div class="form-group row">
-        <label for="swimmer" class="col-sm-2 col-form-label">Select Swimmer</label>
+      <div class="mb-3 row">
+        <label class="form-label" for="swimmer" class="col-sm-2 col-form-label">Select Swimmer</label>
         <div class="col-sm-10">
           <select class="custom-select" id="swimmer" name="swimmer" required><option value="null" <?php if ($swimmerCount > 1) { ?>selected<?php } ?>>Select a swimmer</option>
           <?php do { ?>
@@ -108,8 +108,8 @@ include "galaMenu.php";
           </select>
         </div>
       </div>
-      <div class="form-group row">
-        <label for="gala" class="col-sm-2 col-form-label">Select Gala</label>
+      <div class="mb-3 row">
+        <label class="form-label" for="gala" class="col-sm-2 col-form-label">Select Gala</label>
         <div class="col-sm-10">
           <select class="custom-select" id="gala" name="gala" required><option value="null" selected>Select a gala</option>
           <?php do { ?>

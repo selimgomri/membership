@@ -64,8 +64,8 @@ include BASE_PATH . "views/notifyMenu.php";
           Add member to list
         </div>
         <form class="card-body">
-          <div class="form-group">
-            <label for="squadSelect">Select Squad (Optional)</label>
+          <div class="mb-3">
+            <label class="form-label" for="squadSelect">Select Squad (Optional)</label>
             <select class="custom-select" id="squadSelect" name="squadSelect">
               <option value="all" selected>Choose...</option>
               <?php while ($squadsRow = $squads->fetch(PDO::FETCH_ASSOC)) { ?>
@@ -75,8 +75,8 @@ include BASE_PATH . "views/notifyMenu.php";
               <?php } ?>
             </select>
           </div>
-          <div class="form-group">
-            <label for="swimmerSelect">Select member</label>
+          <div class="mb-3">
+            <label class="form-label" for="swimmerSelect">Select member</label>
             <select class="custom-select" id="swimmerSelect" name="swimmerSelect" disabled>
               <option value="null" selected>Select squad first</option>
             </select>
@@ -94,13 +94,13 @@ include BASE_PATH . "views/notifyMenu.php";
           Add user to list
         </div>
         <form class="card-body">
-          <div class="form-group">
-            <label for="user-select">Search by name for user</label>
+          <div class="mb-3">
+            <label class="form-label" for="user-select">Search by name for user</label>
             <input type="text" name="user-name-search" id="user-name-search" class="form-control">
             </select>
           </div>
-          <div class="form-group">
-            <label for="user-select">Select user</label>
+          <div class="mb-3">
+            <label class="form-label" for="user-select">Select user</label>
             <select class="custom-select" id="user-select" name="user-select" disabled>
               <option value="null" selected>Search for a user</option>
             </select>

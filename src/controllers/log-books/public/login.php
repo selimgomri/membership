@@ -30,15 +30,15 @@ include BASE_PATH . "views/header.php";
       } ?>
 
       <form method="post" action="<?= autoUrl("log-books/login") ?>" name="loginform" id="loginform" class="needs-validation" novalidate>
-        <div class="form-group">
-          <label for="swim-england">Swim England Membership Number</label>
+        <div class="mb-3">
+          <label class="form-label" for="swim-england">Swim England Membership Number</label>
           <input type="text" name="swim-england" id="swim-england" class="form-control form-control-lg text-lowercase" value="<?= htmlspecialchars($username) ?>" required <?php if (!$username) { ?>autofocus<?php } ?> placeholder="123456" autocomplete="">
           <div class="invalid-feedback">
             Please enter a valid membership number.
           </div>
         </div>
-        <div class="form-group">
-          <label for="password">Password</label>
+        <div class="mb-3">
+          <label class="form-label" for="password">Password</label>
           <input type="password" name="password" id="password" class="form-control form-control-lg" required placeholder="Password" <?php if (mb_strlen($username) > 0) { ?>autofocus<?php } ?> aria-describedby="password-help" autocomplete="current-password">
           <div class="invalid-feedback">
             Please enter a password.
@@ -47,7 +47,7 @@ include BASE_PATH . "views/header.php";
             This is the password for your club account, not your Swim England account.
           </small>
         </div>
-        <div class="form-group">
+        <div class="mb-3">
           <div class="custom-control custom-checkbox">
             <input type="checkbox" class="custom-control-input" name="RememberMe" id="RememberMe" aria-describedby="RememberMeHelp" disabled>
             <label class="custom-control-label" for="RememberMe">Keep me logged in - <span class="badge badge-info">Coming soon</span></label>

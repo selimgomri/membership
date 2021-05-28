@@ -57,8 +57,8 @@ include BASE_PATH . "views/header.php";
 
       <?php if ($list != null) { ?>
       <form method="post">
-        <div class="form-group">
-          <label for="list-select">
+        <div class="mb-3">
+          <label class="form-label" for="list-select">
             Choose targeted list
           </label>
           <select class="custom-select" id="list-select" name="list-select">

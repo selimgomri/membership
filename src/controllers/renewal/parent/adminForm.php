@@ -85,7 +85,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
           Information will not be kept once a person has left the club.
         </p>
 
-        <div class="form-group">
+        <div class="mb-3">
           <div class="custom-control custom-checkbox">
             <input type="checkbox" value="1" class="custom-control-input" name="data-agree" id="data-agree" <?php if ($partial_reg) { ?>checked <?php } ?> required>
             <label class="custom-control-label" for="data-agree">
@@ -138,7 +138,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 
             <h3><?= htmlspecialchars($row[$i]['MForename'] . " " . $row[$i]['MSurname']) ?></h3>
 
-            <div class="form-group <?php if ($age[$i] >= 12) {
+            <div class="mb-3 <?php if ($age[$i] >= 12) {
                                       echo "mb-0";
                                     } ?>">
               <div class="custom-control custom-checkbox">
@@ -161,7 +161,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
                 and Conditions of Membership of <?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?>.
               </p>
 
-              <div class="form-group mb-0">
+              <div class="mb-3 mb-0">
                 <div class="custom-control custom-checkbox">
                   <input type="checkbox" value="1" class="custom-control-input" name="<?= htmlspecialchars($id[$i]) ?>-pg-understanding" id="<?= htmlspecialchars($id[$i]) ?>-pg-understanding" required>
                   <label class="custom-control-label" for="<?= htmlspecialchars($id[$i]) ?>-pg-understanding">

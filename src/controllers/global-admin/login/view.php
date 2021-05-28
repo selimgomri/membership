@@ -44,8 +44,8 @@ include BASE_PATH . "views/root/head.php";
       <?php if (isset($_SESSION['SCDS-SU-Login2FA'])) { ?>
 
         <form method="post" action="<?= htmlspecialchars(autoUrl("admin/login/2fa")) ?>" name="2faform" id="2faform" class="needs-validation" novalidate>
-          <div class="form-group">
-            <label for="auth">Authentication Code</label>
+          <div class="mb-3">
+            <label class="form-label" for="auth">Authentication Code</label>
             <input type="number" name="auth" id="auth" class="form-control form-control-lg" required autofocus placeholder="654321" pattern="[0-9]*" inputmode="numeric" min="0" max="999999" step="1">
             <div class="invalid-feedback">
               Please enter a numeric authentication code.
@@ -59,21 +59,21 @@ include BASE_PATH . "views/root/head.php";
 
       <?php } else { ?>
         <form method="post" action="<?= htmlspecialchars(autoUrl("admin/login")) ?>" name="loginform" id="loginform" class="needs-validation" novalidate>
-          <div class="form-group">
-            <label for="email-address">Email address</label>
+          <div class="mb-3">
+            <label class="form-label" for="email-address">Email address</label>
             <input type="email" name="email-address" id="email-address" class="form-control form-control-lg text-lowercase" <?php if (false) { ?> value="<?= htmlspecialchars($username) ?>" <?php } ?> required <?php if (true) { ?>autofocus<?php } ?> placeholder="yourname@example.com" autocomplete="email">
             <div class="invalid-feedback">
               Please enter a valid email address.
             </div>
           </div>
-          <div class="form-group">
-            <label for="password">Password</label>
+          <div class="mb-3">
+            <label class="form-label" for="password">Password</label>
             <input type="password" name="password" id="password" class="form-control form-control-lg" required placeholder="Password" <?php if (false) { ?>autofocus<?php } ?> autocomplete="current-password">
             <div class="invalid-feedback">
               Please enter a password.
             </div>
           </div>
-          <div class="form-group">
+          <div class="mb-3">
             <div class="custom-control custom-checkbox">
               <input type="checkbox" class="custom-control-input" name="RememberMe" id="RememberMe" checked aria-describedby="RememberMeHelp">
               <label class="custom-control-label" for="RememberMe">Keep me logged in</label>

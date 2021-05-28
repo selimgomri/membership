@@ -61,23 +61,23 @@ include BASE_PATH . 'views/header.php';
 
       <form method="post" class="needs-validation" novalidate>
 
-        <div class="form-group">
-          <label for="qualification-name">Qualification name</label>
+        <div class="mb-3">
+          <label class="form-label" for="qualification-name">Qualification name</label>
           <input type="text" name="qualification-name" id="qualification-name" class="form-control" required value="<?= htmlspecialchars($qualification['Name']) ?>">
           <div class="invalid-feedback">
             Please enter a name for this qualification
           </div>
         </div>
 
-        <div class="form-group">
-          <label for="qualification-description">Qualification description (optional)</label>
+        <div class="mb-3">
+          <label class="form-label" for="qualification-description">Qualification description (optional)</label>
           <textarea name="qualification-description" id="qualification-description" class="form-control"><?= htmlspecialchars($qualification['Description']) ?></textarea>
           <div class="invalid-feedback">
             Please enter a name for this qualification
           </div>
         </div>
 
-        <div class="form-group" id="expires-box">
+        <div class="mb-3" id="expires-box">
           <div class="custom-control custom-radio">
             <input type="radio" id="expires-no" name="expires" class="custom-control-input" value="no" required <?php if (!$expiry->expires) { ?>checked<?php } ?>>
             <label class="custom-control-label" for="expires-no">This qualification never expires</label>
@@ -92,7 +92,7 @@ include BASE_PATH . 'views/header.php';
           <p>
             After how long does this qualification usually expire? Select a unit and then enter a number.
           </p>
-          <div class="form-group" id="expires-when-type">
+          <div class="mb-3" id="expires-when-type">
             <div class="custom-control custom-radio">
               <input type="radio" id="expires-years" name="expires-when-type" class="custom-control-input requirable" value="years" <?php if ($expiry->expiry_schedule->type == 'years') { ?>checked<?php } ?>>
               <label class="custom-control-label" for="expires-years">Years</label>
@@ -107,8 +107,8 @@ include BASE_PATH . 'views/header.php';
             </div>
           </div>
 
-          <div class="form-group">
-            <label for="expires-when">Expires after</label>
+          <div class="mb-3">
+            <label class="form-label" for="expires-when">Expires after</label>
             <div class="input-group">
               <input type="number" placeholder="0" name="expires-when" id="expires-when" class="form-control requirable" min="1" step="1" value="<?= htmlspecialchars($expiry->expiry_schedule->value) ?>">
               <div class="input-group-append">

@@ -75,7 +75,7 @@ include BASE_PATH . 'views/header.php';
         <?=\SCDS\CSRF::write()?>
         <input type="hidden" name="MAX_FILE_SIZE" value="3000000">
 
-        <div class="form-group">
+        <div class="mb-3">
           <label>Select a result file to upload</label>
           <div class="custom-file">
             <input type="file" class="custom-file-input" id="file-upload" name="file-upload[]" accept="text/plain,.sd3" multiple required>
@@ -83,8 +83,8 @@ include BASE_PATH . 'views/header.php';
           </div>
         </div>
 
-        <div class="form-group">
-          <label for="gala">Select a gala to link this file to</label>
+        <div class="mb-3">
+          <label class="form-label" for="gala">Select a gala to link this file to</label>
           <select class="custom-select" id="gala" name="gala" aria-describedby="galaHelp">
             <option value="0" selected>Don't link to an existing gala</option>
             <?php while ($gala = $getRecentGalas->fetch(PDO::FETCH_ASSOC)) { ?>

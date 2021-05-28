@@ -34,8 +34,8 @@ include BASE_PATH . 'views/header.php';
     <div class="cell">
       <h2>Select a squad</h2>
       <p class="lead">Select a squad to edit</p>
-      <div class="form-group mb-0">
-        <label for="squad-select">
+      <div class="mb-3 mb-0">
+        <label class="form-label" for="squad-select">
           Choose squad
         </label>
         <select class="custom-select" id="squad-select" name="squad-select" data-gala-id="<?=htmlspecialchars($id)?>">

@@ -57,24 +57,24 @@ if (isset($renewal_trap) && $renewal_trap) {
         <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['PhoneError']); } ?>
 
         <form method="post" class="needs-validation" novalidate>
-          <div class="form-group">
-            <label for="name">Name</label>
+          <div class="mb-3">
+            <label class="form-label" for="name">Name</label>
             <input type="text" class="form-control" id="name" name="name" placeholder="Name" value="<?=htmlspecialchars($contact->getName())?>" required>
             <div class="invalid-feedback">
               You must provide the name of the emergency contact
             </div>
           </div>
 
-          <div class="form-group">
-            <label for="relation">Relation</label>
+          <div class="mb-3">
+            <label class="form-label" for="relation">Relation</label>
             <input type="text" class="form-control" id="relation" name="relation" placeholder="Relation" value="<?=htmlspecialchars($contact->getRelation())?>" required>
             <div class="invalid-feedback">
               You must provide the relation so we can decide who is best to call
             </div>
           </div>
 
-          <div class="form-group">
-            <label for="num">Contact Number</label>
+          <div class="mb-3">
+            <label class="form-label" for="num">Contact Number</label>
             <input type="tel" pattern="\+{0,1}[0-9]*" class="form-control" id="num" name="num" placeholder="Phone" value="<?=htmlspecialchars($contact->getContactNumber())?>" required>
             <div class="invalid-feedback">
               You must provide a valid UK phone number

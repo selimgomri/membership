@@ -148,8 +148,8 @@ include BASE_PATH . "views/root/header.php";
             </div>
           <?php } ?>
 
-          <div class="form-group">
-            <label for="apple-pay-domain">Domain name</label>
+          <div class="mb-3">
+            <label class="form-label" for="apple-pay-domain">Domain name</label>
             <input class="form-control" type="text" name="apple-pay-domain" id="apple-pay-domain" required placeholder="example.com" <?php if (getenv('IS_DEV')) { ?>disabled<?php } ?>>
           </div>
 

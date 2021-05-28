@@ -68,7 +68,7 @@ include BASE_PATH . "controllers/attendance/attendanceMenu.php";
 			<dd><?= htmlspecialchars($datetime2->format("H:i")) ?></dd>
 			<dd><?= htmlspecialchars($interval->format('%h hours %I minutes')) ?></dd>
 			<div id="successAlert"></div>
-			<dt><label for="endDate">Display Until</label></dt>
+			<dt><label class="form-label" for="endDate">Display Until</label></dt>
 			<dd><input type="date" class="form-control mb-3" id="endDate" name="endDate" value="<?php if ($row['DisplayUntil'] != null) { ?><?= htmlspecialchars($row['DisplayUntil']) ?><?php } ?>" data-ajax-url="<?= htmlspecialchars(autoUrl("attendance/sessions/ajax/endDateHandler")) ?>" data-session-id="<?= htmlspecialchars($row['SessionID']) ?>">
 				<button id="saveDate" type="button" class="btn btn-outline-dark">Save End Date</button></dd>
 		</dl>

@@ -162,7 +162,7 @@ include "galaMenu.php"; ?>
         <p class="lead"><?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent') { ?>You<?php } else { ?><?=htmlspecialchars($parentName)?><?php } ?> paid for this gala entry by card</p>
         <div class="row align-items-center mb-3">
           <div class="col-auto">
-            <img src="<?=autoUrl("public/img/stripe/" . $row['Brand'] . ".png")?>" srcset="<?=autoUrl("public/img/stripe/" . $row['Brand'] . "@2x.png")?> 2x, <?=autoUrl("public/img/stripe/" . $row['Brand'] . "@3x.png")?> 3x" style="width:40px;"> <span class="sr-only"><?=htmlspecialchars(getCardBrand($row['Brand']))?></span>
+            <img src="<?=autoUrl("public/img/stripe/" . $row['Brand'] . ".png")?>" srcset="<?=autoUrl("public/img/stripe/" . $row['Brand'] . "@2x.png")?> 2x, <?=autoUrl("public/img/stripe/" . $row['Brand'] . "@3x.png")?> 3x" style="width:40px;"> <span class="visually-hidden"><?=htmlspecialchars(getCardBrand($row['Brand']))?></span>
           </div>
           <div class="col-auto">
             <p class="my-0">

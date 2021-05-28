@@ -126,27 +126,27 @@ include BASE_PATH . "views/root/header.php";
 
           <?= \SCDS\CSRF::write() ?>
 
-          <div class="form-group">
-            <label for="plan-name">Name</label>
+          <div class="mb-3">
+            <label class="form-label" for="plan-name">Name</label>
             <input type="text" name="plan-name" id="plan-name" class="form-control" required>
             <div class="invalid-feedback">You must supply a name for this plan</div>
           </div>
 
-          <div class="form-group">
-            <label for="plan-price">Price per unit</label>
+          <div class="mb-3">
+            <label class="form-label" for="plan-price">Price per unit</label>
             <input type="number" min="0" step="0.01" name="plan-price" id="plan-price" class="form-control" required>
             <div class="invalid-feedback">You must supply a price per unit for this plan</div>
           </div>
 
-          <div class="form-group">
-            <label for="plan-currency">Currency</label>
+          <div class="mb-3">
+            <label class="form-label" for="plan-currency">Currency</label>
             <select class="custom-select" required name="plan-currency" id="plan-currency">
               <option value="gbp" selected>British Pounds (GBP)</option>
             </select>
             <div class="invalid-feedback">You must supply a currency for this plan</div>
           </div>
 
-          <div class="form-group">
+          <div class="mb-3">
             <p class="mb-2">
               Billing interval (frequency)
             </p>
