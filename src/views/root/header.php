@@ -35,7 +35,7 @@ include 'head.php';
 
   <nav class="navbar navbar-expand-md navbar-dark rounded-bottom rounded-right bg-primary">
     <a class="navbar-brand d-md-none" href="<?= htmlspecialchars(autoUrl("")) ?>">Membership Software</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 

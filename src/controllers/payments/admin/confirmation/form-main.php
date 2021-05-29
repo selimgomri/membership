@@ -32,7 +32,7 @@ $date = new DateTime('now', new DateTimeZone('Europe/London'));
   </div>
 
   <p>
-    <a class="" data-toggle="collapse" href="#additional-fees-box" role="button" aria-expanded="false" aria-controls="additional-fees-box">
+    <a class="" data-bs-toggle="collapse" href="#additional-fees-box" role="button" aria-expanded="false" aria-controls="additional-fees-box">
       Does your bank charge fees for deposits? Click here to add any fees relating to this payment.
     </a>
   </p>

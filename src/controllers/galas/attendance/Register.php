@@ -71,7 +71,7 @@ include BASE_PATH . 'views/header.php';
     <div class="card">
       <div class="card-header py-2" id="heading-<?=htmlspecialchars($session['ID'])?>">
         <h2 class="mb-0">
-          <button class="btn btn-primary collapsed" type="button" data-toggle="collapse" data-target="#collapse-<?=htmlspecialchars($session['ID'])?>" aria-expanded="true" aria-controls="collapse-<?=htmlspecialchars($session['ID'])?>">
+          <button class="btn btn-primary collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-<?=htmlspecialchars($session['ID'])?>" aria-expanded="true" aria-controls="collapse-<?=htmlspecialchars($session['ID'])?>">
             <?=htmlspecialchars($session['Name'])?> <i class="fa fa-chevron-down" aria-hidden="true"></i>
           </button>
         </h2>

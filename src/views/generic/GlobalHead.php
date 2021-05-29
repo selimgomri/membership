@@ -3,12 +3,14 @@
 $tenant = app()->tenant;
 
 $stylesheet = autoUrl(getCompiledAsset('generic.css'), false);
+$stylesheetDarkMode = autoUrl(getCompiledAsset('generic-dark-mode.css'), false);
 
 if (getenv('CUSTOM_CSS_PATH')) {
   $stylesheet = getenv('CUSTOM_CSS_PATH');
 }
 
 header('Link: <' . $stylesheet . '>; rel=preload; as=style', false);
+header('Link: <' . $stylesheetDarkMode . '>; rel=preload; as=style', false);
 header('Link: <' . autoUrl("public/css/colour.css") . '>; rel=preload; as=style', false);
 
 $container_class;
@@ -57,7 +59,9 @@ Chester-le-Street ASC is a non profit unincorporated association.
   <link rel="manifest" href="<?= autoUrl("manifest.webmanifest") ?>">
   <meta name="X-SCDS-Membership-Tracking" content="no">
   <script src="https://js.stripe.com/v3/"></script>
+  <meta name="color-scheme" content="dark light">
   <link rel="stylesheet preload" href="<?= htmlspecialchars($stylesheet) ?>">
+  <link rel="stylesheet preload" href="<?= htmlspecialchars($stylesheetDarkMode) ?>" media="(prefers-color-scheme: dark)">
   <link rel="stylesheet preload" href="<?= htmlspecialchars(autoUrl("public/css/colour.css")) ?>">
 
   <meta property="og:title" content="<?= $pagetitle ?>" />

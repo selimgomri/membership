@@ -26,7 +26,7 @@ include BASE_PATH . 'views/header.php';
   <div class="container">
 
     <nav aria-label="breadcrumb">
-      <ol class="breadcrumb bg-light">
+      <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="<?=autoUrl("galas")?>">Galas</a></li>
         <li class="breadcrumb-item"><a href="<?=autoUrl("galas/" . $id)?>">This Gala</a></li>
         <li class="breadcrumb-item active" aria-current="page">TM Dashboard</li>

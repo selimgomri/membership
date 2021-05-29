@@ -230,7 +230,7 @@ include BASE_PATH . 'views/header.php';
 
                 <?php if ($user = $member->getUser()) { ?>
                   <p class="mb-0 mt-3">
-                    <a data-toggle="collapse" href="#details-<?= htmlspecialchars($member->getId()) ?>" role="button" aria-expanded="false" aria-controls="details-<?= htmlspecialchars($member->getId()) ?>" class="btn btn-primary">Show contact details</a>
+                    <a data-bs-toggle="collapse" href="#details-<?= htmlspecialchars($member->getId()) ?>" role="button" aria-expanded="false" aria-controls="details-<?= htmlspecialchars($member->getId()) ?>" class="btn btn-primary">Show contact details</a>
                   </p>
                   <div class="collapse" id="details-<?= htmlspecialchars($member->getId()) ?>" data-parent="#memberContactAccordion">
                     <div class="cell mb-0 mt-3">

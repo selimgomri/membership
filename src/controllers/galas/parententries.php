@@ -21,7 +21,7 @@ include "galaMenu.php";
 <div class="front-page" style="margin-bottom: -1rem;">
   <div class="container">
   <nav aria-label="breadcrumb">
-    <ol class="breadcrumb bg-light">
+    <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="<?=autoUrl("galas")?>">Galas</a></li>
       <li class="breadcrumb-item active" aria-current="page">My entries</li>
     </ol>

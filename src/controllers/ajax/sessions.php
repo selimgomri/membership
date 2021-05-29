@@ -97,7 +97,7 @@ function sessionManagement($squadID, $old = null)
 					?>
 						<li class="list-group-item">
 							<p class="mb-0">
-								<a data-toggle="modal" href="#sessionModal<?= $row['SessionID'] ?>">
+								<a data-bs-toggle="modal" href="#sessionModal<?= $row['SessionID'] ?>">
 									<strong class="text-gray-dark">
 										<?= htmlspecialchars($row['SessionName']) ?>, <?= $dayText ?> at <?= htmlspecialchars($datetime1->format("H:i")) ?>
 									</strong>
@@ -222,7 +222,7 @@ function sessionManagement($squadID, $old = null)
 				?>
 					<li class="list-group-item">
 						<p class="mb-0">
-							<a data-toggle="modal" href="#sessionModal<?= $row['SessionID'] ?>">
+							<a data-bs-toggle="modal" href="#sessionModal<?= $row['SessionID'] ?>">
 								<strong class="text-gray-dark">
 									<?= htmlspecialchars($row['SessionName']) ?>, <?= $dayText ?> at <?= htmlspecialchars($datetime1->format("H:i")) ?>
 								</strong>

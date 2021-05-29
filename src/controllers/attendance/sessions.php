@@ -67,7 +67,7 @@ include "attendanceMenu.php";
         </p>
       </div>
       <div class="col text-end">
-        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#add-session-modal">
+        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#add-session-modal">
           Add new session
         </button>
       </div>

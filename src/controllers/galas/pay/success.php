@@ -102,7 +102,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
           <div class="row">
             <div class="col-4 col-sm-5 col-md-4 col-lg-6">
               <p>
-                <a data-toggle="collapse" href="#swims-<?=$entry['EntryID']?>" role="button" aria-expanded="false" aria-controls="swims-<?=$entry['EntryID']?>">
+                <a data-bs-toggle="collapse" href="#swims-<?=$entry['EntryID']?>" role="button" aria-expanded="false" aria-controls="swims-<?=$entry['EntryID']?>">
                   View swims
                 </a>
               </p>

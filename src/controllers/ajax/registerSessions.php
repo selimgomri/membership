@@ -355,7 +355,7 @@ if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Committee" 
       }
       $content .= '</ul><div class="card-body">
       <!--<p>
-        <button class="btn btn-warning" type="button" data-toggle="collapse" data-target="#medicine-A-Z" aria-expanded="false" aria-controls="medicine-A-Z">
+        <button class="btn btn-warning" type="button" data-bs-toggle="collapse" data-bs-target="#medicine-A-Z" aria-expanded="false" aria-controls="medicine-A-Z">
           Show/Hide Medicines A-Z
         </button>
       </p>

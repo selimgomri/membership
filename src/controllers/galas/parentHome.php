@@ -123,7 +123,7 @@ include "galaMenu.php";
   <div class="container">
 
     <nav aria-label="breadcrumb">
-      <ol class="breadcrumb bg-light">
+      <ol class="breadcrumb">
         <li class="breadcrumb-item active" aria-current="page">
           Galas
         </li>

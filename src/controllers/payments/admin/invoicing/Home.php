@@ -10,7 +10,7 @@ include BASE_PATH . 'views/header.php';
   <div class="container">
 
     <nav aria-label="breadcrumb">
-      <ol class="breadcrumb bg-light">
+      <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="<?=htmlspecialchars(autoUrl('payments'))?>">Payments</a></li>
         <li class="breadcrumb-item active" aria-current="page">Invoicing</li>
       </ol>

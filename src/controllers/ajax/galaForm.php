@@ -383,7 +383,7 @@ if (!$coachEnters && (isset($_REQUEST["galaID"])) && (isset($_REQUEST["swimmer"]
 	<p>We recommend you take a look at the events and prices for this gala before proceeding.</p>
 
 	<p>
-		<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#eventPrices" aria-expanded="false" aria-controls="eventPrices">
+		<button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#eventPrices" aria-expanded="false" aria-controls="eventPrices">
 			Show events and prices <i class="fa fa-chevron-down" aria-hidden="true"></i>
 		</button>
 	</p>

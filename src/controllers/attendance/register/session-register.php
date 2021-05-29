@@ -124,7 +124,7 @@ function registerSheetGenerator($date, $sessionId)
               // END OF COVID STUFF
               ?>
               <li class="list-group-item py-3">
-                <div class="bg-white my-n3 py-3 sticky-top">
+                <div class="my-n3 py-3 sticky-top">
                   <div class="row align-items-center">
                     <div class="col">
                       <div class="custom-control form-checkbox">

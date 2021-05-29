@@ -92,7 +92,7 @@ include BASE_PATH . 'views/header.php';
                   <div class="d-md-none mb-3"></div>
                 </div>
                 <div class="col text-md-end">
-                  <a class="btn btn-primary" data-toggle="collapse" href="#swimmer-info-box-<?= $i ?>" role="button" aria-expanded="false" aria-controls="swimmer-info-box-<?= $i ?>">
+                  <a class="btn btn-primary" data-bs-toggle="collapse" href="#swimmer-info-box-<?= $i ?>" role="button" aria-expanded="false" aria-controls="swimmer-info-box-<?= $i ?>">
                     Show information <i class="fa fa-chevron-down" aria-hidden="true"></i>
                   </a>
                 </div>

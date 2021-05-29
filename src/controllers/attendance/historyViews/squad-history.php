@@ -89,8 +89,8 @@ $days = [
 
 $pageHead = [
   'body' => [
-    'data-spy="scroll"',
-    'data-target="#member-page-menu"'
+    'data-bs-spy="scroll"',
+    'data-bs-target="#member-page-menu"'
   ]
 ];
 $pagetitle = 'Week ' . htmlspecialchars($startWeek->format('W')) . ', ' . htmlspecialchars($startWeek->format('o')) . ' - ' . htmlspecialchars($pageSquad['SquadName']) . " Session Attendance";

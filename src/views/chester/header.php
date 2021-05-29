@@ -224,7 +224,7 @@ if (isset($customBackground) && $customBackground) {
 
         <div class="ms-2 top-bar d-lg-none">
           <span>
-            <a data-toggle="collapse" href="#mobSearch" role="button" aria-expanded="false" aria-controls="mobSearch" class="text-white" title="Search the site">
+            <a data-bs-toggle="collapse" href="#mobSearch" role="button" aria-expanded="false" aria-controls="mobSearch" class="text-white" title="Search the site">
               Search
             </a>
           </span>
@@ -232,7 +232,7 @@ if (isset($customBackground) && $customBackground) {
 
         <div class="ms-2 top-bar">
           <span>
-            <a id="top-bar-more-link" href="#top-bar-more" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="top-bar-more" class="text-white d-none" title="More Links">
+            <a id="top-bar-more-link" href="#top-bar-more" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="top-bar-more" class="text-white d-none" title="More Links">
               More <i class="fa fa-caret-down" aria-hidden="true"></i>
             </a>
           </span>
@@ -295,7 +295,7 @@ if (isset($customBackground) && $customBackground) {
               <img src="<?php echo autoUrl("img/chesterIcon.svg", false); ?>" width="20" height="20"> Club Membership
             <?php } ?>
           </a>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#chesterNavbar" aria-controls="chesterNavbar" aria-expanded="false" aria-label="Toggle navigation">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#chesterNavbar" aria-controls="chesterNavbar" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
 

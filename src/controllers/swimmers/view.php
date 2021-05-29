@@ -29,8 +29,8 @@ $pagetitle = htmlspecialchars($member->getFullName());
 
 $pageHead = [
   'body' => [
-    'data-spy="scroll"',
-    'data-target="#member-page-menu"'
+    'data-bs-spy="scroll"',
+    'data-bs-target="#member-page-menu"'
   ]
 ];
 
@@ -209,7 +209,7 @@ include BASE_PATH . 'views/header.php';
 
         <div class="col-6">
           <dt class="text-truncate">
-            Sex (for the purposes of competition) <a tabindex="0" data-toggle="popover" data-trigger="focus" title="" data-content="The sex <?= htmlspecialchars($member->getForename()) ?> competes under, even if this is not the same as their gender identity." data-original-title="What does this mean?"><i class="fa fa-question-circle" aria-hidden="true"></i></a>
+            Sex (for the purposes of competition) <a tabindex="0" data-bs-toggle="popover" data-trigger="focus" title="" data-content="The sex <?= htmlspecialchars($member->getForename()) ?> competes under, even if this is not the same as their gender identity." data-original-title="What does this mean?"><i class="fa fa-question-circle" aria-hidden="true"></i></a>
           </dt>
           <dd>
             <?= htmlspecialchars($member->getSex()) ?>
@@ -219,7 +219,7 @@ include BASE_PATH . 'views/header.php';
         <?php if ($member->showGender()) { ?>
           <div class="col-6">
             <dt class="text-truncate">
-              Gender Identity <a tabindex="0" data-toggle="popover" data-trigger="focus" title="" data-content="Your gender identity is a way to describe how you feel about your gender. You might identify your gender as a boy or a girl or something different. This is different from your sex, which is related to your physical body and biology." data-original-title="What is gender identity?"><i class="fa fa-question-circle" aria-hidden="true"></i></a>
+              Gender Identity <a tabindex="0" data-bs-toggle="popover" data-trigger="focus" title="" data-content="Your gender identity is a way to describe how you feel about your gender. You might identify your gender as a boy or a girl or something different. This is different from your sex, which is related to your physical body and biology." data-original-title="What is gender identity?"><i class="fa fa-question-circle" aria-hidden="true"></i></a>
             </dt>
             <dd>
               <?= htmlspecialchars($member->getGenderIdentity()) ?>
@@ -228,7 +228,7 @@ include BASE_PATH . 'views/header.php';
 
           <div class="col-6">
             <dt class="text-truncate">
-              Gender Pronouns <a tabindex="0" data-toggle="popover" data-trigger="focus" title="" data-content="The words we use to refer to someone like, ‘he’, ‘she’ and ‘they’. Members can choose their pronouns so that club staff don't misgender them." data-original-title="What are pronouns?"><i class="fa fa-question-circle" aria-hidden="true"></i></a>
+              Gender Pronouns <a tabindex="0" data-bs-toggle="popover" data-trigger="focus" title="" data-content="The words we use to refer to someone like, ‘he’, ‘she’ and ‘they’. Members can choose their pronouns so that club staff don't misgender them." data-original-title="What are pronouns?"><i class="fa fa-question-circle" aria-hidden="true"></i></a>
             </dt>
             <dd>
               <?= htmlspecialchars($member->getGenderPronouns()) ?>

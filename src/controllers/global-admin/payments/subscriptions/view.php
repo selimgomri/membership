@@ -101,7 +101,7 @@ include BASE_PATH . "views/root/header.php";
           <div id="subscription-plans-box" class="mb-3"></div>
 
           <p>
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-plan-modal">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-plan-modal">
               Add a product plan
             </button>
           </p>

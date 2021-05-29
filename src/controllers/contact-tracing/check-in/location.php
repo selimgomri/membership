@@ -259,7 +259,7 @@ include BASE_PATH . 'views/header.php';
             </p>
 
             <p>
-              <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#member-collapse" aria-expanded="false" aria-controls="member-collapse">
+              <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#member-collapse" aria-expanded="false" aria-controls="member-collapse">
                 I'm a member <i class="fa fa-caret-down" aria-hidden="true"></i>
               </button>
             </p>

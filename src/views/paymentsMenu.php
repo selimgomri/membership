@@ -5,7 +5,7 @@ $access = $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel']; ?>
 <div class="bg-light" style="margin:-1rem 0 1rem 0;">
   <div class="<?=$container_class?>">
     <nav class="navbar navbar-expand-lg navbar-light px-0">
-      <button class="btn btn-primary d-lg-none" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <button class="btn btn-primary d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         Payments Menu
       </button>
 

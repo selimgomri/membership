@@ -44,8 +44,9 @@ module.exports = (env, options) => {
     devtool: 'source-map',
     entry: {
       'main': './js/javascript.js',
-      'clse': './scss/clse.scss',
+      // 'clse': './scss/clse.scss',
       'generic': './scss/generic.scss',
+      'generic-dark-mode': './scss/generic-dark-mode.scss',
       'scds': './scss/scds.scss'
     },
     output: {
