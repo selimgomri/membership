@@ -196,15 +196,17 @@ function registerSheetGenerator($date, $sessionId)
                             <div class="col-md-6 col-xl-4">
                               <div class="card card-body mb-2">
                                 <div class="row align-items-center">
-                                  <div class="col-sm-6 col-md-12 col-lg-6">
+                                  <div class="col-12 text-center">
                                     <div class="text-truncate"><strong><?= htmlspecialchars($ec->getName()) ?></strong></div>
                                     <div class="text-truncate"><?= htmlspecialchars($ec->getRelation()) ?></div>
-                                    <div class="mb-2 d-sm-none d-md-flex d-lg-none"></div>
+                                    <div class="mb-2"></div>
                                   </div>
                                   <div class="col">
-                                    <a href="<?= htmlspecialchars($ec->getRFCContactNumber()) ?>" class="btn btn-block btn-success">
-                                      <i class="fa fa-phone" aria-hidden="true"></i> <?= htmlspecialchars($ec->getInternationalContactNumber()) ?>
-                                    </a>
+                                    <div class="d-grid gap-2">
+                                      <a href="<?= htmlspecialchars($ec->getRFCContactNumber()) ?>" class="btn btn-success">
+                                        <i class="fa fa-phone" aria-hidden="true"></i> <?= htmlspecialchars($ec->getInternationalContactNumber()) ?>
+                                      </a>
+                                    </div>
                                   </div>
                                 </div>
                               </div>

@@ -56,21 +56,17 @@ include BASE_PATH . 'views/header.php';
       <div class="cell">
         <h2>Download entries</h2>
         <p class="lead">Download entries for this squad</p>
-        <p>
-          <a href="<?=autoUrl("galas/" . $id . "/team-manager-view.csv")?>" target="_blank" class="btn btn-block btn-primary">
+        <div class="d-grid gap-2">
+          <a href="<?=autoUrl("galas/" . $id . "/team-manager-view.csv")?>" target="_blank" class="btn btn-primary">
             CSV (for Microsoft Excel)
           </a>
-        </p>
-        <p>
-          <a href="<?=autoUrl("galas/" . $id . "/team-manager-view.json")?>" target="_blank" class="btn btn-block btn-primary">
+          <a href="<?=autoUrl("galas/" . $id . "/team-manager-view.json")?>" target="_blank" class="btn btn-primary">
             JSON
           </a>
-        </p>
-        <p>
-          <a href="<?=autoUrl("galas/" . $id . "/team-manager-view.pdf")?>" target="_blank" class="btn btn-block btn-primary">
+          <a href="<?=autoUrl("galas/" . $id . "/team-manager-view.pdf")?>" target="_blank" class="btn btn-primary">
             PDF
           </a>
-        </p>
+        </div>
       </div>
     </div>
 

@@ -62,9 +62,11 @@ include BASE_PATH . "views/squadMenu.php";
                               <!-- </p> -->
                             </div>
                             <div class="col-auto">
-                              <a class="btn btn-block btn-outline-primary" href="<?= autoUrl("members/" . $member['MemberID'] . '#squads') ?>">
-                                Edit or Cancel
-                              </a>
+                              <div class="d-grid gap-2">
+                                <a class="btn btn-outline-primary" href="<?= htmlspecialchars(autoUrl("members/" . $member['MemberID'] . '#squads')) ?>">
+                                  Edit or Cancel
+                                </a>
+                              </div>
                             </div>
                           </div>
                         </li>

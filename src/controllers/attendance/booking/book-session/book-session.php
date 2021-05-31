@@ -313,7 +313,7 @@ include BASE_PATH . 'views/header.php';
       <div class="modal-header bg-info text-dark">
         <h5 class="modal-title" id="booking-modal-title">Confirm booking</h5>
         <button type="button" class="close text-dark" data-bs-dismiss="modal" aria-label="Close">
-          
+
         </button>
       </div>
       <div class="modal-body">
@@ -353,7 +353,7 @@ include BASE_PATH . 'views/header.php';
       <div class="modal-header bg-danger text-white">
         <h5 class="modal-title" id="cancel-modal-title">Cancel booking?</h5>
         <button type="button" class="close text-white" data-bs-dismiss="modal" aria-label="Close">
-          
+
         </button>
       </div>
       <div class="modal-body">
@@ -393,34 +393,46 @@ include BASE_PATH . 'views/header.php';
       <div class="modal-header">
         <h5 class="modal-title" id="sharing-modal-title">Share this</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-          
+
         </button>
       </div>
       <div class="modal-body">
 
-        <div class="row no-gutters sharing">
+        <div class="row gx-0 sharing">
           <div class="col">
-            <a target="_blank" class="btn btn-dark btn-block dismiss-share-box" href="mailto:?subject=<?= rawurlencode($theTitle); ?>&body=<?= rawurlencode($theLink); ?>"><i class="fa  fa-envelope" aria-hidden="true"></i><span class="visually-hidden visually-hidden-focusable">Share by Email</span></a>
+            <div class="d-grid gap-2">
+              <a target="_blank" class="btn btn-dark dismiss-share-box" href="mailto:?subject=<?= rawurlencode($theTitle); ?>&body=<?= rawurlencode($theLink); ?>"><i class="fa  fa-envelope" aria-hidden="true"></i><span class="visually-hidden visually-hidden-focusable">Share by Email</span></a>
+            </div>
           </div>
 
           <div class="col">
-            <a target="_self" class="btn btn-dark btn-block" id="print-this-page"><i class="fa fa-print" aria-hidden="true"></i><span class="visually-hidden visually-hidden-focusable">Print</span></a>
+            <div class="d-grid gap-2">
+              <a target="_self" class="btn btn-dark  id="print-this-page"><i class="fa fa-print" aria-hidden="true"></i><span class="visually-hidden visually-hidden-focusable">Print</span></a>
+            </div>
           </div>
 
           <div class="col">
-            <a target="_blank" class="btn btn-fb btn-block dismiss-share-box" href="http://www.facebook.com/sharer.php?u=<?= rawurlencode($theLink); ?>&amp;t=<?= ($theTitle); ?>"><i class="fa fa-facebook" aria-hidden="true"></i><span class="visually-hidden visually-hidden-focusable">Share on Facebook</span></a>
+            <div class="d-grid gap-2">
+              <a target="_blank" class="btn btn-fb dismiss-share-box" href="http://www.facebook.com/sharer.php?u=<?= rawurlencode($theLink); ?>&amp;t=<?= ($theTitle); ?>"><i class="fa fa-facebook" aria-hidden="true"></i><span class="visually-hidden visually-hidden-focusable">Share on Facebook</span></a>
+            </div>
           </div>
 
           <div class="col">
-            <a target="_blank" class="btn btn-tweet btn-block dismiss-share-box" href="https://twitter.com/intent/tweet?text=<?= rawurlencode($theTitle); ?>&url=<?= rawurlencode($theLink); ?>"><i class="fa fa-twitter" aria-hidden="true"></i><span class="visually-hidden visually-hidden-focusable">Share on Twitter</span></a>
+            <div class="d-grid gap-2">
+              <a target="_blank" class="btn btn-tweet dismiss-share-box" href="https://twitter.com/intent/tweet?text=<?= rawurlencode($theTitle); ?>&url=<?= rawurlencode($theLink); ?>"><i class="fa fa-twitter" aria-hidden="true"></i><span class="visually-hidden visually-hidden-focusable">Share on Twitter</span></a>
+            </div>
           </div>
 
           <div class="col">
-            <a target="_blank" class="btn btn-whatsapp btn-block dismiss-share-box" href="https://wa.me/?text=<?= rawurlencode($theLink); ?>" data-action="share/whatsapp/share"><i class="fa fa-whatsapp" aria-hidden="true"></i><span class="visually-hidden visually-hidden-focusable">Share with Whatsapp</span></a>
+            <div class="d-grid gap-2">
+              <a target="_blank" class="btn btn-whatsapp dismiss-share-box" href="https://wa.me/?text=<?= rawurlencode($theLink); ?>" data-action="share/whatsapp/share"><i class="fa fa-whatsapp" aria-hidden="true"></i><span class="visually-hidden visually-hidden-focusable">Share with Whatsapp</span></a>
+            </div>
           </div>
 
           <div class="col">
-            <a target="_blank" class="btn btn-lightedin btn-block dismiss-share-box" href="https://www.linkedin.com/shareArticle?mini=true&url=<?= rawurlencode($theLink); ?>&title=<?= rawurlencode($theTitle); ?>&source=<?= rawurlencode($tenant->getName() . ' / SCDS Membership') ?>"><i class="fa fa-linkedin" aria-hidden="true"></i><span class="visually-hidden visually-hidden-focusable">Share on Linked In</span></a>
+            <div class="d-grid gap-2">
+              <a target="_blank" class="btn btn-linkedin dismiss-share-box" href="https://www.linkedin.com/shareArticle?mini=true&url=<?= rawurlencode($theLink); ?>&title=<?= rawurlencode($theTitle); ?>&source=<?= rawurlencode($tenant->getName() . ' / SCDS Membership') ?>"><i class="fa fa-linkedin" aria-hidden="true"></i><span class="visually-hidden visually-hidden-focusable">Share on Linked In</span></a>
+            </div>
           </div>
         </div>
 

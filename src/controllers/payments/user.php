@@ -95,11 +95,13 @@ include BASE_PATH . "views/paymentsMenu.php";
             </dl>
           <?php } ?>
 
+          <div class="d-grid gap-2">
           <?php if ($mandate) { ?>
-            <a href="<?= autoUrl("payments/direct-debit") ?>" class="btn btn-dark btn-block">Manage your bank account</a>
+            <a href="<?= autoUrl("payments/direct-debit") ?>" class="btn btn-dark">Manage your bank account</a>
           <?php } else { ?>
-            <a href="<?= autoUrl("payments/direct-debit/set-up") ?>" class="btn btn-dark btn-block">Setup a Direct Debit</a>
+            <a href="<?= autoUrl("payments/direct-debit/set-up") ?>" class="btn btn-dark">Setup a Direct Debit</a>
           <?php } ?>
+          </div>
         </div>
       <?php } ?>
       <?php if ($tenant->getKey('GOCARDLESS_ACCESS_TOKEN') && userHasMandates($user)) { ?>
@@ -124,11 +126,13 @@ include BASE_PATH . "views/paymentsMenu.php";
           <p class="mono">&middot;&middot;&middot;&middot;&middot;&middot;<?= htmlspecialchars(strtoupper(bankDetails($user, "account_number_end"))) ?></p>
           <p><?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?> does not store your bank details.</p>
           <p class="mb-0">
+          <div class="d-grid gap-2">
             <?php if (userHasMandates($user)) { ?>
-              <a href="<?= autoUrl("payments/mandates") ?>" class="btn btn-dark btn-block">Manage your bank account</a>
+              <a href="<?= autoUrl("payments/mandates") ?>" class="btn btn-dark">Manage your bank account</a>
             <?php } else { ?>
-              <a href="<?= autoUrl("payments/setup") ?>" class="btn btn-dark btn-block">Setup a Direct Debit</a>
+              <a href="<?= autoUrl("payments/setup") ?>" class="btn btn-dark">Setup a Direct Debit</a>
             <?php } ?>
+          </div>
           </p>
         </div>
       <?php } ?>

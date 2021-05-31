@@ -368,9 +368,11 @@ include BASE_PATH . 'views/header.php';
                     <div class="mb-2 d-sm-none d-md-flex d-lg-none"></div>
                   </div>
                   <div class="col">
-                    <a href="<?= htmlspecialchars($ec->getRFCContactNumber()) ?>" class="btn btn-block btn-success">
-                      <i class="fa fa-phone" aria-hidden="true"></i> <?= htmlspecialchars($ec->getNationalContactNumber()) ?>
-                    </a>
+                    <div class="d-grid gap-2">
+                      <a href="<?= htmlspecialchars($ec->getRFCContactNumber()) ?>" class="btn btn-success">
+                        <i class="fa fa-phone" aria-hidden="true"></i> <?= htmlspecialchars($ec->getNationalContactNumber()) ?>
+                      </a>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -651,7 +653,7 @@ include BASE_PATH . 'views/header.php';
       <div class="modal-header">
         <h5 class="modal-title" id="modal-title">Modal title</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-          
+
         </button>
       </div>
       <div id="modal-body" class="modal-body"></div>

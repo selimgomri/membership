@@ -81,9 +81,11 @@ $toDate->setTimezone(new DateTimeZone('Europe/London'));
                     }
                     $number = \Brick\PhoneNumber\PhoneNumber::parse((string) $json->visitors[$i]->phone);
                   ?>
-                    <a href="<?= htmlspecialchars($number->format(\Brick\PhoneNumber\PhoneNumberFormat::RFC3966)) ?>" class="btn btn-dark btn-block">
-                      <i class="fa fa-phone" aria-hidden="true"></i> <?= htmlspecialchars($number->formatForCallingFrom('GB')) ?>
-                    </a>
+                    <div class="d-grid gap-2">
+                      <a href="<?= htmlspecialchars($number->format(\Brick\PhoneNumber\PhoneNumberFormat::RFC3966)) ?>" class="btn btn-dark">
+                        <i class="fa fa-phone" aria-hidden="true"></i> <?= htmlspecialchars($number->formatForCallingFrom('GB')) ?>
+                      </a>
+                    </div>
                   <?php
                   } catch (\Brick\PhoneNumber\PhoneNumberParseException $e) {
                     // Do nothing

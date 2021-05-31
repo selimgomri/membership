@@ -232,9 +232,11 @@ include BASE_PATH . "views/renewalTitleBar.php";
                 <div id="saved-card-errors" role="alert"></div>
 
                 <p>
-                  <button id="saved-card-button" class="btn btn-success btn-block pm-can-disable" type="button" data-secret="<?= $intent->client_secret ?>">
+                <div class="d-grid gap-2">
+                  <button id="saved-card-button" class="btn btn-success pm-can-disable" type="button" data-secret="<?= $intent->client_secret ?>">
                     Pay &pound;<?= htmlspecialchars((string) (\Brick\Math\BigDecimal::of((string) $intent->amount))->withPointMovedLeft(2)->toScale(2)) ?> now
                   </button>
+                </div>
                 </p>
               </div>
 
@@ -341,9 +343,11 @@ include BASE_PATH . "views/renewalTitleBar.php";
             <div id="new-card-errors" role="alert"></div>
 
             <p class="mb-0">
-              <button id="new-card-button" class="btn btn-success btn-block pm-can-disable" type="submit" data-secret="<?= $intent->client_secret ?>">
+            <div class="d-grid gap-2">
+              <button id="new-card-button" class="btn btn-success pm-can-disable" type="submit" data-secret="<?= $intent->client_secret ?>">
                 Pay &pound;<?= htmlspecialchars((string) (\Brick\Math\BigDecimal::of((string) $intent->amount))->withPointMovedLeft(2)->toScale(2)) ?> now
               </button>
+            </div>
             </p>
           </form>
         </div>
