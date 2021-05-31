@@ -122,7 +122,7 @@ document.addEventListener('DOMContentLoaded', function (event) {
     document.getElementById('main-modal-title').textContent = 'Confirm resending registration email';
 
     // Set buttons
-    document.getElementById('main-modal-footer').innerHTML = '<button type="button" class="btn btn-dark" data-dismiss="modal">Cancel</button><button type="button" id="modal-confirm-button" class="btn btn-success">Confirm resend</button>';
+    document.getElementById('main-modal-footer').innerHTML = '<button type="button" class="btn btn-dark" data-bs-dismiss="modal">Cancel</button><button type="button" id="modal-confirm-button" class="btn btn-success">Confirm resend</button>';
 
     // Compose modal body content
     var bodyContent = '<p>Are you sure you want to resend the registration email to <span id="modal-user-name"></span>?</p>';
@@ -195,7 +195,7 @@ document.addEventListener('DOMContentLoaded', function (event) {
 
     document.getElementById('main-modal-body').innerHTML = body;
 
-    document.getElementById('main-modal-footer').innerHTML = '<button type="button" class="btn btn-dark" data-dismiss="modal">Cancel</button><button type="button" id="modal-confirm-button" class="btn btn-danger">Delete account</button>';
+    document.getElementById('main-modal-footer').innerHTML = '<button type="button" class="btn btn-dark" data-bs-dismiss="modal">Cancel</button><button type="button" id="modal-confirm-button" class="btn btn-danger">Delete account</button>';
 
     document.getElementById('modal-confirm-button').addEventListener('click', function (event) {
       let button = document.getElementById('delete-button');
@@ -261,19 +261,22 @@ document.addEventListener('DOMContentLoaded', function (event) {
 
         // SQUAD
         let formGroup = document.createElement('DIV');
-        formGroup.classList.add('form-group');
+        formGroup.classList.add('mb-3');
         let selectLabel = document.createElement('LABEL');
+        selectLabel.classList.add('form-label');
         selectLabel.appendChild(document.createTextNode('Select a squad'));
         selectLabel.setAttribute('for', 'squad-coach-select');
 
         let select = document.createElement('SELECT');
-        select.classList.add('custom-select');
+        select.classList.add('form-select');
         select.id = 'squad-coach-select';
+        select.setAttribute('required', true);
 
         let option = document.createElement('OPTION');
         option.value = 'NONE';
         option.appendChild(document.createTextNode('Select a squad'));
         option.setAttribute('selected', true);
+        option.setAttribute('disabled', true);
         select.appendChild(option);
 
         squads = json.squads;
@@ -291,19 +294,22 @@ document.addEventListener('DOMContentLoaded', function (event) {
 
         // TYPE
         formGroup = document.createElement('DIV');
-        formGroup.classList.add('form-group', 'mb-0');
+        formGroup.classList.add('mb-0');
         selectLabel = document.createElement('LABEL');
+        selectLabel.classList.add('form-label');
         selectLabel.appendChild(document.createTextNode('Select a role'));
         selectLabel.setAttribute('for', 'coach-role-select');
 
         select = document.createElement('SELECT');
-        select.classList.add('custom-select');
+        select.classList.add('form-select');
         select.id = 'coach-role-select';
+        select.setAttribute('required', true);
 
         option = document.createElement('OPTION');
         option.value = 'NONE';
         option.appendChild(document.createTextNode('Select a role'));
         option.setAttribute('selected', true);
+        option.setAttribute('disabled', true);
         select.appendChild(option);
 
         roles = json.roles;
@@ -319,7 +325,7 @@ document.addEventListener('DOMContentLoaded', function (event) {
 
         body.appendChild(formGroup);
 
-        document.getElementById('main-modal-footer').innerHTML = '<button type="button" class="btn btn-dark" data-dismiss="modal">Cancel</button><button type="button" id="modal-confirm-button" class="btn btn-success">Assign squad</button>';
+        document.getElementById('main-modal-footer').innerHTML = '<button type="button" class="btn btn-dark" data-bs-dismiss="modal">Cancel</button><button type="button" id="modal-confirm-button" class="btn btn-success">Assign squad</button>';
 
         document.getElementById('modal-confirm-button').addEventListener('click', function (event) {
           let assignButton = document.getElementById('coach-squad-assign');

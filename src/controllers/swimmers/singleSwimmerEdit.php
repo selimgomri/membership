@@ -484,15 +484,15 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 		<div class="modal-content">
 			<div class="modal-header">
 				<h5 class="modal-title" id="main-modal-title">Modal title</h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+					
 				</button>
 			</div>
 			<div class="modal-body" id="main-modal-body">
 				...
 			</div>
 			<div class="modal-footer" id="main-modal-footer">
-				<button type="button" class="btn btn-dark" data-dismiss="modal">Cancel</button>
+				<button type="button" class="btn btn-dark" data-bs-dismiss="modal">Cancel</button>
 				<button type="button" id="modal-confirm-button" class="btn btn-success">Confirm</button>
 			</div>
 		</div>

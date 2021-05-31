@@ -53,7 +53,7 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 			<?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState']);
 			} ?>
 			<form method="post" class="needs-validation" novalidate>
-				<div class="row">
+				<div class="row g-2">
 					<div class="col-sm-4">
 						<div class="mb-3">
 							<label class="form-label" for="forename">Forename</label>
@@ -86,7 +86,7 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 						Please provide a valid date of birth, which is not in the future.
 					</div>
 				</div>
-				<div class="row">
+				<div class="row g-2">
 					<div class="col-sm-6">
 						<div class="mb-3">
 							<label class="form-label" for="asa">Swim England Registration Number</label>

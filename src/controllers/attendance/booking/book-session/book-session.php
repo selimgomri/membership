@@ -312,8 +312,8 @@ include BASE_PATH . 'views/header.php';
     <div class="modal-content">
       <div class="modal-header bg-info text-dark">
         <h5 class="modal-title" id="booking-modal-title">Confirm booking</h5>
-        <button type="button" class="close text-dark" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
+        <button type="button" class="close text-dark" data-bs-dismiss="modal" aria-label="Close">
+          
         </button>
       </div>
       <div class="modal-body">
@@ -340,7 +340,7 @@ include BASE_PATH . 'views/header.php';
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-dark" data-dismiss="modal">Don't book</button>
+        <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Don't book</button>
         <button type="submit" class="btn btn-info" form="member-booking-form" id="accept">Confirm booking</button>
       </div>
     </div>
@@ -352,8 +352,8 @@ include BASE_PATH . 'views/header.php';
     <div class="modal-content">
       <div class="modal-header bg-danger text-white">
         <h5 class="modal-title" id="cancel-modal-title">Cancel booking?</h5>
-        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
+        <button type="button" class="close text-white" data-bs-dismiss="modal" aria-label="Close">
+          
         </button>
       </div>
       <div class="modal-body">
@@ -380,7 +380,7 @@ include BASE_PATH . 'views/header.php';
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-dark" data-dismiss="modal">Don't cancel</button>
+        <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Don't cancel</button>
         <button type="submit" class="btn btn-danger" form="cancel-booking-form" id="accept">Cancel booking</button>
       </div>
     </div>
@@ -392,8 +392,8 @@ include BASE_PATH . 'views/header.php';
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="sharing-modal-title">Share this</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+          
         </button>
       </div>
       <div class="modal-body">
@@ -428,7 +428,7 @@ include BASE_PATH . 'views/header.php';
 
       </div>
       <!-- <div class="modal-footer">
-        <button type="button" class="btn btn-dark" data-dismiss="modal">Don't cancel</button>
+        <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Don't cancel</button>
         <button type="submit" class="btn btn-danger" form="cancel-booking-form" id="accept">Cancel booking</button>
       </div> -->
     </div>

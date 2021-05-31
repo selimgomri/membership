@@ -146,7 +146,7 @@ function loadListeners() {
       document.getElementById('contact-number').value = event.target.dataset.contactNumber;
 
       // Set footer
-      // <button type="button" class="btn btn-dark" data-dismiss="modal">Cancel</button>
+      // <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Cancel</button>
       let dismissButton = document.createElement('BUTTON');
       dismissButton.classList.add('btn', 'btn-dark');
       dismissButton.dataset.dismiss = 'modal';
@@ -185,7 +185,7 @@ function loadListeners() {
       modalBody.appendChild(p);
 
       // Set footer
-      // <button type="button" class="btn btn-dark" data-dismiss="modal">Cancel</button>
+      // <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Cancel</button>
       let dismissButton = document.createElement('BUTTON');
       dismissButton.classList.add('btn', 'btn-dark');
       dismissButton.dataset.dismiss = 'modal';
@@ -245,7 +245,7 @@ function loadListeners() {
     setForm(modalBody);
 
     // Set footer
-    // <button type="button" class="btn btn-dark" data-dismiss="modal">Cancel</button>
+    // <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Cancel</button>
     let dismissButton = document.createElement('BUTTON');
     dismissButton.classList.add('btn', 'btn-dark');
     dismissButton.dataset.dismiss = 'modal';

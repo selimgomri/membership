@@ -59,14 +59,22 @@ include BASE_PATH . 'views/header.php';
 
 ?>
 
+<div class="bg-light mt-n3 py-3 mb-3">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8">
+        <h1>Squad Reps</h1>
+        <p class="lead mb-0">
+          Squad reps are here to help
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="container">
   <div class="row">
     <div class="col-lg-8">
-      <h1>Squad Reps</h1>
-      <p class="lead">
-        Squad reps are here to help
-      </p>
-
       <?php if (sizeof($members) > 0) { ?>
         <h2>
           Your squad reps

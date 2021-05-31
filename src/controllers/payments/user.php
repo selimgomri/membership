@@ -38,21 +38,25 @@ include BASE_PATH . "views/paymentsMenu.php";
 </div>
 -->
 
-<div class="container">
+<div class="bg-light mt-n3 py-3 mb-3">
+  <div class="container">
 
-  <nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item active" aria-current="page">Payments</li>
-    </ol>
-  </nav>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page">Payments</li>
+      </ol>
+    </nav>
 
-  <div class="row align-items-center">
-    <div class="col-md-6 col-lg-8">
-      <h1>Payments</h1>
-      <p class="lead">Manage your Direct Debit Payments</p>
+    <div class="row align-items-center">
+      <div class="col-md-6 col-lg-8">
+        <h1>Payments</h1>
+        <p class="lead mb-0">Manage your payments to <?= htmlspecialchars(app()->tenant->getName()) ?></p>
+      </div>
     </div>
-
   </div>
+</div>
+
+<div class="container">
   <div class="row">
     <div class="col-md-8">
       <div class="cell">
@@ -64,7 +68,7 @@ include BASE_PATH . "views/paymentsMenu.php";
         <h2>
           Extra Fees this month
         </h2>
-        <p class="lead">Fees to pay on your next Billing Date, in addition to Squad Fees</p>
+        <p class="lead">Fees to pay on your next billing date, in addition to squad fees</p>
         <?= feesToPay(null, $user) ?>
       </div>
     </div>

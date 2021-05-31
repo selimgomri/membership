@@ -70,18 +70,28 @@ include BASE_PATH . 'views/header.php';
 <div id="stripe-data" data-stripe-publishable="<?= htmlspecialchars(getenv('STRIPE_PUBLISHABLE')) ?>" data-stripe-font-css="<?= htmlspecialchars($fontCss) ?>" data-stripe-account-id="<?= htmlspecialchars($tenant->getStripeAccount()) ?>">
 </div>
 
-<div class="container">
-  <nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="<?= autoUrl("payments") ?>">Payments</a></li>
-      <li class="breadcrumb-item"><a href="<?= autoUrl("payments/cards") ?>">Cards</a></li>
-      <li class="breadcrumb-item active" aria-current="page">Add card</li>
-    </ol>
-  </nav>
+<div class="bg-light mt-n3 py-3 mb-3">
+  <div class="container">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="<?= autoUrl("payments") ?>">Payments</a></li>
+        <li class="breadcrumb-item"><a href="<?= autoUrl("payments/cards") ?>">Cards</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Add card</li>
+      </ol>
+    </nav>
 
+    <div class="row">
+      <div class="col-lg-8">
+        <h1>Add a payment card</h1>
+        <p class="lead mb-0">Save a card for use later</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
   <div class="row">
-    <div class="col-md-8">
-      <h1>Add a payment card</h1>
+    <div class="col-lg-8">
 
       <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['PayCardError'])) { ?>
         <div class="alert alert-danger">
@@ -172,6 +182,10 @@ include BASE_PATH . 'views/header.php';
 
         <!-- Used to display form errors. -->
         <div id="card-errors" role="alert"></div>
+
+        <p>
+          Please note that even when using a saved payment card, your bank may request additional verification, such as with a one-time password or a notification sent to one of your devices. When you add a new card, <?= htmlspecialchars(app()->tenant->getName()) ?> may place a temporary hold on your card for verification.
+        </p>
 
         <p>
           <button id="card-button" class="btn btn-success" data-secret="<?= htmlspecialchars($setupIntent->client_secret) ?>">Add payment card</button>

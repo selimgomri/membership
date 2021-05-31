@@ -13,7 +13,7 @@ button.addEventListener('click', function (event) {
 
   document.getElementById('main-modal-body').innerHTML = body;
 
-  document.getElementById('main-modal-footer').innerHTML = '<button type="button" class="btn btn-dark" data-dismiss="modal">Cancel</button><button type="button" id="modal-confirm-button" class="btn btn-danger">Delete account</button>';
+  document.getElementById('main-modal-footer').innerHTML = '<button type="button" class="btn btn-dark" data-bs-dismiss="modal">Cancel</button><button type="button" id="modal-confirm-button" class="btn btn-danger">Delete account</button>';
 
   document.getElementById('modal-confirm-button').addEventListener('click', function (event) {
     let button = document.getElementById('delete-button');

@@ -194,28 +194,33 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
 <div id="stripe-data" data-stripe-publishable="<?= htmlspecialchars(getenv('STRIPE_PUBLISHABLE')) ?>" data-stripe-font-css="<?= htmlspecialchars($fontCss) ?>" data-redirect-url-new="<?= htmlspecialchars(autoUrl("galas/pay-for-entries/complete/new")) ?>" data-redirect-url="<?= htmlspecialchars(autoUrl("galas/pay-for-entries/complete")) ?>" data-org-name="<?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?>" data-intent-amount="<?= htmlspecialchars($intent->amount) ?>" data-intent-currency="<?= htmlspecialchars($intent->currency) ?>" data-payment-request-line-items="<?= htmlspecialchars(json_encode($entryRequestDetails)) ?>" data-stripe-account-id="<?= htmlspecialchars($tenant->getStripeAccount()) ?>">
 </div>
 
-<div class="container">
-  <nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="<?= autoUrl("galas") ?>">Galas</a></li>
-      <li class="breadcrumb-item active" aria-current="page">Pay for entries</li>
-    </ol>
-  </nav>
+<div class="bg-light mt-n3 py-3 mb-3">
+  <div class="container">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="<?= autoUrl("galas") ?>">Galas</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Pay for entries</li>
+      </ol>
+    </nav>
 
-  <div class="row align-items-center justify-content-between mb-3">
-    <div class="col-lg-7">
-      <h1>Pay for gala entries</h1>
-      <p class="lead">Checkout</p>
-    </div>
-    <div class="col text-lg-end">
-      <div class="accepted-network-logos">
-        <p>
-          <img class="apple-pay-row" src="<?= autoUrl("public/img/stripe/apple-pay-mark.svg") ?>" aria-hidden="true"><img class="google-pay-row" src="<?= autoUrl("public/img/stripe/google-pay-mark.svg") ?>" aria-hidden="true"><img class="visa-row" src="<?= autoUrl("public/img/stripe/visa.svg") ?>" aria-hidden="true"><img class="mastercard-row" src="<?= autoUrl("public/img/stripe/mastercard.svg") ?>" aria-hidden="true"><img class="amex-row" src="<?= autoUrl("public/img/stripe/amex.svg") ?>" aria-hidden="true">
-        </p>
+    <div class="row align-items-center justify-content-between">
+      <div class="col-lg-7">
+        <h1>Pay for gala entries</h1>
+        <p class="lead mb-0">Checkout</p>
+      </div>
+      <div class="col text-lg-end">
+        <div class="d-lg-none mt-3"></div>
+        <div class="accepted-network-logos">
+          <p class="mb-0">
+            <img class="apple-pay-row" src="<?= autoUrl("public/img/stripe/apple-pay-mark.svg") ?>" aria-hidden="true"><img class="google-pay-row" src="<?= autoUrl("public/img/stripe/google-pay-mark.svg") ?>" aria-hidden="true"><img class="visa-row" src="<?= autoUrl("public/img/stripe/visa.svg") ?>" aria-hidden="true"><img class="mastercard-row" src="<?= autoUrl("public/img/stripe/mastercard.svg") ?>" aria-hidden="true"><img class="amex-row" src="<?= autoUrl("public/img/stripe/amex.svg") ?>" aria-hidden="true">
+          </p>
+        </div>
       </div>
     </div>
   </div>
+</div>
 
+<div class="container">
   <div class="row justify-content-between">
     <div class="col-lg-4 order-lg-2">
 

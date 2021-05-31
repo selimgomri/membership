@@ -76,18 +76,27 @@ include BASE_PATH . "views/header.php";
 include BASE_PATH . "controllers/galas/galaMenu.php";
 ?>
 
+<div class="bg-light mt-n3 py-3 mb-3">
+  <div class="container">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="<?= autoUrl("galas") ?>">Galas</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Pay for entries</li>
+      </ol>
+    </nav>
+
+    <div class="row">
+      <div class="col-lg-8">
+        <h1>Payment successful</h1>
+        <p class="lead mb-0">Your payment was successful</p>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="container">
-  <nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="<?=autoUrl("galas")?>">Galas</a></li>
-      <li class="breadcrumb-item active" aria-current="page">Pay for entries</li>
-    </ol>
-  </nav>
-  
   <div class="row">
     <div class="col-lg-8">
-      <h1>Payment successful</h1>
-      <p class="lead">Your payment was successful</p>
       <p>A confirmation email is on the way to you.</p>
 
       <h2>Payment details</h2>
@@ -97,45 +106,46 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
           $notReady = !$entry['EntryProcessed'];
           $galaData = new GalaPrices($db, $entry['GalaID']);
         ?>
-        <li class="list-group-item">
-          <h3><?=htmlspecialchars($entry['MForename'] . ' ' . $entry['MSurname'])?> <br><small><?=htmlspecialchars($entry['GalaName'])?></small></h3>
-          <div class="row">
-            <div class="col-4 col-sm-5 col-md-4 col-lg-6">
-              <p>
-                <a data-bs-toggle="collapse" href="#swims-<?=$entry['EntryID']?>" role="button" aria-expanded="false" aria-controls="swims-<?=$entry['EntryID']?>">
-                  View swims
-                </a>
-              </p>
-              <div class="collapse" id="swims-<?=$entry['EntryID']?>">
-                <ul class="list-unstyled">
-                <?php $count = 0; ?>
-                <?php foreach($swimsArray as $colTitle => $text) { ?>
-                  <?php if ($entry[$colTitle]) { $count++; ?>
-                  <li class="row">
-										<div class="col">
-											<?=$text?>
-										</div>
-										<?php if ($galaData->getEvent($colTitle)->isEnabled()) { ?>
-										<div class="col">
-											&pound;<?=$galaData->getEvent($colTitle)->getPriceAsString()?>
-										</div>
-										<?php } ?>
-									</li>
-                  <?php } ?>
-                <?php } ?>
+          <li class="list-group-item">
+            <h3><?= htmlspecialchars($entry['MForename'] . ' ' . $entry['MSurname']) ?> <br><small><?= htmlspecialchars($entry['GalaName']) ?></small></h3>
+            <div class="row">
+              <div class="col-4 col-sm-5 col-md-4 col-lg-6">
+                <p>
+                  <a data-bs-toggle="collapse" href="#swims-<?= $entry['EntryID'] ?>" role="button" aria-expanded="false" aria-controls="swims-<?= $entry['EntryID'] ?>">
+                    View swims
+                  </a>
+                </p>
+                <div class="collapse" id="swims-<?= $entry['EntryID'] ?>">
+                  <ul class="list-unstyled">
+                    <?php $count = 0; ?>
+                    <?php foreach ($swimsArray as $colTitle => $text) { ?>
+                      <?php if ($entry[$colTitle]) {
+                        $count++; ?>
+                        <li class="row">
+                          <div class="col">
+                            <?= $text ?>
+                          </div>
+                          <?php if ($galaData->getEvent($colTitle)->isEnabled()) { ?>
+                            <div class="col">
+                              &pound;<?= $galaData->getEvent($colTitle)->getPriceAsString() ?>
+                            </div>
+                          <?php } ?>
+                        </li>
+                      <?php } ?>
+                    <?php } ?>
+                </div>
+              </div>
+              <div class="col text-end">
+                <p>
+                  <?= mb_convert_case($numFormatter->format($count), MB_CASE_TITLE_SIMPLE) ?> event<?php if ($count != 1) { ?>s<?php } ?>
+                </p>
+
+                <p class="mb-0">
+                  <strong>Fee &pound;<?= htmlspecialchars((string) (\Brick\Math\BigDecimal::of((string) $entry['FeeToPay'])->toScale(2))) ?></strong>
+                </p>
               </div>
             </div>
-            <div class="col text-end">
-              <p>
-                <?=mb_convert_case($numFormatter->format($count), MB_CASE_TITLE_SIMPLE)?> event<?php if ($count != 1) { ?>s<?php } ?>
-              </p>
-
-              <p class="mb-0">
-                <strong>Fee &pound;<?=htmlspecialchars((string) (\Brick\Math\BigDecimal::of((string) $entry['FeeToPay'])->toScale(2)))?></strong>
-              </p>
-            </div>
-          </div>
-        </li>
+          </li>
         <?php } ?>
         <li class="list-group-item">
           <div class="row align-items-center">
@@ -146,7 +156,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
             </div>
             <div class="col text-end">
               <p class="mb-0">
-                <strong>&pound;<?=htmlspecialchars((string) (\Brick\Math\BigDecimal::of((string) $intent->amount))->withPointMovedLeft(2)->toScale(2))?></strong>
+                <strong>&pound;<?= htmlspecialchars((string) (\Brick\Math\BigDecimal::of((string) $intent->amount))->withPointMovedLeft(2)->toScale(2)) ?></strong>
               </p>
             </div>
           </div>
@@ -154,7 +164,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
       </ul>
 
       <p>
-        <a href="<?=autoUrl("galas")?>" class="btn btn-success">
+        <a href="<?= autoUrl("galas") ?>" class="btn btn-success">
           Return to galas
         </a>
       </p>

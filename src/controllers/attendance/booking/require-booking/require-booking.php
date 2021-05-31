@@ -138,7 +138,7 @@ include BASE_PATH . 'views/header.php';
           </div>
 
           <p>
-            If you later reduce the limit on a session to a number lower than the number of bookings, then those who booked a place first will keep their places and the most recent bookings being remove down to the new limit.
+            If you later reduce the limit on a session to a number lower than the number of bookings, then those who booked a place first will keep their places and the most recent bookings being removed down to the new limit.
           </p>
         </div>
 
@@ -169,7 +169,7 @@ include BASE_PATH . 'views/header.php';
         </div>
 
         <div class="d-none" id="open-bookings-at-container">
-          <div class="row">
+          <div class="row g-2">
             <div class="col">
               <div class="mb-3">
                 <label class="form-label" for="open-booking-at-date">Opens date</label>

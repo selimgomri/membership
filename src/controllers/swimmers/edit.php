@@ -152,7 +152,7 @@ include BASE_PATH . "views/swimmersMenu.php";
 
         <div class="mb-3">
           <p class="mb-2">
-            Sex (for the purposes of competition) <a tabindex="0" data-bs-toggle="popover" data-trigger="focus" title="" data-content="<?php if ($isMemberUser) { ?>Please select the sex you compete under, even if this is not the same as your gender identity. You can select your gender identity (for use internally at <?= htmlspecialchars(app()->tenant->getName()) ?>) below.<?php } else { ?>Select the sex <?= htmlspecialchars($row['MForename']) ?> competes under, even if this is not the same as their gender identity. They can select their gender identity (for use internally at <?= htmlspecialchars(app()->tenant->getName()) ?>) if they visit this page themselves.<?php } ?>" data-original-title="What does this mean?"><i class="fa fa-question-circle" aria-hidden="true"></i></a>
+            Sex (for the purposes of competition) <a tabindex="0" data-bs-toggle="popover" data-bs-trigger="focus" title="" data-bs-content="<?php if ($isMemberUser) { ?>Please select the sex you compete under, even if this is not the same as your gender identity. You can select your gender identity (for use internally at <?= htmlspecialchars(app()->tenant->getName()) ?>) below.<?php } else { ?>Select the sex <?= htmlspecialchars($row['MForename']) ?> competes under, even if this is not the same as their gender identity. They can select their gender identity (for use internally at <?= htmlspecialchars(app()->tenant->getName()) ?>) if they visit this page themselves.<?php } ?>" data-original-title="What does this mean?"><i class="fa fa-question-circle" aria-hidden="true"></i></a>
           </p>
           <div class="form-check">
             <input type="radio" id="sex-m" name="sex" class="form-check-input" value="Male" <?php if ($row['Gender'] == 'Male') { ?>checked<?php } ?>>
@@ -170,7 +170,7 @@ include BASE_PATH . "views/swimmersMenu.php";
               <div class="card card-body mb-2">
                 <div class="mb-3" id="gender-radio">
                   <p class="mb-2">
-                    Gender <a tabindex="0" data-bs-toggle="popover" data-trigger="focus" title="" data-content="Your gender identity is a way to describe how you feel about your gender. You might identify your gender as a boy or a girl or something different. This is different from your sex, which is related to your physical body and biology." data-original-title="What is gender identity?"><i class="fa fa-question-circle" aria-hidden="true"></i></a>
+                    Gender <a tabindex="0" data-bs-toggle="popover" data-bs-trigger="focus" title="" data-bs-content="Your gender identity is a way to describe how you feel about your gender. You might identify your gender as a boy or a girl or something different. This is different from your sex, which is related to your physical body and biology." data-original-title="What is gender identity?"><i class="fa fa-question-circle" aria-hidden="true"></i></a>
                   </p>
                   <?php $other = true; ?>
                   <?php if ($row['GenderIdentity'] == '' || $row['GenderIdentity'] == null) $other = false; ?>
@@ -209,7 +209,7 @@ include BASE_PATH . "views/swimmersMenu.php";
               <div class="card card-body mb-2">
                 <div class="mb-3" id="gender-pronoun-radio">
                   <p class="mb-2">
-                    Gender pronouns <a tabindex="0" data-bs-toggle="popover" data-trigger="focus" title="" data-content="The words we use to refer to someone like, ‘he’, ‘she’ and ‘they’. We allow you to choose your pronouns so that you're never mis-gendered." data-original-title="What are pronouns?"><i class="fa fa-question-circle" aria-hidden="true"></i></a>
+                    Gender pronouns <a tabindex="0" data-bs-toggle="popover" data-bs-trigger="focus" title="" data-bs-content="The words we use to refer to someone like, ‘he’, ‘she’ and ‘they’. We allow you to choose your pronouns so that you're never mis-gendered." data-original-title="What are pronouns?"><i class="fa fa-question-circle" aria-hidden="true"></i></a>
                   </p>
                   <?php $other = true; ?>
                   <?php if ($row['GenderPronouns'] == '' || $row['GenderPronouns'] == null) $other = false; ?>
@@ -247,7 +247,7 @@ include BASE_PATH . "views/swimmersMenu.php";
 
           <div class="mb-3">
             <p class="mb-2">
-              Show my gender and pronouns to club staff throughout the membership system <a tabindex="0" data-bs-toggle="popover" data-trigger="focus" title="" data-content="Choosing to show your pronouns to club staff helps us make sure you're not mis-gendered. If you do, places we'll show your information include registers, squad lists and gala information (internally). If you choose no, we'll completely hide your chosen gender and pronouns from all club staff." data-original-title="Why show our staff your pronouns?"><i class="fa fa-question-circle" aria-hidden="true"></i></a>
+              Show my gender and pronouns to club staff throughout the membership system <a tabindex="0" data-bs-toggle="popover" data-bs-trigger="focus" title="" data-bs-content="Choosing to show your pronouns to club staff helps us make sure you're not mis-gendered. If you do, places we'll show your information include registers, squad lists and gala information (internally). If you choose no, we'll completely hide your chosen gender and pronouns from all club staff." data-original-title="Why show our staff your pronouns?"><i class="fa fa-question-circle" aria-hidden="true"></i></a>
             </p>
             <div class="form-check">
               <input type="radio" id="show-gender-and-pronounds-yes" name="show-gender-and-pronounds" class="form-check-input" value="1" <?php if (bool($row['GenderDisplay']) && !($row['GenderIdentity'] == '' || $row['GenderIdentity'] == null)) { ?>checked<?php } ?>>
@@ -464,15 +464,15 @@ include BASE_PATH . "views/swimmersMenu.php";
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="main-modal-title">Modal title</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+          
         </button>
       </div>
       <div class="modal-body" id="main-modal-body">
         ...
       </div>
       <div class="modal-footer" id="main-modal-footer">
-        <button type="button" class="btn btn-dark" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Cancel</button>
         <button type="button" id="modal-confirm-button" class="btn btn-success">Confirm</button>
       </div>
     </div>

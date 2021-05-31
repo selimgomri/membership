@@ -240,7 +240,7 @@ if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Committee" 
             <div class=\"col-auto text-end\">";
             if ($row['Conditions'] != "" || $row['Allergies'] != "" || $row['Medication'] != "") {
               //ref=\"" . autoUrl("swimmers/" . $row['MemberID']) . "\" target=\"_blank\">
-              $content .= "<a data-toggle=\"modal\" href=\"#medicalModal" . $row['MemberID'] . "\"><span class=\"badge bg-danger\">MEDICAL</span></a>";
+              $content .= "<a data-bs-toggle=\"modal\" href=\"#medicalModal" . $row['MemberID'] . "\"><span class=\"badge bg-danger\">MEDICAL</span></a>";
               $modalOutput .= '
               <!-- Modal -->
               <div class="modal fade" id="medicalModal' . $row['MemberID'] . '" tabindex="-1" role="dialog" aria-labelledby="medicalModalTitle' . $row['MemberID'] . '" aria-hidden="true">
@@ -248,8 +248,8 @@ if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Committee" 
                   <div class="modal-content">
                     <div class="modal-header">
                       <h3 class="modal-title" id="medicalModalTitle' . $row['MemberID'] . '">Medical Information for ' . $row['MForename'] . ' ' . $row['MSurname'] . '</h3>
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        
                       </button>
                     </div>
                     <div class="modal-body">
@@ -289,7 +289,7 @@ if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Committee" 
               ';
             }
             if ($row['OtherNotes'] != "") {
-              $content .= " <a data-toggle=\"modal\" href=\"#notesModal" . $row['MemberID'] . "\"><span class=\"badge bg-info\">OTHER</span></a>";
+              $content .= " <a data-bs-toggle=\"modal\" href=\"#notesModal" . $row['MemberID'] . "\"><span class=\"badge bg-info\">OTHER</span></a>";
               $modalOutput .= '
               <!-- Modal -->
               <div class="modal fade" id="notesModal' . $row['MemberID'] . '" tabindex="-1" role="dialog" aria-labelledby="notesModalTitle' . $row['MemberID'] . '" aria-hidden="true">
@@ -297,8 +297,8 @@ if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Committee" 
                   <div class="modal-content">
                     <div class="modal-header">
                       <h5 class="modal-title" id="notesModalTitle' . $row['MemberID'] . '">Other Notes for ' . $row['MForename'] . ' ' . $row['MSurname'] . '</h5>
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        
                       </button>
                     </div>
                     <div class="modal-body">
@@ -310,7 +310,7 @@ if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Committee" 
               ';
             }
             if (($row['Website'] != 1 || $row['Social'] != 1 || $row['Noticeboard'] != 1 || $row['FilmTraining'] != 1 || $row['ProPhoto'] != 1) && ($age < 18)) {
-              $content .= " <a data-toggle=\"modal\" href=\"#photoModal" . $row['MemberID'] . "\"><span class=\"badge bg-warning\">PHOTO</span></a>";
+              $content .= " <a data-bs-toggle=\"modal\" href=\"#photoModal" . $row['MemberID'] . "\"><span class=\"badge bg-warning\">PHOTO</span></a>";
               $modalOutput .= '
               <!-- Modal -->
               <div class="modal fade" id="photoModal' . $row['MemberID'] . '" tabindex="-1" role="dialog" aria-labelledby="photoModalTitle' . $row['MemberID'] . '" aria-hidden="true">
@@ -318,8 +318,8 @@ if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Committee" 
                   <div class="modal-content">
                     <div class="modal-header">
                       <h5 class="modal-title" id="photoModalTitle' . $row['MemberID'] . '">Photography Permissions for ' . $row['MForename'] . ' ' . $row['MSurname'] . '</h5>
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        
                       </button>
                     </div>
                     <div class="modal-body">

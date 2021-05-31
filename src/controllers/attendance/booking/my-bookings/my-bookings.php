@@ -61,7 +61,7 @@ include BASE_PATH . 'views/header.php';
     <div class="row align-items-center">
       <div class="col">
         <h1>
-          My Bookings <span class="badge bg-info" title="This is a new service. Your feedback is always welcome - send an email to feedback@myswimmingclub.uk or call us on +44 191 249 4320">BETA</span>
+          My Bookings
         </h1>
         <p class="lead mb-0">
           View your current and upcoming session bookings

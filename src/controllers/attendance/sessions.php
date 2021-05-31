@@ -114,8 +114,8 @@ include "attendanceMenu.php";
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="add-session-modal-label">Add a new session</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+          
         </button>
       </div>
       <div class="modal-body">
@@ -287,7 +287,7 @@ include "attendanceMenu.php";
       <div class="modal-footer">
         <div class="row">
           <div class="col-auto text-end">
-            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
             <button type="submit" form="new-session-form" class="btn btn-success">Add session</button>
           </div>
         </div>

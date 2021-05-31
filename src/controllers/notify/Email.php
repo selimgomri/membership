@@ -325,8 +325,8 @@ include BASE_PATH . "views/notifyMenu.php";
     <div class="modal-content">
       <div class="modal-header bg-danger text-white">
         <h5 class="modal-title" id="force-alert-modal">Are you sure?</h5>
-        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
+        <button type="button" class="close text-white" data-bs-dismiss="modal" aria-label="Close">
+          
         </button>
       </div>
       <div class="modal-body">
@@ -345,7 +345,7 @@ include BASE_PATH . "views/notifyMenu.php";
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-dark" data-dismiss="modal">Don't force send</button>
+        <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Don't force send</button>
         <button type="button" class="btn btn-danger" id="accept">I understand</button>
       </div>
     </div>
