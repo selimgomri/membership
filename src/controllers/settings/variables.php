@@ -252,7 +252,7 @@ include BASE_PATH . 'views/header.php';
           <?php } ?>
 
           <div class="mb-3">
-            <div class="custom-control form-switch">
+            <div class="form-switch mb-2">
               <input class="form-check-input" type="checkbox" id="BLOCK_SQUAD_REPS_FROM_NOTIFY" name="BLOCK_SQUAD_REPS_FROM_NOTIFY" <?php if (!bool($vars['BLOCK_SQUAD_REPS_FROM_NOTIFY'])) { ?>checked<?php } ?> <?= $disabled['BLOCK_SQUAD_REPS_FROM_NOTIFY'] ?>>
               <label class="form-check-label" for="BLOCK_SQUAD_REPS_FROM_NOTIFY">Allow squad reps to use Notify</label>
             </div>
@@ -260,7 +260,7 @@ include BASE_PATH . 'views/header.php';
 
           <h2>Display options</h2>
           <div class="mb-3">
-            <div class="custom-control form-switch">
+            <div class="form-switch mb-2">
               <input class="form-check-input" type="checkbox" id="HIDE_MEMBER_ATTENDANCE" name="HIDE_MEMBER_ATTENDANCE" <?php if (!bool($vars['HIDE_MEMBER_ATTENDANCE'])) { ?>checked<?php } ?> <?= $disabled['HIDE_MEMBER_ATTENDANCE'] ?>>
               <label class="form-check-label" for="HIDE_MEMBER_ATTENDANCE">Show member attendance percentage to parents</label>
             </div>
@@ -268,7 +268,7 @@ include BASE_PATH . 'views/header.php';
 
           <?php if ($vars['LOGO_DIR']) { ?>
             <div class="mb-3">
-              <div class="custom-control form-switch">
+              <div class="form-switch mb-2">
                 <input class="form-check-input" type="checkbox" id="SHOW_LOGO" value="1" name="SHOW_LOGO" <?php if (bool($vars['SHOW_LOGO'])) { ?>checked<?php } ?> <?= $disabled['SHOW_LOGO'] ?>>
                 <label class="form-check-label" for="SHOW_LOGO">Show organisation logo in header</label>
               </div>
@@ -276,7 +276,7 @@ include BASE_PATH . 'views/header.php';
           <?php } ?>
 
           <div class="mb-3">
-            <div class="custom-control form-switch">
+            <div class="form-switch mb-2">
               <input class="form-check-input" type="checkbox" id="HIDE_CONTACT_TRACING_FROM_PARENTS" value="1" name="HIDE_CONTACT_TRACING_FROM_PARENTS" <?php if (!bool($vars['HIDE_CONTACT_TRACING_FROM_PARENTS'])) { ?>checked<?php } ?> <?= $disabled['HIDE_CONTACT_TRACING_FROM_PARENTS'] ?>>
               <label class="form-check-label" for="HIDE_CONTACT_TRACING_FROM_PARENTS">Show contact tracing links to all member users</label>
             </div>
@@ -284,14 +284,14 @@ include BASE_PATH . 'views/header.php';
 
           <h2>Registration and renewal global options</h2>
           <div class="mb-3">
-            <div class="custom-control form-switch">
+            <div class="form-switch mb-2">
               <input class="form-check-input" type="checkbox" id="REQUIRE_FULL_REGISTRATION" value="1" name="REQUIRE_FULL_REGISTRATION" <?php if (bool($vars['REQUIRE_FULL_REGISTRATION'])) { ?>checked<?php } ?> <?= $disabled['REQUIRE_FULL_REGISTRATION'] ?>>
               <label class="form-check-label" for="REQUIRE_FULL_REGISTRATION">Require users to complete all registration forms</label>
             </div>
           </div>
 
           <div class="mb-3">
-            <div class="custom-control form-switch">
+            <div class="form-switch mb-2">
               <input class="form-check-input" type="checkbox" id="REQUIRE_FULL_RENEWAL" value="1" name="REQUIRE_FULL_RENEWAL" <?php if (bool($vars['REQUIRE_FULL_RENEWAL'])) { ?>checked<?php } ?> <?= $disabled['REQUIRE_FULL_RENEWAL'] ?>>
               <label class="form-check-label" for="REQUIRE_FULL_RENEWAL">Require users to complete all renewal forms. If off renewal jumps direct to membership fees page.</label>
             </div>
@@ -299,7 +299,7 @@ include BASE_PATH . 'views/header.php';
 
           <h2>Billing options</h2>
           <div class="mb-3">
-            <div class="custom-control form-switch">
+            <div class="form-switch mb-2">
               <input class="form-check-input" type="checkbox" id="ENABLE_BILLING_SYSTEM" value="1" name="ENABLE_BILLING_SYSTEM" <?php if (bool($vars['ENABLE_BILLING_SYSTEM'])) { ?>checked<?php } ?> <?= $disabled['ENABLE_BILLING_SYSTEM'] ?>>
               <label class="form-check-label" for="ENABLE_BILLING_SYSTEM">Enable the automated billing system (for Direct Debit)</label>
             </div>

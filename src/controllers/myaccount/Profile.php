@@ -239,7 +239,7 @@ if (app('request')->method == "POST") {
                   </p>
                 </div>
                 <div class="mb-3">
-                  <div class="custom-control form-switch">
+                  <div class="form-switch mb-2">
                     <input class="form-check-input" type="checkbox" value="1" id="emailContactOK" aria-describedby="emailContactOKHelp" name="emailContactOK" <?= $emailChecked ?>>
                     <label class="form-check-label" for="emailContactOK">Receive news by email</label>
                     <small id="emailContactOKHelp" class="form-text text-muted">You'll still receive emails relating to your account if you don't receive news</small>
@@ -251,7 +251,7 @@ if (app('request')->method == "POST") {
                   <small id="mobileHelp" class="form-text text-muted">If you don't have a mobile, use your landline number. By default, we will assume your number is a GB phone number. If it is an international number, please include your country code (e.g. +1).</small>
                 </div>
                 <div class="mb-3">
-                  <div class="custom-control form-switch">
+                  <div class="form-switch mb-2">
                     <input class="form-check-input" type="checkbox" value="1" id="smsContactOK" aria-describedby="smsContactOKHelp" name="smsContactOK" <?= $mobileChecked ?>>
                     <label class="form-check-label" for="smsContactOK">Receive text messages</label>
                     <small id="smsContactOKHelp" class="form-text text-muted">We'll still use this number to contact you in an emergency</small>

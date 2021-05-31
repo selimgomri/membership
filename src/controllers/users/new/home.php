@@ -144,15 +144,15 @@ include BASE_PATH . 'views/header.php';
           <p>
             Select access permissions for this user
           </p>
-          <div class="custom-control form-switch">
+          <div class="form-switch mb-2">
             <input class="form-check-input" type="checkbox" id="permissions-gala" name="permissions-gala" value="1" <?= checked('permissions-gala') ?>>
             <label class="form-check-label" for="permissions-gala">Gala coordinator</label>
           </div>
-          <div class="custom-control form-switch">
+          <div class="form-switch mb-2">
             <input class="form-check-input" type="checkbox" id="permissions-coach" name="permissions-coach" value="1" <?= checked('permissions-coach') ?>>
             <label class="form-check-label" for="permissions-coach">Coach</label>
           </div>
-          <div class="custom-control form-switch">
+          <div class="form-switch mb-2">
             <input class="form-check-input" type="checkbox" id="permissions-admin" name="permissions-admin" value="1" <?= checked('permissions-admin') ?>>
             <label class="form-check-label" for="permissions-admin">Admin</label>
           </div>
