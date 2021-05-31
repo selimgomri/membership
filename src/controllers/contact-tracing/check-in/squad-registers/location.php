@@ -159,9 +159,9 @@ if (!$squad) {
                   }
                 ?>
                   <li class="list-group-item <?php if ($here) { ?> bg-light <?php } ?>">
-                    <div class="custom-control form-checkbox">
-                      <input type="checkbox" class="custom-control-input" id="<?= htmlspecialchars('user-' . $coach['UserID']) ?>" name="<?= htmlspecialchars('user-' . $coach['UserID']) ?>" value="1" <?php if ($here) { ?> disabled <?php } ?> <?php if ($here) { ?> checked <?php } ?>>
-                      <label class="custom-control-label d-block" for="<?= htmlspecialchars('user-' . $coach['UserID']) ?>"><?= htmlspecialchars($coach['Forename'] . ' ' . $coach['Surname']) ?></label>
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" id="<?= htmlspecialchars('user-' . $coach['UserID']) ?>" name="<?= htmlspecialchars('user-' . $coach['UserID']) ?>" value="1" <?php if ($here) { ?> disabled <?php } ?> <?php if ($here) { ?> checked <?php } ?>>
+                      <label class="form-check-label d-block" for="<?= htmlspecialchars('user-' . $coach['UserID']) ?>"><?= htmlspecialchars($coach['Forename'] . ' ' . $coach['Surname']) ?></label>
                     </div>
                   </li>
                 <?php } while ($coach = $getCoaches->fetch(PDO::FETCH_ASSOC)); ?>
@@ -214,9 +214,9 @@ if (!$squad) {
                   <li class="list-group-item <?php if (!$member['UserID'] || $here) { ?> bg-light <?php } ?>">
                     <div class="row">
                       <div class="col">
-                        <div class="custom-control form-checkbox">
-                          <input type="checkbox" class="custom-control-input" id="<?= htmlspecialchars('member-' . $member['MemberID']) ?>" name="<?= htmlspecialchars('member-' . $member['MemberID']) ?>" value="1" <?php if (!$member['UserID'] || $here) { ?> disabled <?php } ?> <?php if ($here) { ?> checked <?php } ?>>
-                          <label class="custom-control-label d-block" for="<?= htmlspecialchars('member-' . $member['MemberID']) ?>"><?= htmlspecialchars($member['MForename'] . ' ' . $member['MSurname']) ?> <em class="small"><?php if ($member['UserID']) { ?><?= htmlspecialchars($member['Forename'] . ' ' . $member['Surname']) ?>'s details<?php } else { ?>No details on file<?php } ?></em></label>
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" id="<?= htmlspecialchars('member-' . $member['MemberID']) ?>" name="<?= htmlspecialchars('member-' . $member['MemberID']) ?>" value="1" <?php if (!$member['UserID'] || $here) { ?> disabled <?php } ?> <?php if ($here) { ?> checked <?php } ?>>
+                          <label class="form-check-label d-block" for="<?= htmlspecialchars('member-' . $member['MemberID']) ?>"><?= htmlspecialchars($member['MForename'] . ' ' . $member['MSurname']) ?> <em class="small"><?php if ($member['UserID']) { ?><?= htmlspecialchars($member['Forename'] . ' ' . $member['Surname']) ?>'s details<?php } else { ?>No details on file<?php } ?></em></label>
                         </div>
                       </div>
                       <div class="col-auto">
@@ -297,9 +297,9 @@ if (!$squad) {
                   }
                 ?>
                   <li class="list-group-item <?php if ($here) { ?> bg-light <?php } ?>">
-                    <div class="custom-control form-checkbox">
-                      <input type="checkbox" class="custom-control-input" id="<?= htmlspecialchars('rep-' . $rep['UserID']) ?>" name="<?= htmlspecialchars('rep-' . $rep['UserID']) ?>" value="1" <?php if ($here) { ?> disabled <?php } ?> <?php if ($here) { ?> checked <?php } ?>>
-                      <label class="custom-control-label d-block" for="<?= htmlspecialchars('rep-' . $rep['UserID']) ?>"><?= htmlspecialchars($rep['Forename'] . ' ' . $rep['Surname']) ?></label>
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" id="<?= htmlspecialchars('rep-' . $rep['UserID']) ?>" name="<?= htmlspecialchars('rep-' . $rep['UserID']) ?>" value="1" <?php if ($here) { ?> disabled <?php } ?> <?php if ($here) { ?> checked <?php } ?>>
+                      <label class="form-check-label d-block" for="<?= htmlspecialchars('rep-' . $rep['UserID']) ?>"><?= htmlspecialchars($rep['Forename'] . ' ' . $rep['Surname']) ?></label>
                     </div>
                   </li>
                 <?php } while ($rep = $getReps->fetch(PDO::FETCH_ASSOC)); ?>

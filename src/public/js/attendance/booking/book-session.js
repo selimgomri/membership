@@ -53,7 +53,8 @@ function updateBookingNumbers(stats) {
     }
 
     if (stats.placesRemaining.int == 0) {
-      $('#booking-modal').modal('hide');
+      let modal = new bootstrap.Modal(document.getElementById('booking-modal'));
+      modal.hide();
     }
 
     for (let element of stringSpans) {
@@ -161,7 +162,8 @@ form.addEventListener('submit', event => {
         reloadAllMemberList();
 
         // Show success message, dismiss modal, reload booking box
-        $('#booking-modal').modal('hide');
+        let modal = new bootstrap.Modal(document.getElementById('booking-modal'));
+        modal.hide();
 
       } else {
         alert(json.error);
@@ -192,7 +194,8 @@ cancelForm.addEventListener('submit', event => {
         reloadAllMemberList();
 
         // Hide modal
-        $('#cancel-modal').modal('hide');
+        let modal = new bootstrap.Modal(document.getElementById('cancel-modal'));
+        modal.hide();
 
       } else {
         alert(json.error);
@@ -219,7 +222,8 @@ if (mbl) {
       document.getElementById('session-id').value = event.target.dataset.sessionId;
       document.getElementById('session-date').value = event.target.dataset.sessionDate;
 
-      $('#booking-modal').modal('show');
+      let modal = new bootstrap.Modal(document.getElementById('booking-modal'));
+      modal.show();
     }
   });
 }
@@ -236,7 +240,8 @@ if (ambl) {
       document.getElementById('cancel-session-id').value = event.target.dataset.sessionId;
       document.getElementById('cancel-session-date').value = event.target.dataset.sessionDate;
 
-      $('#cancel-modal').modal('show');
+      let modal = new bootstrap.Modal(document.getElementById('cancel-modal'));
+      modal.show();
     }
   });
 }
@@ -254,26 +259,30 @@ shareButton.addEventListener('click', event => {
       .catch((err) => {
         // Don't log error
         if (err.name === 'NotAllowedError') {
-          $('#sharing-modal').modal('show');
+          let modal = new bootstrap.Modal(document.getElementById('sharing-modal'));
+          modal.show();
         }
       }
       );
   } else {
     // Use sharing modal
-    $('#sharing-modal').modal('show');
+    let modal = new bootstrap.Modal(document.getElementById('sharing-modal'));
+    modal.show();
   }
 });
 
 let printButton = document.getElementById('print-this-page');
 printButton.addEventListener('click', event => {
-  $('#sharing-modal').modal('hide');
+  let modal = new bootstrap.Modal(document.getElementById('sharing-modal'));
+  modal.hide();
   window.print();
 });
 
 let sharingModal = document.getElementById('sharing-modal');
 sharingModal.addEventListener('click', event => {
   if (event.target.classList.contains('dismiss-share-box')) {
-    $('#sharing-modal').modal('hide');
+    let modal = new bootstrap.Modal(document.getElementById('sharing-modal'));
+    modal.hide();
   }
 });
 

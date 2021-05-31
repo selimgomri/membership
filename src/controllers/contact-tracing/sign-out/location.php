@@ -173,9 +173,9 @@ include BASE_PATH . 'views/header.php';
               $date->setTimezone(new DateTimeZone('Europe/London'));
             ?>
             <li class="list-group-item">
-              <div class="custom-control form-checkbox">
-                <input type="checkbox" class="custom-control-input" id="<?= htmlspecialchars('visitor-' . $visitor['ID']) ?>" name="<?= htmlspecialchars('visitor-' . $visitor['ID']) ?>" value="1" data-id="<?= htmlspecialchars($visitor['ID']) ?>" <?php if (bool($visitor['SignedOut'])) { ?>checked<?php } ?> >
-                <label class="custom-control-label d-block" for="<?= htmlspecialchars('visitor-' . $visitor['ID']) ?>"><?= htmlspecialchars($visitor['GuestName']) ?> <small>Arrived <?= htmlspecialchars($date->format('H:i, j F')) ?></small>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="<?= htmlspecialchars('visitor-' . $visitor['ID']) ?>" name="<?= htmlspecialchars('visitor-' . $visitor['ID']) ?>" value="1" data-id="<?= htmlspecialchars($visitor['ID']) ?>" <?php if (bool($visitor['SignedOut'])) { ?>checked<?php } ?> >
+                <label class="form-check-label d-block" for="<?= htmlspecialchars('visitor-' . $visitor['ID']) ?>"><?= htmlspecialchars($visitor['GuestName']) ?> <small>Arrived <?= htmlspecialchars($date->format('H:i, j F')) ?></small>
               </div>
             </li>
             <?php } while ($visitor = $getVisitors->fetch(PDO::FETCH_ASSOC)); ?>

@@ -177,7 +177,7 @@ include BASE_PATH . 'views/header.php';
             <button class="btn btn-danger dropdown-toggle" type="button" id="deleteDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               Advanced Options
             </button>
-            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="deleteDropdown">
+            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="deleteDropdown">
               <?php if (sizeof($swimmers) > 1) { ?>
               <a href="<?=autoUrl($url_path . $hash . "/cancel/" . $swimmer['ID'])?>" class="dropdown-item">
                 <?php if ($swimmer['SquadSuggestion'] == null) { ?>

@@ -128,57 +128,57 @@ include BASE_PATH . 'views/header.php';
             <div class="row mb-3">
               <?php if ($galaData->getEvent('25Free')->isEnabled()) { ?>
                 <div class="col-sm-4 col-md-2">
-                  <div class="custom-control form-checkbox">
-                    <input type="checkbox" value="1" class="custom-control-input" id="<?= $member ?>-25Free" name="<?= $member ?>-25Free">
-                    <label class="custom-control-label" for="<?= $member ?>-25Free">25 Freestyle</label>
+                  <div class="form-check">
+                    <input type="checkbox" value="1" class="form-check-input" id="<?= $member ?>-25Free" name="<?= $member ?>-25Free">
+                    <label class="form-check-label" for="<?= $member ?>-25Free">25 Freestyle</label>
                   </div>
                 </div>
               <?php } ?>
               <?php if ($galaData->getEvent('50Free')->isEnabled()) { ?>
                 <div class="col-sm-4 col-md-2">
-                  <div class="custom-control form-checkbox">
-                    <input type="checkbox" value="1" class="custom-control-input" id="<?= $member ?>-50Free" name="<?= $member ?>-50Free">
-                    <label class="custom-control-label" for="<?= $member ?>-50Free">50 Freestyle</label>
+                  <div class="form-check">
+                    <input type="checkbox" value="1" class="form-check-input" id="<?= $member ?>-50Free" name="<?= $member ?>-50Free">
+                    <label class="form-check-label" for="<?= $member ?>-50Free">50 Freestyle</label>
                   </div>
                 </div>
               <?php } ?>
               <?php if ($galaData->getEvent('100Free')->isEnabled()) { ?>
                 <div class="col-sm-4 col-md-2">
-                  <div class="custom-control form-checkbox">
-                    <input type="checkbox" value="1" class="custom-control-input" id="<?= $member ?>-100Free" name="<?= $member ?>-100Free">
-                    <label class="custom-control-label" for="<?= $member ?>-100Free">100 Freestyle</label>
+                  <div class="form-check">
+                    <input type="checkbox" value="1" class="form-check-input" id="<?= $member ?>-100Free" name="<?= $member ?>-100Free">
+                    <label class="form-check-label" for="<?= $member ?>-100Free">100 Freestyle</label>
                   </div>
                 </div>
               <?php } ?>
               <?php if ($galaData->getEvent('200Free')->isEnabled()) { ?>
                 <div class="col-sm-4 col-md-2">
-                  <div class="custom-control form-checkbox">
-                    <input type="checkbox" value="1" class="custom-control-input" id="<?= $member ?>-200Free" name="<?= $member ?>-200Free">
-                    <label class="custom-control-label" for="<?= $member ?>-200Free">200 Freestyle</label>
+                  <div class="form-check">
+                    <input type="checkbox" value="1" class="form-check-input" id="<?= $member ?>-200Free" name="<?= $member ?>-200Free">
+                    <label class="form-check-label" for="<?= $member ?>-200Free">200 Freestyle</label>
                   </div>
                 </div>
               <?php } ?>
               <?php if ($galaData->getEvent('400Free')->isEnabled()) { ?>
                 <div class="col-sm-4 col-md-2">
-                  <div class="custom-control form-checkbox">
-                    <input type="checkbox" value="1" class="custom-control-input" id="<?= $member ?>-400Free" name="<?= $member ?>-400Free">
-                    <label class="custom-control-label" for="<?= $member ?>-400Free">400 Freestyle</label>
+                  <div class="form-check">
+                    <input type="checkbox" value="1" class="form-check-input" id="<?= $member ?>-400Free" name="<?= $member ?>-400Free">
+                    <label class="form-check-label" for="<?= $member ?>-400Free">400 Freestyle</label>
                   </div>
                 </div>
               <?php } ?>
               <?php if ($galaData->getEvent('800Free')->isEnabled()) { ?>
                 <div class="col-sm-4 col-md-2">
-                  <div class="custom-control form-checkbox">
-                    <input type="checkbox" value="1" class="custom-control-input" id="<?= $member ?>-800Free" name="<?= $member ?>-800Free">
-                    <label class="custom-control-label" for="<?= $member ?>-800Free">800 Freestyle</label>
+                  <div class="form-check">
+                    <input type="checkbox" value="1" class="form-check-input" id="<?= $member ?>-800Free" name="<?= $member ?>-800Free">
+                    <label class="form-check-label" for="<?= $member ?>-800Free">800 Freestyle</label>
                   </div>
                 </div>
               <?php } ?>
               <?php if ($galaData->getEvent('1500Free')->isEnabled()) { ?>
                 <div class="col-sm-4 col-md-2">
-                  <div class="custom-control form-checkbox">
-                    <input type="checkbox" value="1" class="custom-control-input" id="<?= $member ?>-1500Free" name="<?= $member ?>-1500Free">
-                    <label class="custom-control-label" for="<?= $member ?>-1500Free">1500 Freestyle</label>
+                  <div class="form-check">
+                    <input type="checkbox" value="1" class="form-check-input" id="<?= $member ?>-1500Free" name="<?= $member ?>-1500Free">
+                    <label class="form-check-label" for="<?= $member ?>-1500Free">1500 Freestyle</label>
                   </div>
                 </div>
               <?php } ?>
@@ -186,33 +186,33 @@ include BASE_PATH . 'views/header.php';
             <div class="row mb-3">
               <?php if ($galaData->getEvent('25Breast')->isEnabled()) { ?>
                 <div class="col-sm-4 col-md-2">
-                  <div class="custom-control form-checkbox">
-                    <input type="checkbox" value="1" class="custom-control-input" id="<?= $member ?>-25Breast" name="<?= $member ?>-25Breast">
-                    <label class="custom-control-label" for="<?= $member ?>-25Breast">25 Breaststroke</label>
+                  <div class="form-check">
+                    <input type="checkbox" value="1" class="form-check-input" id="<?= $member ?>-25Breast" name="<?= $member ?>-25Breast">
+                    <label class="form-check-label" for="<?= $member ?>-25Breast">25 Breaststroke</label>
                   </div>
                 </div>
               <?php } ?>
               <?php if ($galaData->getEvent('50Breast')->isEnabled()) { ?>
                 <div class="col-sm-4 col-md-2">
-                  <div class="custom-control form-checkbox">
-                    <input type="checkbox" value="1" class="custom-control-input" id="<?= $member ?>-50Breast" name="<?= $member ?>-50Breast">
-                    <label class="custom-control-label" for="<?= $member ?>-50Breast">50 Breaststroke</label>
+                  <div class="form-check">
+                    <input type="checkbox" value="1" class="form-check-input" id="<?= $member ?>-50Breast" name="<?= $member ?>-50Breast">
+                    <label class="form-check-label" for="<?= $member ?>-50Breast">50 Breaststroke</label>
                   </div>
                 </div>
               <?php } ?>
               <?php if ($galaData->getEvent('100Breast')->isEnabled()) { ?>
                 <div class="col-sm-4 col-md-2">
-                  <div class="custom-control form-checkbox">
-                    <input type="checkbox" value="1" class="custom-control-input" id="<?= $member ?>-100Breast" name="<?= $member ?>-100Breast">
-                    <label class="custom-control-label" for="<?= $member ?>-100Breast">100 Breaststroke</label>
+                  <div class="form-check">
+                    <input type="checkbox" value="1" class="form-check-input" id="<?= $member ?>-100Breast" name="<?= $member ?>-100Breast">
+                    <label class="form-check-label" for="<?= $member ?>-100Breast">100 Breaststroke</label>
                   </div>
                 </div>
               <?php } ?>
               <?php if ($galaData->getEvent('200Breast')->isEnabled()) { ?>
                 <div class="col-sm-4 col-md-2">
-                  <div class="custom-control form-checkbox">
-                    <input type="checkbox" value="1" class="custom-control-input" id="<?= $member ?>-200Breast" name="<?= $member ?>-200Breast">
-                    <label class="custom-control-label" for="<?= $member ?>-200Breast">200 Breaststroke</label>
+                  <div class="form-check">
+                    <input type="checkbox" value="1" class="form-check-input" id="<?= $member ?>-200Breast" name="<?= $member ?>-200Breast">
+                    <label class="form-check-label" for="<?= $member ?>-200Breast">200 Breaststroke</label>
                   </div>
                 </div>
               <?php } ?>
@@ -220,33 +220,33 @@ include BASE_PATH . 'views/header.php';
             <div class="row mb-3">
               <?php if ($galaData->getEvent('25Fly')->isEnabled()) { ?>
                 <div class="col-sm-4 col-md-2">
-                  <div class="custom-control form-checkbox">
-                    <input type="checkbox" value="1" class="custom-control-input" id="<?= $member ?>-25Fly" name="<?= $member ?>-25Fly">
-                    <label class="custom-control-label" for="<?= $member ?>-25Fly">25 Butterfly</label>
+                  <div class="form-check">
+                    <input type="checkbox" value="1" class="form-check-input" id="<?= $member ?>-25Fly" name="<?= $member ?>-25Fly">
+                    <label class="form-check-label" for="<?= $member ?>-25Fly">25 Butterfly</label>
                   </div>
                 </div>
               <?php } ?>
               <?php if ($galaData->getEvent('50Fly')->isEnabled()) { ?>
                 <div class="col-sm-4 col-md-2">
-                  <div class="custom-control form-checkbox">
-                    <input type="checkbox" value="1" class="custom-control-input" id="<?= $member ?>-50Fly" name="<?= $member ?>-50Fly">
-                    <label class="custom-control-label" for="<?= $member ?>-50Fly">50 Butterfly</label>
+                  <div class="form-check">
+                    <input type="checkbox" value="1" class="form-check-input" id="<?= $member ?>-50Fly" name="<?= $member ?>-50Fly">
+                    <label class="form-check-label" for="<?= $member ?>-50Fly">50 Butterfly</label>
                   </div>
                 </div>
               <?php } ?>
               <?php if ($galaData->getEvent('100Fly')->isEnabled()) { ?>
                 <div class="col-sm-4 col-md-2">
-                  <div class="custom-control form-checkbox">
-                    <input type="checkbox" value="1" class="custom-control-input" id="<?= $member ?>-100Fly" name="<?= $member ?>-100Fly">
-                    <label class="custom-control-label" for="<?= $member ?>-100Fly">100 Butterfly</label>
+                  <div class="form-check">
+                    <input type="checkbox" value="1" class="form-check-input" id="<?= $member ?>-100Fly" name="<?= $member ?>-100Fly">
+                    <label class="form-check-label" for="<?= $member ?>-100Fly">100 Butterfly</label>
                   </div>
                 </div>
               <?php } ?>
               <?php if ($galaData->getEvent('200Fly')->isEnabled()) { ?>
                 <div class="col-sm-4 col-md-2">
-                  <div class="custom-control form-checkbox">
-                    <input type="checkbox" value="1" class="custom-control-input" id="<?= $member ?>-200Fly" name="<?= $member ?>-200Fly">
-                    <label class="custom-control-label" for="<?= $member ?>-200Fly">200 Butterfly</label>
+                  <div class="form-check">
+                    <input type="checkbox" value="1" class="form-check-input" id="<?= $member ?>-200Fly" name="<?= $member ?>-200Fly">
+                    <label class="form-check-label" for="<?= $member ?>-200Fly">200 Butterfly</label>
                   </div>
                 </div>
               <?php } ?>
@@ -254,33 +254,33 @@ include BASE_PATH . 'views/header.php';
             <div class="row mb-3">
               <?php if ($galaData->getEvent('25Back')->isEnabled()) { ?>
                 <div class="col-sm-4 col-md-2">
-                  <div class="custom-control form-checkbox">
-                    <input type="checkbox" value="1" class="custom-control-input" id="<?= $member ?>-25Back" name="<?= $member ?>-25Back">
-                    <label class="custom-control-label" for="<?= $member ?>-25Back">25 Backstroke</label>
+                  <div class="form-check">
+                    <input type="checkbox" value="1" class="form-check-input" id="<?= $member ?>-25Back" name="<?= $member ?>-25Back">
+                    <label class="form-check-label" for="<?= $member ?>-25Back">25 Backstroke</label>
                   </div>
                 </div>
               <?php } ?>
               <?php if ($galaData->getEvent('50Back')->isEnabled()) { ?>
                 <div class="col-sm-4 col-md-2">
-                  <div class="custom-control form-checkbox">
-                    <input type="checkbox" value="1" class="custom-control-input" id="<?= $member ?>-50Back" name="<?= $member ?>-50Back">
-                    <label class="custom-control-label" for="<?= $member ?>-50Back">50 Backstroke</label>
+                  <div class="form-check">
+                    <input type="checkbox" value="1" class="form-check-input" id="<?= $member ?>-50Back" name="<?= $member ?>-50Back">
+                    <label class="form-check-label" for="<?= $member ?>-50Back">50 Backstroke</label>
                   </div>
                 </div>
               <?php } ?>
               <?php if ($galaData->getEvent('100Back')->isEnabled()) { ?>
                 <div class="col-sm-4 col-md-2">
-                  <div class="custom-control form-checkbox">
-                    <input type="checkbox" value="1" class="custom-control-input" id="<?= $member ?>-100Back" name="<?= $member ?>-100Back">
-                    <label class="custom-control-label" for="<?= $member ?>-100Back">100 Backstroke</label>
+                  <div class="form-check">
+                    <input type="checkbox" value="1" class="form-check-input" id="<?= $member ?>-100Back" name="<?= $member ?>-100Back">
+                    <label class="form-check-label" for="<?= $member ?>-100Back">100 Backstroke</label>
                   </div>
                 </div>
               <?php } ?>
               <?php if ($galaData->getEvent('200Back')->isEnabled()) { ?>
                 <div class="col-sm-4 col-md-2">
-                  <div class="custom-control form-checkbox">
-                    <input type="checkbox" value="1" class="custom-control-input" id="<?= $member ?>-200Back" name="<?= $member ?>-200Back">
-                    <label class="custom-control-label" for="<?= $member ?>-200Back">200 Backstroke</label>
+                  <div class="form-check">
+                    <input type="checkbox" value="1" class="form-check-input" id="<?= $member ?>-200Back" name="<?= $member ?>-200Back">
+                    <label class="form-check-label" for="<?= $member ?>-200Back">200 Backstroke</label>
                   </div>
                 </div>
               <?php } ?>
@@ -288,33 +288,33 @@ include BASE_PATH . 'views/header.php';
             <div class="row">
               <?php if ($galaData->getEvent('100IM')->isEnabled()) { ?>
                 <div class="col-sm-4 col-md-2">
-                  <div class="custom-control form-checkbox">
-                    <input type="checkbox" value="1" class="custom-control-input" id="<?= $member ?>-100IM" name="<?= $member ?>-100IM">
-                    <label class="custom-control-label" for="<?= $member ?>-100IM">100 IM</label>
+                  <div class="form-check">
+                    <input type="checkbox" value="1" class="form-check-input" id="<?= $member ?>-100IM" name="<?= $member ?>-100IM">
+                    <label class="form-check-label" for="<?= $member ?>-100IM">100 IM</label>
                   </div>
                 </div>
               <?php } ?>
               <?php if ($galaData->getEvent('150IM')->isEnabled()) { ?>
                 <div class="col-sm-4 col-md-2">
-                  <div class="custom-control form-checkbox">
-                    <input type="checkbox" value="1" class="custom-control-input" id="<?= $member ?>-150IM" name="<?= $member ?>-150IM">
-                    <label class="custom-control-label" for="<?= $member ?>-150IM">150 IM</label>
+                  <div class="form-check">
+                    <input type="checkbox" value="1" class="form-check-input" id="<?= $member ?>-150IM" name="<?= $member ?>-150IM">
+                    <label class="form-check-label" for="<?= $member ?>-150IM">150 IM</label>
                   </div>
                 </div>
               <?php } ?>
               <?php if ($galaData->getEvent('200IM')->isEnabled()) { ?>
                 <div class="col-sm-4 col-md-2">
-                  <div class="custom-control form-checkbox">
-                    <input type="checkbox" value="1" class="custom-control-input" id="<?= $member ?>-200IM" name="<?= $member ?>-200IM">
-                    <label class="custom-control-label" for="<?= $member ?>-200IM">200 IM</label>
+                  <div class="form-check">
+                    <input type="checkbox" value="1" class="form-check-input" id="<?= $member ?>-200IM" name="<?= $member ?>-200IM">
+                    <label class="form-check-label" for="<?= $member ?>-200IM">200 IM</label>
                   </div>
                 </div>
               <?php } ?>
               <?php if ($galaData->getEvent('400IM')->isEnabled()) { ?>
                 <div class="col-sm-4 col-md-2">
-                  <div class="custom-control form-checkbox">
-                    <input type="checkbox" value="1" class="custom-control-input" id="<?= $member ?>-400IM" name="<?= $member ?>-400IM">
-                    <label class="custom-control-label" for="<?= $member ?>-400IM">400 IM</label>
+                  <div class="form-check">
+                    <input type="checkbox" value="1" class="form-check-input" id="<?= $member ?>-400IM" name="<?= $member ?>-400IM">
+                    <label class="form-check-label" for="<?= $member ?>-400IM">400 IM</label>
                   </div>
                 </div>
               <?php } ?>
@@ -325,16 +325,16 @@ include BASE_PATH . 'views/header.php';
       </div>
 
       <div class="mb-3">
-        <div class="custom-control form-checkbox">
-          <input type="checkbox" value="1" class="custom-control-input" id="parent-veto" name="parent-veto">
-          <label class="custom-control-label" for="parent-veto">Allow parents to reject your entries and not enter the gala</label>
+        <div class="form-check">
+          <input type="checkbox" value="1" class="form-check-input" id="parent-veto" name="parent-veto">
+          <label class="form-check-label" for="parent-veto">Allow parents to reject your entries and not enter the gala</label>
         </div>
       </div>
 
       <div class="mb-3">
-        <div class="custom-control form-checkbox">
-          <input type="checkbox" value="1" class="custom-control-input" id="lock-entry" name="lock-entry">
-          <label class="custom-control-label" for="lock-entry">Prevent parents from editing your entries</label>
+        <div class="form-check">
+          <input type="checkbox" value="1" class="form-check-input" id="lock-entry" name="lock-entry">
+          <label class="form-check-label" for="lock-entry">Prevent parents from editing your entries</label>
         </div>
       </div>
 

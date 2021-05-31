@@ -152,13 +152,13 @@ include BASE_PATH . "views/notifyMenu.php";
       <div class="col-md">
         <div class="mb-3">
           <label class="form-label" for="from">Send message as</label>
-          <div class="custom-control form-check">
-            <input type="radio" id="from-club" name="from" class="custom-control-input" value="club-sending-account" <?php if ($from == "club-sending-account") { ?>checked<?php } ?> required>
-            <label class="custom-control-label" for="from-club"><?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?></label>
+          <div class="form-check">
+            <input type="radio" id="from-club" name="from" class="form-check-input" value="club-sending-account" <?php if ($from == "club-sending-account") { ?>checked<?php } ?> required>
+            <label class="form-check-label" for="from-club"><?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?></label>
           </div>
-          <div class="custom-control form-check">
-            <input type="radio" id="from-user" name="from" class="custom-control-input" value="current-user" <?php if ($from == "current-user") { ?>checked<?php } ?>>
-            <label class="custom-control-label" for="from-user"><?= htmlspecialchars($curUserInfo['Forename'] . ' ' . $curUserInfo['Surname']) ?></label>
+          <div class="form-check">
+            <input type="radio" id="from-user" name="from" class="form-check-input" value="current-user" <?php if ($from == "current-user") { ?>checked<?php } ?>>
+            <label class="form-check-label" for="from-user"><?= htmlspecialchars($curUserInfo['Forename'] . ' ' . $curUserInfo['Surname']) ?></label>
           </div>
           <div class="invalid-feedback">
             Choose a send-as option
@@ -169,13 +169,13 @@ include BASE_PATH . "views/notifyMenu.php";
       <div class="col-md">
         <div class="mb-3">
           <label class="form-label" for="ReplyToMe">Send replies to</label>
-          <div class="custom-control form-check">
-            <input type="radio" id="ReplyTo-Club" name="ReplyToMe" class="custom-control-input" value="0" <?php if ($reply == "0") { ?>checked<?php } ?> required>
-            <label class="custom-control-label" for="ReplyTo-Club">Main club address</label>
+          <div class="form-check">
+            <input type="radio" id="ReplyTo-Club" name="ReplyToMe" class="form-check-input" value="0" <?php if ($reply == "0") { ?>checked<?php } ?> required>
+            <label class="form-check-label" for="ReplyTo-Club">Main club address</label>
           </div>
-          <div class="custom-control form-check">
-            <input type="radio" id="ReplyTo-Me" name="ReplyToMe" class="custom-control-input" value="1" <?php if (!$replyMe) { ?>disabled<?php } ?> <?php if ($reply == "1") { ?>checked<?php } ?>>
-            <label class="custom-control-label" for="ReplyTo-Me">My reply-to email address</label>
+          <div class="form-check">
+            <input type="radio" id="ReplyTo-Me" name="ReplyToMe" class="form-check-input" value="1" <?php if (!$replyMe) { ?>disabled<?php } ?> <?php if ($reply == "1") { ?>checked<?php } ?>>
+            <label class="form-check-label" for="ReplyTo-Me">My reply-to email address</label>
           </div>
           <small class="form-text text-muted">
             <a href="<?= htmlspecialchars(autoUrl("notify/reply-to")) ?>" target="_blank">Manage reply-to address</a>
@@ -221,9 +221,9 @@ include BASE_PATH . "views/notifyMenu.php";
 
     <?php if (isset($swimmer)) { ?>
       <div class="mb-3">
-        <div class="custom-control form-checkbox">
-          <input type="checkbox" class="custom-control-input" aria-describedby="coach-help" id="coach-send" name="coach-send" value="1" checked>
-          <label class="custom-control-label" for="coach-send">BCC coaches</label>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" aria-describedby="coach-help" id="coach-send" name="coach-send" value="1" checked>
+          <label class="form-check-label" for="coach-send">BCC coaches</label>
           <small id="coach-help" class="form-text text-muted">
             Send a blind carbon-copy of this email to coaches of this member's squads. The member will not be aware coaches were sent a copy of the email.
           </small>

@@ -100,13 +100,13 @@ include BASE_PATH . 'views/header.php';
           </div>
 
           <div class="mb-3" id="expires-selector">
-            <div class="custom-control form-check custom-control-inline">
-              <input type="radio" id="expires-yes" name="expires" class="custom-control-input" value="yes" checked>
-              <label class="custom-control-label" for="expires-yes">Qualification expires</label>
+            <div class="form-check custom-control-inline">
+              <input type="radio" id="expires-yes" name="expires" class="form-check-input" value="yes" checked>
+              <label class="form-check-label" for="expires-yes">Qualification expires</label>
             </div>
-            <div class="custom-control form-check custom-control-inline">
-              <input type="radio" id="expires-no" name="expires" class="custom-control-input" value="no">
-              <label class="custom-control-label" for="expires-no">Never expires</label>
+            <div class="form-check custom-control-inline">
+              <input type="radio" id="expires-no" name="expires" class="form-check-input" value="no">
+              <label class="form-check-label" for="expires-no">Never expires</label>
             </div>
           </div>
 

@@ -48,9 +48,9 @@ include BASE_PATH . "views/header.php";
           </small>
         </div>
         <div class="mb-3">
-          <div class="custom-control form-checkbox">
-            <input type="checkbox" class="custom-control-input" name="RememberMe" id="RememberMe" aria-describedby="RememberMeHelp" disabled>
-            <label class="custom-control-label" for="RememberMe">Keep me logged in - <span class="badge bg-info">Coming soon</span></label>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="RememberMe" id="RememberMe" aria-describedby="RememberMeHelp" disabled>
+            <label class="form-check-label" for="RememberMe">Keep me logged in - <span class="badge bg-info">Coming soon</span></label>
             <small id="RememberMeHelp" class="form-text text-muted">
               Untick this box if you are using a public or shared computer
             </small>

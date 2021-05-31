@@ -344,15 +344,15 @@ function sessionManagement($squadID, $old = null)
 				</div>
 				<div class="mb-3">
 					<label class="form-label" for="newSessionMS">Include in attendance count</label>
-					<div class="custom-control form-check">
-						<input type="radio" id="newSessionMSYes" name="newSessionMS" class="custom-control-input" value="1" checked>
-						<label class="custom-control-label" for="newSessionMSYes">
+					<div class="form-check">
+						<input type="radio" id="newSessionMSYes" name="newSessionMS" class="form-check-input" value="1" checked>
+						<label class="form-check-label" for="newSessionMSYes">
 							Yes, the session is for the full squad
 						</label>
 					</div>
-					<div class="custom-control form-check">
-						<input type="radio" id="newSessionMSNo" name="newSessionMS" class="custom-control-input" value="0">
-						<label class="custom-control-label" for="newSessionMSNo">
+					<div class="form-check">
+						<input type="radio" id="newSessionMSNo" name="newSessionMS" class="form-check-input" value="0">
+						<label class="form-check-label" for="newSessionMSNo">
 							No, this session is only for selected swimmers
 						</label>
 					</div>

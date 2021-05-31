@@ -119,7 +119,7 @@ include "galaMenu.php";
           <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Gala options
           </button>
-          <div class="dropdown-menu dropdown-menu-right">
+          <div class="dropdown-menu dropdown-menu-end">
             <a class="dropdown-item" href="<?=autoUrl("galas/" . $id . "/edit")?>">Edit</a>
             <a class="dropdown-item" href="<?=autoUrl("galas/" . $id . "/pricing-and-events")?>">Events and prices</a>
             <a class="dropdown-item" href="<?=autoUrl("galas/" . $id . "/sessions")?>">Sessions</a>

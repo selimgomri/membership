@@ -170,9 +170,9 @@ include BASE_PATH . 'views/header.php';
               Let us know if you're here or just dropping off your members.
             </p>
 
-            <div class="custom-control form-checkbox">
-              <input type="checkbox" class="custom-control-input" id="user" name="user" value="1">
-              <label class="custom-control-label" for="user"><?= htmlspecialchars(app()->user->getName()) ?></label>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="user" name="user" value="1">
+              <label class="form-check-label" for="user"><?= htmlspecialchars(app()->user->getName()) ?></label>
             </div>
           </div>
 
@@ -184,9 +184,9 @@ include BASE_PATH . 'views/header.php';
             <div class="cell">
               <h3>Members</h3>
               <?php do { ?>
-                <div class="custom-control form-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="<?= htmlspecialchars('member-' . $member['id']) ?>" name="<?= htmlspecialchars('member-' . $member['id']) ?>" value="1">
-                  <label class="custom-control-label" for="<?= htmlspecialchars('member-' . $member['id']) ?>"><?= htmlspecialchars($member['fn'] . ' ' . $member['sn']) ?></label>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="<?= htmlspecialchars('member-' . $member['id']) ?>" name="<?= htmlspecialchars('member-' . $member['id']) ?>" value="1">
+                  <label class="form-check-label" for="<?= htmlspecialchars('member-' . $member['id']) ?>"><?= htmlspecialchars($member['fn'] . ' ' . $member['sn']) ?></label>
                 </div>
               <?php } while ($member = $members->fetch(PDO::FETCH_ASSOC)); ?>
             </div>
@@ -197,9 +197,9 @@ include BASE_PATH . 'views/header.php';
             <div class="cell">
               <h3>Previous guests</h3>
               <?php do { ?>
-                <div class="custom-control form-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="<?= htmlspecialchars('guest-' . $guest['ID']) ?>" name="<?= htmlspecialchars('guest-' . $guest['ID']) ?>" value="1">
-                  <label class="custom-control-label" for="<?= htmlspecialchars('guest-' . $guest['ID']) ?>"><?= htmlspecialchars($guest['GuestName']) ?> <em><?= htmlspecialchars($guest['GuestPhone']) ?></em></label>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="<?= htmlspecialchars('guest-' . $guest['ID']) ?>" name="<?= htmlspecialchars('guest-' . $guest['ID']) ?>" value="1">
+                  <label class="form-check-label" for="<?= htmlspecialchars('guest-' . $guest['ID']) ?>"><?= htmlspecialchars($guest['GuestName']) ?> <em><?= htmlspecialchars($guest['GuestPhone']) ?></em></label>
                 </div>
               <?php } while ($guest = $guests->fetch(PDO::FETCH_ASSOC)); ?>
             </div>

@@ -78,13 +78,13 @@ include BASE_PATH . "views/root/header.php";
 
         <div class="mb-3" id="pays-auto-radios">
           <p class="mb-2">Bills when?</p>
-          <div class="custom-control form-check">
-            <input type="radio" id="bills-when-immediately" name="bills-when" class="custom-control-input" value="immediately" required checked>
-            <label class="custom-control-label" for="bills-when-immediately">Bill selected payment method immediately</label>
+          <div class="form-check">
+            <input type="radio" id="bills-when-immediately" name="bills-when" class="form-check-input" value="immediately" required checked>
+            <label class="form-check-label" for="bills-when-immediately">Bill selected payment method immediately</label>
           </div>
-          <div class="custom-control form-check">
-            <input type="radio" id="bills-when-manually" name="bills-when" class="custom-control-input" value="chooses">
-            <label class="custom-control-label" for="bills-when-manually">Customer makes manual payment</label>
+          <div class="form-check">
+            <input type="radio" id="bills-when-manually" name="bills-when" class="form-check-input" value="chooses">
+            <label class="form-check-label" for="bills-when-manually">Customer makes manual payment</label>
           </div>
         </div>
 

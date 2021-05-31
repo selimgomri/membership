@@ -72,13 +72,13 @@ include BASE_PATH . 'views/header.php';
 
           <div class="mb-3" id="fee-type">
             <p class="mb-2">Fee type</p>
-            <div class="custom-control form-check">
-              <input type="radio" id="fee-n" name="class-fee-type" class="custom-control-input" <?php if ($json->type == 'NSwimmers') { ?>checked<?php } ?> value="NSwimmers" required>
-              <label class="custom-control-label" for="fee-n">N Members</label>
+            <div class="form-check">
+              <input type="radio" id="fee-n" name="class-fee-type" class="form-check-input" <?php if ($json->type == 'NSwimmers') { ?>checked<?php } ?> value="NSwimmers" required>
+              <label class="form-check-label" for="fee-n">N Members</label>
             </div>
-            <div class="custom-control form-check">
-              <input type="radio" id="fee-person" name="class-fee-type" class="custom-control-input" <?php if ($json->type == 'PerPerson') { ?>checked<?php } ?> value="PerPerson">
-              <label class="custom-control-label" for="fee-person">Per Person</label>
+            <div class="form-check">
+              <input type="radio" id="fee-person" name="class-fee-type" class="form-check-input" <?php if ($json->type == 'PerPerson') { ?>checked<?php } ?> value="PerPerson">
+              <label class="form-check-label" for="fee-person">Per Person</label>
             </div>
           </div>
 

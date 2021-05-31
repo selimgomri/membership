@@ -34,7 +34,8 @@ document.getElementById('table-area').addEventListener('click', event => {
       req.send('submission=' + encodeURI(submission) + '&action=void');
     });
 
-    $('#revokeModal').modal('show')
+    let modal = new bootstrap.Modal(document.getElementById('revokeModal'));
+    modal.show();
   }
 });
 
@@ -77,5 +78,6 @@ document.getElementById('voidAllButton').addEventListener('click', (event) => {
     req.send('squad=' + encodeURI(squad) + '&action=void');
   });
 
-  $('#revokeModal').modal('show')
+  let modal = new bootstrap.Modal(document.getElementById('revokeModal'));
+  modal.show();
 });

@@ -198,10 +198,10 @@ $_SESSION['TENANT-' . app()->tenant->getId()]['RegistrationMode'] = $mode;
         <div class="row">
           <div class="col-md-10 col-lg-8">
             <div class="mb-3">
-              <div class="custom-control form-checkbox">
-                <input type="checkbox" class="custom-control-input"
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox"
                 name="emailAuthorise" id="emailAuthorise" value="1" <?=$email?>>
-                <label class="custom-control-label" for="emailAuthorise">
+                <label class="form-check-label" for="emailAuthorise">
                   I wish to receive important email updates about my squads.
                   This includes emails about session cancellations.
                 </label>
@@ -209,10 +209,10 @@ $_SESSION['TENANT-' . app()->tenant->getId()]['RegistrationMode'] = $mode;
             </div>
 
             <div class="mb-3">
-              <div class="custom-control form-checkbox">
-                <input type="checkbox" class="custom-control-input"
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox"
                 name="smsAuthorise" id="smsAuthorise" value="1" <?=$sms?>>
-                <label class="custom-control-label" for="smsAuthorise">
+                <label class="form-check-label" for="smsAuthorise">
                   I wish to receive text message notifications
                 </label>
               </div>

@@ -29,9 +29,9 @@ include BASE_PATH . 'views/header.php';
         <div class="mb-3">
         <label>Select a card</label>
         <?php while ($pm = $paymentMethods->fetch(PDO::FETCH_ASSOC)) { ?>
-        <div class="custom-control form-check">
-          <input type="radio" id="select-card-<?=$pm['ID']?>" name="select-card" class="custom-control-input" value="<?=$pm['ID']?>">
-          <label class="custom-control-label" for="select-card-<?=$pm['ID']?>">
+        <div class="form-check">
+          <input type="radio" id="select-card-<?=$pm['ID']?>" name="select-card" class="form-check-input" value="<?=$pm['ID']?>">
+          <label class="form-check-label" for="select-card-<?=$pm['ID']?>">
             <i class="fa <?=htmlspecialchars(getCardFA($pm['Brand']))?>" aria-hidden="true"></i> <span class="visually-hidden"><?=htmlspecialchars($pm['Brand'])?></span> <?=htmlspecialchars($pm['Name'] . ' (Card ending ' . $pm['Last4'] . ')')?>
           </label>
         </div>

@@ -39,7 +39,8 @@ document.getElementById('new-session-form').addEventListener('submit', ev => {
             window.location.href = response.redirect;
           } else {
             getSessions();
-            $('#add-session-modal').modal('hide');
+            let modal = new bootstrap.Modal(document.getElementById('add-session-modal'));
+            modal.hide();
           }
         } else {
           // Error

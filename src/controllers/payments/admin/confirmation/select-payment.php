@@ -43,9 +43,9 @@ include BASE_PATH . 'views/header.php';
           ?>
 
           <div class="list-group-item">
-            <div class="custom-control form-check">
-              <input type="radio" id="payment-<?=htmlspecialchars($paymentId)?>" name="payment" value="<?=htmlspecialchars($paymentId)?>" class="custom-control-input">
-              <label class="custom-control-label d-block" for="payment-<?=htmlspecialchars($paymentId)?>">
+            <div class="form-check">
+              <input type="radio" id="payment-<?=htmlspecialchars($paymentId)?>" name="payment" value="<?=htmlspecialchars($paymentId)?>" class="form-check-input">
+              <label class="form-check-label d-block" for="payment-<?=htmlspecialchars($paymentId)?>">
                 <?=htmlspecialchars($payment['Forename'] . ' ' . $payment['Surname'])?>: 
                 <span class="mono">
                   &pound;<?=number_format($payment['Amount']/100, 2, '.', '')?>, <?=htmlspecialchars($payment['Name'])?>, <?=htmlspecialchars($payment['Date'])?>

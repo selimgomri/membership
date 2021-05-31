@@ -168,8 +168,8 @@ include BASE_PATH . 'views/header.php';
           <form method="post">
             <div class="mb-3">
               <div class="custom-control form-switch">
-                <input type="checkbox" class="custom-control-input" id="GALA_CARD_PAYMENTS_ALLOWED" name="GALA_CARD_PAYMENTS_ALLOWED" <?php if (bool($vars['GALA_CARD_PAYMENTS_ALLOWED'])) { ?>checked<?php } ?> <?= $disabled['GALA_CARD_PAYMENTS_ALLOWED'] ?>>
-                <label class="custom-control-label" for="GALA_CARD_PAYMENTS_ALLOWED">Allow card payments for gala entries</label>
+                <input class="form-check-input" type="checkbox" id="GALA_CARD_PAYMENTS_ALLOWED" name="GALA_CARD_PAYMENTS_ALLOWED" <?php if (bool($vars['GALA_CARD_PAYMENTS_ALLOWED'])) { ?>checked<?php } ?> <?= $disabled['GALA_CARD_PAYMENTS_ALLOWED'] ?>>
+                <label class="form-check-label" for="GALA_CARD_PAYMENTS_ALLOWED">Allow card payments for gala entries</label>
               </div>
             </div>
 
@@ -181,23 +181,23 @@ include BASE_PATH . 'views/header.php';
 
             <div class="mb-3">
               <div class="custom-control form-switch">
-                <input type="checkbox" class="custom-control-input" id="ALLOW_STRIPE_DIRECT_DEBIT_SET_UP" name="ALLOW_STRIPE_DIRECT_DEBIT_SET_UP" <?php if (bool($vars['ALLOW_STRIPE_DIRECT_DEBIT_SET_UP'])) { ?>checked<?php } ?> <?= $disabled['ALLOW_STRIPE_DIRECT_DEBIT_SET_UP'] ?>>
-                <label class="custom-control-label" for="ALLOW_STRIPE_DIRECT_DEBIT_SET_UP">Allow users to set up a Direct Debit mandate with Stripe</label>
+                <input class="form-check-input" type="checkbox" id="ALLOW_STRIPE_DIRECT_DEBIT_SET_UP" name="ALLOW_STRIPE_DIRECT_DEBIT_SET_UP" <?php if (bool($vars['ALLOW_STRIPE_DIRECT_DEBIT_SET_UP'])) { ?>checked<?php } ?> <?= $disabled['ALLOW_STRIPE_DIRECT_DEBIT_SET_UP'] ?>>
+                <label class="form-check-label" for="ALLOW_STRIPE_DIRECT_DEBIT_SET_UP">Allow users to set up a Direct Debit mandate with Stripe</label>
               </div>
             </div>
 
             <div class="mb-3">
               <div class="custom-control form-switch">
-                <input type="checkbox" class="custom-control-input" id="USE_STRIPE_DIRECT_DEBIT" name="USE_STRIPE_DIRECT_DEBIT" <?php if (bool($vars['USE_STRIPE_DIRECT_DEBIT'])) { ?>checked<?php } ?> <?= $disabled['USE_STRIPE_DIRECT_DEBIT'] ?> aria-describedby="USE_STRIPE_DIRECT_DEBIT-help">
-                <label class="custom-control-label" for="USE_STRIPE_DIRECT_DEBIT">Use Stripe for Direct Debit rather than GoCardless</label>
+                <input class="form-check-input" type="checkbox" id="USE_STRIPE_DIRECT_DEBIT" name="USE_STRIPE_DIRECT_DEBIT" <?php if (bool($vars['USE_STRIPE_DIRECT_DEBIT'])) { ?>checked<?php } ?> <?= $disabled['USE_STRIPE_DIRECT_DEBIT'] ?> aria-describedby="USE_STRIPE_DIRECT_DEBIT-help">
+                <label class="form-check-label" for="USE_STRIPE_DIRECT_DEBIT">Use Stripe for Direct Debit rather than GoCardless</label>
               </div>
               <small id="USE_STRIPE_DIRECT_DEBIT-help">Once you enable Stripe Direct Debit, GoCardless will stop working and this change can not be reversed.</small>
             </div>
 
             <div class="mb-3">
               <div class="custom-control form-switch">
-                <input type="checkbox" class="custom-control-input" id="ALLOW_DIRECT_DEBIT_OPT_OUT" name="ALLOW_DIRECT_DEBIT_OPT_OUT" <?php if (bool($vars['ALLOW_DIRECT_DEBIT_OPT_OUT'])) { ?>checked<?php } ?> aria-describedby="ALLOW_DIRECT_DEBIT_OPT_OUT-help">
-                <label class="custom-control-label" for="ALLOW_DIRECT_DEBIT_OPT_OUT">Allow users to choose not to use Direct Debit</label>
+                <input class="form-check-input" type="checkbox" id="ALLOW_DIRECT_DEBIT_OPT_OUT" name="ALLOW_DIRECT_DEBIT_OPT_OUT" <?php if (bool($vars['ALLOW_DIRECT_DEBIT_OPT_OUT'])) { ?>checked<?php } ?> aria-describedby="ALLOW_DIRECT_DEBIT_OPT_OUT-help">
+                <label class="form-check-label" for="ALLOW_DIRECT_DEBIT_OPT_OUT">Allow users to choose not to use Direct Debit</label>
               </div>
               <small id="ALLOW_DIRECT_DEBIT_OPT_OUT-help">If some of your users will continue to pay by standing order, enable this option so that they aren't forced to set up a Direct Debit mandate during registration or renewal.</small>
             </div>

@@ -123,7 +123,8 @@ form.addEventListener('submit', function(event) {
     });
 
     // Show alert modal
-    $('#confirmation-modal').modal('show');
+    let modal = new bootstrap.Modal(document.getElementById('confirmation-modal'));
+    modal.show();
   } else {
     document.getElementById('error-notice').classList.remove('d-none');
   }

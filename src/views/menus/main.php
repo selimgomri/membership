@@ -457,7 +457,7 @@ if (!function_exists('chesterStandardMenu')) {
               <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
                 <?= $user_name ?> <i class="fa fa-user-circle-o" aria-hidden="true"></i>
               </a>
-              <div class="dropdown-menu dropdown-menu-right">
+              <div class="dropdown-menu dropdown-menu-end">
                 <span class="dropdown-item-text">Signed&nbsp;in&nbsp;as&nbsp;<strong><?= $user_name ?></strong></span>
                 <div class="dropdown-divider"></div>
                 <?php $perms = $currentUser->getPrintPermissions();
@@ -466,12 +466,6 @@ if (!function_exists('chesterStandardMenu')) {
                   <?php foreach ($perms as $perm => $name) { ?>
                     <a class="dropdown-item" href="<?= autoUrl("account-switch?type=" . urlencode($perm)) ?>"><?= htmlspecialchars($name) ?><?php if ($perm == $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel']) { ?> <i class="text-primary fa fa-check-circle fa-fw" aria-hidden="true"></i><?php } ?></a>
                   <?php } ?>
-                  <div class="dropdown-divider"></div>
-                <?php } ?>
-                <?php if (isset(app()->tenant) && app()->tenant->getKey('ASA_CLUB_CODE') == 'UOSZ') { ?>
-                  <h6 class="dropdown-header">UoS Swimming and Water Polo</h6>
-                  <a class="dropdown-item" target="_blank" href="https://github.com/Swimming-Club-Data-Systems/Membership/issues?q=is%3Aissue+is%3Aopen+label%3AUOSSWPC">Feature Requests and Issues</a>
-                  <a class="dropdown-item" target="_blank" href="https://www.facebook.com/groups/69294080736">Facebook Group</a>
                   <div class="dropdown-divider"></div>
                 <?php } ?>
                 <h6 class="dropdown-header">Account settings</h6>

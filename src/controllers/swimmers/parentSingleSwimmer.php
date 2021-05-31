@@ -215,33 +215,33 @@ $title = null;
                 $row['MSurname']) ?> in the following circumstances. Tick boxes only
               if you wish to grant us photography permission.
             </p>
-            <div class="custom-control form-checkbox">
-              <input type="checkbox" value="1" class="custom-control-input" name="webPhoto" id="webPhoto" <?= $photo[0] ?>>
-              <label class="custom-control-label" for="webPhoto">
+            <div class="form-check">
+              <input type="checkbox" value="1" class="form-check-input" name="webPhoto" id="webPhoto" <?= $photo[0] ?>>
+              <label class="form-check-label" for="webPhoto">
                 Take photographs to use on the clubs website
               </label>
             </div>
-            <div class="custom-control form-checkbox">
-              <input type="checkbox" value="1" class="custom-control-input" name="socPhoto" id="socPhoto" <?= $photo[1] ?>>
-              <label class="custom-control-label" for="socPhoto">
+            <div class="form-check">
+              <input type="checkbox" value="1" class="form-check-input" name="socPhoto" id="socPhoto" <?= $photo[1] ?>>
+              <label class="form-check-label" for="socPhoto">
                 Take photographs to use on social media sites
               </label>
             </div>
-            <div class="custom-control form-checkbox">
-              <input type="checkbox" value="1" class="custom-control-input" name="noticePhoto" id="noticePhoto" <?= $photo[2] ?>>
-              <label class="custom-control-label" for="noticePhoto">
+            <div class="form-check">
+              <input type="checkbox" value="1" class="form-check-input" name="noticePhoto" id="noticePhoto" <?= $photo[2] ?>>
+              <label class="form-check-label" for="noticePhoto">
                 Take photographs to use on club noticeboards
               </label>
             </div>
-            <div class="custom-control form-checkbox">
-              <input type="checkbox" value="1" class="custom-control-input" name="trainFilm" id="trainFilm" <?= $photo[3] ?>>
-              <label class="custom-control-label" for="trainFilm">
+            <div class="form-check">
+              <input type="checkbox" value="1" class="form-check-input" name="trainFilm" id="trainFilm" <?= $photo[3] ?>>
+              <label class="form-check-label" for="trainFilm">
                 Filming for training purposes only
               </label>
             </div>
-            <div class="custom-control form-checkbox">
-              <input type="checkbox" value="1" class="custom-control-input" name="proPhoto" id="proPhoto" <?= $photo[4] ?>>
-              <label class="custom-control-label" for="proPhoto">
+            <div class="form-check">
+              <input type="checkbox" value="1" class="form-check-input" name="proPhoto" id="proPhoto" <?= $photo[4] ?>>
+              <label class="form-check-label" for="proPhoto">
                 Employ a professional photographer (approved by the club) who will take
                 photographs in competitions and/or club events.
               </label>

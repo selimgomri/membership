@@ -116,18 +116,18 @@ include BASE_PATH . 'views/header.php';
 
         <h2>Choose notification preferences </h2>
         <div class="mb-3">
-          <div class="custom-control form-checkbox">
-            <input type="checkbox" class="custom-control-input"
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox"
             name="allow-email" id="allow-email" value="1" <?=$email?> checked>
-            <label class="custom-control-label" for="allow-email">
+            <label class="form-check-label" for="allow-email">
               I wish to receive important email updates about my squads
             </label>
           </div>
 
-          <div class="custom-control form-checkbox">
-            <input type="checkbox" class="custom-control-input" name="allow-sms"
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="allow-sms"
             id="allow-sms" value="1" <?=$sms?> checked>
-            <label class="custom-control-label" for="allow-sms">
+            <label class="form-check-label" for="allow-sms">
               I wish to receive text message notifications
             </label>
           </div>

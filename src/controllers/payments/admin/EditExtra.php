@@ -71,13 +71,13 @@ include BASE_PATH . "views/paymentsMenu.php";
 
           <div class="mb-3">
             <label>Monthly payment or refund</label>
-            <div class="custom-control form-check">
-              <input type="radio" id="type-pay" name="pay-credit-type" class="custom-control-input" <?php if ($row['Type'] == 'Payment') { ?>checked<?php } ?> value="Payment" required>
-              <label class="custom-control-label" for="type-pay">Payment</label>
+            <div class="form-check">
+              <input type="radio" id="type-pay" name="pay-credit-type" class="form-check-input" <?php if ($row['Type'] == 'Payment') { ?>checked<?php } ?> value="Payment" required>
+              <label class="form-check-label" for="type-pay">Payment</label>
             </div>
-            <div class="custom-control form-check">
-              <input type="radio" id="type-credit" name="pay-credit-type" class="custom-control-input" <?php if ($row['Type'] == 'Refund') { ?>checked<?php } ?> value="Refund">
-              <label class="custom-control-label" for="type-credit">Credit/refund</label>
+            <div class="form-check">
+              <input type="radio" id="type-credit" name="pay-credit-type" class="form-check-input" <?php if ($row['Type'] == 'Refund') { ?>checked<?php } ?> value="Refund">
+              <label class="form-check-label" for="type-credit">Credit/refund</label>
             </div>
           </div>
 

@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
   // your code here
   $(function () {
-    $('[data-toggle="popover"]').popover({
+    $('[data-bs-toggle="popover"]').popover({
       trigger: 'focus'
     })
   });

@@ -55,15 +55,15 @@ include BASE_PATH . 'views/header.php';
 
           <div class="mb-3">
             <div class="custom-control form-switch">
-              <input type="checkbox" class="custom-control-input" id="MEMBERSHIP_FEE_PM_CARD" name="MEMBERSHIP_FEE_PM_CARD" <?php if ($tenant->getBooleanKey('MEMBERSHIP_FEE_PM_CARD') && $tenant->getStripeAccount()) { ?>checked<?php } ?> <?php if (!$tenant->getStripeAccount()) { ?>disabled<?php } ?>>
-              <label class="custom-control-label" for="MEMBERSHIP_FEE_PM_CARD">Credit/debit card payments</label>
+              <input class="form-check-input" type="checkbox" id="MEMBERSHIP_FEE_PM_CARD" name="MEMBERSHIP_FEE_PM_CARD" <?php if ($tenant->getBooleanKey('MEMBERSHIP_FEE_PM_CARD') && $tenant->getStripeAccount()) { ?>checked<?php } ?> <?php if (!$tenant->getStripeAccount()) { ?>disabled<?php } ?>>
+              <label class="form-check-label" for="MEMBERSHIP_FEE_PM_CARD">Credit/debit card payments</label>
             </div>
           </div>
 
           <div class="mb-3">
             <div class="custom-control form-switch">
-              <input type="checkbox" class="custom-control-input" id="MEMBERSHIP_FEE_PM_DD" name="MEMBERSHIP_FEE_PM_DD" <?php if ($tenant->getBooleanKey('MEMBERSHIP_FEE_PM_DD') && ($tenant->getStripeAccount() || $tenant->getGoCardlessAccessToken()) && $tenant->getKey('USE_DIRECT_DEBIT')) { ?>checked<?php } ?> <?php if (!$tenant->getStripeAccount() && !$tenant->getGoCardlessAccessToken()) { ?>disabled<?php } ?>>
-              <label class="custom-control-label" for="MEMBERSHIP_FEE_PM_DD">Direct debit</label>
+              <input class="form-check-input" type="checkbox" id="MEMBERSHIP_FEE_PM_DD" name="MEMBERSHIP_FEE_PM_DD" <?php if ($tenant->getBooleanKey('MEMBERSHIP_FEE_PM_DD') && ($tenant->getStripeAccount() || $tenant->getGoCardlessAccessToken()) && $tenant->getKey('USE_DIRECT_DEBIT')) { ?>checked<?php } ?> <?php if (!$tenant->getStripeAccount() && !$tenant->getGoCardlessAccessToken()) { ?>disabled<?php } ?>>
+              <label class="form-check-label" for="MEMBERSHIP_FEE_PM_DD">Direct debit</label>
             </div>
           </div>
 
@@ -73,22 +73,22 @@ include BASE_PATH . 'views/header.php';
 
           <div class="mb-3">
             <div class="custom-control form-switch">
-              <input type="checkbox" class="custom-control-input" id="MEMBERSHIP_FEE_PM_BACS" name="MEMBERSHIP_FEE_PM_BACS" <?php if ($tenant->getBooleanKey('MEMBERSHIP_FEE_PM_BACS')) { ?>checked<?php } ?> disabled>
-              <label class="custom-control-label" for="MEMBERSHIP_FEE_PM_BACS">Bank transfer</label>
+              <input class="form-check-input" type="checkbox" id="MEMBERSHIP_FEE_PM_BACS" name="MEMBERSHIP_FEE_PM_BACS" <?php if ($tenant->getBooleanKey('MEMBERSHIP_FEE_PM_BACS')) { ?>checked<?php } ?> disabled>
+              <label class="form-check-label" for="MEMBERSHIP_FEE_PM_BACS">Bank transfer</label>
             </div>
           </div>
 
           <div class="mb-3">
             <div class="custom-control form-switch">
-              <input type="checkbox" class="custom-control-input" id="MEMBERSHIP_FEE_PM_CASH" name="MEMBERSHIP_FEE_PM_CASH" <?php if ($tenant->getBooleanKey('MEMBERSHIP_FEE_PM_CASH')) { ?>checked<?php } ?> disabled>
-              <label class="custom-control-label" for="MEMBERSHIP_FEE_PM_CASH">Cash</label>
+              <input class="form-check-input" type="checkbox" id="MEMBERSHIP_FEE_PM_CASH" name="MEMBERSHIP_FEE_PM_CASH" <?php if ($tenant->getBooleanKey('MEMBERSHIP_FEE_PM_CASH')) { ?>checked<?php } ?> disabled>
+              <label class="form-check-label" for="MEMBERSHIP_FEE_PM_CASH">Cash</label>
             </div>
           </div>
 
           <div class="mb-3">
             <div class="custom-control form-switch">
-              <input type="checkbox" class="custom-control-input" id="MEMBERSHIP_FEE_PM_CHEQUE" name="MEMBERSHIP_FEE_PM_CHEQUE" <?php if ($tenant->getBooleanKey('MEMBERSHIP_FEE_PM_CHEQUE')) { ?>checked<?php } ?> disabled>
-              <label class="custom-control-label" for="MEMBERSHIP_FEE_PM_CHEQUE">Cheque</label>
+              <input class="form-check-input" type="checkbox" id="MEMBERSHIP_FEE_PM_CHEQUE" name="MEMBERSHIP_FEE_PM_CHEQUE" <?php if ($tenant->getBooleanKey('MEMBERSHIP_FEE_PM_CHEQUE')) { ?>checked<?php } ?> disabled>
+              <label class="form-check-label" for="MEMBERSHIP_FEE_PM_CHEQUE">Cheque</label>
             </div>
           </div>
 

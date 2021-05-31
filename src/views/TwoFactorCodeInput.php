@@ -92,9 +92,9 @@ include BASE_PATH . "views/head.php";
         <input type="hidden" name="target" value="<?= htmlspecialchars($target) ?>">
 
         <div class="mb-3">
-          <div class="custom-control form-checkbox">
-            <input type="checkbox" class="custom-control-input" name="RememberMe" id="RememberMe" <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['2FAUserRememberMe']) && bool($_SESSION['TENANT-' . app()->tenant->getId()]['2FAUserRememberMe'])) { ?>checked<?php } ?> aria-describedby="RememberMeHelp" value="1">
-            <label class="custom-control-label" for="RememberMe">Keep me logged in</label>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="RememberMe" id="RememberMe" <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['2FAUserRememberMe']) && bool($_SESSION['TENANT-' . app()->tenant->getId()]['2FAUserRememberMe'])) { ?>checked<?php } ?> aria-describedby="RememberMeHelp" value="1">
+            <label class="form-check-label" for="RememberMe">Keep me logged in</label>
             <small id="RememberMeHelp" class="form-text text-muted">
               Untick this box if you are using a public or shared computer
             </small>
@@ -103,9 +103,9 @@ include BASE_PATH . "views/head.php";
 
         <?php if (!isset($_SESSION['TENANT-' . app()->tenant->getId()]['TWO_FACTOR_GOOGLE']) || $_SESSION['TENANT-' . app()->tenant->getId()]['TWO_FACTOR_GOOGLE'] !== true) { ?>
           <div class="mb-3">
-            <div class="custom-control form-checkbox">
-              <input type="checkbox" class="custom-control-input" name="setup-time-based-codes" id="setup-time-based-codes" aria-describedby="setup-time-based-codes-help">
-              <label class="custom-control-label" for="setup-time-based-codes">Set up an authenticator app</label>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="setup-time-based-codes" id="setup-time-based-codes" aria-describedby="setup-time-based-codes-help">
+              <label class="form-check-label" for="setup-time-based-codes">Set up an authenticator app</label>
               <small id="setup-time-based-codes-help" class="form-text text-muted">
                 Set up an authenticator app, such as Google Authenticator, so that you can use time-based one-time passwords and don't need to wait for an email from us. You can always still get codes by email if you don't have your phone with you.
               </small>

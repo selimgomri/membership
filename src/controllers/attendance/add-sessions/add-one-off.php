@@ -112,13 +112,13 @@ include BASE_PATH . 'views/header.php';
           <p class="mb-2">
             Recurrence
           </p>
-          <div class="custom-control form-check">
-            <input type="radio" id="recurring-one-off" name="recurring" class="custom-control-input" checked required value="one-off">
-            <label class="custom-control-label" for="recurring-one-off">One-off</label>
+          <div class="form-check">
+            <input type="radio" id="recurring-one-off" name="recurring" class="form-check-input" checked required value="one-off">
+            <label class="form-check-label" for="recurring-one-off">One-off</label>
           </div>
-          <div class="custom-control form-check">
-            <input type="radio" id="recurring-session" name="recurring" class="custom-control-input" value="recurring">
-            <label class="custom-control-label" for="recurring-session">Weekly until cancelled</label>
+          <div class="form-check">
+            <input type="radio" id="recurring-session" name="recurring" class="form-check-input" value="recurring">
+            <label class="form-check-label" for="recurring-session">Weekly until cancelled</label>
           </div>
         </div>
 
@@ -176,9 +176,9 @@ include BASE_PATH . 'views/header.php';
           <div class="row">
             <?php do { ?>
               <div class="col-6 col-md-4 col-lg-3 mb-2">
-                <div class="custom-control form-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="squad-check-<?= htmlspecialchars($squad['SquadID']) ?>" name="squad-<?= htmlspecialchars($squad['SquadID']) ?>" value="1">
-                  <label class="custom-control-label" for="squad-check-<?= htmlspecialchars($squad['SquadID']) ?>"><?= htmlspecialchars($squad['SquadName']) ?></label>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="squad-check-<?= htmlspecialchars($squad['SquadID']) ?>" name="squad-<?= htmlspecialchars($squad['SquadID']) ?>" value="1">
+                  <label class="form-check-label" for="squad-check-<?= htmlspecialchars($squad['SquadID']) ?>"><?= htmlspecialchars($squad['SquadName']) ?></label>
                 </div>
               </div>
             <?php } while ($squad = $getSquads->fetch(PDO::FETCH_ASSOC)); ?>

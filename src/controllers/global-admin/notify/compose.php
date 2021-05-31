@@ -88,9 +88,9 @@ include BASE_PATH . "views/root/header.php";
       <div class="row">
         <?php while ($list = $lists->fetch(PDO::FETCH_ASSOC)) { ?>
           <div class="col-6 col-sm-6 col-md-4 col-lg-3">
-            <div class="custom-control form-checkbox">
-              <input type="checkbox" class="custom-control-input" id="TL-<?= $list['ID'] ?>" name="TL-<?= $list['ID'] ?>" value="1" <?= fieldChecked('TL-' . $list['ID']) ?>>
-              <label class="custom-control-label" for="TL-<?= $list['ID'] ?>">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="TL-<?= $list['ID'] ?>" name="TL-<?= $list['ID'] ?>" value="1" <?= fieldChecked('TL-' . $list['ID']) ?>>
+              <label class="form-check-label" for="TL-<?= $list['ID'] ?>">
                 <?= htmlspecialchars($list['Name']) ?>
               </label>
             </div>
@@ -135,9 +135,9 @@ include BASE_PATH . "views/root/header.php";
     </div>
 
     <div class="mb-3">
-      <div class="custom-control form-checkbox">
-        <input type="checkbox" class="custom-control-input" aria-describedby="forceHelp" id="force" name="force" value="1">
-        <label class="custom-control-label" for="force">Force Send</label>
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" aria-describedby="forceHelp" id="force" name="force" value="1">
+        <label class="form-check-label" for="force">Force Send</label>
         <small id="forceHelp" class="form-text text-muted">
           Normally, messages will only be sent to those who have opted in to email
           notifications. Selecting Force Send overrides this. If you do this, you

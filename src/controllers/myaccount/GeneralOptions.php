@@ -63,16 +63,16 @@ include BASE_PATH . "views/header.php";
 
           <div class="mb-3">
       			<div class="custom-control form-switch">
-      				<input type="checkbox" class="custom-control-input" value="1" id="tracking-cookies" aria-describedby="tracking-cookies-help" name="tracking-cookies" <?=$trackersChecked?> >
-              <label class="custom-control-label" for="tracking-cookies">Disable tracking cookies</label>
+      				<input class="form-check-input" type="checkbox" value="1" id="tracking-cookies" aria-describedby="tracking-cookies-help" name="tracking-cookies" <?=$trackersChecked?> >
+              <label class="form-check-label" for="tracking-cookies">Disable tracking cookies</label>
       				<small id="2FAHelp" class="form-text text-muted">Tracking cookies (including Google Analytics) help us gain insight into how this software is used and make improvements.</small>
       			</div>
       		</div>
 
           <div class="mb-3">
       			<div class="custom-control form-switch">
-      				<input type="checkbox" class="custom-control-input" value="1" id="beta-features" aria-describedby="beta-features-help" name="beta-features" <?=$betasChecked?> >
-              <label class="custom-control-label" for="beta-features">Enable beta features</label>
+      				<input class="form-check-input" type="checkbox" value="1" id="beta-features" aria-describedby="beta-features-help" name="beta-features" <?=$betasChecked?> >
+              <label class="form-check-label" for="beta-features">Enable beta features</label>
       				<small id="beta-features-help" class="form-text text-muted">Help us test new features by opting in to small beta trials.</small>
       			</div>
       		</div>
@@ -80,8 +80,8 @@ include BASE_PATH . "views/header.php";
           <?php if (app()->tenant->isCLS()) { ?>
           <div class="mb-3">
       			<div class="custom-control form-switch">
-      				<input type="checkbox" class="custom-control-input" value="1" id="generic-theme" aria-describedby="generic-theme-help" name="generic-theme" <?=$genericThemeChecked?> >
-              <label class="custom-control-label" for="generic-theme">Use the generic theme</label>
+      				<input class="form-check-input" type="checkbox" value="1" id="generic-theme" aria-describedby="generic-theme-help" name="generic-theme" <?=$genericThemeChecked?> >
+              <label class="form-check-label" for="generic-theme">Use the generic theme</label>
       				<small id="generic-theme-help" class="form-text text-muted">Use this software without Chester-le-Street ASC styling.</small>
       			</div>
       		</div>
@@ -99,8 +99,8 @@ include BASE_PATH . "views/header.php";
           </h2>
       		<div class="mb-3">
       			<div class="custom-control form-switch">
-      				<input type="checkbox" class="custom-control-input" value="1" id="gala-dd-opt-out" aria-describedby="gala-dd-opt-out-Help" name="gala-dd-opt-out" <?=$notGalaDDChecked?> >
-              <label class="custom-control-label" for="gala-dd-opt-out">Opt out of Direct Debit gala payments</label>
+      				<input class="form-check-input" type="checkbox" value="1" id="gala-dd-opt-out" aria-describedby="gala-dd-opt-out-Help" name="gala-dd-opt-out" <?=$notGalaDDChecked?> >
+              <label class="form-check-label" for="gala-dd-opt-out">Opt out of Direct Debit gala payments</label>
       				<small id="gala-dd-opt-out-Help" class="form-text text-muted">This feature is only relevent if your club charges for galas by Direct Debit</small>
       			</div>
       		</div>
@@ -114,8 +114,8 @@ include BASE_PATH . "views/header.php";
           <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Parent") { ?>
       		<div class="mb-3">
       			<div class="custom-control form-switch">
-      				<input type="checkbox" class="custom-control-input" value="1" id="2FA" aria-describedby="2FAHelp" name="2FA" <?=$twofaChecked?> >
-              <label class="custom-control-label" for="2FA">Enable two-factor authentication</label>
+      				<input class="form-check-input" type="checkbox" value="1" id="2FA" aria-describedby="2FAHelp" name="2FA" <?=$twofaChecked?> >
+              <label class="form-check-label" for="2FA">Enable two-factor authentication</label>
       				<small id="2FAHelp" class="form-text text-muted">2FA provides an increased level of security for your club account.</small>
       			</div>
       		</div>

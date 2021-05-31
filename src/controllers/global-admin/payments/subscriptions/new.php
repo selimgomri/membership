@@ -98,17 +98,17 @@ include BASE_PATH . "views/root/header.php";
 
         <div class="mb-3" id="subscription-first-bills-radios">
           <p class="mb-2">Subscription first bills</p>
-          <div class="custom-control form-check">
-            <input type="radio" id="subscription-first-bills-immediately" name="subscription-first-bills" class="custom-control-input" value="immediately" required checked>
-            <label class="custom-control-label" for="subscription-first-bills-immediately">Immediately</label>
+          <div class="form-check">
+            <input type="radio" id="subscription-first-bills-immediately" name="subscription-first-bills" class="form-check-input" value="immediately" required checked>
+            <label class="form-check-label" for="subscription-first-bills-immediately">Immediately</label>
           </div>
-          <div class="custom-control form-check">
-            <input type="radio" id="subscription-first-bills-next-first" name="subscription-first-bills" class="custom-control-input" value="next-first">
-            <label class="custom-control-label" for="subscription-first-bills-next-first">On <?= htmlspecialchars($firstNextMonth->format('l j F Y')) ?></label>
+          <div class="form-check">
+            <input type="radio" id="subscription-first-bills-next-first" name="subscription-first-bills" class="form-check-input" value="next-first">
+            <label class="form-check-label" for="subscription-first-bills-next-first">On <?= htmlspecialchars($firstNextMonth->format('l j F Y')) ?></label>
           </div>
-          <div class="custom-control form-check">
-            <input type="radio" id="subscription-first-bills-custom" name="subscription-first-bills" class="custom-control-input" value="custom">
-            <label class="custom-control-label" for="subscription-first-bills-custom">On a custom date</label>
+          <div class="form-check">
+            <input type="radio" id="subscription-first-bills-custom" name="subscription-first-bills" class="form-check-input" value="custom">
+            <label class="form-check-label" for="subscription-first-bills-custom">On a custom date</label>
           </div>
         </div>
 

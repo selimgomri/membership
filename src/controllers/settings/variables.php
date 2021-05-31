@@ -131,21 +131,21 @@ include BASE_PATH . 'views/header.php';
 
           <div class="mb-3">
             <label>Message type</label>
-            <div class="custom-control form-check">
-              <input type="radio" value="NONE" id="EMERGENCY_MESSAGE_TYPE_NONE" name="EMERGENCY_MESSAGE_TYPE" class="custom-control-input" <?php if ($vars['EMERGENCY_MESSAGE_TYPE'] == 'NONE') { ?>checked<?php } ?> <?= $disabled['EMERGENCY_MESSAGE_TYPE'] ?>>
-              <label class="custom-control-label" for="EMERGENCY_MESSAGE_TYPE_NONE">No emergency message</label>
+            <div class="form-check">
+              <input type="radio" value="NONE" id="EMERGENCY_MESSAGE_TYPE_NONE" name="EMERGENCY_MESSAGE_TYPE" class="form-check-input" <?php if ($vars['EMERGENCY_MESSAGE_TYPE'] == 'NONE') { ?>checked<?php } ?> <?= $disabled['EMERGENCY_MESSAGE_TYPE'] ?>>
+              <label class="form-check-label" for="EMERGENCY_MESSAGE_TYPE_NONE">No emergency message</label>
             </div>
-            <div class="custom-control form-check">
-              <input type="radio" value="SUCCESS" id="EMERGENCY_MESSAGE_TYPE_SUCCESS" name="EMERGENCY_MESSAGE_TYPE" class="custom-control-input" <?php if ($vars['EMERGENCY_MESSAGE_TYPE'] == 'SUCCESS') { ?>checked<?php } ?> <?= $disabled['EMERGENCY_MESSAGE_TYPE'] ?>>
-              <label class="custom-control-label" for="EMERGENCY_MESSAGE_TYPE_SUCCESS">Safe/good (green)</label>
+            <div class="form-check">
+              <input type="radio" value="SUCCESS" id="EMERGENCY_MESSAGE_TYPE_SUCCESS" name="EMERGENCY_MESSAGE_TYPE" class="form-check-input" <?php if ($vars['EMERGENCY_MESSAGE_TYPE'] == 'SUCCESS') { ?>checked<?php } ?> <?= $disabled['EMERGENCY_MESSAGE_TYPE'] ?>>
+              <label class="form-check-label" for="EMERGENCY_MESSAGE_TYPE_SUCCESS">Safe/good (green)</label>
             </div>
-            <div class="custom-control form-check">
-              <input type="radio" value="WARN" id="EMERGENCY_MESSAGE_TYPE_WARN" name="EMERGENCY_MESSAGE_TYPE" class="custom-control-input" <?php if ($vars['EMERGENCY_MESSAGE_TYPE'] == 'WARN') { ?>checked<?php } ?> <?= $disabled['EMERGENCY_MESSAGE_TYPE'] ?>>
-              <label class="custom-control-label" for="EMERGENCY_MESSAGE_TYPE_WARN">Warning (yellow)</label>
+            <div class="form-check">
+              <input type="radio" value="WARN" id="EMERGENCY_MESSAGE_TYPE_WARN" name="EMERGENCY_MESSAGE_TYPE" class="form-check-input" <?php if ($vars['EMERGENCY_MESSAGE_TYPE'] == 'WARN') { ?>checked<?php } ?> <?= $disabled['EMERGENCY_MESSAGE_TYPE'] ?>>
+              <label class="form-check-label" for="EMERGENCY_MESSAGE_TYPE_WARN">Warning (yellow)</label>
             </div>
-            <div class="custom-control form-check">
-              <input type="radio" value="DANGER" id="EMERGENCY_MESSAGE_TYPE_DANGER" name="EMERGENCY_MESSAGE_TYPE" class="custom-control-input" <?php if ($vars['EMERGENCY_MESSAGE_TYPE'] == 'DANGER') { ?>checked<?php } ?> <?= $disabled['EMERGENCY_MESSAGE_TYPE'] ?>>
-              <label class="custom-control-label" for="EMERGENCY_MESSAGE_TYPE_DANGER">Danger (red)</label>
+            <div class="form-check">
+              <input type="radio" value="DANGER" id="EMERGENCY_MESSAGE_TYPE_DANGER" name="EMERGENCY_MESSAGE_TYPE" class="form-check-input" <?php if ($vars['EMERGENCY_MESSAGE_TYPE'] == 'DANGER') { ?>checked<?php } ?> <?= $disabled['EMERGENCY_MESSAGE_TYPE'] ?>>
+              <label class="form-check-label" for="EMERGENCY_MESSAGE_TYPE_DANGER">Danger (red)</label>
             </div>
           </div>
 
@@ -253,55 +253,55 @@ include BASE_PATH . 'views/header.php';
 
           <div class="mb-3">
             <div class="custom-control form-switch">
-              <input type="checkbox" class="custom-control-input" id="BLOCK_SQUAD_REPS_FROM_NOTIFY" name="BLOCK_SQUAD_REPS_FROM_NOTIFY" <?php if (!bool($vars['BLOCK_SQUAD_REPS_FROM_NOTIFY'])) { ?>checked<?php } ?> <?= $disabled['BLOCK_SQUAD_REPS_FROM_NOTIFY'] ?>>
-              <label class="custom-control-label" for="BLOCK_SQUAD_REPS_FROM_NOTIFY">Allow squad reps to use Notify</label>
+              <input class="form-check-input" type="checkbox" id="BLOCK_SQUAD_REPS_FROM_NOTIFY" name="BLOCK_SQUAD_REPS_FROM_NOTIFY" <?php if (!bool($vars['BLOCK_SQUAD_REPS_FROM_NOTIFY'])) { ?>checked<?php } ?> <?= $disabled['BLOCK_SQUAD_REPS_FROM_NOTIFY'] ?>>
+              <label class="form-check-label" for="BLOCK_SQUAD_REPS_FROM_NOTIFY">Allow squad reps to use Notify</label>
             </div>
           </div>
 
           <h2>Display options</h2>
           <div class="mb-3">
             <div class="custom-control form-switch">
-              <input type="checkbox" class="custom-control-input" id="HIDE_MEMBER_ATTENDANCE" name="HIDE_MEMBER_ATTENDANCE" <?php if (!bool($vars['HIDE_MEMBER_ATTENDANCE'])) { ?>checked<?php } ?> <?= $disabled['HIDE_MEMBER_ATTENDANCE'] ?>>
-              <label class="custom-control-label" for="HIDE_MEMBER_ATTENDANCE">Show member attendance percentage to parents</label>
+              <input class="form-check-input" type="checkbox" id="HIDE_MEMBER_ATTENDANCE" name="HIDE_MEMBER_ATTENDANCE" <?php if (!bool($vars['HIDE_MEMBER_ATTENDANCE'])) { ?>checked<?php } ?> <?= $disabled['HIDE_MEMBER_ATTENDANCE'] ?>>
+              <label class="form-check-label" for="HIDE_MEMBER_ATTENDANCE">Show member attendance percentage to parents</label>
             </div>
           </div>
 
           <?php if ($vars['LOGO_DIR']) { ?>
             <div class="mb-3">
               <div class="custom-control form-switch">
-                <input type="checkbox" class="custom-control-input" id="SHOW_LOGO" value="1" name="SHOW_LOGO" <?php if (bool($vars['SHOW_LOGO'])) { ?>checked<?php } ?> <?= $disabled['SHOW_LOGO'] ?>>
-                <label class="custom-control-label" for="SHOW_LOGO">Show organisation logo in header</label>
+                <input class="form-check-input" type="checkbox" id="SHOW_LOGO" value="1" name="SHOW_LOGO" <?php if (bool($vars['SHOW_LOGO'])) { ?>checked<?php } ?> <?= $disabled['SHOW_LOGO'] ?>>
+                <label class="form-check-label" for="SHOW_LOGO">Show organisation logo in header</label>
               </div>
             </div>
           <?php } ?>
 
           <div class="mb-3">
             <div class="custom-control form-switch">
-              <input type="checkbox" class="custom-control-input" id="HIDE_CONTACT_TRACING_FROM_PARENTS" value="1" name="HIDE_CONTACT_TRACING_FROM_PARENTS" <?php if (!bool($vars['HIDE_CONTACT_TRACING_FROM_PARENTS'])) { ?>checked<?php } ?> <?= $disabled['HIDE_CONTACT_TRACING_FROM_PARENTS'] ?>>
-              <label class="custom-control-label" for="HIDE_CONTACT_TRACING_FROM_PARENTS">Show contact tracing links to all member users</label>
+              <input class="form-check-input" type="checkbox" id="HIDE_CONTACT_TRACING_FROM_PARENTS" value="1" name="HIDE_CONTACT_TRACING_FROM_PARENTS" <?php if (!bool($vars['HIDE_CONTACT_TRACING_FROM_PARENTS'])) { ?>checked<?php } ?> <?= $disabled['HIDE_CONTACT_TRACING_FROM_PARENTS'] ?>>
+              <label class="form-check-label" for="HIDE_CONTACT_TRACING_FROM_PARENTS">Show contact tracing links to all member users</label>
             </div>
           </div>
 
           <h2>Registration and renewal global options</h2>
           <div class="mb-3">
             <div class="custom-control form-switch">
-              <input type="checkbox" class="custom-control-input" id="REQUIRE_FULL_REGISTRATION" value="1" name="REQUIRE_FULL_REGISTRATION" <?php if (bool($vars['REQUIRE_FULL_REGISTRATION'])) { ?>checked<?php } ?> <?= $disabled['REQUIRE_FULL_REGISTRATION'] ?>>
-              <label class="custom-control-label" for="REQUIRE_FULL_REGISTRATION">Require users to complete all registration forms</label>
+              <input class="form-check-input" type="checkbox" id="REQUIRE_FULL_REGISTRATION" value="1" name="REQUIRE_FULL_REGISTRATION" <?php if (bool($vars['REQUIRE_FULL_REGISTRATION'])) { ?>checked<?php } ?> <?= $disabled['REQUIRE_FULL_REGISTRATION'] ?>>
+              <label class="form-check-label" for="REQUIRE_FULL_REGISTRATION">Require users to complete all registration forms</label>
             </div>
           </div>
 
           <div class="mb-3">
             <div class="custom-control form-switch">
-              <input type="checkbox" class="custom-control-input" id="REQUIRE_FULL_RENEWAL" value="1" name="REQUIRE_FULL_RENEWAL" <?php if (bool($vars['REQUIRE_FULL_RENEWAL'])) { ?>checked<?php } ?> <?= $disabled['REQUIRE_FULL_RENEWAL'] ?>>
-              <label class="custom-control-label" for="REQUIRE_FULL_RENEWAL">Require users to complete all renewal forms. If off renewal jumps direct to membership fees page.</label>
+              <input class="form-check-input" type="checkbox" id="REQUIRE_FULL_RENEWAL" value="1" name="REQUIRE_FULL_RENEWAL" <?php if (bool($vars['REQUIRE_FULL_RENEWAL'])) { ?>checked<?php } ?> <?= $disabled['REQUIRE_FULL_RENEWAL'] ?>>
+              <label class="form-check-label" for="REQUIRE_FULL_RENEWAL">Require users to complete all renewal forms. If off renewal jumps direct to membership fees page.</label>
             </div>
           </div>
 
           <h2>Billing options</h2>
           <div class="mb-3">
             <div class="custom-control form-switch">
-              <input type="checkbox" class="custom-control-input" id="ENABLE_BILLING_SYSTEM" value="1" name="ENABLE_BILLING_SYSTEM" <?php if (bool($vars['ENABLE_BILLING_SYSTEM'])) { ?>checked<?php } ?> <?= $disabled['ENABLE_BILLING_SYSTEM'] ?>>
-              <label class="custom-control-label" for="ENABLE_BILLING_SYSTEM">Enable the automated billing system (for Direct Debit)</label>
+              <input class="form-check-input" type="checkbox" id="ENABLE_BILLING_SYSTEM" value="1" name="ENABLE_BILLING_SYSTEM" <?php if (bool($vars['ENABLE_BILLING_SYSTEM'])) { ?>checked<?php } ?> <?= $disabled['ENABLE_BILLING_SYSTEM'] ?>>
+              <label class="form-check-label" for="ENABLE_BILLING_SYSTEM">Enable the automated billing system (for Direct Debit)</label>
             </div>
           </div>
 

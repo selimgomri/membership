@@ -89,9 +89,9 @@ include BASE_PATH . 'views/header.php';
               <li class="list-group-item">
                 <div class="row">
                   <div class="col">
-                    <div class="custom-control form-checkbox">
-                    <input type="checkbox" class="custom-control-input" name="s-<?=htmlspecialchars($session['ID'])?>-m-<?=htmlspecialchars($swimmers[$i]['id'])?>" value="1" id="s-<?=htmlspecialchars($session['ID'])?>-m-<?=htmlspecialchars($swimmers[$i]['id'])?>">
-                    <label class="custom-control-label d-block" for="s-<?=htmlspecialchars($session['ID'])?>-m-<?=htmlspecialchars($swimmers[$i]['id'])?>">
+                    <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="s-<?=htmlspecialchars($session['ID'])?>-m-<?=htmlspecialchars($swimmers[$i]['id'])?>" value="1" id="s-<?=htmlspecialchars($session['ID'])?>-m-<?=htmlspecialchars($swimmers[$i]['id'])?>">
+                    <label class="form-check-label d-block" for="s-<?=htmlspecialchars($session['ID'])?>-m-<?=htmlspecialchars($swimmers[$i]['id'])?>">
                       <?=htmlspecialchars($swimmers[$i]['fn'] . " " . $swimmers[$i]['sn'] . ", " . $swimmers[$i]['squad'])?>
                     </label>
                   </div>

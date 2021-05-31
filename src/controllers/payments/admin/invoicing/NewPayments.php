@@ -108,13 +108,13 @@ include BASE_PATH . 'views/header.php';
 
           <div class="mb-3" id="radios">
             <label>Type</label>
-            <div class="custom-control form-check">
-              <input type="radio" id="type-payment" name="type" class="custom-control-input" checked required value="Payment">
-              <label class="custom-control-label" for="type-payment">Payment</label>
+            <div class="form-check">
+              <input type="radio" id="type-payment" name="type" class="form-check-input" checked required value="Payment">
+              <label class="form-check-label" for="type-payment">Payment</label>
             </div>
-            <div class="custom-control form-check">
-              <input type="radio" id="type-credit" name="type" class="custom-control-input" required value="Credit">
-              <label class="custom-control-label" for="type-credit">Credit (refund)</label>
+            <div class="form-check">
+              <input type="radio" id="type-credit" name="type" class="form-check-input" required value="Credit">
+              <label class="form-check-label" for="type-credit">Credit (refund)</label>
             </div>
           </div>
 

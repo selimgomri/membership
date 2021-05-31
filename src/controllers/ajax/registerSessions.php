@@ -232,9 +232,9 @@ if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Committee" 
         <li class=\"list-group-item\">
           <div class=\"row\">
             <div class=\"col\">
-              <div class=\"custom-control form-checkbox\">
-              <input type=\"checkbox\" class=\"custom-control-input\" " . $checked . " name=\"Member-" . $row['MemberID'] . "\" value=\"1\" id=\"Member-" . $row['MemberID'] . "\">
-              <label class=\"custom-control-label d-block\" for=\"Member-" . $row['MemberID'] . "\">" . htmlspecialchars($row['MForename'] . " " . $row['MSurname']) . " " . $no_parent . "</label>
+              <div class=\"form-check\">
+              <input type=\"checkbox\" class=\"form-check-input\" " . $checked . " name=\"Member-" . $row['MemberID'] . "\" value=\"1\" id=\"Member-" . $row['MemberID'] . "\">
+              <label class=\"form-check-label d-block\" for=\"Member-" . $row['MemberID'] . "\">" . htmlspecialchars($row['MForename'] . " " . $row['MSurname']) . " " . $no_parent . "</label>
               </div>
             </div>
             <div class=\"col-auto text-end\">";

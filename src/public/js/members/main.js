@@ -6,7 +6,7 @@
  */
 
 // Enable popovers
-$(function() {
+$(function () {
   $('[data-toggle="popover"]').popover({
     trigger: 'focus'
   })
@@ -267,12 +267,14 @@ function handleNewMove(event) {
         }
       }
 
-      $('#modal').modal('show');
+      let modal = new bootstrap.Modal(document.getElementById('modal'));
+      modal.show();
     })
     .catch((error) => {
       console.warn(error.message);
       showGetSquadsFailure();
-      $('#modal').modal('show');
+      let modal = new bootstrap.Modal(document.getElementById('modal'));
+      modal.show();
     })
 }
 

@@ -97,17 +97,17 @@ include BASE_PATH . 'views/header.php';
           Format
         </p>
         <div class="mb-3">
-          <div class="custom-control form-check">
-            <input type="radio" class="custom-control-input" value="html" name="format" id="format-html" checked required>
-            <label class="custom-control-label" for="format-html">Webpage (HTML)</label>
+          <div class="form-check">
+            <input type="radio" class="form-check-input" value="html" name="format" id="format-html" checked required>
+            <label class="form-check-label" for="format-html">Webpage (HTML)</label>
           </div>
-          <div class="custom-control form-check">
-            <input type="radio" class="custom-control-input" value="csv" name="format" id="format-csv" required>
-            <label class="custom-control-label" for="format-csv">CSV (For Excel)</label>
+          <div class="form-check">
+            <input type="radio" class="form-check-input" value="csv" name="format" id="format-csv" required>
+            <label class="form-check-label" for="format-csv">CSV (For Excel)</label>
           </div>
-          <div class="custom-control form-check">
-            <input type="radio" class="custom-control-input" value="json" name="format" id="format-json" required>
-            <label class="custom-control-label" for="format-json">JSON</label>
+          <div class="form-check">
+            <input type="radio" class="form-check-input" value="json" name="format" id="format-json" required>
+            <label class="form-check-label" for="format-json">JSON</label>
           </div>
         </div>
 

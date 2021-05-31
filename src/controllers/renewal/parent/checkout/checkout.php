@@ -328,9 +328,9 @@ include BASE_PATH . "views/renewalTitleBar.php";
 
             <!--
               <div class="mb-3">
-                <div class="custom-control form-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="reuse-card" name="reuse-card" checked>
-                  <label class="custom-control-label" for="reuse-card">Save this card for future payments</label>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="reuse-card" name="reuse-card" checked>
+                  <label class="form-check-label" for="reuse-card">Save this card for future payments</label>
                 </div>
               </div>
               -->

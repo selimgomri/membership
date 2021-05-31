@@ -281,9 +281,9 @@ if (isset($id)) {
 
             <div class="cell">
               <div class="mb-3">
-                <div class="custom-control form-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="agree" name="agree" value="1" required>
-                  <label class="custom-control-label" for="agree">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="agree" name="agree" value="1" required>
+                  <label class="form-check-label" for="agree">
                     I, <?= htmlspecialchars($row['MForename'] . ' ' . $row['MSurname']) ?> agree to all of the codes of conduct that are shown to me on this page
                   </label>
                   <div class="invalid-feedback">

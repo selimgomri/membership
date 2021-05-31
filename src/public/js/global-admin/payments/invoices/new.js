@@ -141,7 +141,8 @@ import { renderSubscriptionItems } from "./common.js";
     subscriptionPlansInput.value = JSON.stringify(subscriptionPlans);
 
     addPlanForm.classList.remove('was-validated');
-    $('#add-plan-modal').modal('hide');
+    let modal = new bootstrap.Modal(document.getElementById('add-plan-modal'));
+    modal.hide();
 
     // Reset form
     document.getElementById('product-select').value = '';

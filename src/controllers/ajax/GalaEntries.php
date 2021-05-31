@@ -226,18 +226,18 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
 
       // If the entry has been processes, show a ticked checkbox
       $content .= "
-      <div class=\"custom-control form-checkbox\">
+      <div class=\"form-check\">
         <input type=\"checkbox\" value=\"1\" ";
         if ($row['EntryProcessed'] == 1) {
           $content .= ' checked ';
         }
-        $content .= " data-button-action=\"mark-processed\" class=\"custom-control-input\" id=\"processedEntry-" . $row['EntryID'] . "\">
-        <label class=\"custom-control-label\" for=\"processedEntry-" . $row['EntryID'] . "\">Processed?</label>
+        $content .= " data-button-action=\"mark-processed\" class=\"form-check-input\" id=\"processedEntry-" . $row['EntryID'] . "\">
+        <label class=\"form-check-label\" for=\"processedEntry-" . $row['EntryID'] . "\">Processed?</label>
       </div>";
 
       // If the entry has been processes, show a ticked checkbox
       $content .= "
-      <div class=\"custom-control form-checkbox\">
+      <div class=\"form-check\">
         <input type=\"checkbox\" value=\"1\" ";
       if ($row['Charged'] || $row['PaymentID'] != null) {
         $content .= ' checked ';
@@ -251,8 +251,8 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
       } catch (Exception $e) {
         $amount = "UNKNOWN";
       }
-      $content .= " data-button-action=\"mark-paid\" class=\"custom-control-input\" id=\"chargedEntry-" . $row['EntryID'] . "\">
-        <label class=\"custom-control-label\" for=\"chargedEntry-" . $row['EntryID'] . "\">Paid? (&pound;" . htmlspecialchars($amount) . ")</label>
+      $content .= " data-button-action=\"mark-paid\" class=\"form-check-input\" id=\"chargedEntry-" . $row['EntryID'] . "\">
+        <label class=\"form-check-label\" for=\"chargedEntry-" . $row['EntryID'] . "\">Paid? (&pound;" . htmlspecialchars($amount) . ")</label>
       </div>";
 
       $content .= '</td>';

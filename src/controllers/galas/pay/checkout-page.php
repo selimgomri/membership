@@ -399,10 +399,8 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
               <label class="form-label" for="card-number-element">
                 Card number
               </label>
-              <div class="input-group">
-                <div class="input-group-prepend">
-                  <span class="input-group-text" id="card-brand-element"><img class="fa fa-fw" src="<?= autoUrl("public/img/stripe/network-svgs/credit-card.svg") ?>" aria-hidden="true"></span>
-                </div>
+              <div class="input-group has-validation">
+                <span class="input-group-text" id="card-brand-element"><img class="fa fa-fw" src="<?= autoUrl("public/img/stripe/network-svgs/credit-card.svg") ?>" aria-hidden="true"></span>
                 <div id="card-number-element" class="form-control stripe-form-control pm-can-disable"></div>
                 <div id="card-number-element-errors" class="stripe-feedback"></div>
               </div>
@@ -431,9 +429,9 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
 
             <!--
               <div class="mb-3">
-                <div class="custom-control form-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="reuse-card" name="reuse-card" checked>
-                  <label class="custom-control-label" for="reuse-card">Save this card for future payments</label>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="reuse-card" name="reuse-card" checked>
+                  <label class="form-check-label" for="reuse-card">Save this card for future payments</label>
                 </div>
               </div>
               -->

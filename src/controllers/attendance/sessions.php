@@ -171,13 +171,13 @@ include "attendanceMenu.php";
             <p class="mb-2">
               Recurrence
             </p>
-            <div class="custom-control form-check">
-              <input type="radio" id="recurring-session" name="recurring" class="custom-control-input" value="recurring" checked required>
-              <label class="custom-control-label" for="recurring-session">Weekly until cancelled</label>
+            <div class="form-check">
+              <input type="radio" id="recurring-session" name="recurring" class="form-check-input" value="recurring" checked required>
+              <label class="form-check-label" for="recurring-session">Weekly until cancelled</label>
             </div>
-            <div class="custom-control form-check">
-              <input type="radio" id="recurring-one-off" name="recurring" class="custom-control-input" value="one-off">
-              <label class="custom-control-label" for="recurring-one-off">One-off</label>
+            <div class="form-check">
+              <input type="radio" id="recurring-one-off" name="recurring" class="form-check-input" value="one-off">
+              <label class="form-check-label" for="recurring-one-off">One-off</label>
             </div>
           </div>
 
@@ -235,9 +235,9 @@ include "attendanceMenu.php";
             <div class="row">
               <?php do { ?>
                 <div class="col-6 col-md-4 col-lg-3 mb-2">
-                  <div class="custom-control form-checkbox">
-                    <input type="checkbox" class="custom-control-input add-session-form-squad-checkboxes" id="squad-check-<?= htmlspecialchars($squadNew['SquadID']) ?>" name="squad-<?= htmlspecialchars($squadNew['SquadID']) ?>" value="1">
-                    <label class="custom-control-label" for="squad-check-<?= htmlspecialchars($squadNew['SquadID']) ?>"><?= htmlspecialchars($squadNew['SquadName']) ?></label>
+                  <div class="form-check">
+                    <input type="checkbox" class="form-check-input add-session-form-squad-checkboxes" id="squad-check-<?= htmlspecialchars($squadNew['SquadID']) ?>" name="squad-<?= htmlspecialchars($squadNew['SquadID']) ?>" value="1">
+                    <label class="form-check-label" for="squad-check-<?= htmlspecialchars($squadNew['SquadID']) ?>"><?= htmlspecialchars($squadNew['SquadName']) ?></label>
                   </div>
                 </div>
               <?php } while ($squadNew = $getSquadsNew->fetch(PDO::FETCH_ASSOC)); ?>
@@ -256,13 +256,13 @@ include "attendanceMenu.php";
             <p class="mb-2">
               Attendance monitoring
             </p>
-            <div class="custom-control form-check">
-              <input type="radio" id="main-sequence-all" name="main-sequence" class="custom-control-input" value="all" checked required>
-              <label class="custom-control-label" for="main-sequence-all">This session is for all squad members</label>
+            <div class="form-check">
+              <input type="radio" id="main-sequence-all" name="main-sequence" class="form-check-input" value="all" checked required>
+              <label class="form-check-label" for="main-sequence-all">This session is for all squad members</label>
             </div>
-            <div class="custom-control form-check">
-              <input type="radio" id="main-sequence-some" name="main-sequence" class="custom-control-input" value="some">
-              <label class="custom-control-label" for="main-sequence-some">This session is only for some squad members</label>
+            <div class="form-check">
+              <input type="radio" id="main-sequence-some" name="main-sequence" class="form-check-input" value="some">
+              <label class="form-check-label" for="main-sequence-some">This session is only for some squad members</label>
             </div>
           </div>
 
@@ -270,13 +270,13 @@ include "attendanceMenu.php";
             <p class="mb-2">
               Require booking for this session
             </p>
-            <div class="custom-control form-check">
-              <input type="radio" id="require-booking-no" name="require-booking" class="custom-control-input" value="0" checked required>
-              <label class="custom-control-label" for="require-booking-no">Don't require booking</label>
+            <div class="form-check">
+              <input type="radio" id="require-booking-no" name="require-booking" class="form-check-input" value="0" checked required>
+              <label class="form-check-label" for="require-booking-no">Don't require booking</label>
             </div>
-            <div class="custom-control form-check">
-              <input type="radio" id="require-booking-yes" name="require-booking" class="custom-control-input" value="1">
-              <label class="custom-control-label" for="require-booking-yes">Require booking</label>
+            <div class="form-check">
+              <input type="radio" id="require-booking-yes" name="require-booking" class="form-check-input" value="1">
+              <label class="form-check-label" for="require-booking-yes">Require booking</label>
             </div>
           </div>
 

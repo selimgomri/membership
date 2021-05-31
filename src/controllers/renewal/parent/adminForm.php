@@ -86,9 +86,9 @@ include BASE_PATH . "views/renewalTitleBar.php";
         </p>
 
         <div class="mb-3">
-          <div class="custom-control form-checkbox">
-            <input type="checkbox" value="1" class="custom-control-input" name="data-agree" id="data-agree" <?php if ($partial_reg) { ?>checked <?php } ?> required>
-            <label class="custom-control-label" for="data-agree">
+          <div class="form-check">
+            <input type="checkbox" value="1" class="form-check-input" name="data-agree" id="data-agree" <?php if ($partial_reg) { ?>checked <?php } ?> required>
+            <label class="form-check-label" for="data-agree">
               I (<?= htmlspecialchars($name) ?>) agree to the use of my data by <?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?> as
               outlined above
               <?php if ($partial_reg) { ?> (You have already registered with a previous member, so have already
@@ -141,9 +141,9 @@ include BASE_PATH . "views/renewalTitleBar.php";
             <div class="mb-3 <?php if ($age[$i] >= 12) {
                                       echo "mb-0";
                                     } ?>">
-              <div class="custom-control form-checkbox">
-                <input type="checkbox" value="1" class="custom-control-input" name="<?= htmlspecialchars($id[$i]) ?>-tc-confirm" id="<?= htmlspecialchars($id[$i]) ?>-tc-confirm" required>
-                <label class="custom-control-label" for="<?= htmlspecialchars($id[$i]) ?>-tc-confirm">
+              <div class="form-check">
+                <input type="checkbox" value="1" class="form-check-input" name="<?= htmlspecialchars($id[$i]) ?>-tc-confirm" id="<?= htmlspecialchars($id[$i]) ?>-tc-confirm" required>
+                <label class="form-check-label" for="<?= htmlspecialchars($id[$i]) ?>-tc-confirm">
                   I, <?= htmlspecialchars($row[$i]['MForename'] . " " . $row[$i]['MSurname']) ?> agree to the Terms and
                   Conditions of <?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?> as outlined above
                 </label>
@@ -162,9 +162,9 @@ include BASE_PATH . "views/renewalTitleBar.php";
               </p>
 
               <div class="mb-3 mb-0">
-                <div class="custom-control form-checkbox">
-                  <input type="checkbox" value="1" class="custom-control-input" name="<?= htmlspecialchars($id[$i]) ?>-pg-understanding" id="<?= htmlspecialchars($id[$i]) ?>-pg-understanding" required>
-                  <label class="custom-control-label" for="<?= htmlspecialchars($id[$i]) ?>-pg-understanding">
+                <div class="form-check">
+                  <input type="checkbox" value="1" class="form-check-input" name="<?= htmlspecialchars($id[$i]) ?>-pg-understanding" id="<?= htmlspecialchars($id[$i]) ?>-pg-understanding" required>
+                  <label class="form-check-label" for="<?= htmlspecialchars($id[$i]) ?>-pg-understanding">
                     I, <?= htmlspecialchars($name) ?> have explained the content and implications to
                     <?= htmlspecialchars($row[$i]['MForename'] . " " . $row[$i]['MSurname']) ?> and can confirm that they
                     understood.
@@ -234,33 +234,33 @@ include BASE_PATH . "views/renewalTitleBar.php";
                   I, <?= htmlspecialchars($name) ?> agree to photography in the following circumstances. <strong>Tick boxes only
                     if you wish to grant us photography permission.</strong>
                 </p>
-                <div class="custom-control form-checkbox">
-                  <input type="checkbox" value="1" <?= $photo[0] ?> class="custom-control-input" name="<?= htmlspecialchars($id[$i]) ?>-photo-web" id="<?= htmlspecialchars($id[$i]) ?>-photo-web">
-                  <label class="custom-control-label" for="<?= htmlspecialchars($id[$i]) ?>-photo-web">
+                <div class="form-check">
+                  <input type="checkbox" value="1" <?= $photo[0] ?> class="form-check-input" name="<?= htmlspecialchars($id[$i]) ?>-photo-web" id="<?= htmlspecialchars($id[$i]) ?>-photo-web">
+                  <label class="form-check-label" for="<?= htmlspecialchars($id[$i]) ?>-photo-web">
                     Take photographs to use on the club's website
                   </label>
                 </div>
-                <div class="custom-control form-checkbox">
-                  <input type="checkbox" value="1" <?= $photo[1] ?> class="custom-control-input" name="<?= htmlspecialchars($id[$i]) ?>-photo-soc" id="<?= htmlspecialchars($id[$i]) ?>-photo-soc">
-                  <label class="custom-control-label" for="<?= htmlspecialchars($id[$i]) ?>-photo-soc">
+                <div class="form-check">
+                  <input type="checkbox" value="1" <?= $photo[1] ?> class="form-check-input" name="<?= htmlspecialchars($id[$i]) ?>-photo-soc" id="<?= htmlspecialchars($id[$i]) ?>-photo-soc">
+                  <label class="form-check-label" for="<?= htmlspecialchars($id[$i]) ?>-photo-soc">
                     Take photographs to use on social media sites
                   </label>
                 </div>
-                <div class="custom-control form-checkbox">
-                  <input type="checkbox" value="1" <?= $photo[2] ?> class="custom-control-input" name="<?= htmlspecialchars($id[$i]) ?>-photo-nb" id="<?= htmlspecialchars($id[$i]) ?>-photo-nb">
-                  <label class="custom-control-label" for="<?= htmlspecialchars($id[$i]) ?>-photo-nb">
+                <div class="form-check">
+                  <input type="checkbox" value="1" <?= $photo[2] ?> class="form-check-input" name="<?= htmlspecialchars($id[$i]) ?>-photo-nb" id="<?= htmlspecialchars($id[$i]) ?>-photo-nb">
+                  <label class="form-check-label" for="<?= htmlspecialchars($id[$i]) ?>-photo-nb">
                     Take photographs to use on club noticeboards
                   </label>
                 </div>
-                <div class="custom-control form-checkbox">
-                  <input type="checkbox" value="1" <?= $photo[3] ?> class="custom-control-input" name="<?= htmlspecialchars($id[$i]) ?>-photo-film" id="<?= htmlspecialchars($id[$i]) ?>-photo-film">
-                  <label class="custom-control-label" for="<?= htmlspecialchars($id[$i]) ?>-photo-film">
+                <div class="form-check">
+                  <input type="checkbox" value="1" <?= $photo[3] ?> class="form-check-input" name="<?= htmlspecialchars($id[$i]) ?>-photo-film" id="<?= htmlspecialchars($id[$i]) ?>-photo-film">
+                  <label class="form-check-label" for="<?= htmlspecialchars($id[$i]) ?>-photo-film">
                     Filming for training purposes only
                   </label>
                 </div>
-                <div class="custom-control form-checkbox">
-                  <input type="checkbox" value="1" <?= $photo[4] ?> class="custom-control-input" name="<?= htmlspecialchars($id[$i]) ?>-photo-pro" id="<?= htmlspecialchars($id[$i]) ?>-photo-pro">
-                  <label class="custom-control-label" for="<?= htmlspecialchars($id[$i]) ?>-photo-pro">
+                <div class="form-check">
+                  <input type="checkbox" value="1" <?= $photo[4] ?> class="form-check-input" name="<?= htmlspecialchars($id[$i]) ?>-photo-pro" id="<?= htmlspecialchars($id[$i]) ?>-photo-pro">
+                  <label class="form-check-label" for="<?= htmlspecialchars($id[$i]) ?>-photo-pro">
                     Employ a professional photographer (approved by the club) who will
                     take photographs in competitions and/or club events.
                   </label>
@@ -290,10 +290,10 @@ include BASE_PATH . "views/renewalTitleBar.php";
                 advised by a doctor to not take part in physical activities unless under medical supervision.
               </p>
 
-              <!-- <div class="custom-control form-checkbox">
-            <input type="checkbox" value="1" class="custom-control-input" name="<?= htmlspecialchars($id[$i]) ?>-med"
+              <!-- <div class="form-check">
+            <input type="checkbox" value="1" class="form-check-input" name="<?= htmlspecialchars($id[$i]) ?>-med"
               id="<?= htmlspecialchars($id[$i]) ?>-med">
-            <label class="custom-control-label" for="<?= htmlspecialchars($id[$i]) ?>-med">
+            <label class="form-check-label" for="<?= htmlspecialchars($id[$i]) ?>-med">
               Confirm
             </label>
           </div> -->
@@ -305,9 +305,9 @@ include BASE_PATH . "views/renewalTitleBar.php";
                 seeking my personal consent.
               </p>
 
-              <div class="custom-control form-checkbox">
-                <input type="checkbox" value="1" class="custom-control-input" name="<?= htmlspecialchars($id[$i]) ?>-med" id="<?= htmlspecialchars($id[$i]) ?>-med" required>
-                <label class="custom-control-label" for="<?= htmlspecialchars($id[$i]) ?>-med">
+              <div class="form-check">
+                <input type="checkbox" value="1" class="form-check-input" name="<?= htmlspecialchars($id[$i]) ?>-med" id="<?= htmlspecialchars($id[$i]) ?>-med" required>
+                <label class="form-check-label" for="<?= htmlspecialchars($id[$i]) ?>-med">
                   Confirm
                 </label>
                 <div class="invalid-feedback">

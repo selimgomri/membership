@@ -172,9 +172,9 @@ include BASE_PATH . 'views/header.php';
         <div class="row">
           <div class="col-md-8 col-lg-6">
             <div class="mb-3">
-              <div class="custom-control form-checkbox">
-                <input type="checkbox" class="custom-control-input" name="emailAuthorise" id="emailAuthorise" value="1" <?= $email ?>>
-                <label class="custom-control-label" for="emailAuthorise">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="emailAuthorise" id="emailAuthorise" value="1" <?= $email ?>>
+                <label class="form-check-label" for="emailAuthorise">
                   I wish to receive important email updates about my squads.
                   This includes emails about session cancellations.
                 </label>
@@ -182,9 +182,9 @@ include BASE_PATH . 'views/header.php';
             </div>
 
             <div class="mb-3">
-              <div class="custom-control form-checkbox">
-                <input type="checkbox" class="custom-control-input" name="smsAuthorise" id="smsAuthorise" value="1" <?= $sms ?>>
-                <label class="custom-control-label" for="smsAuthorise">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="smsAuthorise" id="smsAuthorise" value="1" <?= $sms ?>>
+                <label class="form-check-label" for="smsAuthorise">
                   I wish to receive text message notifications
                 </label>
                 <small class="d-block"><?= htmlspecialchars(app()->tenant->getName()) ?> may not offer this service</small>

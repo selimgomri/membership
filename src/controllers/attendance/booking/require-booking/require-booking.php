@@ -118,13 +118,13 @@ include BASE_PATH . 'views/header.php';
         </div>
 
         <div class="mb-3" id="number-limit">
-          <div class="custom-control form-check">
-            <input type="radio" id="unlimited-numbers" name="number-limit" class="custom-control-input" value="0" required <?php if ($bookingClosed) { ?>disabled<?php } ?> checked>
-            <label class="custom-control-label" for="unlimited-numbers">Unlimited numbers</label>
+          <div class="form-check">
+            <input type="radio" id="unlimited-numbers" name="number-limit" class="form-check-input" value="0" required <?php if ($bookingClosed) { ?>disabled<?php } ?> checked>
+            <label class="form-check-label" for="unlimited-numbers">Unlimited numbers</label>
           </div>
-          <div class="custom-control form-check">
-            <input type="radio" id="limited-numbers" name="number-limit" class="custom-control-input" value="1" <?php if ($bookingClosed) { ?>disabled<?php } ?>>
-            <label class="custom-control-label" for="limited-numbers">Limited numbers</label>
+          <div class="form-check">
+            <input type="radio" id="limited-numbers" name="number-limit" class="form-check-input" value="1" <?php if ($bookingClosed) { ?>disabled<?php } ?>>
+            <label class="form-check-label" for="limited-numbers">Limited numbers</label>
           </div>
         </div>
 
@@ -143,13 +143,13 @@ include BASE_PATH . 'views/header.php';
         </div>
 
         <div class="mb-3">
-          <div class="custom-control form-check">
-            <input type="radio" id="open-to-squads" name="open-to" class="custom-control-input" value="0" required <?php if ($bookingClosed) { ?>disabled<?php } ?> checked>
-            <label class="custom-control-label" for="open-to-squads">Open to this session's scheduled squads</label>
+          <div class="form-check">
+            <input type="radio" id="open-to-squads" name="open-to" class="form-check-input" value="0" required <?php if ($bookingClosed) { ?>disabled<?php } ?> checked>
+            <label class="form-check-label" for="open-to-squads">Open to this session's scheduled squads</label>
           </div>
-          <div class="custom-control form-check">
-            <input type="radio" id="open-to-all" name="open-to" class="custom-control-input" value="1" <?php if ($bookingClosed) { ?>disabled<?php } ?>>
-            <label class="custom-control-label" for="open-to-all">Open to all members</label>
+          <div class="form-check">
+            <input type="radio" id="open-to-all" name="open-to" class="form-check-input" value="1" <?php if ($bookingClosed) { ?>disabled<?php } ?>>
+            <label class="form-check-label" for="open-to-all">Open to all members</label>
           </div>
         </div>
 
@@ -158,13 +158,13 @@ include BASE_PATH . 'views/header.php';
         </p>
 
         <div class="mb-3" id="open-bookings">
-          <div class="custom-control form-check">
-            <input type="radio" id="open-bookings-now" name="open-bookings" class="custom-control-input" value="0" required <?php if ($bookingClosed) { ?>disabled<?php } ?> checked>
-            <label class="custom-control-label" for="open-bookings-now">Opening bookings immediately</label>
+          <div class="form-check">
+            <input type="radio" id="open-bookings-now" name="open-bookings" class="form-check-input" value="0" required <?php if ($bookingClosed) { ?>disabled<?php } ?> checked>
+            <label class="form-check-label" for="open-bookings-now">Opening bookings immediately</label>
           </div>
-          <div class="custom-control form-check">
-            <input type="radio" id="open-bookings-later" name="open-bookings" class="custom-control-input" value="1" <?php if ($bookingClosed) { ?>disabled<?php } ?>>
-            <label class="custom-control-label" for="open-bookings-later">Open bookings later</label>
+          <div class="form-check">
+            <input type="radio" id="open-bookings-later" name="open-bookings" class="form-check-input" value="1" <?php if ($bookingClosed) { ?>disabled<?php } ?>>
+            <label class="form-check-label" for="open-bookings-later">Open bookings later</label>
           </div>
         </div>
 
@@ -196,13 +196,13 @@ include BASE_PATH . 'views/header.php';
         </div>
 
         <div class="mb-3" id="booking-fees">
-          <div class="custom-control form-check">
-            <input type="radio" id="booking-fees-no" name="booking-fees" class="custom-control-input" value="0" required <?php if ($bookingClosed) { ?>disabled<?php } ?> checked>
-            <label class="custom-control-label" for="booking-fees-no">Session is free</label>
+          <div class="form-check">
+            <input type="radio" id="booking-fees-no" name="booking-fees" class="form-check-input" value="0" required <?php if ($bookingClosed) { ?>disabled<?php } ?> checked>
+            <label class="form-check-label" for="booking-fees-no">Session is free</label>
           </div>
-          <div class="custom-control form-check">
-            <input type="radio" id="booking-fees-yes" name="booking-fees" class="custom-control-input" value="1" <?php if ($bookingClosed) { ?>disabled<?php } ?>>
-            <label class="custom-control-label" for="booking-fees-yes">Charge a fee</label>
+          <div class="form-check">
+            <input type="radio" id="booking-fees-yes" name="booking-fees" class="form-check-input" value="1" <?php if ($bookingClosed) { ?>disabled<?php } ?>>
+            <label class="form-check-label" for="booking-fees-yes">Charge a fee</label>
           </div>
         </div>
 

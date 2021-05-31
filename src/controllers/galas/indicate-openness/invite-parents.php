@@ -67,9 +67,9 @@ include BASE_PATH . 'views/header.php';
         <?php while ($squad = $squads->fetch(PDO::FETCH_ASSOC)) { ?>
           <div class="col-6 col-sm-6 col-md-4 col-lg-3">
             <div class="mb-3">
-              <div class="custom-control form-checkbox">
-                <input type="checkbox" class="custom-control-input" id="squad-<?=$squad['id']?>" name="squad-<?=$squad['id']?>">
-                <label class="custom-control-label" for="squad-<?=$squad['id']?>"><?=htmlspecialchars($squad['name'])?></label>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="squad-<?=$squad['id']?>" name="squad-<?=$squad['id']?>">
+                <label class="form-check-label" for="squad-<?=$squad['id']?>"><?=htmlspecialchars($squad['name'])?></label>
               </div>
             </div>
           </div>

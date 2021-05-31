@@ -123,9 +123,9 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 					<div class="row">
 						<?php do { ?>
 							<div class="col-6 col-md-4 col-lg-3 mb-2">
-								<div class="custom-control form-checkbox">
-									<input type="checkbox" class="custom-control-input" id="squad-check-<?= htmlspecialchars($squad['SquadID']) ?>" name="squad-<?= htmlspecialchars($squad['SquadID']) ?>" value="1">
-									<label class="custom-control-label" for="squad-check-<?= htmlspecialchars($squad['SquadID']) ?>"><?= htmlspecialchars($squad['SquadName']) ?></label>
+								<div class="form-check">
+									<input class="form-check-input" type="checkbox" id="squad-check-<?= htmlspecialchars($squad['SquadID']) ?>" name="squad-<?= htmlspecialchars($squad['SquadID']) ?>" value="1">
+									<label class="form-check-label" for="squad-check-<?= htmlspecialchars($squad['SquadID']) ?>"><?= htmlspecialchars($squad['SquadName']) ?></label>
 								</div>
 							</div>
 						<?php } while ($squad = $squads->fetch(PDO::FETCH_ASSOC)); ?>
@@ -137,9 +137,9 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 				<?php } ?>
 
 				<div class="mb-3">
-					<div class="custom-control form-checkbox">
-						<input type="checkbox" class="custom-control-input" id="clubpays" name="clubpays" value="1" aria-describedby="cphelp">
-						<label class="custom-control-label" for="clubpays">Club pays Swim England fees?</label>
+					<div class="form-check">
+						<input class="form-check-input" type="checkbox" id="clubpays" name="clubpays" value="1" aria-describedby="cphelp">
+						<label class="form-check-label" for="clubpays">Club pays Swim England fees?</label>
 					</div>
 					<small id="cphelp" class="form-text text-muted">Tick the box if this swimmer will not pay any Swim England fees.</small>
 				</div>
@@ -155,17 +155,17 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 				</div>
 
 				<div class="mb-3">
-					<div class="custom-control form-checkbox">
-						<input type="checkbox" class="custom-control-input" id="clubmemb" name="clubmemb" value="1" aria-describedby="clubmembhelp">
-						<label class="custom-control-label" for="clubmemb">Club pays Club Membership fees?</label>
+					<div class="form-check">
+						<input class="form-check-input" type="checkbox" id="clubmemb" name="clubmemb" value="1" aria-describedby="clubmembhelp">
+						<label class="form-check-label" for="clubmemb">Club pays Club Membership fees?</label>
 					</div>
 					<small id="clubmembhelp" class="form-text text-muted">Tick the box if this swimmer will not pay any annual club membership fees.</small>
 				</div>
 
 				<div class="mb-3">
-					<div class="custom-control form-checkbox">
-						<input type="checkbox" class="custom-control-input" id="transfer" name="transfer" value="1" aria-describedby="transfer-help">
-						<label class="custom-control-label" for="transfer">Transferring from another club?</label>
+					<div class="form-check">
+						<input class="form-check-input" type="checkbox" id="transfer" name="transfer" value="1" aria-describedby="transfer-help">
+						<label class="form-check-label" for="transfer">Transferring from another club?</label>
 					</div>
 					<small id="transfer-help" class="form-text text-muted">Tick the box if this swimmer is transferring from another swimming club - They will not be charged for Swim England membership fees. If it is almost a new Swim England membership year and this swimmer will not be completing membership renewal then leave the box unticked so they pay Swim England membership fees when registering.</small>
 				</div>

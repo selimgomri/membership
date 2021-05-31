@@ -112,9 +112,9 @@ include BASE_PATH . 'views/header.php';
         <?php foreach ($swimmers as $swimmer) {
           $id = $swimmer['ID'] . '-tc-confirm'; ?>
           <div class="mb-3">
-						<div class="custom-control form-checkbox">
-							<input type="checkbox" value="1" class="custom-control-input" name="<?=$id?>" id="<?=$id?>" <?=$selected[$id]?> required>
-							<label class="custom-control-label" for="<?=$id?>">
+						<div class="form-check">
+							<input type="checkbox" value="1" class="form-check-input" name="<?=$id?>" id="<?=$id?>" <?=$selected[$id]?> required>
+							<label class="form-check-label" for="<?=$id?>">
 								I, <?=$swimmer['First']?> <?=$swimmer['Last']?>
 								agree to the Terms and Conditions of <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?> as outlined
 								above

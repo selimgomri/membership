@@ -127,9 +127,9 @@ function registerSheetGenerator($date, $sessionId)
                 <div class="my-n3 py-3 sticky-top">
                   <div class="row align-items-center">
                     <div class="col">
-                      <div class="custom-control form-checkbox">
-                        <input type="checkbox" class="custom-control-input checkbox-input" id="member-<?= htmlspecialchars($row['id']) ?>" <?php if (bool($row['tick'])) { ?>checked<?php } ?> data-indeterminate="<?php if (bool($row['indeterminate'])) { ?>true<?php } else { ?>false<?php } ?>"" data-week-id=" <?= htmlspecialchars($row['week_id']) ?>" data-session-id="<?= htmlspecialchars($row['session_id']) ?>" data-member-id="<?= htmlspecialchars($row['id']) ?>">
-                        <label class="custom-control-label d-block" for="member-<?= htmlspecialchars($row['id']) ?>"><?= htmlspecialchars($row['fn'] . ' ' . $row['sn']) ?><?php if ($row['show_gender']) { ?><br><em><?= htmlspecialchars($row['gender_identity']) ?>, <?= htmlspecialchars($row['gender_pronouns']) ?></em><?php } ?></label>
+                      <div class="form-check">
+                        <input type="checkbox" class="form-check-input checkbox-input" id="member-<?= htmlspecialchars($row['id']) ?>" <?php if (bool($row['tick'])) { ?>checked<?php } ?> data-indeterminate="<?php if (bool($row['indeterminate'])) { ?>true<?php } else { ?>false<?php } ?>"" data-week-id=" <?= htmlspecialchars($row['week_id']) ?>" data-session-id="<?= htmlspecialchars($row['session_id']) ?>" data-member-id="<?= htmlspecialchars($row['id']) ?>">
+                        <label class="form-check-label d-block" for="member-<?= htmlspecialchars($row['id']) ?>"><?= htmlspecialchars($row['fn'] . ' ' . $row['sn']) ?><?php if ($row['show_gender']) { ?><br><em><?= htmlspecialchars($row['gender_identity']) ?>, <?= htmlspecialchars($row['gender_pronouns']) ?></em><?php } ?></label>
                       </div>
                     </div>
                     <?php if (sizeof($row['medical']) > 0 || sizeof($row['photo']) > 0 || $row['notes'] || sizeof($row['contacts']) > 0) { ?>

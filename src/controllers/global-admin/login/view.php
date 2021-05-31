@@ -74,9 +74,9 @@ include BASE_PATH . "views/root/head.php";
             </div>
           </div>
           <div class="mb-3">
-            <div class="custom-control form-checkbox">
-              <input type="checkbox" class="custom-control-input" name="RememberMe" id="RememberMe" checked aria-describedby="RememberMeHelp">
-              <label class="custom-control-label" for="RememberMe">Keep me logged in</label>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="RememberMe" id="RememberMe" checked aria-describedby="RememberMeHelp">
+              <label class="form-check-label" for="RememberMe">Keep me logged in</label>
               <small id="RememberMeHelp" class="form-text text-muted">
                 Untick this box if you are using a public or shared computer
               </small>

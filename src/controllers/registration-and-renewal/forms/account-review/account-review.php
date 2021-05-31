@@ -101,9 +101,9 @@ include BASE_PATH . 'views/header.php';
             <input type="email" class="form-control" name="email" id="email" placeholder="Email Address" value="<?= htmlspecialchars($email) ?>" disabled>
           </div>
           <div class="mb-3">
-            <div class="custom-control form-checkbox">
-              <input type="checkbox" class="custom-control-input" value="1" id="emailContactOK" aria-describedby="emailContactOKHelp" name="emailContactOK" <?= $emailChecked ?>>
-              <label class="custom-control-label" for="emailContactOK">I would like to receive news and messages from squad coaches by email</label>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="1" id="emailContactOK" aria-describedby="emailContactOKHelp" name="emailContactOK" <?= $emailChecked ?>>
+              <label class="form-check-label" for="emailContactOK">I would like to receive news and messages from squad coaches by email</label>
               <small id="emailContactOKHelp" class="form-text text-muted">You'll still receive emails relating to your account if you don't receive news</small>
             </div>
           </div>
@@ -116,9 +116,9 @@ include BASE_PATH . 'views/header.php';
             <small id="mobileHelp" class="form-text text-muted">If you don't have a mobile, use your landline number.</small>
           </div>
           <div class="mb-3">
-            <div class="custom-control form-checkbox">
-              <input type="checkbox" class="custom-control-input" value="1" id="smsContactOK" aria-describedby="smsContactOKHelp" name="smsContactOK" <?= $mobileChecked ?>>
-              <label class="custom-control-label" for="smsContactOK">I am happy to be contacted by text message</label>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="1" id="smsContactOK" aria-describedby="smsContactOKHelp" name="smsContactOK" <?= $mobileChecked ?>>
+              <label class="form-check-label" for="smsContactOK">I am happy to be contacted by text message</label>
               <small id="smsContactOKHelp" class="form-text text-muted">We'll still use this to contact you in an emergency</small>
             </div>
           </div>

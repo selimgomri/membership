@@ -123,16 +123,16 @@ include "galaMenu.php"; ?>
         if ($galaData->getEvent($swimsArray[$i])->isEnabled()) {
           if ($row[$swimsArray[$i]] == 1) { ?>
             <div class="col-sm-4 col-md-2">
-              <div class="custom-control form-checkbox">
-                <input type="checkbox" value="1" class="custom-control-input" id="<?php echo $swimsArray[$i]; ?>" checked <?php echo $disabled; ?>  name="<?php echo $swimsArray[$i]; ?>" data-event-fee="<?=htmlspecialchars($galaData->getEvent($swimsArray[$i])->getPrice())?>">
-                <label class="custom-control-label" for="<?php echo $swimsArray[$i]; ?>"><?php echo $swimsTextArray[$i]; ?></label>
+              <div class="form-check">
+                <input type="checkbox" value="1" class="form-check-input" id="<?php echo $swimsArray[$i]; ?>" checked <?php echo $disabled; ?>  name="<?php echo $swimsArray[$i]; ?>" data-event-fee="<?=htmlspecialchars($galaData->getEvent($swimsArray[$i])->getPrice())?>">
+                <label class="form-check-label" for="<?php echo $swimsArray[$i]; ?>"><?php echo $swimsTextArray[$i]; ?></label>
               </div>
             </div>
           <?php } else { ?>
             <div class="col-sm-4 col-md-2">
-              <div class="custom-control form-checkbox">
-                <input type="checkbox" value="1" class="custom-control-input" id="<?php echo $swimsArray[$i]; ?>" <?php echo $disabled; ?>  name="<?php echo $swimsArray[$i]; ?>" data-event-fee="<?=htmlspecialchars($galaData->getEvent($swimsArray[$i])->getPrice())?>">
-                <label class="custom-control-label" for="<?php echo $swimsArray[$i]; ?>"><?php echo $swimsTextArray[$i]; ?></label>
+              <div class="form-check">
+                <input type="checkbox" value="1" class="form-check-input" id="<?php echo $swimsArray[$i]; ?>" <?php echo $disabled; ?>  name="<?php echo $swimsArray[$i]; ?>" data-event-fee="<?=htmlspecialchars($galaData->getEvent($swimsArray[$i])->getPrice())?>">
+                <label class="form-check-label" for="<?php echo $swimsArray[$i]; ?>"><?php echo $swimsTextArray[$i]; ?></label>
               </div>
             </div>
           <?php }
