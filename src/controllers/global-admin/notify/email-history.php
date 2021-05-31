@@ -109,16 +109,14 @@ include BASE_PATH . "views/root/header.php";
 
           $tenant = Tenant::fromId($row['TenantID']);
         ?>
-          <div class="cell p-0">
-            <div class="p-3">
-              <p>
+          <div class="card mb-3">
+            <div class="card-header">
+            <p>
                 <strong>Tenant:</strong> <a href="<?= htmlspecialchars(autoUrl($tenant->getCodeId())) ?>"><?= htmlspecialchars($tenant->getName()) ?></a>
               </p>
-              <p>
-                <strong>
-                  <?= htmlspecialchars($row['Subject']) ?>
-                </strong>
-              </p>
+              <h5 class="card-title">
+                <?= htmlspecialchars($row['Subject']) ?>
+              </h5>
               <dl class="row mb-0 small">
                 <?php echo $sender; ?>
                 <?php if ($row['JSONData'] != "") { ?>
@@ -140,7 +138,7 @@ include BASE_PATH . "views/root/header.php";
                     $array = array_merge($squads, $lists, $galas);
                     sort($array);
                     foreach ($array as $s) { ?>
-                      <span class="badge rounded-pill rounded badge-dark">
+                      <span class="badge rounded-pill rounded bg-dark">
                         <?= htmlspecialchars(mb_strimwidth($s, 0, 40)) ?>
                       </span><?php
                             } ?>
@@ -173,6 +171,7 @@ include BASE_PATH . "views/root/header.php";
                       foreach ($attachments as $a) {
                         $faClass = ' fa-file-o ';
                         $download = false;
+                        $disposition = 'inline';
 
                         if (isset($a->MIME) && $a->MIME) {
 
@@ -211,8 +210,10 @@ include BASE_PATH . "views/root/header.php";
                           $download = true;
                         }
 
+                        if ($download) $disposition = 'attachment';
+
                       ?>
-                        <a href="<?= htmlspecialchars(autoUrl("admin/files/" . $tenant->getId() . '/' . $a->URI)) ?>" class="d-block mb-1 text-truncate text-decoration-none" <?php if ($download) { ?> download="" <?php } else { ?> target="_blank" <?php } ?>>
+                        <a href="<?= htmlspecialchars(autoUrl("admin/files/" . $tenant->getId() . '/' . $a->URI . "?filename=" . urlencode($a->Filename) . "&disposition=" . urlencode($disposition))) ?>" class="d-block mb-1 text-truncate text-decoration-none" <?php if ($download) { ?> download="" <?php } else { ?> target="_blank" <?php } ?>>
                           <span class="fa <?= htmlspecialchars($faClass) ?> fa-fw"></span> <?= htmlspecialchars($a->Filename) ?>
                         </a>
                       <?php
@@ -222,7 +223,7 @@ include BASE_PATH . "views/root/header.php";
               </dl>
             <?php } ?>
             </div>
-            <div class="p-3 pt-0 bg-light force-wrap">
+            <div class="card-body force-wrap">
               <?php echo $row['Message']; ?>
             </div>
           </div>

@@ -129,7 +129,7 @@ include BASE_PATH . 'views/header.php';
 
         <div class="form-check mb-3">
           <input class="form-check-input" type="checkbox" id="member-declaration" name="member-declaration" required value="1">
-          <label class="form-check-label" for="member-declaration">I <strong><?= htmlspecialchars($member['MForename']) . '&nbsp;' . htmlspecialchars($member['MSurname']) ?></strong>, agree to this declaration<br><span class="badge badge-light">Signed <?= $today->format("j F Y") ?></span></label>
+          <label class="form-check-label" for="member-declaration">I <strong><?= htmlspecialchars($member['MForename']) . '&nbsp;' . htmlspecialchars($member['MSurname']) ?></strong>, agree to this declaration<br><span class="badge bg-light">Signed <?= $today->format("j F Y") ?></span></label>
           <div class="invalid-feedback">
             You (<?= htmlspecialchars($member['MForename']) ?>) must agree to this declaration to proceed.
           </div>
@@ -138,7 +138,7 @@ include BASE_PATH . 'views/header.php';
         <?php if (app()->tenant->getKey('ASA_CLUB_CODE') == 'UOSZ') { ?>
           <div class="form-check mb-3">
             <input class="form-check-input" type="checkbox" id="uosswpc-member-declaration" name="uosswpc-member-declaration" required value="1">
-            <label class="form-check-label" for="uosswpc-member-declaration">I <strong><?= htmlspecialchars($member['MForename']) . '&nbsp;' . htmlspecialchars($member['MSurname']) ?></strong>, accept that I am swimming at my own risk and won't hold the club accountable if I catch coronavirus (COVID-19).<br><span class="badge badge-light">Signed <?= $today->format("j F Y") ?></span></label>
+            <label class="form-check-label" for="uosswpc-member-declaration">I <strong><?= htmlspecialchars($member['MForename']) . '&nbsp;' . htmlspecialchars($member['MSurname']) ?></strong>, accept that I am swimming at my own risk and won't hold the club accountable if I catch coronavirus (COVID-19).<br><span class="badge bg-light">Signed <?= $today->format("j F Y") ?></span></label>
             <div class="invalid-feedback">
               You (<?= htmlspecialchars($member['MForename']) ?>) must agree to this special UoSSWPC declaration to proceed.
             </div>
