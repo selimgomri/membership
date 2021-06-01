@@ -125,7 +125,7 @@ include BASE_PATH . 'views/header.php';
               </p>
             </div>
             <div class="col col-lg-4">
-              <img src="<?= htmlspecialchars(autoUrl("img/settings/emergency-message.png")) ?>" class="border" alt="Picture of membership software displaying emergency message">
+              <img src="<?= htmlspecialchars(autoUrl("img/settings/emergency-message.png", false)) ?>" class="border" alt="Picture of membership software displaying emergency message">
             </div>
           </div>
 

@@ -151,7 +151,7 @@ include BASE_PATH . 'views/header.php';
               Card number
             </label>
             <div class="input-group has-validation">
-              <span class="input-group-text" id="card-brand-element"><img class="fa fa-fw" src="<?= htmlspecialchars(autoUrl("img/stripe/network-svgs/credit-card.svg")) ?>" aria-hidden="true"></span>
+              <span class="input-group-text" id="card-brand-element"><img class="fa fa-fw" src="<?= htmlspecialchars(autoUrl("img/stripe/network-svgs/credit-card.svg", false)) ?>" aria-hidden="true"></span>
               <div id="card-number-element" class="form-control stripe-form-control"></div>
               <div id="card-number-element-errors" class="stripe-feedback"></div>
             </div>

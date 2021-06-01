@@ -67,7 +67,7 @@ if (isset($renewal_trap) && $renewal_trap) {
         </p>
       </div>
       <div class="d-none d-sm-flex col-sm-auto ms-auto">
-        <img style="max-height:50px;" src="<?= htmlspecialchars(autoUrl("img/directdebit/directdebit.png")) ?>" srcset="<?= htmlspecialchars(autoUrl("img/directdebit/directdebit@2x.png")) ?> 2x, <?= htmlspecialchars(autoUrl("img/directdebit/directdebit@3x.png")) ?> 3x" alt="Direct
+        <img style="max-height:50px;" src="<?= htmlspecialchars(autoUrl("img/directdebit/directdebit.png", false)) ?>" srcset="<?= htmlspecialchars(autoUrl("img/directdebit/directdebit@2x.png", false)) ?> 2x, <?= htmlspecialchars(autoUrl("img/directdebit/directdebit@3x.png", false)) ?> 3x" alt="Direct
 				Debit Logo">
       </div>
     </div>

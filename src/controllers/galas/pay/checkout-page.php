@@ -212,7 +212,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
         <div class="d-lg-none mt-3"></div>
         <div class="accepted-network-logos">
           <p class="mb-0">
-            <img class="apple-pay-row" src="<?= autoUrl("img/stripe/apple-pay-mark.svg") ?>" aria-hidden="true"><img class="google-pay-row" src="<?= autoUrl("img/stripe/google-pay-mark.svg") ?>" aria-hidden="true"><img class="visa-row" src="<?= autoUrl("img/stripe/visa.svg") ?>" aria-hidden="true"><img class="mastercard-row" src="<?= autoUrl("img/stripe/mastercard.svg") ?>" aria-hidden="true"><img class="amex-row" src="<?= autoUrl("img/stripe/amex.svg") ?>" aria-hidden="true">
+            <img class="apple-pay-row" src="<?= autoUrl("img/stripe/apple-pay-mark.svg", false) ?>" aria-hidden="true"><img class="google-pay-row" src="<?= autoUrl("img/stripe/google-pay-mark.svg", false) ?>" aria-hidden="true"><img class="visa-row" src="<?= autoUrl("img/stripe/visa.svg", false) ?>" aria-hidden="true"><img class="mastercard-row" src="<?= autoUrl("img/stripe/mastercard.svg", false) ?>" aria-hidden="true"><img class="amex-row" src="<?= autoUrl("img/stripe/amex.svg", false) ?>" aria-hidden="true">
           </p>
         </div>
       </div>
@@ -407,7 +407,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
                 Card number
               </label>
               <div class="input-group has-validation">
-                <span class="input-group-text" id="card-brand-element"><img class="fa fa-fw" src="<?= autoUrl("img/stripe/network-svgs/credit-card.svg") ?>" aria-hidden="true"></span>
+                <span class="input-group-text" id="card-brand-element"><img class="fa fa-fw" src="<?= autoUrl("img/stripe/network-svgs/credit-card.svg", false) ?>" aria-hidden="true"></span>
                 <div id="card-number-element" class="form-control stripe-form-control pm-can-disable"></div>
                 <div id="card-number-element-errors" class="stripe-feedback"></div>
               </div>
