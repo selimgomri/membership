@@ -91,13 +91,10 @@ include BASE_PATH . 'views/header.php';
         <input type="hidden" name="MAX_FILE_SIZE" value="30000">
 
         <div class="mb-3">
-          <label>Select a member file to upload</label>
-          <div class="custom-file">
-            <input type="file" class="custom-file-input" id="file-upload" name="file-upload" accept="text/csv" required>
-            <label class="custom-file-label" for="file-upload">Choose file</label>
-            <div class="invalid-feedback">
-              Please select a CSV file to upload
-            </div>
+          <label class="form-label" for="file-upload">Select a member file to upload</label>
+          <input type="file" class="form-control" id="file-upload" name="file-upload" accept="text/csv" required>
+          <div class="invalid-feedback">
+            Please select a CSV file to upload
           </div>
         </div>
 

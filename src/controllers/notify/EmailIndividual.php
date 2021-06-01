@@ -209,13 +209,10 @@ include BASE_PATH . "views/notifyMenu.php";
     <input type="hidden" name="MAX_FILE_SIZE" value="3145728">
 
     <div class="mb-3">
-      <label>Select files to attach</label>
-      <div class="custom-file">
-        <input type="file" class="custom-file-input" id="file-upload" name="file-upload[]" multiple data-max-total-file-size="10485760" data-max-file-size="3145728" data-error-message-id="file-upload-invalid-feedback">
-        <label class="custom-file-label text-truncate" for="file-upload">Choose file(s)</label>
-        <div class="invalid-feedback" id="file-upload-invalid-feedback">
-          Oh no!
-        </div>
+      <label class="form-label text-truncate" for="file-upload">Choose file(s)</label>
+      <input type="file" class="form-control" id="file-upload" name="file-upload[]" multiple data-max-total-file-size="10485760" data-max-file-size="3145728" data-error-message-id="file-upload-invalid-feedback">
+      <div class="invalid-feedback" id="file-upload-invalid-feedback">
+        Oh no!
       </div>
     </div>
 

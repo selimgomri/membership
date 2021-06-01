@@ -121,16 +121,13 @@ include BASE_PATH . "views/root/header.php";
     <input type="hidden" name="MAX_FILE_SIZE" value="10485760">
 
     <div class="mb-3">
-      <label>Select files to attach</label>
-      <div class="custom-file">
-        <input type="file" class="custom-file-input" id="file-upload" name="file-upload[]" multiple data-max-total-file-size="10485760" data-max-file-size="10485760" data-error-message-id="file-upload-invalid-feedback" aria-describedby="file-upload-multi-info">
-        <label class="custom-file-label text-truncate" for="file-upload">Choose file(s)</label>
-        <small id="file-upload-multi-info" class="form-text text-muted">
-          To upload multiple files, press and hold <kbd>shift</kbd> or <kbd>control</kbd> in the file upload window.
-        </small>
-        <div class="invalid-feedback" id="file-upload-invalid-feedback">
-          Oh no!
-        </div>
+      <label class="form-label text-truncate" for="file-upload">Select files to attach</label>
+      <input type="file" class="form-control" id="file-upload" name="file-upload[]" multiple data-max-total-file-size="10485760" data-max-file-size="10485760" data-error-message-id="file-upload-invalid-feedback" aria-describedby="file-upload-multi-info">
+      <small id="file-upload-multi-info" class="form-text text-muted">
+        To upload multiple files, press and hold <kbd>shift</kbd> or <kbd>control</kbd> in the file upload window.
+      </small>
+      <div class="invalid-feedback" id="file-upload-invalid-feedback">
+        Oh no!
       </div>
     </div>
 
@@ -160,7 +157,7 @@ include BASE_PATH . "views/root/header.php";
       <div class="modal-header bg-danger text-white">
         <h5 class="modal-title" id="force-alert-modal">Are you sure?</h5>
         <button type="button" class="close text-white" data-bs-dismiss="modal" aria-label="Close">
-          
+
         </button>
       </div>
       <div class="modal-body">
