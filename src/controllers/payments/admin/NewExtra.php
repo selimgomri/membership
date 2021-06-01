@@ -41,9 +41,7 @@ include BASE_PATH . "views/paymentsMenu.php";
           <div class="mb-3">
             <label class="form-label" for="price">Amount</label>
             <div class="input-group mb-3">
-              <div class="input-group-prepend">
-                <span class="input-group-text" id="basic-addon3">&pound;</span>
-              </div>
+              <span class="input-group-text" id="basic-addon3">&pound;</span>
               <input type="number" min="0" step="0.01" class="form-control rounded-right" id="price" name="price" placeholder="0" required>
               <div class="invalid-feedback">
                 Enter an amount for this extra

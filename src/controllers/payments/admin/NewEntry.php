@@ -24,9 +24,7 @@ include BASE_PATH . "views/paymentsMenu.php";
         <div class="mb-3">
           <label class="form-label" for="price">Price</label>
           <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <span class="input-group-text" id="basic-addon3">&pound;</span>
-            </div>
+            <span class="input-group-text" id="basic-addon3">&pound;</span>
             <input type="text" class="form-control" id="price" name="price" placeholder="Enter price">
           </div>
         </div>

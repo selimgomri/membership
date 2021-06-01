@@ -265,9 +265,7 @@ include BASE_PATH . 'views/header.php';
               <div class="mb-3">
                 <label class="form-label" for="booking-fees-amount">Booking fee</label>
                 <div class="input-group">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text">&pound;</span>
-                  </div>
+                  <span class="input-group-text">&pound;</span>
                   <input type="num" id="booking-fees-amount" name="booking-fees-amount" min="0" max="50" step="0.01" class="form-control" <?php if ($bookingClosed) { ?>disabled<?php } ?> value="<?= htmlspecialchars((string) (\Brick\Math\BigDecimal::of((string) $session['BookingFee']))->withPointMovedLeft(2)->toScale(2)) ?>" placeholder="0.00">
                   <div class="invalid-feedback">
                     Please provide a session fee

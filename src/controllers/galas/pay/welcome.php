@@ -155,9 +155,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
                         Amount to pay
                       </label>
                       <div class="input-group">
-                        <div class="input-group-prepend">
-                          <div class="input-group-text mono">&pound;</div>
-                        </div>
+                        <div class="input-group-text mono">&pound;</div>
                         <input type="number" pattern="[0-9]*([\.,][0-9]*)?" class="form-control mono" id="<?= $entry['EntryID'] ?>-amount" name="<?= $entry['EntryID'] ?>-amount" placeholder="0.00" value="<?= htmlspecialchars((string) (\Brick\Math\BigDecimal::of((string) $entry['FeeToPay'])->toScale(2))) ?>" min="0" max="150" step="0.01" <?php if ($entry['GalaFeeConstant']) { ?>readonly<?php } ?>>
                       </div>
                     </div>

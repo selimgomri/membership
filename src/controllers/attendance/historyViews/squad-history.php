@@ -166,9 +166,7 @@ include BASE_PATH . 'views/header.php';
       <form action="<?= htmlspecialchars(autoUrl('attendance/history/squads/' . $id . '/week/jump-to-week')) ?>" method="post" class="needs-validation" novalidate>
         <div class="input-group">
           <input type="date" class="form-control" value="<?= htmlspecialchars($startWeek->format('Y-m-d')) ?>" aria-label="Find a week" aria-describedby="go-to-week" name="go-to-week-date" id="go-to-week-date">
-          <div class="input-group-append">
-            <button class="btn btn-secondary" type="submit" id="go-to-week">Go to week</button>
-          </div>
+          <button class="btn btn-secondary" type="submit" id="go-to-week">Go to week</button>
         </div>
       </form>
     </div>

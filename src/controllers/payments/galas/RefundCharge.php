@@ -209,9 +209,7 @@ include BASE_PATH . 'views/header.php';
 												Amount charged
 											</label>
 											<div class="input-group">
-												<div class="input-group-prepend">
-													<div class="input-group-text mono">&pound;</div>
-												</div>
+												<div class="input-group-text mono">&pound;</div>
 												<input type="number" class="form-control mono" id="<?=$entry['EntryID']?>-amount" name="<?=$entry['EntryID']?>-amount" placeholder="0.00" value="<?=htmlspecialchars((string) (\Brick\Math\BigDecimal::of((string) $entry['FeeToPay'])->toScale(2)))?>" disabled>
 											</div>
 										</div>
@@ -224,9 +222,7 @@ include BASE_PATH . 'views/header.php';
 												Amount to refund
 											</label>
 											<div class="input-group">
-												<div class="input-group-prepend">
-													<div class="input-group-text mono">&pound;</div>
-												</div>
+												<div class="input-group-text mono">&pound;</div>
 												<input type="number" pattern="[0-9]*([\.,][0-9]*)?" class="form-control mono refund-amount-field" id="<?=$entry['EntryID']?>-refund" name="<?=$entry['EntryID']?>-refund" placeholder="0.00" min="0" max="<?=htmlspecialchars((string) (\Brick\Math\BigDecimal::of((string) $amountRefundable)->withPointMovedLeft(2)->toScale(2)))?>" data-max-refundable="<?=$amountRefundable?>" data-amount-refunded="<?=$entry['AmountRefunded']?>" step="0.01" <?php if ($amountRefundable == 0 || $notReady) { ?>disabled<?php } ?> >
 											</div>
 										</div>

@@ -116,7 +116,7 @@ include BASE_PATH . "views/root/header.php";
       <div class="modal-header">
         <h5 class="modal-title" id="staticBackdropLabel">Add plan</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-          
+
         </button>
       </div>
       <div class="modal-body">
@@ -151,9 +151,7 @@ include BASE_PATH . "views/root/header.php";
               Billing interval (frequency)
             </p>
             <div class="input-group">
-              <div class="input-group-prepend">
-                <span class="input-group-text">Every</span>
-              </div>
+              <span class="input-group-text">Every</span>
               <input type="number" min="1" step="1" value="1" aria-label="Billing Frequency" class="form-control" name="plan-frequency-n" id="plan-frequency-n" required>
               <select class="form-select" aria-label="Billing Frequency Type" required name="plan-frequency-type" id="plan-frequency-type">
                 <option value="days">Days</option>

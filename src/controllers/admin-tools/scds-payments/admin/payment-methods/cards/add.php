@@ -114,9 +114,7 @@ include BASE_PATH . "views/root/head.php";
               Card number
             </label>
             <div class="input-group">
-              <div class="input-group-prepend">
                 <span class="input-group-text" id="card-brand-element"><img class="fa fa-fw" src="<?= autoUrl("public/img/stripe/network-svgs/credit-card.svg") ?>" aria-hidden="true"></span>
-              </div>
               <div id="card-number-element" class="form-control stripe-form-control"></div>
               <div id="card-number-element-errors" class="stripe-feedback"></div>
             </div>

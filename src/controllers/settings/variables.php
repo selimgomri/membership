@@ -234,9 +234,7 @@ include BASE_PATH . 'views/header.php';
           <div class="mb-3">
             <label class="form-label" for="EMAIL_DOMAIN">Email Domain</label>
             <div class="input-group">
-              <div class="input-group-prepend">
-                <span class="input-group-text">@</span>
-              </div>
+              <span class="input-group-text">@</span>
               <input class="form-control" type="text" name="EMAIL_DOMAIN" id="EMAIL_DOMAIN" value="<?= htmlspecialchars($vars['EMAIL_DOMAIN']) ?>" <?= $disabled['EMAIL_DOMAIN'] ?> aria-describedby="EMAIL_DOMAIN_HELP">
             </div>
             <small id="EMAIL_DOMAIN_HELP" class="form-text text-muted">Your email domain must be listed in your Twilio SendGrid account.</small>

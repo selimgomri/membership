@@ -19,9 +19,7 @@ include BASE_PATH . 'views/header.php';
         <div class="mb-3">
           <label class="form-label" for="amount-to-pay">Amount</label>
           <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <label class="input-group-text">&pound;</label>
-            </div>
+            <label class="input-group-text">&pound;</label>
             <input type="number" pattern="[0-9]*([\.,][0-9]*)?" class="form-control mono" placeholder="0.00" min="0" step="0.01" id="amount-to-pay" name="amount-to-pay">
           </div>
         </div>

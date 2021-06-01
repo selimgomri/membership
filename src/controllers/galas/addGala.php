@@ -50,9 +50,7 @@ $content .= "<div class=\"row\"><div class=\"col-md-10 col-lg-8\"><form method=\
   <label for=\"galaFee\" class=\"col-sm-2 col-form-label\">Gala Fee</label>
   <div class=\"col-sm-10\">
     <div class=\"input-group\">
-      <div class=\"input-group-prepend\">
-        <span class=\"input-group-text\">&pound;</span>
-      </div>
+      <span class=\"input-group-text\">&pound;</span>
       <input type=\"text\" class=\"form-control\" id=\"galaFee\" name=\"galaFee\" aria-describedby=\"galaFeeHelp\" placeholder=\"eg 5.00\">
     </div>
     <small id=\"galaFeeHelp\" class=\"form-text text-muted\">Enter the <strong>most common</strong> price for swims at this gala.</small>

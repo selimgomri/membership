@@ -73,9 +73,7 @@ include BASE_PATH . "views/squadMenu.php"; ?>
           <div class="mb-3">
             <label class="form-label" for="squadFee" class="form-label">Squad Fee</label>
             <div class="input-group">
-              <div class="input-group-prepend">
-                <span class="input-group-text">&pound;</span>
-              </div>
+              <span class="input-group-text">&pound;</span>
               <input type="number" min="0" step="0.01" class="form-control" id="squadFee" name="squadFee" aria-describedby="squadFeeHelp" placeholder="eg 50.00" value="<?= htmlspecialchars($row['SquadFee']) ?>" required>
               <div class="invalid-feedback">
                 Please provide a monthly fee.

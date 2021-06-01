@@ -40,9 +40,9 @@ if (isset($customBackground) && $customBackground) {
 
 <body class="<?= $bg ?> account--body <?php if (isset($pageHead['body-class'])) {
                                         foreach ($pageHead['body-class'] as $item) { ?> <?= $item ?> <?php }
-                                                                                                } ?>" <?php if (isset($pageHead['body'])) {
-                                                                                                                                                foreach ($pageHead['body'] as $item) { ?> <?= $item ?> <?php }
-                                                                                                                                                                                                                } ?>>
+                                                                                                  } ?>" <?php if (isset($pageHead['body'])) {
+                                                                                                        foreach ($pageHead['body'] as $item) { ?> <?= $item ?> <?php }
+                                                                                                                                                                                                    } ?>>
 
   <?php if (bool(getenv('IS_DEV'))) { ?>
     <div class="bg-warning bg-striped py-1">
@@ -101,7 +101,7 @@ if (isset($customBackground) && $customBackground) {
           <p class="mb-0">
             <strong>
               You are in User Simulation Mode simulating <?=
-                                                            $_SESSION['TENANT-' . app()->tenant->getId()]['UserSimulation']['SimUserName'] ?>
+                                                          $_SESSION['TENANT-' . app()->tenant->getId()]['UserSimulation']['SimUserName'] ?>
             </strong>
           </p>
           <p class="mb-0">
@@ -255,14 +255,12 @@ if (isset($customBackground) && $customBackground) {
           <label class="form-label" for="s" class="visually-hidden">Search</label>
           <div class="input-group">
             <input class="form-control bg-primary text-white border-primary" id="s" name="s" placeholder="Search the site" type="search">
-            <div class="input-group-append">
-              <button type="submit" class="btn btn-primary">
-                <i class="fa fa-search"></i>
-                <span class="visually-hidden">
-                  Search
-                </span>
-              </button>
-            </div>
+            <button type="submit" class="btn btn-primary">
+              <i class="fa fa-search"></i>
+              <span class="visually-hidden">
+                Search
+              </span>
+            </button>
           </div>
         </form>
       </div>
