@@ -90,7 +90,7 @@ class Login
 
     $mobile = 0;
 
-    $browser_details = new \WhichBrowser\Parser($_SERVER['HTTP_USER_AGENT']);
+    $browser_details = new \WhichBrowser\Parser(getallheaders());
 
     $browser = "Unknown";
     if ($browser_details->browser->version != null && $browser_details->browser->name != null) {

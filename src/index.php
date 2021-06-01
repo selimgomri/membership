@@ -243,7 +243,7 @@ if ($headInfo[0] == 'ref:') {
 require_once "functions.php";
 
 if (!isset($_SESSION['Browser'])) {
-  $browser = new \WhichBrowser\Parser($_SERVER['HTTP_USER_AGENT']);
+  $browser = new \WhichBrowser\Parser(getallheaders());
 
   // reportError($browser);
 

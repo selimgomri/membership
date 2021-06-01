@@ -6150,16 +6150,16 @@
         },
         {
             "name": "whichbrowser/parser",
-            "version": "v2.1.1",
+            "version": "v2.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/WhichBrowser/Parser-PHP.git",
-                "reference": "da24adc4f4f26002673d236e69b91a10f2fd594c"
+                "reference": "bcf642a1891032de16a5ab976fd352753dd7f9a0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/WhichBrowser/Parser-PHP/zipball/da24adc4f4f26002673d236e69b91a10f2fd594c",
-                "reference": "da24adc4f4f26002673d236e69b91a10f2fd594c",
+                "url": "https://api.github.com/repos/WhichBrowser/Parser-PHP/zipball/bcf642a1891032de16a5ab976fd352753dd7f9a0",
+                "reference": "bcf642a1891032de16a5ab976fd352753dd7f9a0",
                 "shasum": ""
             },
             "require": {
@@ -6208,9 +6208,9 @@
             ],
             "support": {
                 "issues": "https://github.com/WhichBrowser/Parser-PHP/issues",
-                "source": "https://github.com/WhichBrowser/Parser-PHP/tree/v2.1.1"
+                "source": "https://github.com/WhichBrowser/Parser-PHP/tree/v2.1.2"
             },
-            "time": "2021-01-04T16:36:15+00:00"
+            "time": "2021-05-10T10:18:11+00:00"
         }
     ],
     "packages-dev": [],
