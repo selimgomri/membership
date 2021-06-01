@@ -51,8 +51,8 @@ include BASE_PATH . "views/paymentsMenu.php";
 
     if ($row != null) { ?>
 			<div class="table-responsive-md">
-				<table class="table">
-					<thead class="thead-light">
+				<table class="table table-light">
+					<thead">
 						<tr>
 							<th>
 								User

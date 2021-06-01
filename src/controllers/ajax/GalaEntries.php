@@ -82,11 +82,11 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
 
     $content = "";
     if (app('request')->isMobile()) {
-      $content .= '<table class="table table-sm">';
+      $content .= '<table class="table table-sm table-light">';
     } else {
-      $content .= '<table class="table table-hover">';
+      $content .= '<table class="table table-hover table-light">';
     }
-    $content .= '<thead class="thead-light"><tr><th>Swimmer</th><th>Swims</th><th class="d-print-none"><abbr title="Lock entries and mark as paid">Admin</abbr></th></tr></thead><tbody>';
+    $content .= '<thead class=""><tr><th>Swimmer</th><th>Swims</th><th class="d-print-none"><abbr title="Lock entries and mark as paid">Admin</abbr></th></tr></thead><tbody>';
 
     // For loop iterates through the rows of the database result, producing rows for the table
     while ($row = $results->fetch(PDO::FETCH_ASSOC)) {

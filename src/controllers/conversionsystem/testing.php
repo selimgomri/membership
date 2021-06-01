@@ -55,8 +55,8 @@ include BASE_PATH . "views/header.php";
           <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['Time'])) { ?>
             <?php if (!$_SESSION['TENANT-' . app()->tenant->getId()]['Time']['Error']) { ?>
               <div class="col-lg-4">
-                <table class="table table-sm table-striped">
-                  <thead class="thead-light">
+                <table class="table table-sm table-striped table-light">
+                  <thead class="">
                     <tr>
                       <th scope="col">Pool Length</th>
                       <th scope="col">Time (<?= htmlentities($_SESSION['TENANT-' . app()->tenant->getId()]['Time']['Event']) ?>)</th>

@@ -69,7 +69,7 @@ include BASE_PATH . "views/root/header.php";
           <label class="form-label" for="rate">Rate</label>
           <div class="input-group">
             <input type="number" min="0" max="100" step="0.01" name="rate" id="rate" required class="form-control">
-            <span class="input-group-text rounded-right">%</span>
+            <span class="input-group-text rounded-end">%</span>
             <div class="invalid-feedback">
               Provide a valid tax rate
             </div>

@@ -150,8 +150,8 @@ include BASE_PATH . "views/renewalTitleBar.php";
 			Check that these are as you expected before you continue.
 		</p>
 		<div class="table-responsive-md">
-			<table class="table">
-				<thead class="">
+			<table class="table table-light">
+				<thead>
 					<tr class="bg-primary text-light">
 						<th>
 							Club Membership
@@ -169,7 +169,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 								</th>
 							</tr>
 						</thead>
-						<thead class="thead-light">
+						<thead>
 							<tr>
 								<th>
 									Member
@@ -215,7 +215,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 					</th>
 				</tr>
 			</thead>
-			<thead class="thead-light">
+			<thead>
 				<tr>
 					<th>
 						Member

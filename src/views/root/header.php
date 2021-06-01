@@ -39,7 +39,7 @@ include 'head.php';
     </div>
   </div>
 
-  <nav class="navbar navbar-expand-md navbar-dark rounded-bottom rounded-right bg-primary">
+  <nav class="navbar navbar-expand-md navbar-dark rounded-bottom rounded-end bg-primary">
     <div class="container">
       <a class="navbar-brand d-md-none" href="<?= htmlspecialchars(autoUrl("")) ?>">Membership Software</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">

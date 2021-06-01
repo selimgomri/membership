@@ -129,8 +129,8 @@ include BASE_PATH . 'views/header.php';
 
       <h2>Your Membership Fees</h2>
       <div class="table-responsive-md">
-        <table class="table">
-          <thead class="">
+        <table class="table table-light">
+          <thead>
             <tr class="bg-primary text-light">
               <th>
                 Club Membership
@@ -149,7 +149,7 @@ include BASE_PATH . 'views/header.php';
                 </th>
               </tr>
             </thead>
-            <thead class="thead-light">
+            <thead>
               <tr>
                 <th>
                   Member
@@ -181,7 +181,7 @@ include BASE_PATH . 'views/header.php';
               </th>
             </tr>
           </thead>
-          <thead class="thead-light">
+          <thead>
             <tr>
               <th>
                 Member

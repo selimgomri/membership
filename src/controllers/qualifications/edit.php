@@ -111,7 +111,7 @@ include BASE_PATH . 'views/header.php';
             <label class="form-label" for="expires-when">Expires after</label>
             <div class="input-group">
               <input type="number" placeholder="0" name="expires-when" id="expires-when" class="form-control requirable" min="1" step="1" value="<?= htmlspecialchars($expiry->expiry_schedule->value) ?>">
-              <span class="input-group-text rounded-right" id="expires-when-addon">years</span>
+              <span class="input-group-text rounded-end" id="expires-when-addon">years</span>
               <div class="invalid-feedback">
                 Please enter the normal expected lifetime of this qualification
               </div>

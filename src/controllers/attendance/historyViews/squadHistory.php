@@ -73,8 +73,8 @@ include BASE_PATH . "controllers/attendance/attendanceMenu.php"; ?>
     <?php } else { ?>
 
 		<div class="table-responsive-md">
-			<table class="table table-sm">
-				<thead class="thead-light">
+			<table class="table table-sm table-light">
+				<thead class="">
 					<tr>
 						<th>
 							Swimmer

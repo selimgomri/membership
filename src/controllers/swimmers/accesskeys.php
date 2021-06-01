@@ -35,14 +35,14 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
   if ($row = $swimmers->fetch(PDO::FETCH_ASSOC)) { ?>
     <div class="table-responsive-md">
       <?php if (app('request')->isMobile()) {
-      ?><table class="table table-sm"><?php
+      ?><table class="table table-sm table-light"><?php
                                     } else {
-                                      ?><table class="table table-hover"><?php
+                                      ?><table class="table table-hover table-light"><?php
                                                                         } ?>
-          <thead class="thead-light">
+          <thead>
             <tr>
               <th>Name</th>
-              <th>Squad</th>
+              <th>Squads</th>
               <th>Swim England Number</th>
               <th>Access Key</th>
             </tr>

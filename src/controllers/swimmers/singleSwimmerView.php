@@ -489,8 +489,8 @@ $content .= '<!--
     $evs = ['50m Free', '100m Free', '200m Free', '400m Free', '800m Free', '1500m Free',
     '50m Breast', '100m Breast', '200m Breast', '50m Fly', '100m Fly', '200m Fly',
     '50m Back', '100m Back', '200m Back', '100m IM', '200m IM', '400m IM'];
-    $content.= '<table class="table table-sm table-borderless table-striped mb-2">
-    <thead class="thead-light"><tr><th>Swim</th><th>Short Course</th>';
+    $content.= '<table class="table table-sm table-borderless table-striped mb-2 table-light">
+    <thead><tr><th>Swim</th><th>Short Course</th>';
     if (!$mob && $scy) {
       $content .= '<th>' . date("Y") . ' SC</th>';
     }

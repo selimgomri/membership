@@ -26,7 +26,7 @@ $dateString = date("F Y", strtotime($year . "-" . $month));
 
 $table_sm;
 if (app('request')->isMobile()) {
-  $table_sm = "table-sm";
+	$table_sm = "table-sm";
 }
 
 if ($type == "squads") {
@@ -78,20 +78,20 @@ $url = autoUrl("payments/history/" . $type . "/" . $year . "/" . $month);
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/paymentsMenu.php";
 
- ?>
+?>
 
 <div class="container-fluid">
 	<nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="<?=autoUrl("payments")?>">Payments</a></li>
-			<li class="breadcrumb-item"><a href="<?=autoUrl("payments/history")?>">History &amp; Status</a></li>
-      <li class="breadcrumb-item active" aria-current="page"><?=$dateString?></li>
-    </ol>
-  </nav>
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item"><a href="<?= autoUrl("payments") ?>">Payments</a></li>
+			<li class="breadcrumb-item"><a href="<?= autoUrl("payments/history") ?>">History &amp; Status</a></li>
+			<li class="breadcrumb-item active" aria-current="page"><?= $dateString ?></li>
+		</ol>
+	</nav>
 
-	<h1>Status for <?=$dateString?></h1>
-  <p class="lead"><?=$title_string?></p>
-	<p><a href="<?=htmlspecialchars($url . "/csv")?>" target="_blank">View as CSV (Comma Separated Values)</a> or <a href="<?=htmlspecialchars($url . "/json")?>" target="_blank">View as JSON (JavaScript Object Notation)</a></p>
+	<h1>Status for <?= $dateString ?></h1>
+	<p class="lead"><?= $title_string ?></p>
+	<p><a href="<?= htmlspecialchars($url . "/csv") ?>" target="_blank">View as CSV (Comma Separated Values)</a> or <a href="<?= htmlspecialchars($url . "/json") ?>" target="_blank">View as JSON (JavaScript Object Notation)</a></p>
 	<?php if ($row == null) { ?>
 		<div class="alert alert-warning mb-0">
 			<p class="mb-0">
@@ -104,85 +104,88 @@ include BASE_PATH . "views/paymentsMenu.php";
 			</p>
 		</div>
 	<?php } else { ?>
-	<div class="table-responsive-md">
-		<table class="table mb-0 <?=$table_sm?>">
-			<thead class="thead-light">
-				<tr>
-					<th>
-						Parent
-					</th>
-					<th>
-						Swimmer
-					</th>
-					<th>
-						Amount
-					</th>
-					<th>
-						Status
-					</th>
-				</tr>
-			</thead>
-			<tbody>
-			<?php
-      $link;
-			do {
-				$metadata = json_decode($row['metadataJSON']);
-				$swimmer_name = null;
-				if (isset($metadata->Members)) {
-					for ($j = 0; $j < sizeof($metadata->Members); $j++) {
-						if ($metadata->Members[$j]->Member == $row['MemberID']) {
-							$swimmer_name = htmlspecialchars($metadata->Members[$j]->MemberName);
-						}
-					}
-				}
-				?>
-				<?php if ($row['Status'] == "confirmed" || $row['Status'] == "paid_out" || $row['Status'] == "paid_manually" || $row['Status'] == "succeeded") {
-					?><tr class="table-success"><?php
-          $link = "text-success";
-				} else if ($row['Status'] == "failed" || $row['Status'] == "charged_back" || $row['Status'] == "canceled" || $row['Status'] == "requires_payment_method" || $row['Status'] == null) {
-					?><tr class="table-danger"><?php
-          $link = "text-danger";
-				} else if ($row['Status'] == "cust_not_dd") {
-					?><tr class="table-warning"><?php
-          $link = "text-warning";
-				} else { ?><tr class=""><?php $link = "";
-				} ?>
-					<td>
-						<?php if ($row['Forename'] != null && $row['Surname'] != null) {?>
-							<?=htmlspecialchars($row['Forename'] . " " . $row['Surname'])?><br>
-              <small><strong>
-                <a target="_blank" href="<?=autoUrl("notify/newemail/individual/" . $row['UserID'])?>">
-                  Contact Parent
-                </a>
-              </strong></small>
-						<?php } else { ?>
-							No Parent
-						<?php } ?>
-					<td>
-						<ul class="list-unstyled mb-0">
-              <?php if ($row['MForename'] == null || $row['MSurname'] == null || $row['MForename'] == "" || $row['MSurname'] == "") { ?>
-                <li><?=$swimmer_name?></li>
-              <?php } else { ?>
-                <li><?=htmlspecialchars($row['MForename'] . " " . $row['MSurname'])?></li>
-              <?php } ?>
-							<li><em><?=htmlspecialchars($row['Description'])?></em></li>
-						</ul>
-					</td>
-					<td>
-						&pound;<?=htmlspecialchars(number_format(($row['Amount']/100),2,'.',''))?>
-					</td>
-					<td>
-						<?php if ($row['Forename'] != null && $row['Surname'] != null) {
-							echo paymentStatusString($row['Status'], $row['stripeFailureCode']);
-						} else {
-							echo "No Parent or Direct Debit Available";
-						} ?>
-					</td>
-				</tr>
-				<?php	} while ($row = $getPayments->fetch(PDO::FETCH_ASSOC)); ?>
-			</tbody>
-		</table>
-	</div>
+		<div class="table-responsive-md">
+			<table class="table mb-0 <?= $table_sm ?> table-light">
+				<thead">
+					<tr>
+						<th>
+							Parent
+						</th>
+						<th>
+							Swimmer
+						</th>
+						<th>
+							Amount
+						</th>
+						<th>
+							Status
+						</th>
+					</tr>
+					</thead>
+					<tbody>
+						<?php
+						$link;
+						do {
+							$metadata = json_decode($row['metadataJSON']);
+							$swimmer_name = null;
+							if (isset($metadata->Members)) {
+								for ($j = 0; $j < sizeof($metadata->Members); $j++) {
+									if ($metadata->Members[$j]->Member == $row['MemberID']) {
+										$swimmer_name = htmlspecialchars($metadata->Members[$j]->MemberName);
+									}
+								}
+							}
+						?>
+							<?php if ($row['Status'] == "confirmed" || $row['Status'] == "paid_out" || $row['Status'] == "paid_manually" || $row['Status'] == "succeeded") {
+							?><tr class="table-success"><?php
+																			$link = "text-success";
+																		} else if ($row['Status'] == "failed" || $row['Status'] == "charged_back" || $row['Status'] == "canceled" || $row['Status'] == "requires_payment_method" || $row['Status'] == null) {
+																			?>
+								<tr class="table-danger"><?php
+																					$link = "text-danger";
+																				} else if ($row['Status'] == "cust_not_dd") {
+																					?>
+								<tr class="table-warning"><?php
+																					$link = "text-warning";
+																				} else { ?>
+								<tr class=""><?php $link = "";
+																				} ?>
+								<td>
+									<?php if ($row['Forename'] != null && $row['Surname'] != null) { ?>
+										<?= htmlspecialchars($row['Forename'] . " " . $row['Surname']) ?><br>
+										<small><strong>
+												<a target="_blank" href="<?= autoUrl("notify/newemail/individual/" . $row['UserID']) ?>">
+													Contact Parent
+												</a>
+											</strong></small>
+									<?php } else { ?>
+										No Parent
+									<?php } ?>
+								<td>
+									<ul class="list-unstyled mb-0">
+										<?php if ($row['MForename'] == null || $row['MSurname'] == null || $row['MForename'] == "" || $row['MSurname'] == "") { ?>
+											<li><?= $swimmer_name ?></li>
+										<?php } else { ?>
+											<li><?= htmlspecialchars($row['MForename'] . " " . $row['MSurname']) ?></li>
+										<?php } ?>
+										<li><em><?= htmlspecialchars($row['Description']) ?></em></li>
+									</ul>
+								</td>
+								<td>
+									&pound;<?= htmlspecialchars(number_format(($row['Amount'] / 100), 2, '.', '')) ?>
+								</td>
+								<td>
+									<?php if ($row['Forename'] != null && $row['Surname'] != null) {
+										echo paymentStatusString($row['Status'], $row['stripeFailureCode']);
+									} else {
+										echo "No Parent or Direct Debit Available";
+									} ?>
+								</td>
+								</tr>
+							<?php	} while ($row = $getPayments->fetch(PDO::FETCH_ASSOC)); ?>
+					</tbody>
+			</table>
+		</div>
 	<?php } ?>
 </div>
 

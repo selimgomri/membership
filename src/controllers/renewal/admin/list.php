@@ -113,8 +113,8 @@ include BASE_PATH . "views/swimmersMenu.php";
 	<?php
 	} else {  ?>
 		<div class="table-responsive-sm">
-			<table class="table <?php if (app('request')->isMobile()) { ?>table-sm small<?php } ?>">
-				<thead class="thead-light">
+			<table class="table table-light <?php if (app('request')->isMobile()) { ?>table-sm small<?php } ?>">
+				<thead>
 					<tr>
 						<th>
 							Member
