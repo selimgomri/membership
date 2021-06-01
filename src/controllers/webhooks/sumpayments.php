@@ -386,7 +386,7 @@ if ($tenant->getBooleanKey('ENABLE_BILLING_SYSTEM')) {
         }
       }
 
-      $sql = $db->query("SELECT `members`.`MemberID`, `ExtraFee`, `ExtraName` FROM ((`members` INNER JOIN `extrasRelations` ON extrasRelations.MemberID = members.MemberID) INNER JOIN `extras` ON extrasRelations.ExtraID = extras.ExtraID) WHERE members.Tenant = ? AND `members`.`UserID` IS NULL");
+      $sql = $db->prepare("SELECT `members`.`MemberID`, `ExtraFee`, `ExtraName` FROM ((`members` INNER JOIN `extrasRelations` ON extrasRelations.MemberID = members.MemberID) INNER JOIN `extras` ON extrasRelations.ExtraID = extras.ExtraID) WHERE members.Tenant = ? AND `members`.`UserID` IS NULL");
       $sql->execute([
         $tenant->getId()
       ]);
