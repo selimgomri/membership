@@ -63,18 +63,23 @@ include BASE_PATH . 'views/header.php';
 
 ?>
 
-<div class="container">
-  <nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="<?= autoUrl("squad-reps") ?>">Squad Reps</a></li>
-      <li class="breadcrumb-item active" aria-current="page">View gala entries</li>
-    </ol>
-  </nav>
+<div class="bg-light mt-n3 py-3 mb-3">
+  <div class="container">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="<?= autoUrl("squad-reps") ?>">Squad Reps</a></li>
+        <li class="breadcrumb-item active" aria-current="page">View gala entries</li>
+      </ol>
+    </nav>
 
-  <h1><?= htmlspecialchars($data->squad->name) ?> entries for <?= htmlspecialchars($data->gala->name) ?></h1>
-  <p class="lead">
-    <?= htmlspecialchars($data->gala->venue) ?>
-  </p>
+    <h1><?= htmlspecialchars($data->squad->name) ?> entries for <?= htmlspecialchars($data->gala->name) ?></h1>
+    <p class="lead mb-0">
+      <?= htmlspecialchars($data->gala->venue) ?>
+    </p>
+  </div>
+</div>
+
+<div class="container">
 
   <div class="row">
 
@@ -117,7 +122,7 @@ include BASE_PATH . 'views/header.php';
               JSON
             </a>
 
-            <a href="<?= autoUrl("galas/" . $id . "/squad-rep-view.pdf?squad=" . $squad) ?>" target="_blank" class="btn btn-primary">
+            <a href="<?= autoUrl("galas/" . $id . "/squad-rep-view.pdf?squad=" . $squad) ?>" target="_blank" class="btn btn-primary disabled" disabled>
               PDF
             </a>
           </div>

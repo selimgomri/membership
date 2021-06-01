@@ -30,7 +30,7 @@ $swimsArray = [
   '400IM' => '400&nbsp;IM'
 ];
 
-$swimsTextArray = ['50 Fr','100 Fr','200 Fr','400 Fr','800 Fr','1500 Fr','50 Bk','100 Bk','200 Bk','50 Br','100 Br','200 Br','50 Fly','100 Fly','200 Fly','100 IM','150 IM','200 IM','400 IM'];
+$swimsTextArray = ['25 Fr', '50 Fr','100 Fr','200 Fr','400 Fr','800 Fr','1500 Fr','25 Bk','50 Bk','100 Bk','200 Bk','50 Br','50 Br','100 Br','200 Br','25 Fly','50 Fly','100 Fly','200 Fly','100 IM','150 IM','200 IM','400 IM'];
 
 $pagetitle = "Team Manager Report for " . htmlspecialchars($data->gala->name);
 

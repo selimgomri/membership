@@ -18,7 +18,7 @@ if (!$location) {
 
 $pagetitle = htmlspecialchars($location['Name']) . ' - Contact Tracing';
 
-$addr = json_decode($location['Address']);
+$address = json_decode($location['Address']);
 
 include BASE_PATH . 'views/header.php';
 
@@ -40,9 +40,11 @@ include BASE_PATH . 'views/header.php';
         <h1>
           <?= htmlspecialchars($location['Name']) ?>
         </h1>
+        <?php if (isset($address->streetAndNumber)) { ?>
         <p class="lead mb-0">
-          <?= htmlspecialchars($addr->streetAndNumber) ?>
+          <?= htmlspecialchars($address->streetAndNumber) ?>
         </p>
+        <?php } ?>
         <div class="mb-3 d-lg-none"></div>
       </div>
       <?php if (app()->user->hasPermission('Admin')) {?>
@@ -63,17 +65,17 @@ include BASE_PATH . 'views/header.php';
     <div class="col-lg-8">
       <h3>Address</h3>
       <address>
-        <?php if (isset($addr->streetAndNumber) && $addr->streetAndNumber) { ?>
-          <?= htmlspecialchars($addr->streetAndNumber) ?><br>
+        <?php if (isset($address->streetAndNumber) && $address->streetAndNumber) { ?>
+          <?= htmlspecialchars($address->streetAndNumber) ?><br>
         <?php } ?>
-        <?php if (isset($addr->flatOrBuilding) && $addr->flatOrBuilding) { ?>
-          <?= htmlspecialchars($addr->flatOrBuilding) ?><br>
+        <?php if (isset($address->flatOrBuilding) && $address->flatOrBuilding) { ?>
+          <?= htmlspecialchars($address->flatOrBuilding) ?><br>
         <?php } ?>
-        <?php if (isset($addr->city) && $addr->city) { ?>
-          <?= htmlspecialchars($addr->city) ?><br>
+        <?php if (isset($address->city) && $address->city) { ?>
+          <?= htmlspecialchars($address->city) ?><br>
         <?php } ?>
-        <?php if (isset($addr->postCode) && $addr->postCode) { ?>
-          <?= htmlspecialchars($addr->postCode) ?>
+        <?php if (isset($address->postCode) && $address->postCode) { ?>
+          <?= htmlspecialchars($address->postCode) ?>
         <?php } ?>
       </address>
 
