@@ -44,7 +44,7 @@ include BASE_PATH . "views/root/head.php";
               <div class="row align-items-center mb-3">
                 <div class="col-auto">
                   <a href="<?= htmlspecialchars(autoUrl("", false)) ?>">
-                  <img src="<?= htmlspecialchars(autoUrl("public/img/corporate/scds.png")) ?>" class="img-fluid rounded" style="height: 75px;">
+                  <img src="<?= htmlspecialchars(autoUrl("img/corporate/scds.png")) ?>" class="img-fluid rounded" style="height: 75px;">
                   </a>
                 </div>
                 <div class="col-auto">

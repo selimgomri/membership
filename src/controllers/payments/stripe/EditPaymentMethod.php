@@ -40,7 +40,7 @@ $pm = \Stripe\PaymentMethod::retrieve(
       <div class="col-lg-8">
         <div class="row align-items-center mb-2 text-dark">
           <div class="col-auto">
-            <img src="<?= autoUrl("public/img/stripe/" . $card['Brand'] . ".png") ?>" srcset="<?= autoUrl("public/img/stripe/" . $card['Brand'] . "@2x.png") ?> 2x, <?= autoUrl("public/img/stripe/" . $card['Brand'] . "@3x.png") ?> 3x" style="width:48px;"> <span class="visually-hidden"><?= htmlspecialchars(getCardBrand($card['Brand'])) ?></span>
+            <img src="<?= autoUrl("img/stripe/" . $card['Brand'] . ".png") ?>" srcset="<?= autoUrl("img/stripe/" . $card['Brand'] . "@2x.png") ?> 2x, <?= autoUrl("img/stripe/" . $card['Brand'] . "@3x.png") ?> 3x" style="width:48px;"> <span class="visually-hidden"><?= htmlspecialchars(getCardBrand($card['Brand'])) ?></span>
           </div>
           <div class="col-auto">
             <h1 class="h1 my-0">

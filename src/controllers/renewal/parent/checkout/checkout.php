@@ -143,7 +143,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
     <div class="col text-lg-end">
       <div class="accepted-network-logos">
         <p>
-          <img class="apple-pay-row" src="<?= autoUrl("public/img/stripe/apple-pay-mark.svg") ?>" aria-hidden="true"><img class="google-pay-row" src="<?= autoUrl("public/img/stripe/google-pay-mark.svg") ?>" aria-hidden="true"><img class="visa-row" src="<?= autoUrl("public/img/stripe/visa.svg") ?>" aria-hidden="true"><img class="mastercard-row" src="<?= autoUrl("public/img/stripe/mastercard.svg") ?>" aria-hidden="true"><img class="amex-row" src="<?= autoUrl("public/img/stripe/amex.svg") ?>" aria-hidden="true">
+          <img class="apple-pay-row" src="<?= autoUrl("img/stripe/apple-pay-mark.svg") ?>" aria-hidden="true"><img class="google-pay-row" src="<?= autoUrl("img/stripe/google-pay-mark.svg") ?>" aria-hidden="true"><img class="visa-row" src="<?= autoUrl("img/stripe/visa.svg") ?>" aria-hidden="true"><img class="mastercard-row" src="<?= autoUrl("img/stripe/mastercard.svg") ?>" aria-hidden="true"><img class="amex-row" src="<?= autoUrl("img/stripe/amex.svg") ?>" aria-hidden="true">
         </p>
       </div>
     </div>
@@ -299,7 +299,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
                 Card number
               </label>
               <div class="input-group">
-                <span class="input-group-text" id="card-brand-element"><img class="fa fa-fw" src="<?= autoUrl("public/img/stripe/network-svgs/credit-card.svg") ?>" aria-hidden="true"></span>
+                <span class="input-group-text" id="card-brand-element"><img class="fa fa-fw" src="<?= autoUrl("img/stripe/network-svgs/credit-card.svg") ?>" aria-hidden="true"></span>
                 <div id="card-number-element" class="form-control stripe-form-control pm-can-disable"></div>
                 <div id="card-number-element-errors" class="stripe-feedback"></div>
               </div>

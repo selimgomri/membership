@@ -69,9 +69,9 @@ include BASE_PATH . "views/root/head.php";
     </div>
     <aside class="col-auto ms-auto">
       <?php if ($paymentMethod['Type'] == 'card') { ?>
-        <img src="<?= htmlspecialchars(autoUrl("public/img/stripe/" . $typeData->brand . ".png")) ?>" srcset="<?= htmlspecialchars(autoUrl("public/img/stripe/" . $typeData->brand . "@2x.png")) ?> 2x, <?= htmlspecialchars(autoUrl("public/img/stripe/" . $typeData->brand . "@3x.png")) ?> 3x" style="height:2.5rem;">
+        <img src="<?= htmlspecialchars(autoUrl("img/stripe/" . $typeData->brand . ".png")) ?>" srcset="<?= htmlspecialchars(autoUrl("img/stripe/" . $typeData->brand . "@2x.png")) ?> 2x, <?= htmlspecialchars(autoUrl("img/stripe/" . $typeData->brand . "@3x.png")) ?> 3x" style="height:2.5rem;">
       <?php } else if ($paymentMethod['Type'] == 'bacs_debit') { ?>
-        <img style="max-height:50px;" src="<?= htmlspecialchars(autoUrl("public/img/directdebit/directdebit.png")) ?>" srcset="<?= htmlspecialchars(autoUrl("public/img/directdebit/directdebit@2x.png")) ?> 2x, <?= htmlspecialchars(autoUrl("public/img/directdebit/directdebit@3x.png")) ?> 3x" alt="Direct Debit Logo">
+        <img style="max-height:50px;" src="<?= htmlspecialchars(autoUrl("img/directdebit/directdebit.png")) ?>" srcset="<?= htmlspecialchars(autoUrl("img/directdebit/directdebit@2x.png")) ?> 2x, <?= htmlspecialchars(autoUrl("img/directdebit/directdebit@3x.png")) ?> 3x" alt="Direct Debit Logo">
       <?php } ?>
     </aside>
   </div>
