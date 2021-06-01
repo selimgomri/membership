@@ -65,10 +65,12 @@ if ((!empty($_POST['email-address']) && !empty($_POST['password'])) && ($securit
         //   setUserOption($userID, "IsSpotCheck2FA", true);
         // }
 
+        $browserDetails = new \WhichBrowser\Parser(getallheaders());
+
         $message = '
           <p>Hello. Confirm your login by entering the following code in your web browser.</p>
           <p><strong>' . htmlspecialchars($code) . '</strong></p>
-          <p>If you did not just try to log in, you can ignore this email. You may want to reset your password.</p>
+          <p>The login was from IP address ' . htmlspecialchars($_SERVER['REMOTE_ADDR']) . ' using ' . htmlspecialchars($browserDetails->toString()) . '. If you did not just try to log in, you should reset your password immediately.</p>
           <p>Kind Regards, <br>The ' . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . ' Team</p>';
 
         $date = new DateTime('now', new DateTimeZone('Europe/London'));
