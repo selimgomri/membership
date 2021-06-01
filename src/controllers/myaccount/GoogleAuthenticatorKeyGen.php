@@ -35,7 +35,7 @@ include BASE_PATH . 'views/header.php';
         </p>
       <?php } ?>
       <p>
-        Your Secret Key is <span class="mono"><?= $_SESSION['TENANT-' . app()->tenant->getId()]['G2FAKey'] ?></span>.
+        Your Secret Key is <span class="font-monospace"><?= $_SESSION['TENANT-' . app()->tenant->getId()]['G2FAKey'] ?></span>.
       </p>
 
       <h2>Scan Code</h2>

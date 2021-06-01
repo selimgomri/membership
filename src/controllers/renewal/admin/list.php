@@ -173,7 +173,7 @@ include BASE_PATH . "views/swimmersMenu.php";
 								<?= htmlspecialchars($renewalItem['Forename'] . " " . $renewalItem['Surname']) ?>
 							</td>
 							<td>
-								<span class="mono">
+								<span class="font-monospace">
 									<?= htmlspecialchars($renewalItem['ASANumber']) ?><?php if ($renewalItem['ASACategory'] != 0) { ?> (Cat<?= htmlspecialchars($renewalItem['ASACategory']) ?>)<?php } ?>
 								</span>
 							</td>

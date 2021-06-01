@@ -66,108 +66,108 @@ include BASE_PATH . "views/header.php";
                     <?php if (!$_SESSION['TENANT-' . app()->tenant->getId()]['Time']['Conv-20m-fail']) { ?>
                       <tr>
                         <td>20m</td>
-                        <td class="mono"><?= $_SESSION['TENANT-' . app()->tenant->getId()]['Time']['Conv-20m'] ?></td>
+                        <td class="font-monospace"><?= $_SESSION['TENANT-' . app()->tenant->getId()]['Time']['Conv-20m'] ?></td>
                       </tr>
                     <?php } else { ?>
                       <tr>
                         <td>20m</td>
-                        <td class="mono">No Conversion*</td>
+                        <td class="font-monospace">No Conversion*</td>
                       </tr>
                     <?php } ?>
 
                     <?php if (!$_SESSION['TENANT-' . app()->tenant->getId()]['Time']['Conv-25m-fail']) { ?>
                       <tr>
                         <td>25m</td>
-                        <td class="mono"><?= $_SESSION['TENANT-' . app()->tenant->getId()]['Time']['Conv-25m'] ?></td>
+                        <td class="font-monospace"><?= $_SESSION['TENANT-' . app()->tenant->getId()]['Time']['Conv-25m'] ?></td>
                       </tr>
                     <?php } else { ?>
                       <tr>
                         <td>25m</td>
-                        <td class="mono">No Conversion*</td>
+                        <td class="font-monospace">No Conversion*</td>
                       </tr>
                     <?php } ?>
 
                     <?php if (!$_SESSION['TENANT-' . app()->tenant->getId()]['Time']['Conv-33m-fail']) { ?>
                       <tr>
                         <td>33 1/3m</td>
-                        <td class="mono"><?= $_SESSION['TENANT-' . app()->tenant->getId()]['Time']['Conv-33m'] ?></td>
+                        <td class="font-monospace"><?= $_SESSION['TENANT-' . app()->tenant->getId()]['Time']['Conv-33m'] ?></td>
                       </tr>
                     <?php } else { ?>
                       <tr>
                         <td>33 1/3m</td>
-                        <td class="mono">No Conversion*</td>
+                        <td class="font-monospace">No Conversion*</td>
                       </tr>
                     <?php } ?>
 
                     <?php if (!$_SESSION['TENANT-' . app()->tenant->getId()]['Time']['Conv-50m-fail']) { ?>
                       <tr>
                         <td>50m</td>
-                        <td class="mono"><?= $_SESSION['TENANT-' . app()->tenant->getId()]['Time']['Conv-50m'] ?></td>
+                        <td class="font-monospace"><?= $_SESSION['TENANT-' . app()->tenant->getId()]['Time']['Conv-50m'] ?></td>
                       </tr>
                     <?php } else { ?>
                       <tr>
                         <td>50m</td>
-                        <td class="mono">No Conversion*</td>
+                        <td class="font-monospace">No Conversion*</td>
                       </tr>
                     <?php } ?>
 
                     <?php if (!$_SESSION['TENANT-' . app()->tenant->getId()]['Time']['Conv-20y-fail']) { ?>
                       <tr>
                         <td>20y</td>
-                        <td class="mono"><?= $_SESSION['TENANT-' . app()->tenant->getId()]['Time']['Conv-20y'] ?></td>
+                        <td class="font-monospace"><?= $_SESSION['TENANT-' . app()->tenant->getId()]['Time']['Conv-20y'] ?></td>
                       </tr>
                     <?php } else { ?>
                       <tr>
                         <td>20y</td>
-                        <td class="mono">No Conversion*</td>
+                        <td class="font-monospace">No Conversion*</td>
                       </tr>
                     <?php } ?>
 
                     <?php if (!$_SESSION['TENANT-' . app()->tenant->getId()]['Time']['Conv-25y-fail']) { ?>
                       <tr>
                         <td>25y</td>
-                        <td class="mono"><?= $_SESSION['TENANT-' . app()->tenant->getId()]['Time']['Conv-25y'] ?></td>
+                        <td class="font-monospace"><?= $_SESSION['TENANT-' . app()->tenant->getId()]['Time']['Conv-25y'] ?></td>
                       </tr>
                     <?php } else { ?>
                       <tr>
                         <td>25y</td>
-                        <td class="mono">No Conversion*</td>
+                        <td class="font-monospace">No Conversion*</td>
                       </tr>
                     <?php } ?>
 
                     <?php if (!$_SESSION['TENANT-' . app()->tenant->getId()]['Time']['Conv-27y-fail']) { ?>
                       <tr>
                         <td>27 1/2y</td>
-                        <td class="mono"><?= $_SESSION['TENANT-' . app()->tenant->getId()]['Time']['Conv-27y'] ?></td>
+                        <td class="font-monospace"><?= $_SESSION['TENANT-' . app()->tenant->getId()]['Time']['Conv-27y'] ?></td>
                       </tr>
                     <?php } else { ?>
                       <tr>
                         <td>27 1/2y</td>
-                        <td class="mono">No Conversion*</td>
+                        <td class="font-monospace">No Conversion*</td>
                       </tr>
                     <?php } ?>
 
                     <?php if (!$_SESSION['TENANT-' . app()->tenant->getId()]['Time']['Conv-33y-fail']) { ?>
                       <tr>
                         <td>33 1/3y</td>
-                        <td class="mono"><?= $_SESSION['TENANT-' . app()->tenant->getId()]['Time']['Conv-33y'] ?></td>
+                        <td class="font-monospace"><?= $_SESSION['TENANT-' . app()->tenant->getId()]['Time']['Conv-33y'] ?></td>
                       </tr>
                     <?php } else { ?>
                       <tr>
                         <td>33 1/3y</td>
-                        <td class="mono">No Conversion*</td>
+                        <td class="font-monospace">No Conversion*</td>
                       </tr>
                     <?php } ?>
 
                     <?php if (!$_SESSION['TENANT-' . app()->tenant->getId()]['Time']['Conv-36y-fail']) { ?>
                       <tr>
                         <td>36 2/3y</td>
-                        <td class="mono"><?= $_SESSION['TENANT-' . app()->tenant->getId()]['Time']['Conv-36y'] ?></td>
+                        <td class="font-monospace"><?= $_SESSION['TENANT-' . app()->tenant->getId()]['Time']['Conv-36y'] ?></td>
                       </tr>
                     <?php } else { ?>
                       <tr>
                         <td>36 2/3y</td>
-                        <td class="mono">No Conversion*</td>
+                        <td class="font-monospace">No Conversion*</td>
                       </tr>
                     <?php } ?>
                   </tbody>
@@ -176,7 +176,7 @@ include BASE_PATH . "views/header.php";
                   Times are rounded to the nearest tenth of a second
                 </p>
                 <p class="small">
-                  If you see <span class="mono">No Conversion*</span>, this is because a
+                  If you see <span class="font-monospace">No Conversion*</span>, this is because a
                   conversion for that event and pool length is not possible or the
                   resulting converted time contained a negative component.
                 </p>

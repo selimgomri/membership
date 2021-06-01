@@ -129,7 +129,7 @@ include BASE_PATH . 'views/header.php';
           <?=htmlspecialchars((new DateTime($result['Date'], new DateTimeZone('Europe/London')))->format("d/m/Y"))?>
         </div>
         <div class="col-4 col-sm-3 col-md-2 text-end">
-          <span class="mono"><?=htmlspecialchars($result['Time'])?></span>
+          <span class="font-monospace"><?=htmlspecialchars($result['Time'])?></span>
         </div>
         <div class="col-8 col-sm-6 col-md-5 col-lg-4 text-truncate d-none d-sm-block" title="<?php if ($result['GalaName'] == null) { ?><?=htmlspecialchars($result['Name'])?><?php } else { ?><?=htmlspecialchars($result['GalaName'])?><?php } ?>">
           <?php if ($result['GalaName'] == null) { ?>

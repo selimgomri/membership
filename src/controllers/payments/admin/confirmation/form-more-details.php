@@ -14,8 +14,8 @@ $date = new DateTime('now', new DateTimeZone('Europe/London'));
       <div class="mb-3">
         <label class="form-label" for="payment-amount">Amount</label>
         <div class="input-group">
-          <div class="input-group-text mono">&pound;</div>
-          <input type="number" class="mono form-control" id="payment-amount" name="payment-amount" aria-describedby="payment-amount-help" placeholder="0" pattern="[0-9]*([\.,][0-9]*)?" min="0" step="0.01">
+          <div class="input-group-text font-monospace">&pound;</div>
+          <input type="number" class="font-monospace form-control" id="payment-amount" name="payment-amount" aria-describedby="payment-amount-help" placeholder="0" pattern="[0-9]*([\.,][0-9]*)?" min="0" step="0.01">
         </div>
         <small id="payment-amount-help" class="form-text text-muted">
           The amount shown on your bank statement
@@ -26,7 +26,7 @@ $date = new DateTime('now', new DateTimeZone('Europe/London'));
     <div class="col-6">
       <div class="mb-3">
         <label class="form-label" for="payment-name">Surname</label>
-        <input type="text" class="mono form-control" id="payment-name" name="payment-name" aria-describedby="payment-name-help" placeholder="eg <?=htmlspecialchars($_SESSION['TENANT-' . app()->tenant->getId()]['Surname'])?>">
+        <input type="text" class="font-monospace form-control" id="payment-name" name="payment-name" aria-describedby="payment-name-help" placeholder="eg <?=htmlspecialchars($_SESSION['TENANT-' . app()->tenant->getId()]['Surname'])?>">
         <small id="payment-date-help" class="form-text text-muted">
           Enter the surname of the name shown on your bank statement*
         </small>

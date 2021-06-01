@@ -72,7 +72,7 @@ ob_start();?>
         </p>
 
         <p>
-          Internal Reference: <span class="mono">SM<?=$email_info['MoveID']?></span>
+          Internal Reference: <span class="font-monospace">SM<?=$email_info['MoveID']?></span>
         </p>
       </div>
     </div>

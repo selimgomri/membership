@@ -85,13 +85,13 @@ include BASE_PATH . "views/paymentsMenu.php";
           <?php if ($mandate) { ?>
             <dl class="row">
               <dt class="col-sm-5">Sort code</dt>
-              <dd class="col-sm-7 mono"><?= htmlspecialchars(implode("-", str_split($mandate['SortCode'], 2))) ?></dd>
+              <dd class="col-sm-7 font-monospace"><?= htmlspecialchars(implode("-", str_split($mandate['SortCode'], 2))) ?></dd>
 
               <dt class="col-sm-5">Account number</dt>
-              <dd class="col-sm-7 mono">&middot;&middot;&middot;&middot;<?= htmlspecialchars($mandate['Last4']) ?></dd>
+              <dd class="col-sm-7 font-monospace">&middot;&middot;&middot;&middot;<?= htmlspecialchars($mandate['Last4']) ?></dd>
 
               <dt class="col-sm-5">Payment reference</dt>
-              <dd class="col-sm-7 mono"><?= htmlspecialchars($mandate['Reference']) ?></dd>
+              <dd class="col-sm-7 font-monospace"><?= htmlspecialchars($mandate['Reference']) ?></dd>
             </dl>
           <?php } ?>
 
@@ -123,7 +123,7 @@ include BASE_PATH . "views/paymentsMenu.php";
             <img class="img-fluid mb-3" style="max-height:35px;" src="<?= $logo_path ?>.png" srcset="<?= $logo_path ?>@2x.png 2x, <?= $logo_path ?>@3x.png 3x">
           <?php } ?>
           <p class="mb-0"><?= htmlspecialchars($name) ?><abbr title="<?= htmlspecialchars(strtoupper(bankDetails($user, "bank_name"))) ?>"><?= htmlspecialchars(getBankName(bankDetails($user, "bank_name"))) ?></abbr></p>
-          <p class="mono">&middot;&middot;&middot;&middot;&middot;&middot;<?= htmlspecialchars(strtoupper(bankDetails($user, "account_number_end"))) ?></p>
+          <p class="font-monospace">&middot;&middot;&middot;&middot;&middot;&middot;<?= htmlspecialchars(strtoupper(bankDetails($user, "account_number_end"))) ?></p>
           <p><?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?> does not store your bank details.</p>
           <p class="mb-0">
           <div class="d-grid gap-2">

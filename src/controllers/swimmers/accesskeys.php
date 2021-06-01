@@ -68,10 +68,10 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
                 <?php if ($row['ASANumber'] == null) {
                   $memID = $row['MemberID'];
                   $asaN = $tenant->getKey('ASA_CLUB_CODE') . $memID;
-                ?><td><span class="mono"><?= htmlspecialchars($asaN) ?></span></td><?php
+                ?><td><span class="font-monospace"><?= htmlspecialchars($asaN) ?></span></td><?php
                                                                                     $updateASA->execute([$asaN, $memID]);
                                                                                   } else { ?>
-                  <td><span class="mono"><?= htmlspecialchars($row['ASANumber']) ?></span></td>
+                  <td><span class="font-monospace"><?= htmlspecialchars($row['ASANumber']) ?></span></td>
                 <?php } ?>
                 <td><samp><?= htmlspecialchars($row['AccessKey']) ?></samp></td>
               </tr>

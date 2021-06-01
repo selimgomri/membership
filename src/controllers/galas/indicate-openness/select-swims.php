@@ -118,7 +118,7 @@ include BASE_PATH . 'views/header.php';
                   <li><strong>Date of birth:</strong> <?= $dob->format('j F Y') ?></li>
                   <li><strong>Age on day:</strong> <?= $ageOnLastDay->format('%y') ?></li>
                   <li><strong>Age at end of year:</strong> <?= $ageAtEOY->format('%y') ?></li>
-                  <li><strong>Swim England number:</strong> <span class="mono"><?= htmlspecialchars($info[0]['se']) ?></span></li>
+                  <li><strong>Swim England number:</strong> <span class="font-monospace"><?= htmlspecialchars($info[0]['se']) ?></span></li>
                 </ul>
               </div>
             </div>

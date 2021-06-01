@@ -60,7 +60,7 @@ $mandateDetails->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID'
       <tbody>
         <?php do { ?>
         <tr>
-          <td class="mono">
+          <td class="font-monospace">
             <a target="_blank" href="<?=autoUrl("payments/mandates/" . $row['Mandate'] . '/print')?>" title="View Mandate Details">
               <?=htmlspecialchars($row['Mandate'])?>
             </a>
@@ -68,10 +68,10 @@ $mandateDetails->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID'
           <td>
             <?=htmlspecialchars(getBankName($row['BankName']))?>
           </td>
-          <td class="mono" title="Name on bank account">
+          <td class="font-monospace" title="Name on bank account">
             <?=htmlspecialchars($row['AccountHolderName'])?>
           </td>
-          <td class="mono" title="Last two digits of your account number">
+          <td class="font-monospace" title="Last two digits of your account number">
             ******<?=htmlspecialchars($row['AccountNumEnd'])?>
           </td>
           <?php if ($defaultAcc != null > 1 && $defaultAcc != $row['MandateID']) { ?>

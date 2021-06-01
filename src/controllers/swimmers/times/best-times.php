@@ -112,7 +112,7 @@ include BASE_PATH . 'views/header.php';
               <a href="<?=htmlspecialchars(autoUrl("members/" . $id . "/times/event?course=S&stroke=" . $strokeCode . "&distance=" . $distance))?>"><?=$distance?>m <?=$stroke?></a>
             </div>
             <div class="col-4 col-sm-3 col-md-2 text-end">
-              <span class="mono"><?=htmlspecialchars($row['Time'])?></span>
+              <span class="font-monospace"><?=htmlspecialchars($row['Time'])?></span>
             </div>
             <div class="col-4 col-sm-3 col-md-2 text-truncate text-end text-lg-center">
               <?=htmlspecialchars((new DateTime($row['Date'], new DateTimeZone('Europe/London')))->format("d/m/Y"))?>
@@ -167,7 +167,7 @@ include BASE_PATH . 'views/header.php';
               <a href="<?=htmlspecialchars(autoUrl("members/" . $id . "/times/event?course=L&stroke=" . $strokeCode . "&distance=" . $distance))?>"><?=$distance?>m <?=$stroke?></a>
             </div>
             <div class="col-4 col-sm-3 col-md-2 text-end">
-              <span class="mono"><?=htmlspecialchars($row['Time'])?></span>
+              <span class="font-monospace"><?=htmlspecialchars($row['Time'])?></span>
             </div>
             <div class="col-4 col-sm-3 col-md-2 text-truncate text-end text-lg-center">
               <?=htmlspecialchars((new DateTime($row['Date'], new DateTimeZone('Europe/London')))->format("d/m/Y"))?>

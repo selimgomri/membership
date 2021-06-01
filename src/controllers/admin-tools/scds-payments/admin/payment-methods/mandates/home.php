@@ -89,13 +89,13 @@ include BASE_PATH . "views/root/head.php";
 
               <dl class="row">
                 <dt class="col-sm-3">Sort code</dt>
-                <dd class="col-sm-9 mono"><?= htmlspecialchars(implode("-", str_split($json->sort_code, 2))) ?></dd>
+                <dd class="col-sm-9 font-monospace"><?= htmlspecialchars(implode("-", str_split($json->sort_code, 2))) ?></dd>
 
                 <dt class="col-sm-3">Account number</dt>
-                <dd class="col-sm-9 mono">&middot;&middot;&middot;&middot;<?= htmlspecialchars($json->last4) ?></dd>
+                <dd class="col-sm-9 font-monospace">&middot;&middot;&middot;&middot;<?= htmlspecialchars($json->last4) ?></dd>
 
                 <dt class="col-sm-3">Payment reference</dt>
-                <dd class="col-sm-9 mono"><?= htmlspecialchars($methodDetails->bacs_debit->reference) ?></dd>
+                <dd class="col-sm-9 font-monospace"><?= htmlspecialchars($methodDetails->bacs_debit->reference) ?></dd>
 
                 <dt class="col-sm-3">Active</dt>
                 <dd class="col-sm-9"><?php if ($mandate['Status'] == 'active') { ?>Yes<?php } else { ?>No<?php } ?></dd>

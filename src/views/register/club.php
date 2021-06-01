@@ -66,7 +66,7 @@ include BASE_PATH . "views/root/header.php";
 
           <div class="mb-3">
             <label class="form-label" for="CLUB_WEBSITE">Club Website</label>
-            <input class="form-control mono" type="url" name="CLUB_WEBSITE" id="CLUB_WEBSITE" placeholder="https://anytownasc.org.uk">
+            <input class="form-control font-monospace" type="url" name="CLUB_WEBSITE" id="CLUB_WEBSITE" placeholder="https://anytownasc.org.uk">
           </div>
 
           <div class="mb-3">

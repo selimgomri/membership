@@ -73,7 +73,7 @@ include BASE_PATH . 'views/header.php';
                   <strong><?= htmlspecialchars($time->format('H:i:s d/m/Y')) ?></strong>
                 </div>
               </div>
-              <p class="mb-0 mono">
+              <p class="mb-0 font-monospace">
                 <?= htmlspecialchars($row['Event']) ?>
               </p>
               <p class="mb-0">

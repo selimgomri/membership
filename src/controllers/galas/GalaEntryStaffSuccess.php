@@ -58,7 +58,7 @@ include BASE_PATH . "views/header.php";
         <p class="mb-0">
           An email confirmation is on it's way to
         </p>
-        <p class="text-truncate mb-0 mono">
+        <p class="text-truncate mb-0 font-monospace">
           <?=htmlspecialchars($row['EmailAddress'])?>
         </p>
       </div>

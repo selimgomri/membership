@@ -112,7 +112,7 @@ include BASE_PATH . 'views/header.php';
               </div>
             <?php } ?>
             <p class="lead">At <?= $date->format("H:i \o\\n j F Y") ?></p>
-            <p class="mono mb-0">&pound;<?= number_format($pm['Amount'] / 100, 2, '.', '') ?></p>
+            <p class="font-monospace mb-0">&pound;<?= number_format($pm['Amount'] / 100, 2, '.', '') ?></p>
           </a>
         <?php } ?>
       </div>

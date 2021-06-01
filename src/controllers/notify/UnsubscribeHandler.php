@@ -35,7 +35,7 @@ include BASE_PATH . "views/header.php";?>
 
 <div class="container">
 	<h1>Successfully Unsubscribed</h1>
-	<p>You will no longer receive emails from the <span class="mono"><?=htmlspecialchars($list)?></span> list.</p>
+	<p>You will no longer receive emails from the <span class="font-monospace"><?=htmlspecialchars($list)?></span> list.</p>
 	<p>
 		For further help and support with emails from <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?>, visit
 		our <a href="<?=autoUrl("notify")?>">Notify Help Centre</a>.

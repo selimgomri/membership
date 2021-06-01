@@ -367,9 +367,9 @@ include BASE_PATH . "views/header.php";
                   <div class="col-lg">
                     <h4>Stripe DD (New System)</h4>
                     <?php if ($stripeDD) { ?>
-                      <p class="mb-0"><strong>Sort Code</strong> <span class="mono"><?= htmlspecialchars(implode("-", str_split($stripeDD['SortCode'], 2))) ?></span>
+                      <p class="mb-0"><strong>Sort Code</strong> <span class="font-monospace"><?= htmlspecialchars(implode("-", str_split($stripeDD['SortCode'], 2))) ?></span>
                       </p>
-                      <p class="mb-0"><strong>Account Number</strong> <span class="mono">&middot;&middot;&middot;&middot;<?= htmlspecialchars($stripeDD['Last4']) ?></span></p>
+                      <p class="mb-0"><strong>Account Number</strong> <span class="font-monospace">&middot;&middot;&middot;&middot;<?= htmlspecialchars($stripeDD['Last4']) ?></span></p>
                     <?php } else { ?>
                       <p class="mb-0">No Direct Debit set up</p>
                     <?php } ?>
@@ -384,7 +384,7 @@ include BASE_PATH . "views/header.php";
                       <?php } ?>
                       <p class="mb-0"><?= $bankName ?><abbr title="<?= htmlspecialchars(mb_strtoupper(bankDetails($id, "bank_name"))) ?>"><?= htmlspecialchars(getBankName(bankDetails($id, "bank_name"))) ?></abbr>
                       </p>
-                      <p class="mb-0 mono">&middot;&middot;&middot;&middot;&middot;&middot;<?= mb_strtoupper(bankDetails($id, "account_number_end")) ?></p>
+                      <p class="mb-0 font-monospace">&middot;&middot;&middot;&middot;&middot;&middot;<?= mb_strtoupper(bankDetails($id, "account_number_end")) ?></p>
 
                     <?php } else { ?>
                       <p class="mb-0">No Direct Debit set up</p>

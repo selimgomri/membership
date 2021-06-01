@@ -18,7 +18,7 @@ include BASE_PATH . 'views/header.php';
   <div class="row">
     <div class="col-lg-8">
       <h1>Member upload</h1>
-      <p class="lead">Batch upload members from a <span class="mono">CSV</span> file.</p>
+      <p class="lead">Batch upload members from a <span class="font-monospace">CSV</span> file.</p>
 
       <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['UploadSuccess']) && $_SESSION['TENANT-' . app()->tenant->getId()]['UploadSuccess']) { ?>
         <div class="alert alert-success">
@@ -59,7 +59,7 @@ include BASE_PATH . 'views/header.php';
 
       <p>Your CSV file should contain the following columns in the order shown without any column headers (titles etc);</p>
 
-      <ul class="mono">
+      <ul class="font-monospace">
         <li>Last name</li>
         <li>First name</li>
         <li>Squad name</li>

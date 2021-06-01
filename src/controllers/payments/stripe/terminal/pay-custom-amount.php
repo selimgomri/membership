@@ -20,7 +20,7 @@ include BASE_PATH . 'views/header.php';
           <label class="form-label" for="amount-to-pay">Amount</label>
           <div class="input-group mb-3">
             <label class="input-group-text">&pound;</label>
-            <input type="number" pattern="[0-9]*([\.,][0-9]*)?" class="form-control mono" placeholder="0.00" min="0" step="0.01" id="amount-to-pay" name="amount-to-pay">
+            <input type="number" pattern="[0-9]*([\.,][0-9]*)?" class="form-control font-monospace" placeholder="0.00" min="0" step="0.01" id="amount-to-pay" name="amount-to-pay">
           </div>
         </div>
 

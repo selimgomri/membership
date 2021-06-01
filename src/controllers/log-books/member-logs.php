@@ -154,8 +154,8 @@ include BASE_PATH . 'views/header.php';
           <div class="blog-main">
             <?= $markdown->text($log['Content']) ?>
           </div>
-          <?php } else if (mb_strtolower($log['ContentType']) == 'text/plain-monospace') { ?>
-          <div class="mono">
+          <?php } else if (mb_strtolower($log['ContentType']) == 'text/plain-font-monospacespace') { ?>
+          <div class="font-monospace">
             <?=nl2br(htmlspecialchars($log['Content']))?>
           </div>
           <?php } else { ?>

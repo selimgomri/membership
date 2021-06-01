@@ -3,7 +3,7 @@
 $db = app()->db;
 $tenant = app()->tenant;
 
-$sql = $db->prepare("SELECT * FROM `members` INNER JOIN `squads` ON members.SquadID = squads.SquadID WHERE members.Tenant = ? AND `MemberID` = ?");
+$sql = $db->prepare("SELECT * FROM `members` WHERE members.Tenant = ? AND `MemberID` = ?");
 $sql->execute([
   $tenant->getId(),
   $id
@@ -114,8 +114,8 @@ include BASE_PATH . "views/swimmersMenu.php";
     </form> -->
   </div>
 
-  <div class="py-3 mb-3 text-end mono">
-    <?=htmlspecialchars($row['SquadName'])?>
+  <div class="py-3 mb-3 text-end font-monospace">
+    <?=htmlspecialchars(app()->tenant->getCode())?> MEMBER ID: <?= htmlspecialchars($id) ?>
   </div>
 
   <div class="mb-3 p-5 bg-primary text-white">
@@ -149,8 +149,8 @@ include BASE_PATH . "views/swimmersMenu.php";
     Here’s what you will need to do to add <?=htmlspecialchars($row['MForename'] . " " . $row['MSurname'])?> to your
     account in our Online Membership System.
   </p>
-  <!-- 
-	<h2>Add via QR Code</h2>
+  
+	<!-- <h2>Add via QR Code</h2>
 
 	<p>
 		If you have a device that can read QR Codes (A built in feature on iOS and
@@ -192,11 +192,11 @@ include BASE_PATH . "views/swimmersMenu.php";
       <tbody>
         <tr>
           <th scope="row" class="ps-0"><?=$swimEnglandText?></th>
-          <td class="pe-0"><span class="mono"><?=htmlspecialchars($row['ASANumber'])?></span></td>
+          <td class="pe-0"><span class="font-monospace"><?=htmlspecialchars($row['ASANumber'])?></span></td>
         </tr>
         <tr>
           <th scope="row" class="ps-0"><?=htmlspecialchars(app()->tenant->getKey('CLUB_SHORT_NAME'))?> Access Key</th>
-          <td class="pe-0"><span class="mono"><?=htmlspecialchars($row['AccessKey'])?></span></td>
+          <td class="pe-0"><span class="font-monospace"><?=htmlspecialchars($row['AccessKey'])?></span></td>
         </tr>
       </tbody>
     </table>
@@ -216,7 +216,7 @@ include BASE_PATH . "views/swimmersMenu.php";
     <p>
       At the time you were given this form we did not yet have a Swim England registration number for
       <?=htmlspecialchars($row['MForename'])?>. We have given you a temporary number which starts with <span
-        class="mono"><?=htmlspecialchars(app()->tenant->getKey('ASA_CLUB_CODE'))?></span> which you can use to add your swimmer to your
+        class="font-monospace"><?=htmlspecialchars(app()->tenant->getKey('ASA_CLUB_CODE'))?></span> which you can use to add your swimmer to your
       account.
     </p>
     <?php } ?>

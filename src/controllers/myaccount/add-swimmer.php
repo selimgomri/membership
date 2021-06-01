@@ -61,7 +61,7 @@ if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Parent") { 
               </div>
               <div class="mb-3">
                 <label class="form-label" for="accessKey">Access Key</label>
-                <input class="form-control mb-0 mono" type="text" name="accessKey" id="accessKey" placeholder="1A3B5C" required value="<?= htmlspecialchars($acs) ?>">
+                <input class="form-control mb-0 font-monospace" type="text" name="accessKey" id="accessKey" placeholder="1A3B5C" required value="<?= htmlspecialchars($acs) ?>">
                 <div class="invalid-feedback">
                   An access key is required
                 </div>

@@ -100,7 +100,7 @@ ob_start();?>
         </p>
 
         <p>
-          Internal Reference: <span class="mono">#<?=htmlspecialchars($id)?></span>
+          Internal Reference: <span class="font-monospace">#<?=htmlspecialchars($id)?></span>
         </p>
       </div>
     </div>
@@ -137,7 +137,7 @@ ob_start();?>
       <div class="row">
         <dt class="split-30">Statement Identifier</dt>
         <dd class="split-70">
-          <span class="mono">
+          <span class="font-monospace">
             <?=htmlspecialchars($id)?>
           </span>
         </dd>
@@ -146,7 +146,7 @@ ob_start();?>
       <div class="row">
         <dt class="split-30">Statement Date</dt>
         <dd class="split-70">
-          <span class="mono">
+          <span class="font-monospace">
             <?=htmlspecialchars($billDate->format("j F Y"))?>
           </span>
         </dd>
@@ -156,7 +156,7 @@ ob_start();?>
       <div class="row">
         <dt class="split-30">GoCardless Payment Identifier</dt>
         <dd class="split-70">
-          <span class="mono">
+          <span class="font-monospace">
             <?=htmlspecialchars($PMKey)?>
           </span>
         </dd>
@@ -166,7 +166,7 @@ ob_start();?>
       <div class="row">
         <dt class="split-30">Total Fee</dt>
         <dd class="split-70">
-          <span class="mono">
+          <span class="font-monospace">
             &pound;<?=(string) (\Brick\Math\BigDecimal::of((string) $payment_info['Amount']))->withPointMovedLeft(2)->toScale(2)?>
           </span>
         </dd>
@@ -175,7 +175,7 @@ ob_start();?>
       <div class="row">
         <dt class="split-30">Payment Status as of <?=date("d/m/Y")?></dt>
         <dd class="split-70">
-          <span class="mono">
+          <span class="font-monospace">
             <?=htmlspecialchars(paymentStatusString($payment_info['Status']))?>
           </span>
         </dd>
@@ -186,7 +186,7 @@ ob_start();?>
       <div class="row">
         <dt class="split-30">Bank</dt>
         <dd class="split-70">
-          <span class="mono">
+          <span class="font-monospace">
             <?=htmlspecialchars(getBankName($payment_info['BankName']))?>
           </span>
         </dd>
@@ -195,7 +195,7 @@ ob_start();?>
       <div class="row">
         <dt class="split-30">Bank Account</dt>
         <dd class="split-70">
-          <span class="mono">
+          <span class="font-monospace">
             &middot;&middot;&middot;&middot;&middot;&middot;<?=htmlspecialchars($payment_info['AccountNumEnd'])?>
           </span>
         </dd>
@@ -204,7 +204,7 @@ ob_start();?>
       <div class="row">
         <dt class="split-30">Account Name</dt>
         <dd class="split-70">
-          <span class="mono">
+          <span class="font-monospace">
             <?=htmlspecialchars(mb_strtoupper($payment_info['AccountHolderName']))?>
           </span>
         </dd>

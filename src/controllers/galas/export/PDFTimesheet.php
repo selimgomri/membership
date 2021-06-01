@@ -91,7 +91,7 @@ ob_start();?>
     </p>
 
     <p>
-      Timesheet Reference Number: <span class="mono"><?=mb_substr($hash, 0, 8)?></span>
+      Timesheet Reference Number: <span class="font-monospace"><?=mb_substr($hash, 0, 8)?></span>
     </p>
 
     <!--

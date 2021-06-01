@@ -264,14 +264,14 @@ $title = null;
         <div class="alert alert-danger">
           <p><strong>Danger Zone</strong> <br>Actions here can be irreversible. Be careful what you do.</p>
           <div class="mb-3">
-            <label class="form-label" for="disconnect">Disconnect swimmer from your account with this key: <span class="mono"><?= htmlspecialchars($disconnectKey) ?></span></label>
-            <input type="text" class="form-control mono" id="disconnect" name="disconnect" aria-describedby="disconnectHelp" placeholder="Enter the key" onselectstart="return false" onpaste="return false;" onCopy="return false" onCut="return false" onDrag="return false" onDrop="return false" autocomplete=off>
+            <label class="form-label" for="disconnect">Disconnect swimmer from your account with this key: <span class="font-monospace"><?= htmlspecialchars($disconnectKey) ?></span></label>
+            <input type="text" class="form-control font-monospace" id="disconnect" name="disconnect" aria-describedby="disconnectHelp" placeholder="Enter the key" onselectstart="return false" onpaste="return false;" onCopy="return false" onCut="return false" onDrag="return false" onDrop="return false" autocomplete=off>
             <small id="disconnectHelp" class="form-text">Enter the key above and press the <strong>Delete or Disconnect</strong> button. This will dissassociate this swimmer from your account in all of our systems. You will need to request a new Access Key to add the swimmer again.</small>
           </div>
           <input type="hidden" value="<?= $disconnectKey ?>" name="disconnectKey">
           <div class="mb-3">
-            <label class="form-label" for="swimmerDeleteDanger">Delete this Swimmer with this key: <span class="mono"><?= htmlspecialchars($row['AccessKey']) ?></span></label>
-            <input type="text" class="form-control mono" id="swimmerDeleteDanger" name="swimmerDeleteDanger" aria-describedby="swimmerDeleteDangerHelp" placeholder="Enter the key" onselectstart="return false" onpaste="return false;" onCopy="return false" onCut="return false" onDrag="return false" onDrop="return false" autocomplete=off>
+            <label class="form-label" for="swimmerDeleteDanger">Delete this Swimmer with this key: <span class="font-monospace"><?= htmlspecialchars($row['AccessKey']) ?></span></label>
+            <input type="text" class="form-control font-monospace" id="swimmerDeleteDanger" name="swimmerDeleteDanger" aria-describedby="swimmerDeleteDangerHelp" placeholder="Enter the key" onselectstart="return false" onpaste="return false;" onCopy="return false" onCut="return false" onDrag="return false" onDrop="return false" autocomplete=off>
             <small id="swimmerDeleteDangerHelp" class="form-text">Enter the key above and press <strong>Delete or Disconnect</strong>. This will delete this swimmer from all of our systems.</small>
           </div>
           <p class="mb-0">

@@ -53,7 +53,7 @@ include BASE_PATH . "views/root/header.php";
       <?php if ($at) { ?>
 
         <p>
-          Stripe account (<span class="mono"><?= htmlspecialchars($at) ?></span>) for <?= htmlspecialchars($club['Name']) ?> is currently connected.
+          Stripe account (<span class="font-monospace"><?= htmlspecialchars($at) ?></span>) for <?= htmlspecialchars($club['Name']) ?> is currently connected.
         </p>
 
         <h2>
@@ -77,10 +77,10 @@ include BASE_PATH . "views/root/header.php";
           <dd class="col-sm-9 text-truncate"><?php if (isset($stripeAccount->business_profile->url)) { ?><a href="<?= htmlspecialchars($stripeAccount->business_profile->url) ?>" target="_blank"><?= htmlspecialchars(trim(str_replace(['https://www.', 'http://www.', 'http://', 'https://'], '', $stripeAccount->business_profile->url), '/')) ?></a><?php } else { ?>Not set<?php } ?></dd>
 
           <dt class="col-sm-3">Statement descriptor</dt>
-          <dd class="col-sm-9 mono"><?php if (isset($stripeAccount->settings->payments->statement_descriptor)) { ?><?= htmlspecialchars($stripeAccount->settings->payments->statement_descriptor) ?><?php } else { ?>Not set<?php } ?></dd>
+          <dd class="col-sm-9 font-monospace"><?php if (isset($stripeAccount->settings->payments->statement_descriptor)) { ?><?= htmlspecialchars($stripeAccount->settings->payments->statement_descriptor) ?><?php } else { ?>Not set<?php } ?></dd>
 
           <dt class="col-sm-3">Short statement descriptor</dt>
-          <dd class="col-sm-9 mono"><?php if (isset($stripeAccount->settings->card_payments->statement_descriptor_prefix)) { ?><?= htmlspecialchars($stripeAccount->settings->card_payments->statement_descriptor_prefix) ?><?php } else { ?>Not set<?php } ?></dd>
+          <dd class="col-sm-9 font-monospace"><?php if (isset($stripeAccount->settings->card_payments->statement_descriptor_prefix)) { ?><?= htmlspecialchars($stripeAccount->settings->card_payments->statement_descriptor_prefix) ?><?php } else { ?>Not set<?php } ?></dd>
 
           <dt class="col-sm-3">Administrator email</dt>
           <dd class="col-sm-9 text-truncate"><?php if (isset($stripeAccount->email)) { ?><a href="mailto:<?= htmlspecialchars($stripeAccount->email) ?>"><?= htmlspecialchars($stripeAccount->email) ?></a><?php } else { ?>Not set<?php } ?></dd>

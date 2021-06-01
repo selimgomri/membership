@@ -110,28 +110,28 @@ include BASE_PATH . "views/paymentsMenu.php";
 <div class="container">
   <dl class="row">
     <dt class="col-md-4">Statement Identifier</dt>
-    <dd class="col-md-8"><span class="mono"><?= htmlspecialchars($id) ?></span></dd>
+    <dd class="col-md-8"><span class="font-monospace"><?= htmlspecialchars($id) ?></span></dd>
 
     <dt class="col-md-4">Statement Date</dt>
     <dd class="col-md-8"><?= htmlspecialchars($billDate->format("j F Y")) ?></dd>
 
     <?php if ($PMKey != null) { ?>
       <dt class="col-md-4">GoCardless Payment Identifier</dt>
-      <dd class="col-md-8"><span class="mono"><?= htmlspecialchars($PMKey) ?></span></dd>
+      <dd class="col-md-8"><span class="font-monospace"><?= htmlspecialchars($PMKey) ?></span></dd>
     <?php } ?>
 
     <dt class="col-md-4">Total Fee</dt>
-    <dd class="col-md-8"><span class="mono">&pound;<?= (string) (\Brick\Math\BigDecimal::of((string) $payment_info['Amount']))->withPointMovedLeft(2)->toScale(2) ?></span></dd>
+    <dd class="col-md-8"><span class="font-monospace">&pound;<?= (string) (\Brick\Math\BigDecimal::of((string) $payment_info['Amount']))->withPointMovedLeft(2)->toScale(2) ?></span></dd>
 
     <dt class="col-md-4">Payment Status</dt>
     <dd class="col-md-8"><span class=""><?= htmlspecialchars(paymentStatusString($payment_info['Status'], $payment_info['stripeFailureCode'])) ?></span></dd>
 
     <?php if ($stripeMandateInfo) { ?>
       <dt class="col-md-4">Sort Code</dt>
-      <dd class="col-md-8"><span class="mono"><?= htmlspecialchars(implode("-", str_split($stripeMandateInfo['SortCode'], 2))) ?></span></dd>
+      <dd class="col-md-8"><span class="font-monospace"><?= htmlspecialchars(implode("-", str_split($stripeMandateInfo['SortCode'], 2))) ?></span></dd>
 
       <dt class="col-md-4">Account Number</dt>
-      <dd class="col-md-8"><span class="mono">&middot;&middot;&middot;&middot;<?= htmlspecialchars($stripeMandateInfo['Last4']) ?></span></dd>
+      <dd class="col-md-8"><span class="font-monospace">&middot;&middot;&middot;&middot;<?= htmlspecialchars($stripeMandateInfo['Last4']) ?></span></dd>
     <?php } ?>
 
     <?php if ($payment_info['BankName'] != null || $payment_info['AccountNumEnd'] != null || $payment_info['AccountHolderName'] != null) { ?>
@@ -152,7 +152,7 @@ include BASE_PATH . "views/paymentsMenu.php";
 
       <dt class="col-md-4">Account Name</dt>
       <dd class="col-md-8">
-        <span class="mono">
+        <span class="font-monospace">
           <?= htmlspecialchars(mb_strtoupper($payment_info['AccountHolderName'])) ?>
         </span>
       </dd>

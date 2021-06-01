@@ -119,7 +119,7 @@ include BASE_PATH . "views/root/header.php";
                   <strong><a target="_blank" href="<?= htmlspecialchars(autoUrl($tenant->getCodeId())) ?>"><?= htmlspecialchars($tenant->getName()) ?></a></strong>
                 </div>
               </div>
-              <p class="mb-0 mono">
+              <p class="mb-0 font-monospace">
                 <?= htmlspecialchars($row['Event']) ?>
               </p>
               <p class="mb-0">

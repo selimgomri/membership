@@ -83,7 +83,7 @@ include BASE_PATH . 'views/header.php';
                     Swim England Membership Discount
                   </label>
                   <div class="input-group">
-                    <input type="number" min="0" max="100" class="form-control mono" id="se-<?= htmlspecialchars(date('m', $month)) ?>" name="se-<?= htmlspecialchars(date('m', $month)) ?>" placeholder="0" value="<?= htmlspecialchars($discounts['ASA'][date('m', $month)]) ?>">
+                    <input type="number" min="0" max="100" class="form-control font-monospace" id="se-<?= htmlspecialchars(date('m', $month)) ?>" name="se-<?= htmlspecialchars(date('m', $month)) ?>" placeholder="0" value="<?= htmlspecialchars($discounts['ASA'][date('m', $month)]) ?>">
                     <div class="input-group-append">
                       <label class="input-group-text">%</label>
                     </div>
@@ -97,7 +97,7 @@ include BASE_PATH . 'views/header.php';
                     Club Membership Discount
                   </label>
                   <div class="input-group">
-                    <input type="number" min="0" max="100" class="form-control mono" id="club-<?= htmlspecialchars(date('m', $month)) ?>" name="club-<?= htmlspecialchars(date('m', $month)) ?>" placeholder="0" value="<?= htmlspecialchars($discounts['CLUB'][date('m', $month)]) ?>">
+                    <input type="number" min="0" max="100" class="form-control font-monospace" id="club-<?= htmlspecialchars(date('m', $month)) ?>" name="club-<?= htmlspecialchars(date('m', $month)) ?>" placeholder="0" value="<?= htmlspecialchars($discounts['CLUB'][date('m', $month)]) ?>">
                     <div class="input-group-append">
                       <label class="input-group-text">%</label>
                     </div>

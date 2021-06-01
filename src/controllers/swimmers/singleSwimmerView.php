@@ -224,7 +224,7 @@ $content .= '<!--
     <li class="list-group-item">
       <p class="mb-0">
         <strong class="d-block text-gray-dark">Swim England Number</strong>
-        <a href="https://www.swimmingresults.org/biogs/biogs_details.php?tiref=' . htmlspecialchars($rowSwim["ASANumber"]) . '" target="_blank" title="ASA Biographical Data"><span class="mono">' . htmlspecialchars($rowSwim["ASANumber"]) . '</span> <i class="fa fa-external-link" aria-hidden="true"></i></a>
+        <a href="https://www.swimmingresults.org/biogs/biogs_details.php?tiref=' . htmlspecialchars($rowSwim["ASANumber"]) . '" target="_blank" title="ASA Biographical Data"><span class="font-monospace">' . htmlspecialchars($rowSwim["ASANumber"]) . '</span> <i class="fa fa-external-link" aria-hidden="true"></i></a>
       </p>
     </li>
     <li class="list-group-item">

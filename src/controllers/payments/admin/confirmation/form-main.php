@@ -13,7 +13,7 @@ $date = new DateTime('now', new DateTimeZone('Europe/London'));
     <div class="col-6">
       <div class="mb-3">
         <label class="form-label" for="payment-ref">Reference</label>
-        <input type="text" class="mono form-control" id="payment-ref" name="payment-ref" aria-describedby="payment-ref-help" placeholder="Enter reference">
+        <input type="text" class="font-monospace form-control" id="payment-ref" name="payment-ref" aria-describedby="payment-ref-help" placeholder="Enter reference">
         <small id="payment-ref-help" class="form-text text-muted">
           Enter the reference shown on your bank statement
         </small>
@@ -23,7 +23,7 @@ $date = new DateTime('now', new DateTimeZone('Europe/London'));
     <div class="col-6">
       <div class="mb-3">
         <label class="form-label" for="payment-date">Date received</label>
-        <input type="date" class="mono form-control" id="payment-date" name="payment-date" aria-describedby="payment-date-help" value="<?=$date->format("Y-m-d")?>" placeholder="Use format YYYY-MM-DD, eg <?=$date->format("Y-m-d")?>">
+        <input type="date" class="font-monospace form-control" id="payment-date" name="payment-date" aria-describedby="payment-date-help" value="<?=$date->format("Y-m-d")?>" placeholder="Use format YYYY-MM-DD, eg <?=$date->format("Y-m-d")?>">
         <small id="payment-date-help" class="form-text text-muted">
           Enter the date shown on your bank statement
         </small>
@@ -41,8 +41,8 @@ $date = new DateTime('now', new DateTimeZone('Europe/London'));
     <div class="mb-3">
       <label class="form-label" for="payment-fees">Bank fees</label>
       <div class="input-group">
-        <div class="input-group-text mono">&pound;</div>
-        <input type="number" class="mono form-control" id="payment-fees" name="payment-fees" aria-describedby="payment-fees-help" value="0" placeholder="0" pattern="[0-9]*([\.,][0-9]*)?" min="0" step="0.01">
+        <div class="input-group-text font-monospace">&pound;</div>
+        <input type="number" class="font-monospace form-control" id="payment-fees" name="payment-fees" aria-describedby="payment-fees-help" value="0" placeholder="0" pattern="[0-9]*([\.,][0-9]*)?" min="0" step="0.01">
       </div>
       <small id="payment-fees-help" class="form-text text-muted">
         Enter fees incurred taking this payment

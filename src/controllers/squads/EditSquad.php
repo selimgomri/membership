@@ -107,8 +107,8 @@ include BASE_PATH . "views/squadMenu.php"; ?>
           </div>
           <div class="alert alert-danger">
             <div class="mb-3 mb-0">
-              <label class="form-label" for="squadDeleteDanger"><strong>Danger Zone</strong> <br>Delete this squad by entering this key "<span class="mono"><?= htmlspecialchars($row['SquadKey']) ?></span>" in the box below</label>
-              <input type="text" class="form-control mono" id="squadDeleteDanger" name="squadDeleteDanger" placeholder="Enter the key" onselectstart="return false" onpaste="return false;" onCopy="return false" onCut="return false" onDrag="return false" onDrop="return false" autocomplete=off>
+              <label class="form-label" for="squadDeleteDanger"><strong>Danger Zone</strong> <br>Delete this squad by entering this key "<span class="font-monospace"><?= htmlspecialchars($row['SquadKey']) ?></span>" in the box below</label>
+              <input type="text" class="form-control font-monospace" id="squadDeleteDanger" name="squadDeleteDanger" placeholder="Enter the key" onselectstart="return false" onpaste="return false;" onCopy="return false" onCut="return false" onDrag="return false" onDrop="return false" autocomplete=off>
             </div>
           </div>
           <p>

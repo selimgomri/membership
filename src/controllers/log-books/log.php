@@ -88,8 +88,8 @@ include BASE_PATH . 'views/header.php';
         <div class="blog-main">
           <?= $markdown->text($info['Content']) ?>
         </div>
-        <?php } else if (mb_strtolower($info['ContentType']) == 'text/plain-monospace') { ?>
-        <div class="mono">
+        <?php } else if (mb_strtolower($info['ContentType']) == 'text/plain-font-monospacespace') { ?>
+        <div class="font-monospace">
           <?=nl2br(htmlspecialchars($info['Content']))?>
         </div>
         <?php } else { ?>

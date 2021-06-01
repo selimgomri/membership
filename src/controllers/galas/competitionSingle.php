@@ -49,7 +49,7 @@ include "galaMenu.php"; ?>
         <div class="mb-3 row">
           <label class="form-label" for="description" class="col-sm-4 col-form-label">Description (optional)</label>
           <div class="col-sm-8">
-            <textarea name="description" id="description" class="form-control mono" aria-describedby="descriptionHelp"><?= htmlspecialchars($row['Description']) ?></textarea>
+            <textarea name="description" id="description" class="form-control font-monospace" aria-describedby="descriptionHelp"><?= htmlspecialchars($row['Description']) ?></textarea>
             <small id="descriptionHelp" class="form-text text-muted">
               A description is optional and will only be displayed if you enter something. Markdown is supported here.
             </small>

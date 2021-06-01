@@ -38,7 +38,7 @@ include BASE_PATH . "views/header.php";?>
 	</p>
 	<p><a href="<?=currentUrl() . "do"?>" class="btn
 	btn-primary">Unsubscribe from <span
-	class="mono"><?=htmlspecialchars($list)?></span></a></p>
+	class="font-monospace"><?=htmlspecialchars($list)?></span></a></p>
 	<p>
 		For further help and support with emails from <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?>, visit
 		our <a href="<?=autoUrl("notify")?>">Notify Help Centre</a>.

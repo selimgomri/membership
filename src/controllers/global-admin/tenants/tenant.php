@@ -38,35 +38,35 @@ include BASE_PATH . "views/root/header.php";
         <dt class="col-lg-4">
           UUID
         </dt>
-        <dd class="col-lg-8 mono">
+        <dd class="col-lg-8 font-monospace">
           <?= htmlspecialchars($tenant->getUuid()) ?>
         </dd>
 
         <dt class="col-lg-4">
           ID
         </dt>
-        <dd class="col-lg-8 mono">
+        <dd class="col-lg-8 font-monospace">
           <?= htmlspecialchars($tenant->getId()) ?>
         </dd>
 
         <dt class="col-lg-4">
           Code
         </dt>
-        <dd class="col-lg-8 mono">
+        <dd class="col-lg-8 font-monospace">
           <?= htmlspecialchars($tenant->getCode()) ?>
         </dd>
 
         <dt class="col-lg-4">
           Website
         </dt>
-        <dd class="col-lg-8 mono">
+        <dd class="col-lg-8 font-monospace">
           <a href="<?= htmlspecialchars($tenant->getWebsite()) ?>" target="_blank"><?= htmlspecialchars($tenant->getWebsite()) ?></a>
         </dd>
 
         <dt class="col-lg-4">
           Email
         </dt>
-        <dd class="col-lg-8 mono">
+        <dd class="col-lg-8 font-monospace">
           <a href="mailto:<?= htmlspecialchars($tenant->getEmail()) ?>"><?= htmlspecialchars($tenant->getEmail()) ?></a>
         </dd>
 
@@ -74,7 +74,7 @@ include BASE_PATH . "views/root/header.php";
           Stripe Account
         </dt>
         <dd class="col-lg-8">
-          <div class="mono mb-2">
+          <div class="font-monospace mb-2">
             <?= htmlspecialchars($tenant->getStripeAccount()) ?>
           </div>
           <div class="">

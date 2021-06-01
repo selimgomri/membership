@@ -80,8 +80,8 @@ include BASE_PATH . 'views/header.php';
               Amount to <span id="amount-type">charge</span>
             </label>
             <div class="input-group">
-              <div class="input-group-text mono">&pound;</div>
-              <input required type="number" pattern="[0-9]*([\.,][0-9]*)?" class="form-control mono" id="amount" name="amount" placeholder="0.00" min="0" max="1000" step="0.01">
+              <div class="input-group-text font-monospace">&pound;</div>
+              <input required type="number" pattern="[0-9]*([\.,][0-9]*)?" class="form-control font-monospace" id="amount" name="amount" placeholder="0.00" min="0" max="1000" step="0.01">
               <div class="invalid-feedback">
                 You must enter an amount between &pound;0 and £1000.
               </div>

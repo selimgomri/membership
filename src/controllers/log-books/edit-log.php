@@ -153,7 +153,7 @@ include BASE_PATH . 'views/header.php';
             <label class="form-label" for="content-type">Content type</label>
             <select required class="form-select" id="content-type" name="content-type" aria-describedby="content-type-help">
               <option value="text/plain" <?php if ($contentType == 'text/plain') { ?>selected<?php } ?> >Plain text</option>
-              <option value="text/plain-monospace" <?php if ($contentType == 'text/plain-monospace') { ?>selected<?php } ?> >Monospaced plain text</option>
+              <option value="text/plain-font-monospacespace" <?php if ($contentType == 'text/plain-font-monospacespace') { ?>selected<?php } ?> >font-monospacespaced plain text</option>
               <option value="text/markdown" <?php if ($contentType == 'text/markdown') { ?>selected<?php } ?> >Markdown</option>
             </select>
             <div class="invalid-feedback">

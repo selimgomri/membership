@@ -29,7 +29,7 @@ if ($email_comms != $row['EmailComms']) {
   	$db->prepare($sql)->execute([$emailCommsDb, $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
   } catch (Exception $e) {
 		// Could not update settings
-		$_SESSION['TENANT-' . app()->tenant->getId()]['EmailUpdateError'] = '<p class="mb-0"><strong>We were unable to change your email subscription preferences</strong></p><p class="mb-0">Please try again. If the issue persists, please contact support referencing <span class="mono">Email Preferences Update Error</span></p>';
+		$_SESSION['TENANT-' . app()->tenant->getId()]['EmailUpdateError'] = '<p class="mb-0"><strong>We were unable to change your email subscription preferences</strong></p><p class="mb-0">Please try again. If the issue persists, please contact support referencing <span class="font-monospace">Email Preferences Update Error</span></p>';
   }
 }
 
@@ -56,7 +56,7 @@ if (mb_strtolower($_POST['EmailAddress']) != mb_strtolower($row['EmailAddress'])
 		} catch (Exception $e) {
 			// Could not add to db
 			reportError($e);
-			$_SESSION['TENANT-' . app()->tenant->getId()]['EmailUpdateError'] = '<p class="mb-0"><strong>We were unable to add your new email address to our awaiting confirmation list</strong></p><p class="mb-0">Please try again. If the issue persists, please contact support referencing <span class="mono">Email Address Update Error</span></p>';
+			$_SESSION['TENANT-' . app()->tenant->getId()]['EmailUpdateError'] = '<p class="mb-0"><strong>We were unable to add your new email address to our awaiting confirmation list</strong></p><p class="mb-0">Please try again. If the issue persists, please contact support referencing <span class="font-monospace">Email Address Update Error</span></p>';
 		}
 		$id = $db->lastInsertId();
 

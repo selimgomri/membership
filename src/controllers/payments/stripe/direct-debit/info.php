@@ -71,13 +71,13 @@ include BASE_PATH . "views/header.php";
             <h2><?php if ($used) { ?>Your Direct Debit Mandate<?php $user = false; } else { ?>Old Mandate<?php } ?> <span class="badge bg-secondary"><?php if ($mandate['Status'] == 'pending') { ?>Pending<?php } else if ($mandate['Status'] == 'accepted') { ?>Active<?php } ?></span></h2>
             <dl class="row">
               <dt class="col-sm-3">Sort code</dt>
-              <dd class="col-sm-9 mono"><?= htmlspecialchars(implode("-", str_split($mandate['SortCode'], 2))) ?></dd>
+              <dd class="col-sm-9 font-monospace"><?= htmlspecialchars(implode("-", str_split($mandate['SortCode'], 2))) ?></dd>
 
               <dt class="col-sm-3">Account number</dt>
-              <dd class="col-sm-9 mono">&middot;&middot;&middot;&middot;<?= htmlspecialchars($mandate['Last4']) ?></dd>
+              <dd class="col-sm-9 font-monospace">&middot;&middot;&middot;&middot;<?= htmlspecialchars($mandate['Last4']) ?></dd>
 
               <dt class="col-sm-3">Payment reference</dt>
-              <dd class="col-sm-9 mono"><?= htmlspecialchars($mandate['Reference']) ?></dd>
+              <dd class="col-sm-9 font-monospace"><?= htmlspecialchars($mandate['Reference']) ?></dd>
             </dl>
 
             <p class="mb-0">

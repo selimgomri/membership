@@ -74,7 +74,7 @@ include BASE_PATH . 'views/header.php';
         <?php while ($squad = $squads->fetch(PDO::FETCH_ASSOC)) { ?>
           <div class="mb-3">
             <label class="form-label" for="<?= htmlspecialchars('field-' . $squad['SquadID']) ?>"><?= htmlspecialchars($squad['SquadName']) ?></label>
-            <textarea class="form-control mono" id="<?= htmlspecialchars('field-' . $squad['SquadID']) ?>" name="<?= htmlspecialchars('field-' . $squad['SquadID']) ?>" rows="3" maxlength="255"><?= htmlspecialchars((string) $squad['ContactDescription']) ?></textarea>
+            <textarea class="form-control font-monospace" id="<?= htmlspecialchars('field-' . $squad['SquadID']) ?>" name="<?= htmlspecialchars('field-' . $squad['SquadID']) ?>" rows="3" maxlength="255"><?= htmlspecialchars((string) $squad['ContactDescription']) ?></textarea>
             <div class="invalid-feedback">
               Please use no more than 255 characters.
             </div>

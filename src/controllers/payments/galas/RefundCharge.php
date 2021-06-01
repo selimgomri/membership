@@ -174,7 +174,7 @@ include BASE_PATH . 'views/header.php';
 								</p>
 								<?php } else if ($entry['Intent'] != null && $amountRefundable > 0 && bool($entry['StripePaid'])) { ?>
 								<p>
-									This entry will be refunded to <?=htmlspecialchars(getCardBrand($entry['Brand']))?> <span class="mono"><?=htmlspecialchars($entry['Last4'])?></span>.
+									This entry will be refunded to <?=htmlspecialchars(getCardBrand($entry['Brand']))?> <span class="font-monospace"><?=htmlspecialchars($entry['Last4'])?></span>.
 								</p>
 								<?php } else if ($amountRefundable > 0) { ?>
 								<p>
@@ -209,8 +209,8 @@ include BASE_PATH . 'views/header.php';
 												Amount charged
 											</label>
 											<div class="input-group">
-												<div class="input-group-text mono">&pound;</div>
-												<input type="number" class="form-control mono" id="<?=$entry['EntryID']?>-amount" name="<?=$entry['EntryID']?>-amount" placeholder="0.00" value="<?=htmlspecialchars((string) (\Brick\Math\BigDecimal::of((string) $entry['FeeToPay'])->toScale(2)))?>" disabled>
+												<div class="input-group-text font-monospace">&pound;</div>
+												<input type="number" class="form-control font-monospace" id="<?=$entry['EntryID']?>-amount" name="<?=$entry['EntryID']?>-amount" placeholder="0.00" value="<?=htmlspecialchars((string) (\Brick\Math\BigDecimal::of((string) $entry['FeeToPay'])->toScale(2)))?>" disabled>
 											</div>
 										</div>
 										<div class="d-none d-sm-block d-xl-none mb-3"></div>
@@ -222,8 +222,8 @@ include BASE_PATH . 'views/header.php';
 												Amount to refund
 											</label>
 											<div class="input-group">
-												<div class="input-group-text mono">&pound;</div>
-												<input type="number" pattern="[0-9]*([\.,][0-9]*)?" class="form-control mono refund-amount-field" id="<?=$entry['EntryID']?>-refund" name="<?=$entry['EntryID']?>-refund" placeholder="0.00" min="0" max="<?=htmlspecialchars((string) (\Brick\Math\BigDecimal::of((string) $amountRefundable)->withPointMovedLeft(2)->toScale(2)))?>" data-max-refundable="<?=$amountRefundable?>" data-amount-refunded="<?=$entry['AmountRefunded']?>" step="0.01" <?php if ($amountRefundable == 0 || $notReady) { ?>disabled<?php } ?> >
+												<div class="input-group-text font-monospace">&pound;</div>
+												<input type="number" pattern="[0-9]*([\.,][0-9]*)?" class="form-control font-monospace refund-amount-field" id="<?=$entry['EntryID']?>-refund" name="<?=$entry['EntryID']?>-refund" placeholder="0.00" min="0" max="<?=htmlspecialchars((string) (\Brick\Math\BigDecimal::of((string) $amountRefundable)->withPointMovedLeft(2)->toScale(2)))?>" data-max-refundable="<?=$amountRefundable?>" data-amount-refunded="<?=$entry['AmountRefunded']?>" step="0.01" <?php if ($amountRefundable == 0 || $notReady) { ?>disabled<?php } ?> >
 											</div>
 										</div>
 									</div>

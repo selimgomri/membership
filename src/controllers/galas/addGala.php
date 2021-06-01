@@ -12,7 +12,7 @@ $content .= "<div class=\"row\"><div class=\"col-md-10 col-lg-8\"><form method=\
 <div class=\"mb-3 row\">
   <label for=\"description\" class=\"col-sm-2 col-form-label\">Description (optional)</label>
   <div class=\"col-sm-10\">
-    <textarea class=\"form-control mono\" id=\"description\" name=\"description\" aria-describedby=\"descriptionHelp\"></textarea>
+    <textarea class=\"form-control font-monospace\" id=\"description\" name=\"description\" aria-describedby=\"descriptionHelp\"></textarea>
     <small id=\"descriptionHelp\" class=\"form-text text-muted\">
       A description is optional and will only be displayed if you enter something. Markdown is supported here.
     </small>

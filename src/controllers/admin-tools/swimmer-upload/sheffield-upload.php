@@ -18,7 +18,7 @@ include BASE_PATH . 'views/header.php';
   <div class="row">
     <div class="col-lg-8">
       <h1>Member upload (for Uni of Sheffield only)</h1>
-      <p class="lead">Batch upload members from a <span class="mono">CSV</span> file.</p>
+      <p class="lead">Batch upload members from a <span class="font-monospace">CSV</span> file.</p>
 
       <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['UploadSuccess']) && $_SESSION['TENANT-' . app()->tenant->getId()]['UploadSuccess']) { ?>
         <div class="alert alert-success">
@@ -66,10 +66,10 @@ include BASE_PATH . 'views/header.php';
       </p>
 
       <p>
-        We will check for existing members by checking if their email address is already in the system. Existing members will not be added again. For this to work, members must not change their email address from their <span class="mono">@sheffield.ac.uk</span> email.
+        We will check for existing members by checking if their email address is already in the system. Existing members will not be added again. For this to work, members must not change their email address from their <span class="font-monospace">@sheffield.ac.uk</span> email.
       </p>
 
-      <ol class="mono">
+      <ol class="font-monospace">
         <li>Empty column <span class="badge bg-info">Disregarded</span></li>
         <li>Member ID <span class="badge bg-info">Disregarded</span></li>
         <li>UCard Number <span class="badge bg-info">Disregarded</span></li>
