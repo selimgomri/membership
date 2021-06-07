@@ -27,7 +27,6 @@ if (substr($filename, 0, 18) !== "notify/attachments") {
 $disposition = 'inline';
 if (isset($_GET['disposition']) && $_GET['disposition'] == 'attachment' && isset($_GET['filename']) && mb_strlen($_GET['filename']) > 0) {
   $disposition = 'attachment; filename="' . addslashes($_GET['filename']) . '"';
-  reportError($disposition);
 } else if (isset($_GET['disposition']) && $_GET['disposition'] == 'attachment') {
   $disposition = 'attachment';
 }
