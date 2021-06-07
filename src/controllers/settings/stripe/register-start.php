@@ -58,6 +58,8 @@ include BASE_PATH . "views/root/head.php";
           </div>
         </div>
 
+        <?= \SCDS\CSRF::write() ?>
+
         <p>
           <button type="submit" class="btn btn-primary">
             Confirm

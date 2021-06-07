@@ -2,6 +2,10 @@
 
 if (!isset($_GET['tenant']) || !isset($_GET['tenant'])) halt(404);
 
+if (!\SCDS\CSRF::verify()) {
+  halt(403);
+}
+
 $db = app()->db;
 $tenant = Tenant::fromUUID($_GET['tenant']);
 
