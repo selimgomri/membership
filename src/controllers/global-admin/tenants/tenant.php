@@ -50,6 +50,13 @@ include BASE_PATH . "views/root/header.php";
         </dd>
 
         <dt class="col-lg-4">
+          Domain
+        </dt>
+        <dd class="col-lg-8">
+          <?= htmlspecialchars($tenant->getDomain()) ?>
+        </dd>
+
+        <dt class="col-lg-4">
           Code
         </dt>
         <dd class="col-lg-8 font-monospace">
@@ -83,8 +90,22 @@ include BASE_PATH . "views/root/header.php";
         </dd>
       </dl>
 
-      <?php pre(get_class_methods($tenant)); ?>
-      <?php pre($tenant); ?>
+      <h2>Domain</h2>
+      <form action="<?= htmlspecialchars(autoUrl("admin/tenants/$id/set-domain")) ?>" method="post" class="needs-validation" novalidate>
+        <div class="mb-3">
+          <label for="domain-name" class="form-label">Tenant Domain Name</label>
+          <input type="text" name="domain-name" id="domain-name" class="form-control" required value="<?= htmlspecialchars($tenant->getDomain()) ?>">
+          <div class="invalid-feedback">
+            You must supply a domain name
+          </div>
+        </div>
+
+        <?= \SCDS\CSRF::write() ?>
+
+        <p>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </p>
+      </form>
 
     </div>
   </div>
@@ -93,4 +114,5 @@ include BASE_PATH . "views/root/header.php";
 <?php
 
 $footer = new \SCDS\RootFooter();
+$footer->addJs('js/NeedsValidation.js');
 $footer->render();

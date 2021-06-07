@@ -290,7 +290,25 @@ function autoUrl($relative, $includeClub = true)
 
   if (isset(app()->tenant)) {
     $club = app()->tenant;
-    if ($club && $includeClub && !getenv('MAIN_DOMAIN')) {
+    if ($club && $includeClub && getenv('DOMAIN_TYPE') == 'PRIMARY') {
+      if ($club->getCode()) {
+        $rootUrl .= mb_strtolower($club->getCode()) . '/';
+      } else if ($club->getId()) {
+        $rootUrl .= $club->getId() . '/';
+      }
+    }
+  }
+
+  return rtrim($rootUrl . $relative, '/');
+}
+
+function webhookUrl($relative, $includeClub = true) {
+  // Returns an absolute URL
+  $rootUrl = getenv('ROOT_URL');
+
+  if (isset(app()->tenant)) {
+    $club = app()->tenant;
+    if ($club && $includeClub) {
       if ($club->getCode()) {
         $rootUrl .= mb_strtolower($club->getCode()) . '/';
       } else if ($club->getId()) {

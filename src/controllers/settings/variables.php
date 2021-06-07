@@ -319,7 +319,7 @@ include BASE_PATH . 'views/header.php';
 
           <p>Your GoCardless webhook endpoint URL is</p>
           <div class="mb-3">
-            <input class="form-control font-monospace" type="text" readonly value="<?= autoUrl("payments/webhooks") ?>">
+            <input class="form-control font-monospace" type="text" readonly value="<?= htmlspecialchars(webhookUrl("payments/webhooks")) ?>">
           </div>
 
           <h2>Stripe API keys (for card payments)</h2>

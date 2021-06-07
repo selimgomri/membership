@@ -245,7 +245,7 @@ include BASE_PATH . 'views/header.php';
         </h2>
 
         <p>
-          If you have an account, <a href="<?= htmlspecialchars(autoUrl('login?target=' . urlencode($tenant->getCodeId() . '/contact-tracing/check-in/' . $id))) ?>">please sign in</a> so we can pre-fill your details
+          If you have an account, <a href="<?= htmlspecialchars(autoUrl('login?target=' . urlencode('contact-tracing/check-in/' . $id))) ?>">please sign in</a> so we can pre-fill your details
         </p>
 
         <form method="post" class="needs-validation" novalidate>

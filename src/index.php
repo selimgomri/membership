@@ -368,58 +368,25 @@ $route->use(function () {
 // ]);
 
 // If SUMDOMAIN OR DOMAIN
-if (getenv('MAIN_DOMAIN')) {
+if (getenv('MAIN_DOMAIN') && getenv('DOMAIN_TYPE') == 'SUBDOMAIN') {
   // Else use main domain
   // Get the club
 
-  /**
-   * This is currently a small scale test
-   * 
-   * In production after the test we would lookup tenant from host in DB
-   */
-  $clubSet = '----';
-  switch (app('request')->hostname) {
-    case 'testclub.mt.myswimmingclub.uk':
-      $clubSet = 'xshf';
-      break;
-    case 'chesterlestreetasc.mt.myswimmingclub.uk':
-    case 'chesterlestreetasc.myswimmingclub.uk':
-      $clubSet = 'clse';
-      break;
-    case 'newcastleswimteam.myswimmingclub.uk':
-      $clubSet = 'newe';
-      break;
-    case 'darlingtonasc.myswimmingclub.uk':
-      $clubSet = 'dare';
-      break;
-    case 'rdasc.myswimmingclub.uk':
-      $clubSet = 'rice';
-      break;
-    case 'swimleeds.myswimmingclub.uk':
-      $clubSet = 'ldse';
-      break;
-    case 'nasc.myswimmingclub.uk':
-      $clubSet = 'nore';
-      break;
-
-    default:
-      # code...
-      break;
-  }
-  /**
-   * END OF TEST CODE
-   */
-
-  $clubObject = Tenant::fromCode($clubSet);
+  $clubObject = Tenant::fromDomain(app('request')->hostname);
 
   if (!$clubObject) {
-    // Because this is a trial, send to main page
+    $uuid = str_replace('.' . getenv('MAIN_DOMAIN'), '', app('request')->hostname);
+    $clubObject = Tenant::fromUUID($uuid);
+  }
+
+  if (!$clubObject) {
+    // Send to main page
     $route->any(['/', '/*'], function () {
       http_response_code(302);
       header('location: https://myswimmingclub.uk');
     });
   } else {
-    app()->club = $clubSet;
+    app()->club = $clubObject->getCodeID();
     app()->tenant = $clubObject;
 
     // pre($clubObject);
@@ -449,7 +416,7 @@ if (getenv('MAIN_DOMAIN')) {
         app()->club = $club;
         app()->tenant = $clubObject;
 
-        include BASE_PATH . 'routes/club/routes.php';
+        include BASE_PATH . 'routes/club/webhook-routes.php';
       }
     }
   });
@@ -470,7 +437,7 @@ if (getenv('MAIN_DOMAIN')) {
         app()->club = $club;
         app()->tenant = $clubObject;
 
-        include BASE_PATH . 'routes/club/routes.php';
+        include BASE_PATH . 'routes/club/webhook-routes.php';
       }
     }
   });

@@ -14,6 +14,7 @@ class Tenant
   private $goCardlessOrganisationId;
   private $goCardlessLoaded = false;
   private $stripeAccountId;
+  private $domain;
 
   public function __construct($details)
   {
@@ -24,6 +25,7 @@ class Tenant
     $this->email = $details['Email'];
     $this->verified = $details['Verified'];
     $this->uuid = $details['UniqueID'];
+    $this->domain = $details['Domain'];
 
     $this->getKeys();
   }
@@ -37,7 +39,7 @@ class Tenant
   public static function fromId(int $id)
   {
     $db = app()->db;
-    $getTenant = $db->prepare("SELECT `ID`, `Name`, `Code`, `Website`, `Email`, `Verified`, `UniqueID` FROM tenants WHERE ID = ?");
+    $getTenant = $db->prepare("SELECT `ID`, `Name`, `Code`, `Website`, `Email`, `Verified`, `UniqueID`, `Domain` FROM tenants WHERE ID = ?");
     $getTenant->execute([
       $id
     ]);
@@ -58,9 +60,51 @@ class Tenant
   public static function fromCode(string $code)
   {
     $db = app()->db;
-    $getTenant = $db->prepare("SELECT `ID`, `Name`, `Code`, `Website`, `Email`, `Verified`, `UniqueID` FROM tenants WHERE Code COLLATE utf8mb4_general_ci = ?");
+    $getTenant = $db->prepare("SELECT `ID`, `Name`, `Code`, `Website`, `Email`, `Verified`, `UniqueID`, `Domain` FROM tenants WHERE Code COLLATE utf8mb4_general_ci = ?");
     $getTenant->execute([
       $code
+    ]);
+    $tentantDetails = $getTenant->fetch(PDO::FETCH_ASSOC);
+
+    if ($tentantDetails) {
+      return new Tenant($tentantDetails);
+    }
+    return null;
+  }
+
+  /**
+   * Get a tenant by domain name
+   * 
+   * @param string domain name
+   * @return Tenant|null tenant object if exists
+   */
+  public static function fromDomain(string $domain)
+  {
+    $db = app()->db;
+    $getTenant = $db->prepare("SELECT `ID`, `Name`, `Code`, `Website`, `Email`, `Verified`, `UniqueID`, `Domain` FROM tenants WHERE `Domain` COLLATE utf8mb4_general_ci = ?");
+    $getTenant->execute([
+      $domain
+    ]);
+    $tentantDetails = $getTenant->fetch(PDO::FETCH_ASSOC);
+
+    if ($tentantDetails) {
+      return new Tenant($tentantDetails);
+    }
+    return null;
+  }
+
+  /**
+   * Get a tenant by UUID
+   * 
+   * @param string tenant UUID
+   * @return Tenant|null tenant object if exists
+   */
+  public static function fromUUID(string $uuid)
+  {
+    $db = app()->db;
+    $getTenant = $db->prepare("SELECT `ID`, `Name`, `Code`, `Website`, `Email`, `Verified`, `UniqueID`, `Domain` FROM tenants WHERE `UniqueID` COLLATE utf8mb4_general_ci = ?");
+    $getTenant->execute([
+      $uuid
     ]);
     $tentantDetails = $getTenant->fetch(PDO::FETCH_ASSOC);
 
@@ -159,6 +203,16 @@ class Tenant
   public function getName()
   {
     return $this->name;
+  }
+
+  /**
+   * Get the tenant domain name
+   * 
+   * @return string domain
+   */
+  public function getDomain()
+  {
+    return $this->domain;
   }
 
   /**
