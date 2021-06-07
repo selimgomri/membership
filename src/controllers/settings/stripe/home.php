@@ -106,7 +106,7 @@ include BASE_PATH . 'views/header.php';
           </h2>
 
           <p>
-            Your Stripe account (<span class="mono"><?= htmlspecialchars($at) ?></span>) is currently connected.
+            Your Stripe account (<span class="font-monospace"><?= htmlspecialchars($at) ?></span>) is currently connected.
           </p>
 
           <h3>
@@ -130,10 +130,10 @@ include BASE_PATH . 'views/header.php';
             <dd class="col-sm-9 text-truncate"><?php if (isset($stripeAccount->business_profile->url)) { ?><a href="<?= htmlspecialchars($stripeAccount->business_profile->url) ?>" target="_blank"><?= htmlspecialchars(trim(str_replace(['https://www.', 'http://www.', 'http://', 'https://'], '', $stripeAccount->business_profile->url), '/')) ?></a><?php } else { ?>Not set<?php } ?></dd>
 
             <dt class="col-sm-3">Statement descriptor</dt>
-            <dd class="col-sm-9 mono"><?php if (isset($stripeAccount->settings->payments->statement_descriptor)) { ?><?= htmlspecialchars($stripeAccount->settings->payments->statement_descriptor) ?><?php } else { ?>Not set<?php } ?></dd>
+            <dd class="col-sm-9 font-monospace"><?php if (isset($stripeAccount->settings->payments->statement_descriptor)) { ?><?= htmlspecialchars($stripeAccount->settings->payments->statement_descriptor) ?><?php } else { ?>Not set<?php } ?></dd>
 
             <dt class="col-sm-3">Short statement descriptor</dt>
-            <dd class="col-sm-9 mono"><?php if (isset($stripeAccount->settings->card_payments->statement_descriptor_prefix)) { ?><?= htmlspecialchars($stripeAccount->settings->card_payments->statement_descriptor_prefix) ?><?php } else { ?>Not set<?php } ?></dd>
+            <dd class="col-sm-9 font-monospace"><?php if (isset($stripeAccount->settings->card_payments->statement_descriptor_prefix)) { ?><?= htmlspecialchars($stripeAccount->settings->card_payments->statement_descriptor_prefix) ?><?php } else { ?>Not set<?php } ?></dd>
 
             <dt class="col-sm-3">Administrator email</dt>
             <dd class="col-sm-9 text-truncate"><?php if (isset($stripeAccount->email)) { ?><a href="mailto:<?= htmlspecialchars($stripeAccount->email) ?>"><?= htmlspecialchars($stripeAccount->email) ?></a><?php } else { ?>Not set<?php } ?></dd>
@@ -166,10 +166,10 @@ include BASE_PATH . 'views/header.php';
           </h2>
 
           <form method="post">
-            <div class="form-group">
-              <div class="custom-control custom-switch">
-                <input type="checkbox" class="custom-control-input" id="GALA_CARD_PAYMENTS_ALLOWED" name="GALA_CARD_PAYMENTS_ALLOWED" <?php if (bool($vars['GALA_CARD_PAYMENTS_ALLOWED'])) { ?>checked<?php } ?> <?= $disabled['GALA_CARD_PAYMENTS_ALLOWED'] ?>>
-                <label class="custom-control-label" for="GALA_CARD_PAYMENTS_ALLOWED">Allow card payments for gala entries</label>
+            <div class="mb-3">
+              <div class="form-switch mb-2">
+                <input class="form-check-input" type="checkbox" id="GALA_CARD_PAYMENTS_ALLOWED" name="GALA_CARD_PAYMENTS_ALLOWED" <?php if (bool($vars['GALA_CARD_PAYMENTS_ALLOWED'])) { ?>checked<?php } ?> <?= $disabled['GALA_CARD_PAYMENTS_ALLOWED'] ?>>
+                <label class="form-check-label" for="GALA_CARD_PAYMENTS_ALLOWED">Allow card payments for gala entries</label>
               </div>
             </div>
 
@@ -179,25 +179,25 @@ include BASE_PATH . 'views/header.php';
               </p>
             <?php } ?>
 
-            <div class="form-group">
-              <div class="custom-control custom-switch">
-                <input type="checkbox" class="custom-control-input" id="ALLOW_STRIPE_DIRECT_DEBIT_SET_UP" name="ALLOW_STRIPE_DIRECT_DEBIT_SET_UP" <?php if (bool($vars['ALLOW_STRIPE_DIRECT_DEBIT_SET_UP'])) { ?>checked<?php } ?> <?= $disabled['ALLOW_STRIPE_DIRECT_DEBIT_SET_UP'] ?>>
-                <label class="custom-control-label" for="ALLOW_STRIPE_DIRECT_DEBIT_SET_UP">Allow users to set up a Direct Debit mandate with Stripe</label>
+            <div class="mb-3">
+              <div class="form-switch mb-2">
+                <input class="form-check-input" type="checkbox" id="ALLOW_STRIPE_DIRECT_DEBIT_SET_UP" name="ALLOW_STRIPE_DIRECT_DEBIT_SET_UP" <?php if (bool($vars['ALLOW_STRIPE_DIRECT_DEBIT_SET_UP'])) { ?>checked<?php } ?> <?= $disabled['ALLOW_STRIPE_DIRECT_DEBIT_SET_UP'] ?>>
+                <label class="form-check-label" for="ALLOW_STRIPE_DIRECT_DEBIT_SET_UP">Allow users to set up a Direct Debit mandate with Stripe</label>
               </div>
             </div>
 
-            <div class="form-group">
-              <div class="custom-control custom-switch">
-                <input type="checkbox" class="custom-control-input" id="USE_STRIPE_DIRECT_DEBIT" name="USE_STRIPE_DIRECT_DEBIT" <?php if (bool($vars['USE_STRIPE_DIRECT_DEBIT'])) { ?>checked<?php } ?> <?= $disabled['USE_STRIPE_DIRECT_DEBIT'] ?> aria-describedby="USE_STRIPE_DIRECT_DEBIT-help">
-                <label class="custom-control-label" for="USE_STRIPE_DIRECT_DEBIT">Use Stripe for Direct Debit rather than GoCardless</label>
+            <div class="mb-3">
+              <div class="form-switch mb-2">
+                <input class="form-check-input" type="checkbox" id="USE_STRIPE_DIRECT_DEBIT" name="USE_STRIPE_DIRECT_DEBIT" <?php if (bool($vars['USE_STRIPE_DIRECT_DEBIT'])) { ?>checked<?php } ?> <?= $disabled['USE_STRIPE_DIRECT_DEBIT'] ?> aria-describedby="USE_STRIPE_DIRECT_DEBIT-help">
+                <label class="form-check-label" for="USE_STRIPE_DIRECT_DEBIT">Use Stripe for Direct Debit rather than GoCardless</label>
               </div>
               <small id="USE_STRIPE_DIRECT_DEBIT-help">Once you enable Stripe Direct Debit, GoCardless will stop working and this change can not be reversed.</small>
             </div>
 
-            <div class="form-group">
-              <div class="custom-control custom-switch">
-                <input type="checkbox" class="custom-control-input" id="ALLOW_DIRECT_DEBIT_OPT_OUT" name="ALLOW_DIRECT_DEBIT_OPT_OUT" <?php if (bool($vars['ALLOW_DIRECT_DEBIT_OPT_OUT'])) { ?>checked<?php } ?> aria-describedby="ALLOW_DIRECT_DEBIT_OPT_OUT-help">
-                <label class="custom-control-label" for="ALLOW_DIRECT_DEBIT_OPT_OUT">Allow users to choose not to use Direct Debit</label>
+            <div class="mb-3">
+              <div class="form-switch mb-2">
+                <input class="form-check-input" type="checkbox" id="ALLOW_DIRECT_DEBIT_OPT_OUT" name="ALLOW_DIRECT_DEBIT_OPT_OUT" <?php if (bool($vars['ALLOW_DIRECT_DEBIT_OPT_OUT'])) { ?>checked<?php } ?> aria-describedby="ALLOW_DIRECT_DEBIT_OPT_OUT-help">
+                <label class="form-check-label" for="ALLOW_DIRECT_DEBIT_OPT_OUT">Allow users to choose not to use Direct Debit</label>
               </div>
               <small id="ALLOW_DIRECT_DEBIT_OPT_OUT-help">If some of your users will continue to pay by standing order, enable this option so that they aren't forced to set up a Direct Debit mandate during registration or renewal.</small>
             </div>

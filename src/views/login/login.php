@@ -44,7 +44,7 @@ include BASE_PATH . "views/root/head.php";
               <div class="row align-items-center mb-3">
                 <div class="col-auto">
                   <a href="<?= htmlspecialchars(autoUrl("", false)) ?>">
-                  <img src="<?= htmlspecialchars(autoUrl("public/img/corporate/scds.png")) ?>" class="img-fluid rounded" style="height: 75px;">
+                  <img src="<?= htmlspecialchars(autoUrl("img/corporate/scds.png")) ?>" class="img-fluid rounded" style="height: 75px;">
                   </a>
                 </div>
                 <div class="col-auto">
@@ -58,22 +58,22 @@ include BASE_PATH . "views/root/head.php";
               </p>
 
               <form action="<?= htmlspecialchars(autoUrl($club->getCodeId() . "/login", false)) ?>" method="post" id="login-form" class="needs-validation" novalidate data-prefilled="<?= htmlspecialchars((int) isset($_GET['user'])) ?>" data-ajax-login-url="<?= htmlspecialchars(autoUrl("login", false)) ?>" data-ajax-two-factor-url="<?= htmlspecialchars(autoUrl("login/2fa", false)) ?>">
-                <div class="form-group">
-                  <label for="email-address">Email address</label>
+                <div class="mb-3">
+                  <label class="form-label" for="email-address">Email address</label>
                   <input type="email" class="form-control form-control-lg text-lowercase" id="email-address" name="email-address" placeholder="yourname@example.com" required autocomplete="email" <?php if (isset($_GET['user'])) { ?>value="<?= htmlspecialchars(urldecode($_GET['user'])) ?>" <?php } else { ?> autofocus <?php } ?>>
                 </div>
 
-                <div class="form-group">
-                  <label for="password">Password</label>
+                <div class="mb-3">
+                  <label class="form-label" for="password">Password</label>
                   <input type="password" name="password" id="password" class="form-control form-control-lg" required placeholder="Password" autocomplete="current-password" <?php if (isset($_GET['user'])) { ?> autofocus <?php } ?>>
                 </div>
 
                 <input type="hidden" name="target" value="<?= htmlspecialchars($target) ?>">
 
-                <div class="form-group">
-                  <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" name="remember-me" id="remember-me" checked aria-describedby="remember-me-help">
-                    <label class="custom-control-label" for="remember-me">Keep me logged in</label>
+                <div class="mb-3">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="remember-me" id="remember-me" checked aria-describedby="remember-me-help">
+                    <label class="form-check-label" for="remember-me">Keep me logged in</label>
                     <small id="remember-me-help" class="form-text text-muted">
                       Untick this box if you are using a public or shared computer
                     </small>

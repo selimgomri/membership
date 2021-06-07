@@ -39,7 +39,8 @@ document.getElementById('new-session-form').addEventListener('submit', ev => {
             window.location.href = response.redirect;
           } else {
             getSessions();
-            $('#add-session-modal').modal('hide');
+            let modal = new bootstrap.Modal(document.getElementById('add-session-modal'));
+            modal.hide();
           }
         } else {
           // Error
@@ -52,7 +53,8 @@ document.getElementById('new-session-form').addEventListener('submit', ev => {
   }
 });
 
-$('#add-session-modal').on('hidden.bs.modal', function (event) {
+let addModal = document.getElementById('add-session-modal');
+addModal.addEventListener('hidden.bs.modal', function (event) {
   let resetForms = document.getElementsByClassName('add-session-form-reset-input');
   document.getElementById('recurring-session').checked = true;
   document.getElementById('main-sequence-all').checked = true;
@@ -74,7 +76,7 @@ $('#add-session-modal').on('hidden.bs.modal', function (event) {
   document.getElementById('new-session-form').classList.remove('was-validated');
 });
 
-$('#add-session-modal').on('show.bs.modal', function (event) {
+addModal.addEventListener('show.bs.modal', function (event) {
   let currentSquad = document.getElementById('squad').value;
   if (currentSquad) {
     let squadCheck = document.getElementById('squad-check-' + currentSquad);

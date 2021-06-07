@@ -39,9 +39,16 @@ try {
   $_SESSION['TENANT-' . $tenant->getId()]['Stripe-Reg-Success'] = true;
   unset($_SESSION['Stripe-Reg-OAuth']['tenant']);
 
+  $domain = app('request')->hostname;
+  if ($tenant->getDomain()) {
+    $domain = $tenant->getDomain();
+  } else {
+    $domain = $tenant->getUUID() . getenv('MAIN_DOMAIN');
+  }
+
   try {
     \Stripe\ApplePayDomain::create(
-      ['domain_name' => app('request')->hostname],
+      ['domain_name' => $domain],
       ['stripe_account' => $tenant->getStripeAccount()]
     );
   } catch (Exception $e) {

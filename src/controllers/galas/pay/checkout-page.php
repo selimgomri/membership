@@ -194,28 +194,33 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
 <div id="stripe-data" data-stripe-publishable="<?= htmlspecialchars(getenv('STRIPE_PUBLISHABLE')) ?>" data-stripe-font-css="<?= htmlspecialchars($fontCss) ?>" data-redirect-url-new="<?= htmlspecialchars(autoUrl("galas/pay-for-entries/complete/new")) ?>" data-redirect-url="<?= htmlspecialchars(autoUrl("galas/pay-for-entries/complete")) ?>" data-org-name="<?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?>" data-intent-amount="<?= htmlspecialchars($intent->amount) ?>" data-intent-currency="<?= htmlspecialchars($intent->currency) ?>" data-payment-request-line-items="<?= htmlspecialchars(json_encode($entryRequestDetails)) ?>" data-stripe-account-id="<?= htmlspecialchars($tenant->getStripeAccount()) ?>">
 </div>
 
-<div class="container">
-  <nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="<?= autoUrl("galas") ?>">Galas</a></li>
-      <li class="breadcrumb-item active" aria-current="page">Pay for entries</li>
-    </ol>
-  </nav>
+<div class="bg-light mt-n3 py-3 mb-3">
+  <div class="container">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="<?= autoUrl("galas") ?>">Galas</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Pay for entries</li>
+      </ol>
+    </nav>
 
-  <div class="row align-items-center justify-content-between mb-3">
-    <div class="col-lg-7">
-      <h1>Pay for gala entries</h1>
-      <p class="lead">Checkout</p>
-    </div>
-    <div class="col text-lg-right">
-      <div class="accepted-network-logos">
-        <p>
-          <img class="apple-pay-row" src="<?= autoUrl("public/img/stripe/apple-pay-mark.svg") ?>" aria-hidden="true"><img class="google-pay-row" src="<?= autoUrl("public/img/stripe/google-pay-mark.svg") ?>" aria-hidden="true"><img class="visa-row" src="<?= autoUrl("public/img/stripe/visa.svg") ?>" aria-hidden="true"><img class="mastercard-row" src="<?= autoUrl("public/img/stripe/mastercard.svg") ?>" aria-hidden="true"><img class="amex-row" src="<?= autoUrl("public/img/stripe/amex.svg") ?>" aria-hidden="true">
-        </p>
+    <div class="row align-items-center justify-content-between">
+      <div class="col-lg-7">
+        <h1>Pay for gala entries</h1>
+        <p class="lead mb-0">Checkout</p>
+      </div>
+      <div class="col text-lg-end">
+        <div class="d-lg-none mt-3"></div>
+        <div class="accepted-network-logos">
+          <p class="mb-0">
+            <img class="apple-pay-row" src="<?= autoUrl("img/stripe/apple-pay-mark.svg", false) ?>" aria-hidden="true"><img class="google-pay-row" src="<?= autoUrl("img/stripe/google-pay-mark.svg", false) ?>" aria-hidden="true"><img class="visa-row" src="<?= autoUrl("img/stripe/visa.svg", false) ?>" aria-hidden="true"><img class="mastercard-row" src="<?= autoUrl("img/stripe/mastercard.svg", false) ?>" aria-hidden="true"><img class="amex-row" src="<?= autoUrl("img/stripe/amex.svg", false) ?>" aria-hidden="true">
+          </p>
+        </div>
       </div>
     </div>
   </div>
+</div>
 
+<div class="container">
   <div class="row justify-content-between">
     <div class="col-lg-4 order-lg-2">
 
@@ -234,7 +239,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
                 <div class="col-8 col-sm-5 col-md-4 col-lg-6">
                   <h3><?= htmlspecialchars($entry['MForename'] . ' ' . $entry['MSurname']) ?> <br><small><?= htmlspecialchars($entry['GalaName']) ?></small></h3>
                   <p class="mb-0">
-                    <a data-toggle="collapse" href="#swims-<?= $entry['EntryID'] ?>" role="button" aria-expanded="false" aria-controls="swims-<?= $entry['EntryID'] ?>">
+                    <a data-bs-toggle="collapse" href="#swims-<?= $entry['EntryID'] ?>" role="button" aria-expanded="false" aria-controls="swims-<?= $entry['EntryID'] ?>">
                       View swims <i class="fa fa-caret-down" aria-hidden="true"></i>
                     </a>
                   </p>
@@ -259,7 +264,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
                       <?php } ?>
                   </div>
                 </div>
-                <div class="col text-right">
+                <div class="col text-end">
                   <p>
                     <?= mb_convert_case($numFormatter->format($count), MB_CASE_TITLE_SIMPLE) ?> event<?php if ($count != 1) { ?>s<?php } ?>
                   </p>
@@ -284,7 +289,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
                   <strong>Total to pay</strong>
                 </p>
               </div>
-              <div class="col text-right">
+              <div class="col text-end">
                 <p class="mb-0">
                   <strong>&pound;<?= htmlspecialchars((string) (\Brick\Math\BigDecimal::of((string) $intent->amount))->withPointMovedLeft(2)->toScale(2)) ?></strong>
                 </p>
@@ -318,9 +323,9 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
             </div>
             <div class="card-body pb-0">
 
-              <div class="form-group">
-                <label for="method">Choose a saved card</label>
-                <select class="custom-select pm-can-disable" name="method" id="method">
+              <div class="mb-3">
+                <label class="form-label" for="method">Choose a saved card</label>
+                <select class="form-select pm-can-disable" name="method" id="method">
                   <option value="select">Select card</option>
                   <?php foreach ($cards as $card) { ?>
                     <option value="<?= $card['MethodID'] ?>">
@@ -335,9 +340,11 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
                 <div id="saved-card-errors" role="alert"></div>
 
                 <p>
-                  <button id="saved-card-button" class="btn btn-success btn-block pm-can-disable" type="button" data-secret="<?= $intent->client_secret ?>">
+                <div class="d-grid">
+                  <button id="saved-card-button" class="btn btn-success pm-can-disable" type="button" data-secret="<?= $intent->client_secret ?>">
                     Pay &pound;<?= htmlspecialchars((string) (\Brick\Math\BigDecimal::of((string) $intent->amount))->withPointMovedLeft(2)->toScale(2)) ?> now
                   </button>
+                </div>
                 </p>
               </div>
 
@@ -354,8 +361,8 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
         </div>
         <div class="card-body">
           <form id="new-card-form" class="needs-validation" novalidate>
-            <div class="form-group">
-              <label for="new-cardholder-name">Cardholder name</label>
+            <div class="mb-3">
+              <label class="form-label" for="new-cardholder-name">Cardholder name</label>
               <input type="text" class="form-control pm-can-disable" id="new-cardholder-name" placeholder="C F Frost" required autocomplete="cc-name" aria-describedby="new-cardholder-name-help">
               <small id="new-cardholder-name-help" class="form-text text-muted">The name shown on your card</small>
               <div class="invalid-feedback">
@@ -363,25 +370,25 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
               </div>
             </div>
 
-            <div class="form-group">
-              <label for="addr-line-1">Address line 1</label>
+            <div class="mb-3">
+              <label class="form-label" for="addr-line-1">Address line 1</label>
               <input type="text" class="form-control pm-can-disable" id="addr-line-1" placeholder="1 Burns Green" required autocomplete="address-line1">
               <div class="invalid-feedback">
                 You must provide your address
               </div>
             </div>
 
-            <div class="form-group">
-              <label for="addr-post-code">Post Code</label>
+            <div class="mb-3">
+              <label class="form-label" for="addr-post-code">Post Code</label>
               <input type="text" class="form-control pm-can-disable text-uppercase" id="addr-post-code" placeholder="NE99 1AA" required autocomplete="postal-code">
               <div class="invalid-feedback">
                 You must provide your post code
               </div>
             </div>
 
-            <div class="form-group">
-              <label for="addr-post-code">Country</label>
-              <select class="custom-select pm-can-disable pm-can-disable" required id="addr-country" autocomplete="country">
+            <div class="mb-3">
+              <label class="form-label" for="addr-post-code">Country</label>
+              <select class="form-select pm-can-disable pm-can-disable" required id="addr-country" autocomplete="country">
                 <?php foreach ($countries as $code => $name) { ?>
                   <option <?php if ($code == 'GB') { ?>selected<?php } ?> value="<?= htmlspecialchars($code) ?>"><?= htmlspecialchars($name) ?></option>
                 <?php } ?>
@@ -395,23 +402,21 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
             <div id="card-errors" role="alert"></div>
 
             <!-- Multiple Part Element -->
-            <div class="form-group">
-              <label for="card-number-element">
+            <div class="mb-3">
+              <label class="form-label" for="card-number-element">
                 Card number
               </label>
-              <div class="input-group">
-                <div class="input-group-prepend">
-                  <span class="input-group-text" id="card-brand-element"><img class="fa fa-fw" src="<?= autoUrl("public/img/stripe/network-svgs/credit-card.svg") ?>" aria-hidden="true"></span>
-                </div>
+              <div class="input-group has-validation">
+                <span class="input-group-text" id="card-brand-element"><img class="fa fa-fw" src="<?= autoUrl("img/stripe/network-svgs/credit-card.svg", false) ?>" aria-hidden="true"></span>
                 <div id="card-number-element" class="form-control stripe-form-control pm-can-disable"></div>
                 <div id="card-number-element-errors" class="stripe-feedback"></div>
               </div>
             </div>
 
-            <div class="form-row">
+            <div class="row">
               <div class="col">
-                <div class="form-group">
-                  <label for="card-expiry-element">
+                <div class="mb-3">
+                  <label class="form-label" for="card-expiry-element">
                     Expires
                   </label>
                   <span id="card-expiry-element" class="form-control pm-can-disable"></span>
@@ -419,8 +424,8 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
                 </div>
               </div>
               <div class="col">
-                <div class="form-group">
-                  <label for="card-cvc-element">
+                <div class="mb-3">
+                  <label class="form-label" for="card-cvc-element">
                     CVC
                   </label>
                   <span id="card-cvc-element" class="form-control pm-can-disable"></span>
@@ -430,10 +435,10 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
             </div>
 
             <!--
-              <div class="form-group">
-                <div class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="reuse-card" name="reuse-card" checked>
-                  <label class="custom-control-label" for="reuse-card">Save this card for future payments</label>
+              <div class="mb-3">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="reuse-card" name="reuse-card" checked>
+                  <label class="form-check-label" for="reuse-card">Save this card for future payments</label>
                 </div>
               </div>
               -->
@@ -444,9 +449,11 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
             <div id="new-card-errors" role="alert"></div>
 
             <p class="mb-0">
-              <button id="new-card-button" class="btn btn-success btn-block pm-can-disable" type="submit" data-secret="<?= $intent->client_secret ?>">
+            <div class="d-grid">
+              <button id="new-card-button" class="btn btn-success pm-can-disable" type="submit" data-secret="<?= $intent->client_secret ?>">
                 Pay &pound;<?= htmlspecialchars((string) (\Brick\Math\BigDecimal::of((string) $intent->amount))->withPointMovedLeft(2)->toScale(2)) ?> now
               </button>
+            </div>
             </p>
           </form>
         </div>

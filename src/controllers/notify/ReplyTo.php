@@ -36,8 +36,8 @@ include BASE_PATH . 'views/header.php';
       <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['SetReplyFalse']); } ?>
 
       <form method="post">
-        <div class="form-group">
-          <label for="reply">Reply-To email address</label>
+        <div class="mb-3">
+          <label class="form-label" for="reply">Reply-To email address</label>
           <input type="email" class="form-control" id="reply" name="reply" placeholder="Enter email" value="<?=htmlspecialchars(getUserOption($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], 'NotifyReplyAddress'))?>">
         </div>
 

@@ -38,21 +38,25 @@ include BASE_PATH . "views/paymentsMenu.php";
 </div>
 -->
 
-<div class="container">
+<div class="bg-light mt-n3 py-3 mb-3">
+  <div class="container">
 
-  <nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item active" aria-current="page">Payments</li>
-    </ol>
-  </nav>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page">Payments</li>
+      </ol>
+    </nav>
 
-  <div class="row align-items-center">
-    <div class="col-md-6 col-lg-8">
-      <h1>Payments</h1>
-      <p class="lead">Manage your Direct Debit Payments</p>
+    <div class="row align-items-center">
+      <div class="col-md-6 col-lg-8">
+        <h1>Payments</h1>
+        <p class="lead mb-0">Manage your payments to <?= htmlspecialchars(app()->tenant->getName()) ?></p>
+      </div>
     </div>
-
   </div>
+</div>
+
+<div class="container">
   <div class="row">
     <div class="col-md-8">
       <div class="cell">
@@ -64,7 +68,7 @@ include BASE_PATH . "views/paymentsMenu.php";
         <h2>
           Extra Fees this month
         </h2>
-        <p class="lead">Fees to pay on your next Billing Date, in addition to Squad Fees</p>
+        <p class="lead">Fees to pay on your next billing date, in addition to squad fees</p>
         <?= feesToPay(null, $user) ?>
       </div>
     </div>
@@ -81,21 +85,23 @@ include BASE_PATH . "views/paymentsMenu.php";
           <?php if ($mandate) { ?>
             <dl class="row">
               <dt class="col-sm-5">Sort code</dt>
-              <dd class="col-sm-7 mono"><?= htmlspecialchars(implode("-", str_split($mandate['SortCode'], 2))) ?></dd>
+              <dd class="col-sm-7 font-monospace"><?= htmlspecialchars(implode("-", str_split($mandate['SortCode'], 2))) ?></dd>
 
               <dt class="col-sm-5">Account number</dt>
-              <dd class="col-sm-7 mono">&middot;&middot;&middot;&middot;<?= htmlspecialchars($mandate['Last4']) ?></dd>
+              <dd class="col-sm-7 font-monospace">&middot;&middot;&middot;&middot;<?= htmlspecialchars($mandate['Last4']) ?></dd>
 
               <dt class="col-sm-5">Payment reference</dt>
-              <dd class="col-sm-7 mono"><?= htmlspecialchars($mandate['Reference']) ?></dd>
+              <dd class="col-sm-7 font-monospace"><?= htmlspecialchars($mandate['Reference']) ?></dd>
             </dl>
           <?php } ?>
 
+          <div class="d-grid gap-2">
           <?php if ($mandate) { ?>
-            <a href="<?= autoUrl("payments/direct-debit") ?>" class="btn btn-dark btn-block">Manage your bank account</a>
+            <a href="<?= autoUrl("payments/direct-debit") ?>" class="btn btn-dark">Manage your bank account</a>
           <?php } else { ?>
-            <a href="<?= autoUrl("payments/direct-debit/set-up") ?>" class="btn btn-dark btn-block">Setup a Direct Debit</a>
+            <a href="<?= autoUrl("payments/direct-debit/set-up") ?>" class="btn btn-dark">Setup a Direct Debit</a>
           <?php } ?>
+          </div>
         </div>
       <?php } ?>
       <?php if ($tenant->getKey('GOCARDLESS_ACCESS_TOKEN') && userHasMandates($user)) { ?>
@@ -117,14 +123,16 @@ include BASE_PATH . "views/paymentsMenu.php";
             <img class="img-fluid mb-3" style="max-height:35px;" src="<?= $logo_path ?>.png" srcset="<?= $logo_path ?>@2x.png 2x, <?= $logo_path ?>@3x.png 3x">
           <?php } ?>
           <p class="mb-0"><?= htmlspecialchars($name) ?><abbr title="<?= htmlspecialchars(strtoupper(bankDetails($user, "bank_name"))) ?>"><?= htmlspecialchars(getBankName(bankDetails($user, "bank_name"))) ?></abbr></p>
-          <p class="mono">&middot;&middot;&middot;&middot;&middot;&middot;<?= htmlspecialchars(strtoupper(bankDetails($user, "account_number_end"))) ?></p>
+          <p class="font-monospace">&middot;&middot;&middot;&middot;&middot;&middot;<?= htmlspecialchars(strtoupper(bankDetails($user, "account_number_end"))) ?></p>
           <p><?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?> does not store your bank details.</p>
           <p class="mb-0">
+          <div class="d-grid gap-2">
             <?php if (userHasMandates($user)) { ?>
-              <a href="<?= autoUrl("payments/mandates") ?>" class="btn btn-dark btn-block">Manage your bank account</a>
+              <a href="<?= autoUrl("payments/mandates") ?>" class="btn btn-dark">Manage your bank account</a>
             <?php } else { ?>
-              <a href="<?= autoUrl("payments/setup") ?>" class="btn btn-dark btn-block">Setup a Direct Debit</a>
+              <a href="<?= autoUrl("payments/setup") ?>" class="btn btn-dark">Setup a Direct Debit</a>
             <?php } ?>
+          </div>
           </p>
         </div>
       <?php } ?>

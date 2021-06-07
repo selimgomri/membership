@@ -159,9 +159,9 @@ if (!$squad) {
                   }
                 ?>
                   <li class="list-group-item <?php if ($here) { ?> bg-light <?php } ?>">
-                    <div class="custom-control custom-checkbox">
-                      <input type="checkbox" class="custom-control-input" id="<?= htmlspecialchars('user-' . $coach['UserID']) ?>" name="<?= htmlspecialchars('user-' . $coach['UserID']) ?>" value="1" <?php if ($here) { ?> disabled <?php } ?> <?php if ($here) { ?> checked <?php } ?>>
-                      <label class="custom-control-label d-block" for="<?= htmlspecialchars('user-' . $coach['UserID']) ?>"><?= htmlspecialchars($coach['Forename'] . ' ' . $coach['Surname']) ?></label>
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" id="<?= htmlspecialchars('user-' . $coach['UserID']) ?>" name="<?= htmlspecialchars('user-' . $coach['UserID']) ?>" value="1" <?php if ($here) { ?> disabled <?php } ?> <?php if ($here) { ?> checked <?php } ?>>
+                      <label class="form-check-label d-block" for="<?= htmlspecialchars('user-' . $coach['UserID']) ?>"><?= htmlspecialchars($coach['Forename'] . ' ' . $coach['Surname']) ?></label>
                     </div>
                   </li>
                 <?php } while ($coach = $getCoaches->fetch(PDO::FETCH_ASSOC)); ?>
@@ -214,38 +214,38 @@ if (!$squad) {
                   <li class="list-group-item <?php if (!$member['UserID'] || $here) { ?> bg-light <?php } ?>">
                     <div class="row">
                       <div class="col">
-                        <div class="custom-control custom-checkbox">
-                          <input type="checkbox" class="custom-control-input" id="<?= htmlspecialchars('member-' . $member['MemberID']) ?>" name="<?= htmlspecialchars('member-' . $member['MemberID']) ?>" value="1" <?php if (!$member['UserID'] || $here) { ?> disabled <?php } ?> <?php if ($here) { ?> checked <?php } ?>>
-                          <label class="custom-control-label d-block" for="<?= htmlspecialchars('member-' . $member['MemberID']) ?>"><?= htmlspecialchars($member['MForename'] . ' ' . $member['MSurname']) ?> <em class="small"><?php if ($member['UserID']) { ?><?= htmlspecialchars($member['Forename'] . ' ' . $member['Surname']) ?>'s details<?php } else { ?>No details on file<?php } ?></em></label>
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" id="<?= htmlspecialchars('member-' . $member['MemberID']) ?>" name="<?= htmlspecialchars('member-' . $member['MemberID']) ?>" value="1" <?php if (!$member['UserID'] || $here) { ?> disabled <?php } ?> <?php if ($here) { ?> checked <?php } ?>>
+                          <label class="form-check-label d-block" for="<?= htmlspecialchars('member-' . $member['MemberID']) ?>"><?= htmlspecialchars($member['MForename'] . ' ' . $member['MSurname']) ?> <em class="small"><?php if ($member['UserID']) { ?><?= htmlspecialchars($member['Forename'] . ' ' . $member['Surname']) ?>'s details<?php } else { ?>No details on file<?php } ?></em></label>
                         </div>
                       </div>
                       <div class="col-auto">
                         <?php if ($cvRALatest && bool($cvRALatest['MemberAgreement'])) { ?>
-                          <span class="badge badge-sm badge-success">
-                            RA <i class="fa fa-check-circle" aria-hidden="true"></i> <span class="sr-only">Valid declaration</span>
+                          <span class="badge badge-sm bg-success">
+                            RA <i class="fa fa-check-circle" aria-hidden="true"></i> <span class="visually-hidden">Valid declaration</span>
                           </span>
                         <?php } else { ?>
-                          <span class="badge badge-sm badge-danger">
-                            RA <i class="fa fa-times-circle" aria-hidden="true"></i> <span class="sr-only">form not submitted or new submission required</span>
+                          <span class="badge badge-sm bg-danger">
+                            RA <i class="fa fa-times-circle" aria-hidden="true"></i> <span class="visually-hidden">form not submitted or new submission required</span>
                           </span>
                         <?php } ?>
                         <?php if ($cvLatest) { ?>
                           <?php if (bool($cvLatest['OfficerApproval'])) { ?>
-                            <span class="badge badge-sm badge-success">
-                              HS <i class="fa fa-check-circle" aria-hidden="true"></i><span class="sr-only">Survey submitted and approved</span>
+                            <span class="badge badge-sm bg-success">
+                              HS <i class="fa fa-check-circle" aria-hidden="true"></i><span class="visually-hidden">Survey submitted and approved</span>
                             </span>
                           <?php } else if (!bool($cvLatest['OfficerApproval']) && $cvLatest['ApprovedBy']) { ?>
-                            <span class="badge badge-sm badge-danger">
-                              HS <i class="fa fa-times-circle" aria-hidden="true"></i><span class="sr-only">Survey submitted and rejected</span>
+                            <span class="badge badge-sm bg-danger">
+                              HS <i class="fa fa-times-circle" aria-hidden="true"></i><span class="visually-hidden">Survey submitted and rejected</span>
                             </span>
                           <?php } else if (!bool($cvLatest['OfficerApproval']) && !$cvLatest['ApprovedBy']) { ?>
-                            <span class="badge badge-sm badge-warning">
-                              HS <i class="fa fa-minus-circle" aria-hidden="true"></i><span class="sr-only">Survey submitted pending approval</span>
+                            <span class="badge badge-sm bg-warning">
+                              HS <i class="fa fa-minus-circle" aria-hidden="true"></i><span class="visually-hidden">Survey submitted pending approval</span>
                             </span>
                           <?php } ?>
                         <?php } else { ?>
-                          <span class="badge badge-sm badge-danger">
-                            NO HS <span class="sr-only">Survey submitted</span>
+                          <span class="badge badge-sm bg-danger">
+                            NO HS <span class="visually-hidden">Survey submitted</span>
                           </span>
                         <?php } ?>
                       </div>
@@ -297,9 +297,9 @@ if (!$squad) {
                   }
                 ?>
                   <li class="list-group-item <?php if ($here) { ?> bg-light <?php } ?>">
-                    <div class="custom-control custom-checkbox">
-                      <input type="checkbox" class="custom-control-input" id="<?= htmlspecialchars('rep-' . $rep['UserID']) ?>" name="<?= htmlspecialchars('rep-' . $rep['UserID']) ?>" value="1" <?php if ($here) { ?> disabled <?php } ?> <?php if ($here) { ?> checked <?php } ?>>
-                      <label class="custom-control-label d-block" for="<?= htmlspecialchars('rep-' . $rep['UserID']) ?>"><?= htmlspecialchars($rep['Forename'] . ' ' . $rep['Surname']) ?></label>
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" id="<?= htmlspecialchars('rep-' . $rep['UserID']) ?>" name="<?= htmlspecialchars('rep-' . $rep['UserID']) ?>" value="1" <?php if ($here) { ?> disabled <?php } ?> <?php if ($here) { ?> checked <?php } ?>>
+                      <label class="form-check-label d-block" for="<?= htmlspecialchars('rep-' . $rep['UserID']) ?>"><?= htmlspecialchars($rep['Forename'] . ' ' . $rep['Surname']) ?></label>
                     </div>
                   </li>
                 <?php } while ($rep = $getReps->fetch(PDO::FETCH_ASSOC)); ?>
@@ -348,32 +348,32 @@ if (!$squad) {
 
             <dl class="row mb-0">
               <dt class="col-sm-3">
-                <span class="badge badge-sm badge-success">
-                  HS <i class="fa fa-check-circle" aria-hidden="true"></i><span class="sr-only">Survey submitted and approved</span>
+                <span class="badge badge-sm bg-success">
+                  HS <i class="fa fa-check-circle" aria-hidden="true"></i><span class="visually-hidden">Survey submitted and approved</span>
                 </span>
               </dt>
               <dd class="col-sm-9">
                 COVID health survey submitted and approved by staff
               </dd>
               <dt class="col-sm-3">
-                <span class="badge badge-sm badge-danger">
-                  HS <i class="fa fa-times-circle" aria-hidden="true"></i><span class="sr-only">Survey submitted and rejected or new survey submission requested</span>
+                <span class="badge badge-sm bg-danger">
+                  HS <i class="fa fa-times-circle" aria-hidden="true"></i><span class="visually-hidden">Survey submitted and rejected or new survey submission requested</span>
                 </span>
               </dt>
               <dd class="col-sm-9">
                 COVID health survey submitted and rejected by staff or survey voided and new survey submission requested by staff
               </dd>
               <dt class="col-sm-3">
-                <span class="badge badge-sm badge-warning">
-                  HS <i class="fa fa-minus-circle" aria-hidden="true"></i><span class="sr-only">Survey submitted pending approval</span>
+                <span class="badge badge-sm bg-warning">
+                  HS <i class="fa fa-minus-circle" aria-hidden="true"></i><span class="visually-hidden">Survey submitted pending approval</span>
                 </span>
               </dt>
               <dd class="col-sm-9">
                 COVID health survey submitted, pending approval
               </dd>
               <dt class="col-sm-3">
-                <span class="badge badge-sm badge-danger">
-                  NO HS <span class="sr-only"> submitted</span>
+                <span class="badge badge-sm bg-danger">
+                  NO HS <span class="visually-hidden"> submitted</span>
                 </span>
               </dt>
               <dd class="col-sm-9 mb-0">
@@ -389,16 +389,16 @@ if (!$squad) {
 
             <dl class="row mb-0">
               <dt class="col-sm-3">
-                <span class="badge badge-sm badge-success">
-                  RA <i class="fa fa-check-circle" aria-hidden="true"></i> <span class="sr-only">Valid declaration</span>
+                <span class="badge badge-sm bg-success">
+                  RA <i class="fa fa-check-circle" aria-hidden="true"></i> <span class="visually-hidden">Valid declaration</span>
                 </span>
               </dt>
               <dd class="col-sm-9">
                 COVID Risk Awareness Declaration is up to date
               </dd>
               <dt class="col-sm-3">
-                <span class="badge badge-sm badge-danger">
-                  RA <i class="fa fa-times-circle" aria-hidden="true"></i> <span class="sr-only">form not submitted or new submission required</span>
+                <span class="badge badge-sm bg-danger">
+                  RA <i class="fa fa-times-circle" aria-hidden="true"></i> <span class="visually-hidden">form not submitted or new submission required</span>
                 </span>
               </dt>
               <dd class="col-sm-9 mb-0">

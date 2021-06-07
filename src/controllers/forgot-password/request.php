@@ -12,8 +12,8 @@ include BASE_PATH . "views/header.php";
     <form method="post">
       <div class="row">
         <div class="col-lg-8">
-          <div class="form-group">
-            <label for="email-address">
+          <div class="mb-3">
+            <label class="form-label" for="email-address">
               Email Address
             </label>
             <input type="email" class="form-control text-lowercase" name="email-address"

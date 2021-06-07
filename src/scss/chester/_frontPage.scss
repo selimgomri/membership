@@ -1,5 +1,6 @@
 .front-page {
-  background: #eee;
+  background: $front-page-bg;
+  color: $front-page-color;
   margin: -1rem 0 0 0;
   padding: 1rem 0;
 }
@@ -31,15 +32,17 @@
 .news-grid {
   a {
     display: grid;
-    background: #fff;
+    background: $front-page-link-bg;
     padding: 1rem;
-    color: $body-color;
+    color: $front-page-link-color;
     @include border-radius($alert-border-radius);
     align-content: space-between;
+    text-decoration: none;
   }
 
   a:hover, a:active, a:focus {
-    background: #ddd;
+    background: $front-page-link-bg-hover;
+    color: $front-page-link-color-hover;
     text-decoration: none;
   }
 

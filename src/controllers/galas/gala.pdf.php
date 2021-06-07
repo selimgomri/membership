@@ -101,7 +101,7 @@ ob_start();?>
   <body>
     <?php include BASE_PATH . 'helperclasses/PDFStyles/Letterhead.php'; ?>
 
-    <div class="row mb-3 text-right">
+    <div class="row mb-3 text-end">
       <div class="split-50">
       </div>
       <div class="split-50">

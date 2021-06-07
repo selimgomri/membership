@@ -24,11 +24,13 @@ include BASE_PATH . 'views/header.php';
 
       <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['LOGO-SAVED']) && $_SESSION['TENANT-' . app()->tenant->getId()]['LOGO-SAVED']) { ?>
         <div class="alert alert-success">New logo saved.</div>
-        <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['LOGO-SAVED']); } ?>
+      <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['LOGO-SAVED']);
+      } ?>
 
-        <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['LOGO-ERROR']) && $_SESSION['TENANT-' . app()->tenant->getId()]['LOGO-ERROR']) { ?>
+      <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['LOGO-ERROR']) && $_SESSION['TENANT-' . app()->tenant->getId()]['LOGO-ERROR']) { ?>
         <div class="alert alert-danger">Your new logo could not be saved.</div>
-        <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['LOGO-ERROR']); } ?>
+      <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['LOGO-ERROR']);
+      } ?>
 
       <?php if ($logos = $tenant->getKey('LOGO_DIR')) { ?>
         <p>You currently have the below image set as your logo:</p>
@@ -62,25 +64,19 @@ include BASE_PATH . 'views/header.php';
           While we accept PNG and JPEG file uploads, we recommend you upload your logos an icons as PNG files as these are much better quality than JPEG files, which become noisy around text.
         </p>
 
-        <div class="form-group">
-          <label>Upload logo</label>
-          <div class="custom-file">
-            <input type="file" class="custom-file-input" accept="image/png,image/jpeg" id="file-upload" name="file-upload" data-max-total-file-size="10485760" data-max-file-size="3145728" data-error-message-id="file-upload-invalid-feedback" required>
-            <label class="custom-file-label text-truncate" for="file-upload">Choose image</label>
-            <div class="invalid-feedback" id="file-upload-invalid-feedback">
-              Please include an image
-            </div>
+        <div class="mb-3">
+          <label class="form-label text-truncate" for="file-upload">Upload logo</label>
+          <input type="file" class="form-control" accept="image/png,image/jpeg" id="file-upload" name="file-upload" data-max-total-file-size="10485760" data-max-file-size="3145728" data-error-message-id="file-upload-invalid-feedback" required>
+          <div class="invalid-feedback" id="file-upload-invalid-feedback">
+            Please include an image
           </div>
         </div>
 
-        <div class="form-group">
-          <label>Upload icon <small class="text-muted">Optional</small></label>
-          <div class="custom-file">
-            <input type="file" class="custom-file-input" accept="image/png,image/jpeg" id="icon-upload" name="icon-upload" data-max-total-file-size="10485760" data-max-file-size="3145728" data-error-message-id="icon-upload-invalid-feedback">
-            <label class="custom-file-label text-truncate" for="icon-upload">Choose image</label>
-            <div class="invalid-feedback" id="icon-upload-invalid-feedback">
-              Oh no!
-            </div>
+        <div class="mb-3">
+          <label class="form-label text-truncate" for="icon-upload">Upload icon <small class="text-muted">Optional</small></label>
+          <input type="file" class="form-control" accept="image/png,image/jpeg" id="icon-upload" name="icon-upload" data-max-total-file-size="10485760" data-max-file-size="3145728" data-error-message-id="icon-upload-invalid-feedback">
+          <div class="invalid-feedback" id="icon-upload-invalid-feedback">
+            Oh no!
           </div>
         </div>
 

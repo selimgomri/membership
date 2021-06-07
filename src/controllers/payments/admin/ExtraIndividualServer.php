@@ -45,8 +45,8 @@ if ($_POST['response'] == "getSwimmers") {
                     </ul>
                   <?php } ?>
                 </div>
-                <div class="col text-right">
-                  <button type="button" id="RelationDrop-<?= htmlspecialchars($row['RelationID']) ?>" class="btn btn-link" value="<?= htmlspecialchars($row['RelationID']) ?>">
+                <div class="col text-end">
+                  <button type="button" id="RelationDrop-<?= htmlspecialchars($row['RelationID']) ?>" class="btn btn-light" value="<?= htmlspecialchars($row['RelationID']) ?>">
                     Remove
                   </button>
                 </div>

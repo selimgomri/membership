@@ -46,15 +46,15 @@ include BASE_PATH . 'views/header.php';
       } ?>
 
       <form id="payment-form" method="post" class="needs-validation" novalidate>
-        <div class="form-group">
-          <label for="user-first-name">User's name</label>
+        <div class="mb-3">
+          <label class="form-label" for="user-first-name">User's name</label>
           <input type="text" class="form-control" id="user-first-name" name="user-first-name" aria-describedby="user-first-name-help" data-ajax-url="<?= htmlspecialchars(autoUrl("payments/invoice-payments/new/search-users")) ?>">
           <small id="user-first-name-help" class="form-text text-muted">Search for a user by name.</small>
         </div>
 
-        <div class="form-group">
-          <label for="user-select">Select user</label>
-          <select class="custom-select overflow-hidden" id="user-select" name="user-select" disabled data-ajax-url="<?= htmlspecialchars(autoUrl("payments/invoice-payments/new/get-user")) ?>">
+        <div class="mb-3">
+          <label class="form-label" for="user-select">Select user</label>
+          <select class="form-select overflow-hidden" id="user-select" name="user-select" disabled data-ajax-url="<?= htmlspecialchars(autoUrl("payments/invoice-payments/new/get-user")) ?>">
             <option value="none" selected>Search for a user by name</option>
           </select>
           <small id="user-select-help" class="form-text text-muted">Pick a user from this drop down.</small>
@@ -66,8 +66,8 @@ include BASE_PATH . 'views/header.php';
 
         <div id="payment-details" class="d-none">
 
-          <div class="form-group">
-            <label for="description">Payment description</label>
+          <div class="mb-3">
+            <label class="form-label" for="description">Payment description</label>
             <input required mmaxlength="500" type="text" class="form-control" name="description" id="description" aria-describedby="description-help">
             <div class="invalid-feedback">
               Invalid description
@@ -75,26 +75,24 @@ include BASE_PATH . 'views/header.php';
             <small id="description-help" class="form-text text-muted">The description for this payment shown on the user's billing statement. Make it descriptive enough that they will be able to identify the reason for this item.</small>
           </div>
 
-          <div class="form-group">
-            <label for="amount">
+          <div class="mb-3">
+            <label class="form-label" for="amount">
               Amount to <span id="amount-type">charge</span>
             </label>
             <div class="input-group">
-              <div class="input-group-prepend">
-                <div class="input-group-text mono">&pound;</div>
-              </div>
-              <input required type="number" pattern="[0-9]*([\.,][0-9]*)?" class="form-control mono" id="amount" name="amount" placeholder="0.00" min="0" max="1000" step="0.01">
+              <div class="input-group-text font-monospace">&pound;</div>
+              <input required type="number" pattern="[0-9]*([\.,][0-9]*)?" class="form-control font-monospace" id="amount" name="amount" placeholder="0.00" min="0" max="1000" step="0.01">
               <div class="invalid-feedback">
                 You must enter an amount between &pound;0 and £1000.
               </div>
             </div>
           </div>
 
-          <div class="form-group">
-            <label for="payment-category">
+          <div class="mb-3">
+            <label class="form-label" for="payment-category">
               Category
             </label>
-            <select class="custom-select" id="payment-category" name="payment-category" <?php if (!$category) { ?>disabled<?php } ?>>
+            <select class="form-select" id="payment-category" name="payment-category" <?php if (!$category) { ?>disabled<?php } ?>>
               <?php if (!$category) { ?>
                 <option value="none" selected>No categories available</option>
               <?php } else { ?>
@@ -106,15 +104,15 @@ include BASE_PATH . 'views/header.php';
             </select>
           </div>
 
-          <div class="form-group" id="radios">
+          <div class="mb-3" id="radios">
             <label>Type</label>
-            <div class="custom-control custom-radio">
-              <input type="radio" id="type-payment" name="type" class="custom-control-input" checked required value="Payment">
-              <label class="custom-control-label" for="type-payment">Payment</label>
+            <div class="form-check">
+              <input type="radio" id="type-payment" name="type" class="form-check-input" checked required value="Payment">
+              <label class="form-check-label" for="type-payment">Payment</label>
             </div>
-            <div class="custom-control custom-radio">
-              <input type="radio" id="type-credit" name="type" class="custom-control-input" required value="Credit">
-              <label class="custom-control-label" for="type-credit">Credit (refund)</label>
+            <div class="form-check">
+              <input type="radio" id="type-credit" name="type" class="form-check-input" required value="Credit">
+              <label class="form-check-label" for="type-credit">Credit (refund)</label>
             </div>
           </div>
 
@@ -146,8 +144,8 @@ include BASE_PATH . 'views/header.php';
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="confirmation-modal-label">Confirmation</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+          
         </button>
       </div>
       <div class="modal-body">
@@ -167,7 +165,7 @@ include BASE_PATH . 'views/header.php';
         <p class="mb-0">A confirmation email detailing this statement item will be sent to the user.</p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
         <button type="button" id="confirm" class="btn btn-primary">Confirm</button>
       </div>
     </div>

@@ -21,7 +21,7 @@ include BASE_PATH . "views/header.php";
 	<div class="container">
 
 		<nav aria-label="breadcrumb">
-			<ol class="breadcrumb bg-light">
+			<ol class="breadcrumb">
 				<li class="breadcrumb-item active" aria-current="page">Squads</li>
 			</ol>
 		</nav>

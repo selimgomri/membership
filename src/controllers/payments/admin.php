@@ -67,7 +67,7 @@ $month = new DateTime('now', new DateTimeZone('Europe/London'));
   <div class="container">
 
     <nav aria-label="breadcrumb">
-      <ol class="breadcrumb bg-light">
+      <ol class="breadcrumb">
         <li class="breadcrumb-item active" aria-current="page">Payments</li>
       </ol>
     </nav>

@@ -91,7 +91,7 @@ include BASE_PATH . "views/header.php";
             <div class="col">
               <?=htmlspecialchars($gala['GalaName'])?>
             </div>
-            <div class="col text-right">
+            <div class="col text-end">
               <span>
                 <a class="btn btn-primary" href="<?=autoUrl("users/" . $id . "/team-manager/remove?gala=" . $gala['GalaID'] . "")?>">Remove</a>
               </span>

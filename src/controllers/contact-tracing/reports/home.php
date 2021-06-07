@@ -53,9 +53,9 @@ include BASE_PATH . 'views/header.php';
           Generate a report for a specific time frame at a specific location. Available in HTML, CSV (for Excel, Numbers, Google Sheets etc) or JSON.
         </p>
 
-        <div class="form-group">
-          <label for="location">Location</label>
-          <select class="custom-select" id="location" name="location" <?php if (!$location) { ?> disabled <?php } ?> required>
+        <div class="mb-3">
+          <label class="form-label" for="location">Location</label>
+          <select class="form-select" id="location" name="location" <?php if (!$location) { ?> disabled <?php } ?> required>
             <option selected>Select a location</option>
             <?php if ($location) { ?>
               <?php do { ?>
@@ -69,7 +69,7 @@ include BASE_PATH . 'views/header.php';
           <p class="mb-2">
             From
           </p>
-          <div class="form-row">
+          <div class="row">
             <div class="col">
               <input type="date" class="form-control" name="from-date" id="from-date" min="<?= htmlspecialchars($threeWeeks->format('Y-m-d')) ?>" max="<?= htmlspecialchars($dateLater->format('Y-m-d')) ?>" required placeholder="<?= htmlspecialchars($date->format('Y-m-d')) ?>" value="<?= htmlspecialchars($date->format('Y-m-d')) ?>">
             </div>
@@ -83,7 +83,7 @@ include BASE_PATH . 'views/header.php';
           <p class="mb-2">
             To
           </p>
-          <div class="form-row">
+          <div class="row">
             <div class="col">
               <input type="date" class="form-control" name="to-date" id="to-date" min="<?= htmlspecialchars($threeWeeks->format('Y-m-d')) ?>" max="<?= htmlspecialchars($dateLater->format('Y-m-d')) ?>" required placeholder="<?= htmlspecialchars($dateLater->format('Y-m-d')) ?>" value="<?= htmlspecialchars($dateLater->format('Y-m-d')) ?>">
             </div>
@@ -97,17 +97,17 @@ include BASE_PATH . 'views/header.php';
           Format
         </p>
         <div class="mb-3">
-          <div class="custom-control custom-radio">
-            <input type="radio" class="custom-control-input" value="html" name="format" id="format-html" checked required>
-            <label class="custom-control-label" for="format-html">Webpage (HTML)</label>
+          <div class="form-check">
+            <input type="radio" class="form-check-input" value="html" name="format" id="format-html" checked required>
+            <label class="form-check-label" for="format-html">Webpage (HTML)</label>
           </div>
-          <div class="custom-control custom-radio">
-            <input type="radio" class="custom-control-input" value="csv" name="format" id="format-csv" required>
-            <label class="custom-control-label" for="format-csv">CSV (For Excel)</label>
+          <div class="form-check">
+            <input type="radio" class="form-check-input" value="csv" name="format" id="format-csv" required>
+            <label class="form-check-label" for="format-csv">CSV (For Excel)</label>
           </div>
-          <div class="custom-control custom-radio">
-            <input type="radio" class="custom-control-input" value="json" name="format" id="format-json" required>
-            <label class="custom-control-label" for="format-json">JSON</label>
+          <div class="form-check">
+            <input type="radio" class="form-check-input" value="json" name="format" id="format-json" required>
+            <label class="form-check-label" for="format-json">JSON</label>
           </div>
         </div>
 

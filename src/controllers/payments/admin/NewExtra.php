@@ -30,36 +30,34 @@ include BASE_PATH . "views/paymentsMenu.php";
         }
         ?>
         <form method="post" class="needs-validation" novalidate>
-          <div class="form-group">
-            <label for="name">Extra Name</label>
+          <div class="mb-3">
+            <label class="form-label" for="name">Extra Name</label>
             <input type="text" class="form-control" id="name" name="name" placeholder="Enter name" required>
             <div class="invalid-feedback">
               Provide a name for this monthly extra
             </div>
           </div>
 
-          <div class="form-group">
-            <label for="price">Amount</label>
+          <div class="mb-3">
+            <label class="form-label" for="price">Amount</label>
             <div class="input-group mb-3">
-              <div class="input-group-prepend">
-                <span class="input-group-text" id="basic-addon3">&pound;</span>
-              </div>
-              <input type="number" min="0" step="0.01" class="form-control rounded-right" id="price" name="price" placeholder="0" required>
+              <span class="input-group-text" id="basic-addon3">&pound;</span>
+              <input type="number" min="0" step="0.01" class="form-control rounded-end" id="price" name="price" placeholder="0" required>
               <div class="invalid-feedback">
                 Enter an amount for this extra
               </div>
             </div>
           </div>
 
-          <div class="form-group">
+          <div class="mb-3">
             <label>Monthly payment or refund</label>
-            <div class="custom-control custom-radio">
-              <input type="radio" id="type-pay" name="pay-credit-type" class="custom-control-input" value="Payment" required>
-              <label class="custom-control-label" for="type-pay">Payment</label>
+            <div class="form-check">
+              <input type="radio" id="type-pay" name="pay-credit-type" class="form-check-input" value="Payment" required>
+              <label class="form-check-label" for="type-pay">Payment</label>
             </div>
-            <div class="custom-control custom-radio">
-              <input type="radio" id="type-credit" name="pay-credit-type" class="custom-control-input" value="Refund">
-              <label class="custom-control-label" for="type-credit">Credit/refund</label>
+            <div class="form-check">
+              <input type="radio" id="type-credit" name="pay-credit-type" class="form-check-input" value="Refund">
+              <label class="form-check-label" for="type-credit">Credit/refund</label>
             </div>
           </div>
 

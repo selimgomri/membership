@@ -143,22 +143,22 @@ include BASE_PATH . "views/notifyMenu.php";
   } ?>
 
   <form method="post" onkeypress="return event.keyCode != 13;" class="needs-validation" novalidate id="notify-form" enctype="multipart/form-data">
-    <div class="form-group">
-      <label for="recipient">To</label>
+    <div class="mb-3">
+      <label class="form-label" for="recipient">To</label>
       <input type="text" class="form-control" name="recipient" id="recipient" placeholder="Recipient" autocomplete="off" value="<?= htmlspecialchars($name . " <" . $email . ">") ?>" disabled>
     </div>
 
     <div class="row">
       <div class="col-md">
-        <div class="form-group">
-          <label for="from">Send message as</label>
-          <div class="custom-control custom-radio">
-            <input type="radio" id="from-club" name="from" class="custom-control-input" value="club-sending-account" <?php if ($from == "club-sending-account") { ?>checked<?php } ?> required>
-            <label class="custom-control-label" for="from-club"><?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?></label>
+        <div class="mb-3">
+          <label class="form-label" for="from">Send message as</label>
+          <div class="form-check">
+            <input type="radio" id="from-club" name="from" class="form-check-input" value="club-sending-account" <?php if ($from == "club-sending-account") { ?>checked<?php } ?> required>
+            <label class="form-check-label" for="from-club"><?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?></label>
           </div>
-          <div class="custom-control custom-radio">
-            <input type="radio" id="from-user" name="from" class="custom-control-input" value="current-user" <?php if ($from == "current-user") { ?>checked<?php } ?>>
-            <label class="custom-control-label" for="from-user"><?= htmlspecialchars($curUserInfo['Forename'] . ' ' . $curUserInfo['Surname']) ?></label>
+          <div class="form-check">
+            <input type="radio" id="from-user" name="from" class="form-check-input" value="current-user" <?php if ($from == "current-user") { ?>checked<?php } ?>>
+            <label class="form-check-label" for="from-user"><?= htmlspecialchars($curUserInfo['Forename'] . ' ' . $curUserInfo['Surname']) ?></label>
           </div>
           <div class="invalid-feedback">
             Choose a send-as option
@@ -167,15 +167,15 @@ include BASE_PATH . "views/notifyMenu.php";
       </div>
 
       <div class="col-md">
-        <div class="form-group">
-          <label for="ReplyToMe">Send replies to</label>
-          <div class="custom-control custom-radio">
-            <input type="radio" id="ReplyTo-Club" name="ReplyToMe" class="custom-control-input" value="0" <?php if ($reply == "0") { ?>checked<?php } ?> required>
-            <label class="custom-control-label" for="ReplyTo-Club">Main club address</label>
+        <div class="mb-3">
+          <label class="form-label" for="ReplyToMe">Send replies to</label>
+          <div class="form-check">
+            <input type="radio" id="ReplyTo-Club" name="ReplyToMe" class="form-check-input" value="0" <?php if ($reply == "0") { ?>checked<?php } ?> required>
+            <label class="form-check-label" for="ReplyTo-Club">Main club address</label>
           </div>
-          <div class="custom-control custom-radio">
-            <input type="radio" id="ReplyTo-Me" name="ReplyToMe" class="custom-control-input" value="1" <?php if (!$replyMe) { ?>disabled<?php } ?> <?php if ($reply == "1") { ?>checked<?php } ?>>
-            <label class="custom-control-label" for="ReplyTo-Me">My reply-to email address</label>
+          <div class="form-check">
+            <input type="radio" id="ReplyTo-Me" name="ReplyToMe" class="form-check-input" value="1" <?php if (!$replyMe) { ?>disabled<?php } ?> <?php if ($reply == "1") { ?>checked<?php } ?>>
+            <label class="form-check-label" for="ReplyTo-Me">My reply-to email address</label>
           </div>
           <small class="form-text text-muted">
             <a href="<?= htmlspecialchars(autoUrl("notify/reply-to")) ?>" target="_blank">Manage reply-to address</a>
@@ -187,16 +187,16 @@ include BASE_PATH . "views/notifyMenu.php";
       </div>
     </div>
 
-    <div class="form-group">
-      <label for="subject">Message Subject</label>
+    <div class="mb-3">
+      <label class="form-label" for="subject">Message Subject</label>
       <input type="text" class="form-control" name="subject" id="subject" placeholder="Message Subject" autocomplete="off" value="<?= htmlspecialchars($subject) ?>" required>
       <div class="invalid-feedback">
         You must enter a subject
       </div>
     </div>
 
-    <div class="form-group">
-      <label for="message">Your Message</label>
+    <div class="mb-3">
+      <label class="form-label" for="message">Your Message</label>
       <textarea class="form-control" id="message" name="message" rows="10" required><?= htmlspecialchars($content) ?></textarea>
       <small id="messageHelp" class="form-text text-muted">
         Styling will be stripped from this message
@@ -208,22 +208,19 @@ include BASE_PATH . "views/notifyMenu.php";
 
     <input type="hidden" name="MAX_FILE_SIZE" value="3145728">
 
-    <div class="form-group">
-      <label>Select files to attach</label>
-      <div class="custom-file">
-        <input type="file" class="custom-file-input" id="file-upload" name="file-upload[]" multiple data-max-total-file-size="10485760" data-max-file-size="3145728" data-error-message-id="file-upload-invalid-feedback">
-        <label class="custom-file-label text-truncate" for="file-upload">Choose file(s)</label>
-        <div class="invalid-feedback" id="file-upload-invalid-feedback">
-          Oh no!
-        </div>
+    <div class="mb-3">
+      <label class="form-label text-truncate" for="file-upload">Choose file(s)</label>
+      <input type="file" class="form-control" id="file-upload" name="file-upload[]" multiple data-max-total-file-size="10485760" data-max-file-size="3145728" data-error-message-id="file-upload-invalid-feedback">
+      <div class="invalid-feedback" id="file-upload-invalid-feedback">
+        Oh no!
       </div>
     </div>
 
     <?php if (isset($swimmer)) { ?>
-      <div class="form-group">
-        <div class="custom-control custom-checkbox">
-          <input type="checkbox" class="custom-control-input" aria-describedby="coach-help" id="coach-send" name="coach-send" value="1" checked>
-          <label class="custom-control-label" for="coach-send">BCC coaches</label>
+      <div class="mb-3">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" aria-describedby="coach-help" id="coach-send" name="coach-send" value="1" checked>
+          <label class="form-check-label" for="coach-send">BCC coaches</label>
           <small id="coach-help" class="form-text text-muted">
             Send a blind carbon-copy of this email to coaches of this member's squads. The member will not be aware coaches were sent a copy of the email.
           </small>

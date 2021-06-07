@@ -57,79 +57,82 @@ if ($gala == null) {
 include BASE_PATH . "views/header.php";
 include "galaMenu.php";
 ?>
-<div class="container">
 
-  <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Parent') { ?>
-  <nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="<?=autoUrl("members")?>">Swimmers</a></li>
-      <li class="breadcrumb-item"><a href="<?=autoUrl("members/" . $swimmer)?>"><?=htmlspecialchars($mySwimmer['fn'])?> <?=htmlspecialchars(mb_substr($mySwimmer['sn'], 0, 1, 'utf-8'))?></a></li>
-      <li class="breadcrumb-item active" aria-current="page">Enter a gala</li>
-    </ol>
-  </nav>
-  <?php } else { ?>
-  <nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="<?=htmlspecialchars(autoUrl("galas"))?>">Galas</a></li>
-      <li class="breadcrumb-item active" aria-current="page">Enter gala</li>
-    </ol>
-  </nav>
-  <?php } ?>
+<div class="bg-light mt-n3 py-3 mb-3">
+  <div class="container">
 
-  <div id="gala-data" data-ajax-url="<?=htmlspecialchars(autoUrl('galas/ajax/entryForm'))?>"></div>
+    <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Parent') { ?>
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="<?= autoUrl("members") ?>">Swimmers</a></li>
+          <li class="breadcrumb-item"><a href="<?= autoUrl("members/" . $swimmer) ?>"><?= htmlspecialchars($mySwimmer['fn']) ?> <?= htmlspecialchars(mb_substr($mySwimmer['sn'], 0, 1, 'utf-8')) ?></a></li>
+          <li class="breadcrumb-item active" aria-current="page">Enter a gala</li>
+        </ol>
+      </nav>
+    <?php } else { ?>
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl("galas")) ?>">Galas</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Enter gala</li>
+        </ol>
+      </nav>
+    <?php } ?>
 
-  <div class="row align-items-center">
-    <div class="col-md-8">
-      <h1 class="mb-3">Enter a gala</h1>
-    </div>
-    <div class="col text-md-right">
-      <aside>
-        <a href="<?=htmlspecialchars(autoUrl("galas/entergala/help"))?>" class="btn btn-info">
-          Gala entry help <i class="fa fa-info-circle" aria-hidden="true"></i>
-        </a>
-        <div class="d-md-none mb-3"></div>
-      </aside>
+    <div id="gala-data" data-ajax-url="<?= htmlspecialchars(autoUrl('galas/ajax/entryForm')) ?>"></div>
+
+    <div class="row align-items-center">
+      <div class="col-lg-8">
+        <h1 class="mb-0">Enter a gala</h1>
+      </div>
+      <div class="col text-lg-end">
+        <div class="d-lg-none mb-3"></div>
+        <aside>
+          <a href="<?= htmlspecialchars(autoUrl("galas/entergala/help")) ?>" class="btn btn-info">
+            Gala entry help <i class="fa fa-info-circle" aria-hidden="true"></i>
+          </a>
+        </aside>
+      </div>
     </div>
   </div>
+</div>
 
+<div class="container">
   <?php if ($hasSwimmer && $hasGalas) { ?>
-    <div>
+    <div class="">
       <form method="post">
-      <h2>Select Swimmer and Gala</h2>
-      <div class="form-group row">
-        <label for="swimmer" class="col-sm-2 col-form-label">Select Swimmer</label>
-        <div class="col-sm-10">
-          <select class="custom-select" id="swimmer" name="swimmer" required><option value="null" <?php if ($swimmerCount > 1) { ?>selected<?php } ?>>Select a swimmer</option>
-          <?php do { ?>
-            <option value="<?=$mySwimmer['id']?>" <?php if ($swimmerCount == 1) { ?>selected<?php } ?>>
-              <?=htmlspecialchars($mySwimmer['fn'] . " " . $mySwimmer['sn'])?>
-            </option>
-          <?php } while ($mySwimmer = $mySwimmers->fetch(PDO::FETCH_ASSOC)); ?>
+        <h2>Select member and competition</h2>
+        <div class="mb-3">
+          <label class="form-label" for="swimmer">Select member</label>
+          <select class="form-select" id="swimmer" name="swimmer" required>
+            <option value="null" <?php if ($swimmerCount > 1) { ?>selected<?php } ?> disabled>Select a swimmer</option>
+            <?php do { ?>
+              <option value="<?= htmlspecialchars($mySwimmer['id']) ?>" <?php if ($swimmerCount == 1) { ?>selected<?php } ?>>
+                <?= htmlspecialchars($mySwimmer['fn'] . " " . $mySwimmer['sn']) ?>
+              </option>
+            <?php } while ($mySwimmer = $mySwimmers->fetch(PDO::FETCH_ASSOC)); ?>
           </select>
         </div>
-      </div>
-      <div class="form-group row">
-        <label for="gala" class="col-sm-2 col-form-label">Select Gala</label>
-        <div class="col-sm-10">
-          <select class="custom-select" id="gala" name="gala" required><option value="null" selected>Select a gala</option>
-          <?php do { ?>
-            <option value="<?=$gala['id']?>">
-              <?=htmlspecialchars($gala['name'])?>
-            </option>
-          <?php } while ($gala = $galas->fetch(PDO::FETCH_ASSOC)); ?>
+        <div class="mb-3">
+          <label class="form-label" for="gala">Select competition</label>
+          <select class="form-select" id="gala" name="gala" required>
+            <option value="null" disabled selected>Select a gala</option>
+            <?php do { ?>
+              <option value="<?= htmlspecialchars($gala['id']) ?>">
+                <?= htmlspecialchars($gala['name']) ?>
+              </option>
+            <?php } while ($gala = $galas->fetch(PDO::FETCH_ASSOC)); ?>
           </select>
         </div>
-      </div>
-      <div class="ajaxArea mb-3" id="output">
-        <div class="ajaxPlaceholder">Select a swimmer and gala
+        <div class="ajaxArea mb-3" id="output">
+          <div class="ajaxPlaceholder">Select a swimmer and gala
+          </div>
         </div>
-      </div>
-      <p>
-        <button type="submit" id="submit" disabled class="btn btn-success">Submit</button>
-      </p>
-      </div>
+        <p>
+          <button type="submit" id="submit" disabled class="btn btn-success">Submit</button>
+        </p>
+    </div>
     </form>
-    <?php
+  <?php
   } else { ?>
     <p class="lead">
       We're unable to let you enter a gala at the moment
@@ -139,16 +142,16 @@ include "galaMenu.php";
     </p>
 
     <?php if (!$hasSwimmer) { ?>
-    <div class="alert alert-warning">
-      <strong>You don't have any swimmers associated with your account</strong> <br>
-      Please <a href="<?=autoUrl("my-account/addswimmer")?>" class="alert-link">add some swimmers in My Account</a>, then try again
-    </div>
+      <div class="alert alert-warning">
+        <strong>You don't have any swimmers associated with your account</strong> <br>
+        Please <a href="<?= autoUrl("my-account/addswimmer") ?>" class="alert-link">add some swimmers in My Account</a>, then try again
+      </div>
     <?php } ?>
 
     <?php if (!$hasGalas) { ?>
-    <div class="alert alert-danger">
-      <strong>There are no galas open for entries at the moment</strong>
-    </div>
+      <div class="alert alert-danger">
+        <strong>There are no galas open for entries at the moment</strong>
+      </div>
     <?php } ?>
 
   <?php } ?>

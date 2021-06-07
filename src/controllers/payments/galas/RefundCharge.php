@@ -152,7 +152,7 @@ include BASE_PATH . 'views/header.php';
 								<div class="d-sm-none mb-3"></div>
 								<?php if ($entry['Intent'] != null && bool($entry['StripePaid'])) { ?>
 								<p>
-									<strong><i class="fa <?=htmlspecialchars(getCardFA($entry['Brand']))?>" aria-hidden="true"></i> <span class="sr-only"><?=htmlspecialchars(getCardBrand($entry['Brand']))?></span> &#0149;&#0149;&#0149;&#0149; <?=htmlspecialchars($entry['Last4'])?></strong>
+									<strong><i class="fa <?=htmlspecialchars(getCardFA($entry['Brand']))?>" aria-hidden="true"></i> <span class="visually-hidden"><?=htmlspecialchars(getCardBrand($entry['Brand']))?></span> &#0149;&#0149;&#0149;&#0149; <?=htmlspecialchars($entry['Last4'])?></strong>
 								</p>
 								<?php } ?>
 
@@ -174,7 +174,7 @@ include BASE_PATH . 'views/header.php';
 								</p>
 								<?php } else if ($entry['Intent'] != null && $amountRefundable > 0 && bool($entry['StripePaid'])) { ?>
 								<p>
-									This entry will be refunded to <?=htmlspecialchars(getCardBrand($entry['Brand']))?> <span class="mono"><?=htmlspecialchars($entry['Last4'])?></span>.
+									This entry will be refunded to <?=htmlspecialchars(getCardBrand($entry['Brand']))?> <span class="font-monospace"><?=htmlspecialchars($entry['Last4'])?></span>.
 								</p>
 								<?php } else if ($amountRefundable > 0) { ?>
 								<p>
@@ -202,32 +202,28 @@ include BASE_PATH . 'views/header.php';
 								</div>
 								<?php } ?>
 
-								<div class="form-row">
+								<div class="row">
 									<div class="col-xs col-sm-12 col-xl-6">
-										<div class="form-group mb-0">
-											<label for="<?=$entry['EntryID']?>-amount">
+										<div class="mb-3 mb-0">
+											<label class="form-label" for="<?=$entry['EntryID']?>-amount">
 												Amount charged
 											</label>
 											<div class="input-group">
-												<div class="input-group-prepend">
-													<div class="input-group-text mono">&pound;</div>
-												</div>
-												<input type="number" class="form-control mono" id="<?=$entry['EntryID']?>-amount" name="<?=$entry['EntryID']?>-amount" placeholder="0.00" value="<?=htmlspecialchars((string) (\Brick\Math\BigDecimal::of((string) $entry['FeeToPay'])->toScale(2)))?>" disabled>
+												<div class="input-group-text font-monospace">&pound;</div>
+												<input type="number" class="form-control font-monospace" id="<?=$entry['EntryID']?>-amount" name="<?=$entry['EntryID']?>-amount" placeholder="0.00" value="<?=htmlspecialchars((string) (\Brick\Math\BigDecimal::of((string) $entry['FeeToPay'])->toScale(2)))?>" disabled>
 											</div>
 										</div>
 										<div class="d-none d-sm-block d-xl-none mb-3"></div>
 									</div>
 
 									<div class="col-xs col-sm-12 col-xl-6">
-										<div class="form-group mb-0">
-											<label for="<?=$entry['EntryID']?>-refund">
+										<div class="mb-3 mb-0">
+											<label class="form-label" for="<?=$entry['EntryID']?>-refund">
 												Amount to refund
 											</label>
 											<div class="input-group">
-												<div class="input-group-prepend">
-													<div class="input-group-text mono">&pound;</div>
-												</div>
-												<input type="number" pattern="[0-9]*([\.,][0-9]*)?" class="form-control mono refund-amount-field" id="<?=$entry['EntryID']?>-refund" name="<?=$entry['EntryID']?>-refund" placeholder="0.00" min="0" max="<?=htmlspecialchars((string) (\Brick\Math\BigDecimal::of((string) $amountRefundable)->withPointMovedLeft(2)->toScale(2)))?>" data-max-refundable="<?=$amountRefundable?>" data-amount-refunded="<?=$entry['AmountRefunded']?>" step="0.01" <?php if ($amountRefundable == 0 || $notReady) { ?>disabled<?php } ?> >
+												<div class="input-group-text font-monospace">&pound;</div>
+												<input type="number" pattern="[0-9]*([\.,][0-9]*)?" class="form-control font-monospace refund-amount-field" id="<?=$entry['EntryID']?>-refund" name="<?=$entry['EntryID']?>-refund" placeholder="0.00" min="0" max="<?=htmlspecialchars((string) (\Brick\Math\BigDecimal::of((string) $amountRefundable)->withPointMovedLeft(2)->toScale(2)))?>" data-max-refundable="<?=$amountRefundable?>" data-amount-refunded="<?=$entry['AmountRefunded']?>" step="0.01" <?php if ($amountRefundable == 0 || $notReady) { ?>disabled<?php } ?> >
 											</div>
 										</div>
 									</div>
@@ -283,15 +279,15 @@ include BASE_PATH . 'views/header.php';
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="myModalTitle">Modal title</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+          
         </button>
       </div>
       <div class="modal-body" id="myModalBody">
         ...
       </div>
       <div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
 				<button type="button" class="btn btn-primary" id="modalConfirmButton">Confirm refund</button>
       </div>
     </div>

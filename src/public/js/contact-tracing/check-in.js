@@ -16,7 +16,7 @@ function addField(event, hideRemove = false) {
   formContainer.classList.add('col');
 
   var formRow = document.createElement('DIV');
-  formRow.classList.add('form-row');
+  formRow.classList.add('row', 'g-2');
 
   var name = document.createElement('DIV');
   name.classList.add('form-group', 'mb-0');

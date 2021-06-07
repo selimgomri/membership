@@ -71,7 +71,7 @@ try {
   if ($_GET['format'] == 'csv') {
     include 'csv-render.php';
   } else if ($_GET['format'] == 'html') {
-    include 'html-render.php';
+    include 'htms-render.php';
   } else {
     header('content-type: application/json');
     echo $json;

@@ -10,7 +10,7 @@ include BASE_PATH . "controllers/attendance/attendanceMenu.php";
 <div class="front-page mb-n3">
   <div class="container">
     <nav aria-label="breadcrumb">
-      <ol class="breadcrumb bg-light">
+      <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('attendance')) ?>">Attendance</a></li>
         <li class="breadcrumb-item active" aria-current="page">History</li>
       </ol>

@@ -82,8 +82,8 @@ include BASE_PATH . "views/head.php";
       <?php } ?>
 
       <form method="post" action="<?= autoUrl("2fa") ?>" name="2faform" id="2faform" class="needs-validation" novalidate>
-        <div class="form-group">
-          <label for="auth">Authentication Code</label>
+        <div class="mb-3">
+          <label class="form-label" for="auth">Authentication Code</label>
           <input type="number" name="auth" id="auth" class="form-control form-control-lg" required autofocus placeholder="654321" pattern="[0-9]*" inputmode="numeric" min="0" max="999999" step="1">
           <div class="invalid-feedback">
             Please enter a numeric authentication code.
@@ -91,10 +91,10 @@ include BASE_PATH . "views/head.php";
         </div>
         <input type="hidden" name="target" value="<?= htmlspecialchars($target) ?>">
 
-        <div class="form-group">
-          <div class="custom-control custom-checkbox">
-            <input type="checkbox" class="custom-control-input" name="RememberMe" id="RememberMe" <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['2FAUserRememberMe']) && bool($_SESSION['TENANT-' . app()->tenant->getId()]['2FAUserRememberMe'])) { ?>checked<?php } ?> aria-describedby="RememberMeHelp" value="1">
-            <label class="custom-control-label" for="RememberMe">Keep me logged in</label>
+        <div class="mb-3">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="RememberMe" id="RememberMe" <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['2FAUserRememberMe']) && bool($_SESSION['TENANT-' . app()->tenant->getId()]['2FAUserRememberMe'])) { ?>checked<?php } ?> aria-describedby="RememberMeHelp" value="1">
+            <label class="form-check-label" for="RememberMe">Keep me logged in</label>
             <small id="RememberMeHelp" class="form-text text-muted">
               Untick this box if you are using a public or shared computer
             </small>
@@ -102,10 +102,10 @@ include BASE_PATH . "views/head.php";
         </div>
 
         <?php if (!isset($_SESSION['TENANT-' . app()->tenant->getId()]['TWO_FACTOR_GOOGLE']) || $_SESSION['TENANT-' . app()->tenant->getId()]['TWO_FACTOR_GOOGLE'] !== true) { ?>
-          <div class="form-group">
-            <div class="custom-control custom-checkbox">
-              <input type="checkbox" class="custom-control-input" name="setup-time-based-codes" id="setup-time-based-codes" aria-describedby="setup-time-based-codes-help">
-              <label class="custom-control-label" for="setup-time-based-codes">Set up an authenticator app</label>
+          <div class="mb-3">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="setup-time-based-codes" id="setup-time-based-codes" aria-describedby="setup-time-based-codes-help">
+              <label class="form-check-label" for="setup-time-based-codes">Set up an authenticator app</label>
               <small id="setup-time-based-codes-help" class="form-text text-muted">
                 Set up an authenticator app, such as Google Authenticator, so that you can use time-based one-time passwords and don't need to wait for an email from us. You can always still get codes by email if you don't have your phone with you.
               </small>

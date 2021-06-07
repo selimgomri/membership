@@ -113,7 +113,7 @@ $row = $query->fetch(PDO::FETCH_ASSOC);
         </ul>
         <div class="mb-2 d-sm-none"></div>
       </div>
-      <div class="col text-sm-right">
+      <div class="col text-sm-end">
         <p class="mb-0">
           <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Galas') { ?>
           <strong>Born:</strong> <?=$DOB?> (<em>Age <?=htmlspecialchars($age)?></em>)

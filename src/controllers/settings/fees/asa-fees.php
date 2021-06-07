@@ -87,38 +87,32 @@ include BASE_PATH . 'views/header.php';
         <form method="post">
 
           <h2>County fees</h2>
-          <div class="form-row">
+          <div class="row">
             <div class="col">
-              <div class="form-group">
-                <label for="county-1">Level 1 fee</label>
-                <div class="input-group mono">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text">&pound;</span>
-                  </div>
+              <div class="mb-3">
+                <label class="form-label" for="county-1">Level 1 fee</label>
+                <div class="input-group font-monospace">
+                  <span class="input-group-text">&pound;</span>
                   <input type="number" class="form-control" id="county-1" name="county-1" placeholder="Enter amount" min="0" step="0.01" value="<?= number_format($fees['County'][1], 2, '.', '') ?>">
                 </div>
               </div>
             </div>
 
             <div class="col">
-              <div class="form-group">
-                <label for="county-2">Level 2 fee</label>
-                <div class="input-group mono">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text">&pound;</span>
-                  </div>
+              <div class="mb-3">
+                <label class="form-label" for="county-2">Level 2 fee</label>
+                <div class="input-group font-monospace">
+                  <span class="input-group-text">&pound;</span>
                   <input type="number" class="form-control" id="county-2" name="county-2" placeholder="Enter amount" min="0" step="0.01" value="<?= number_format($fees['County'][2], 2, '.', '') ?>">
                 </div>
               </div>
             </div>
 
             <div class="col">
-              <div class="form-group">
-                <label for="county">Level 3 fee</label>
-                <div class="input-group mono">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text">&pound;</span>
-                  </div>
+              <div class="mb-3">
+                <label class="form-label" for="county">Level 3 fee</label>
+                <div class="input-group font-monospace">
+                  <span class="input-group-text">&pound;</span>
                   <input type="number" class="form-control" id="county-3" name="county-3" placeholder="Enter amount" min="0" step="0.01" value="<?= number_format($fees['County'][3], 2, '.', '') ?>">
                 </div>
               </div>
@@ -126,38 +120,32 @@ include BASE_PATH . 'views/header.php';
           </div>
 
           <h2>Regional fees</h2>
-          <div class="form-row">
+          <div class="row">
             <div class="col">
-              <div class="form-group">
-                <label for="region-1">Level 1 fee</label>
-                <div class="input-group mono">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text">&pound;</span>
-                  </div>
+              <div class="mb-3">
+                <label class="form-label" for="region-1">Level 1 fee</label>
+                <div class="input-group font-monospace">
+                  <span class="input-group-text">&pound;</span>
                   <input type="number" class="form-control" id="region-1" name="region-1" placeholder="Enter amount" min="0" step="0.01" value="<?= number_format($fees['Region'][1], 2, '.', '') ?>">
                 </div>
               </div>
             </div>
 
             <div class="col">
-              <div class="form-group">
-                <label for="region-2">Level 2 fee</label>
-                <div class="input-group mono">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text">&pound;</span>
-                  </div>
+              <div class="mb-3">
+                <label class="form-label" for="region-2">Level 2 fee</label>
+                <div class="input-group font-monospace">
+                  <span class="input-group-text">&pound;</span>
                   <input type="number" class="form-control" id="region-2" name="region-2" placeholder="Enter amount" min="0" step="0.01" value="<?= number_format($fees['Region'][2], 2, '.', '') ?>">
                 </div>
               </div>
             </div>
 
             <div class="col">
-              <div class="form-group">
-                <label for="region-3">Level 3 fee</label>
-                <div class="input-group mono">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text">&pound;</span>
-                  </div>
+              <div class="mb-3">
+                <label class="form-label" for="region-3">Level 3 fee</label>
+                <div class="input-group font-monospace">
+                  <span class="input-group-text">&pound;</span>
                   <input type="number" class="form-control" id="region-3" name="region-3" placeholder="Enter amount" min="0" step="0.01" value="<?= number_format($fees['Region'][3], 2, '.', '') ?>">
                 </div>
               </div>
@@ -166,38 +154,32 @@ include BASE_PATH . 'views/header.php';
 
           <h2>National fees</h2>
 
-          <div class="form-row">
+          <div class="row">
             <div class="col">
-              <div class="form-group">
-                <label for="national-1">Level 1 fee</label>
-                <div class="input-group mono">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text">&pound;</span>
-                  </div>
+              <div class="mb-3">
+                <label class="form-label" for="national-1">Level 1 fee</label>
+                <div class="input-group font-monospace">
+                  <span class="input-group-text">&pound;</span>
                   <input type="number" class="form-control" id="national-1" name="national-1" placeholder="Enter amount" min="0" step="0.01" value="<?= number_format($fees['National'][1], 2, '.', '') ?>">
                 </div>
               </div>
             </div>
 
             <div class="col">
-              <div class="form-group">
-                <label for="national-2">Level 2 fee</label>
-                <div class="input-group mono">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text">&pound;</span>
-                  </div>
+              <div class="mb-3">
+                <label class="form-label" for="national-2">Level 2 fee</label>
+                <div class="input-group font-monospace">
+                  <span class="input-group-text">&pound;</span>
                   <input type="number" class="form-control" id="national-2" name="national-2" placeholder="Enter amount" min="0" step="0.01" value="<?= number_format($fees['National'][2], 2, '.', '') ?>">
                 </div>
               </div>
             </div>
 
             <div class="col">
-              <div class="form-group">
-                <label for="national-3">Level 3 fee</label>
-                <div class="input-group mono">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text">&pound;</span>
-                  </div>
+              <div class="mb-3">
+                <label class="form-label" for="national-3">Level 3 fee</label>
+                <div class="input-group font-monospace">
+                  <span class="input-group-text">&pound;</span>
                   <input type="number" class="form-control" id="national-3" name="national-3" placeholder="Enter amount" min="0" step="0.01" value="<?= number_format($fees['National'][3], 2, '.', '') ?>">
                 </div>
               </div>

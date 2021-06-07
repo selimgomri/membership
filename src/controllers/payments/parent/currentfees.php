@@ -11,23 +11,29 @@ include BASE_PATH . "views/paymentsMenu.php";
 
 ?>
 
+<div class="bg-light mt-n3 py-3 mb-3">
+  <div class="container">
+    <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent') { ?>
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="<?= autoUrl("payments") ?>">Payments</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Latest fees</li>
+        </ol>
+      </nav>
+    <?php } ?>
+
+    <h1 class="">Charges since last bill</h1>
+    <p class="lead mb-0">Charges and credits created since your last bill</p>
+  </div>
+</div>
+
 <div class="container">
-	<?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent') { ?>
-  <nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="<?=autoUrl("payments")?>">Payments</a></li>
-      <li class="breadcrumb-item active" aria-current="page">Latest fees</li>
-    </ol>
-  </nav>
-  <?php } ?>
-	<div class="row">
+  <div class="row">
     <div class="col-md-8">
-  		<h1 class="">Charges since last bill</h1>
-  		<p class="lead">Fees and Charges created since your last bill</p>
-  		<p>You'll be billed for these on the first working day of the next month.</p>
+      <p>You'll be billed for these on the first working day of the next month.</p>
     </div>
   </div>
-	<?=feesToPay(null, $user)?>
+  <?= feesToPay(null, $user) ?>
 </div>
 
 <?php

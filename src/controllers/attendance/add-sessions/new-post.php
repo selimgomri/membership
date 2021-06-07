@@ -134,7 +134,7 @@ try {
       $addSquadRecord->execute([
         $squad,
         $sessionId,
-        (int) (isset($_POST['main-sequence']) && bool($_POST['main-sequence'])),
+        (int) (isset($_POST['main-sequence']) && $_POST['main-sequence'] == 'all'),
       ]);
       $hasSquad = true;
     }

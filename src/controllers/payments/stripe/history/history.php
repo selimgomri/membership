@@ -55,19 +55,28 @@ include BASE_PATH . 'views/header.php';
 
 ?>
 
-<div class="container">
-  <nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="<?= autoUrl("payments") ?>">Payments</a></li>
-      <li class="breadcrumb-item"><a href="<?= autoUrl("payments/cards") ?>">Cards</a></li>
-      <li class="breadcrumb-item active" aria-current="page">History</li>
-    </ol>
-  </nav>
+<div class="bg-light mt-n3 py-3 mb-3">
+  <div class="container">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="<?= autoUrl("payments") ?>">Payments</a></li>
+        <li class="breadcrumb-item"><a href="<?= autoUrl("payments/cards") ?>">Cards</a></li>
+        <li class="breadcrumb-item active" aria-current="page">History</li>
+      </ol>
+    </nav>
 
+    <div class="row">
+      <div class="col-lg-8">
+        <h1>Card payment history</h1>
+        <p class="lead mb-0">Previous card payments</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
   <div class="row">
-    <div class="col-md-8">
-      <h1>Card payment history</h1>
-      <p class="lead">Previous card payments</p>
+    <div class="col-lg-8">
 
       <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') { ?>
         <?php if (isset($_GET['users']) && $_GET['users'] == 'all') { ?>
@@ -93,7 +102,7 @@ include BASE_PATH . 'views/header.php';
             <?php if (isset($pm['Brand'])) { ?>
               <div class="row align-items-center mb-2">
                 <div class="col-auto">
-                  <img src="<?= autoUrl("public/img/stripe/" . $pm['Brand'] . ".svg") ?>" class="accepted-network-logo"> <span class="sr-only"><?= htmlspecialchars(getCardBrand($pm['Brand'])) ?></span>
+                  <img src="<?= autoUrl("img/stripe/" . $pm['Brand'] . ".svg", false) ?>" class="accepted-network-logo"> <span class="visually-hidden"><?= htmlspecialchars(getCardBrand($pm['Brand'])) ?></span>
                 </div>
                 <div class="col-auto">
                   <h2 class="my-0">
@@ -103,7 +112,7 @@ include BASE_PATH . 'views/header.php';
               </div>
             <?php } ?>
             <p class="lead">At <?= $date->format("H:i \o\\n j F Y") ?></p>
-            <p class="mono mb-0">&pound;<?= number_format($pm['Amount'] / 100, 2, '.', '') ?></p>
+            <p class="font-monospace mb-0">&pound;<?= number_format($pm['Amount'] / 100, 2, '.', '') ?></p>
           </a>
         <?php } ?>
       </div>

@@ -38,35 +38,42 @@ include BASE_PATH . "views/root/header.php";
         <dt class="col-lg-4">
           UUID
         </dt>
-        <dd class="col-lg-8 mono">
+        <dd class="col-lg-8 font-monospace">
           <?= htmlspecialchars($tenant->getUuid()) ?>
         </dd>
 
         <dt class="col-lg-4">
           ID
         </dt>
-        <dd class="col-lg-8 mono">
+        <dd class="col-lg-8 font-monospace">
           <?= htmlspecialchars($tenant->getId()) ?>
+        </dd>
+
+        <dt class="col-lg-4">
+          Domain
+        </dt>
+        <dd class="col-lg-8">
+          <?= htmlspecialchars($tenant->getDomain()) ?>
         </dd>
 
         <dt class="col-lg-4">
           Code
         </dt>
-        <dd class="col-lg-8 mono">
+        <dd class="col-lg-8 font-monospace">
           <?= htmlspecialchars($tenant->getCode()) ?>
         </dd>
 
         <dt class="col-lg-4">
           Website
         </dt>
-        <dd class="col-lg-8 mono">
+        <dd class="col-lg-8 font-monospace">
           <a href="<?= htmlspecialchars($tenant->getWebsite()) ?>" target="_blank"><?= htmlspecialchars($tenant->getWebsite()) ?></a>
         </dd>
 
         <dt class="col-lg-4">
           Email
         </dt>
-        <dd class="col-lg-8 mono">
+        <dd class="col-lg-8 font-monospace">
           <a href="mailto:<?= htmlspecialchars($tenant->getEmail()) ?>"><?= htmlspecialchars($tenant->getEmail()) ?></a>
         </dd>
 
@@ -74,7 +81,7 @@ include BASE_PATH . "views/root/header.php";
           Stripe Account
         </dt>
         <dd class="col-lg-8">
-          <div class="mono mb-2">
+          <div class="font-monospace mb-2">
             <?= htmlspecialchars($tenant->getStripeAccount()) ?>
           </div>
           <div class="">
@@ -83,8 +90,22 @@ include BASE_PATH . "views/root/header.php";
         </dd>
       </dl>
 
-      <?php pre(get_class_methods($tenant)); ?>
-      <?php pre($tenant); ?>
+      <h2>Domain</h2>
+      <form action="<?= htmlspecialchars(autoUrl("admin/tenants/$id/set-domain")) ?>" method="post" class="needs-validation" novalidate>
+        <div class="mb-3">
+          <label for="domain-name" class="form-label">Tenant Domain Name</label>
+          <input type="text" name="domain-name" id="domain-name" class="form-control" required value="<?= htmlspecialchars($tenant->getDomain()) ?>">
+          <div class="invalid-feedback">
+            You must supply a domain name
+          </div>
+        </div>
+
+        <?= \SCDS\CSRF::write() ?>
+
+        <p>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </p>
+      </form>
 
     </div>
   </div>
@@ -93,4 +114,5 @@ include BASE_PATH . "views/root/header.php";
 <?php
 
 $footer = new \SCDS\RootFooter();
+$footer->addJs('js/NeedsValidation.js');
 $footer->render();

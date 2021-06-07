@@ -69,11 +69,11 @@ include BASE_PATH . 'views/header.php';
                 <div class="col">
                   <strong><?= htmlspecialchars($row['Forename'] . ' ' . $row['Surname']) ?></strong>
                 </div>
-                <div class="col text-right">
+                <div class="col text-end">
                   <strong><?= htmlspecialchars($time->format('H:i:s d/m/Y')) ?></strong>
                 </div>
               </div>
-              <p class="mb-0 mono">
+              <p class="mb-0 font-monospace">
                 <?= htmlspecialchars($row['Event']) ?>
               </p>
               <p class="mb-0">

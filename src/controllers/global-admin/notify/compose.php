@@ -83,14 +83,14 @@ include BASE_PATH . "views/root/header.php";
 
   <form method="post" id="notify-form" onkeypress="return event.keyCode != 13;" enctype="multipart/form-data" novalidate>
 
-    <div class="form-group">
+    <div class="mb-3">
       <label>To users in the following tenants...</label>
       <div class="row">
         <?php while ($list = $lists->fetch(PDO::FETCH_ASSOC)) { ?>
           <div class="col-6 col-sm-6 col-md-4 col-lg-3">
-            <div class="custom-control custom-checkbox">
-              <input type="checkbox" class="custom-control-input" id="TL-<?= $list['ID'] ?>" name="TL-<?= $list['ID'] ?>" value="1" <?= fieldChecked('TL-' . $list['ID']) ?>>
-              <label class="custom-control-label" for="TL-<?= $list['ID'] ?>">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="TL-<?= $list['ID'] ?>" name="TL-<?= $list['ID'] ?>" value="1" <?= fieldChecked('TL-' . $list['ID']) ?>>
+              <label class="form-check-label" for="TL-<?= $list['ID'] ?>">
                 <?= htmlspecialchars($list['Name']) ?>
               </label>
             </div>
@@ -99,20 +99,20 @@ include BASE_PATH . "views/root/header.php";
       </div>
     </div>
 
-    <div class="form-group">
-      <label for="subject">Message Subject</label>
+    <div class="mb-3">
+      <label class="form-label" for="subject">Message Subject</label>
       <input type="text" class="form-control" name="subject" id="subject" placeholder="Message Subject" autocomplete="off" required <?= fieldValue('subject') ?>>
       <div class="invalid-feedback">
         Please include a message subject
       </div>
     </div>
 
-    <div class="form-group">
-      <label for="message">Your Message</label>
+    <div class="mb-3">
+      <label class="form-label" for="message">Your Message</label>
       <p>
         <em>
           Your message will begin with "Hello
-          <span class="mono">User Name</span>,".
+          <span class="font-monospace">User Name</span>,".
         </em>
       </p>
       <textarea class="form-control" id="message" name="message" rows="10" data-tinymce-css-location="<?= htmlspecialchars(autoUrl("public/css/tinymce.css")) ?>" data-documentBaseUrl="<?= htmlspecialchars(autoUrl("notify/new/")) ?>" required><?php if (isset($_SESSION['SCDS-Notify']['NotifyPostData']['message'])) { ?><?= htmlspecialchars($_SESSION['SCDS-Notify']['NotifyPostData']['message']) ?><?php } ?></textarea>
@@ -120,24 +120,21 @@ include BASE_PATH . "views/root/header.php";
 
     <input type="hidden" name="MAX_FILE_SIZE" value="10485760">
 
-    <div class="form-group">
-      <label>Select files to attach</label>
-      <div class="custom-file">
-        <input type="file" class="custom-file-input" id="file-upload" name="file-upload[]" multiple data-max-total-file-size="10485760" data-max-file-size="10485760" data-error-message-id="file-upload-invalid-feedback" aria-describedby="file-upload-multi-info">
-        <label class="custom-file-label text-truncate" for="file-upload">Choose file(s)</label>
-        <small id="file-upload-multi-info" class="form-text text-muted">
-          To upload multiple files, press and hold <kbd>shift</kbd> or <kbd>control</kbd> in the file upload window.
-        </small>
-        <div class="invalid-feedback" id="file-upload-invalid-feedback">
-          Oh no!
-        </div>
+    <div class="mb-3">
+      <label class="form-label text-truncate" for="file-upload">Select files to attach</label>
+      <input type="file" class="form-control" id="file-upload" name="file-upload[]" multiple data-max-total-file-size="10485760" data-max-file-size="10485760" data-error-message-id="file-upload-invalid-feedback" aria-describedby="file-upload-multi-info">
+      <small id="file-upload-multi-info" class="form-text text-muted">
+        To upload multiple files, press and hold <kbd>shift</kbd> or <kbd>control</kbd> in the file upload window.
+      </small>
+      <div class="invalid-feedback" id="file-upload-invalid-feedback">
+        Oh no!
       </div>
     </div>
 
-    <div class="form-group">
-      <div class="custom-control custom-checkbox">
-        <input type="checkbox" class="custom-control-input" aria-describedby="forceHelp" id="force" name="force" value="1">
-        <label class="custom-control-label" for="force">Force Send</label>
+    <div class="mb-3">
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" aria-describedby="forceHelp" id="force" name="force" value="1">
+        <label class="form-check-label" for="force">Force Send</label>
         <small id="forceHelp" class="form-text text-muted">
           Normally, messages will only be sent to those who have opted in to email
           notifications. Selecting Force Send overrides this. If you do this, you
@@ -159,8 +156,8 @@ include BASE_PATH . "views/root/header.php";
     <div class="modal-content">
       <div class="modal-header bg-danger text-white">
         <h5 class="modal-title" id="force-alert-modal">Are you sure?</h5>
-        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
+        <button type="button" class="close text-white" data-bs-dismiss="modal" aria-label="Close">
+
         </button>
       </div>
       <div class="modal-body">
@@ -179,7 +176,7 @@ include BASE_PATH . "views/root/header.php";
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-dark" data-dismiss="modal">Don't force send</button>
+        <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Don't force send</button>
         <button type="button" class="btn btn-danger" id="accept">I understand</button>
       </div>
     </div>

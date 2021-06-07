@@ -117,8 +117,8 @@ $days = [
 
 $pageHead = [
   'body' => [
-    'data-spy="scroll"',
-    'data-target="#member-page-menu"'
+    'data-bs-spy="scroll"',
+    'data-bs-target="#member-page-menu"'
   ]
 ];
 $pagetitle = "Timetable";
@@ -192,9 +192,7 @@ include BASE_PATH . 'views/header.php';
         <?php } ?>
         <div class="input-group">
           <input type="date" class="form-control" value="<?= htmlspecialchars($startWeek->format('Y-m-d')) ?>" aria-label="Find a week" aria-describedby="go-to-week" name="go-to-week-date" id="go-to-week-date">
-          <div class="input-group-append">
-            <button class="btn btn-primary" type="submit" id="go-to-week">Go to week</button>
-          </div>
+          <button class="btn btn-primary" type="submit" id="go-to-week">Go to week</button>
         </div>
       </form>
     </div>

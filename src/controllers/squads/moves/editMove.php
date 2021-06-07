@@ -58,22 +58,22 @@ include BASE_PATH . "views/squadMenu.php"; ?>
 			unset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState']);
 		} ?>
 		<form method="post">
-			<div class="form-group row">
-		    <label for="swimmerName" class="col-sm-2 col-form-label">Swimmer</label>
+			<div class="mb-3 row">
+		    <label class="form-label" for="swimmerName" class="col-sm-2 col-form-label">Swimmer</label>
 		    <div class="col-sm-10">
 		      <input type="text" readonly class="form-control" id="swimmerName" name="swimmerName" value="<?=htmlspecialchars($name)?>" disabled>
 		    </div>
 		  </div>
-			<div class="form-group row">
-		    <label for="currentSquad" class="col-sm-2 col-form-label">Current Squad</label>
+			<div class="mb-3 row">
+		    <label class="form-label" for="currentSquad" class="col-sm-2 col-form-label">Current Squad</label>
 		    <div class="col-sm-10">
 		      <input type="text" readonly class="form-control" id="currentSquad" name="currentSquad" value="<?=htmlspecialchars($currentSquad)?>" disabled>
 		    </div>
 		  </div>
-		  <div class="form-group row">
-		    <label for="newSquad" class="col-sm-2 col-form-label">New Squad</label>
+		  <div class="mb-3 row">
+		    <label class="form-label" for="newSquad" class="col-sm-2 col-form-label">New Squad</label>
 		    <div class="col-sm-10">
-					<select class="custom-select" id="newSquad" name="newSquad">
+					<select class="form-select" id="newSquad" name="newSquad">
 						<!-- HIDES CURRENT SQUAD AS POINTLESS -->
 						<?php while ($row = $getSquads->fetch(PDO::FETCH_ASSOC)) { ?>
 							<option value="<?=$row['SquadID']?>" <?php if ($row['SquadID'] == $move['SquadID']) { echo "selected";} ?> ><?=htmlspecialchars($row['SquadName'])?></option>
@@ -81,8 +81,8 @@ include BASE_PATH . "views/squadMenu.php"; ?>
 				  </select>
 		    </div>
 		  </div>
-			<div class="form-group row">
-		    <label for="movingDate" class="col-sm-2 col-form-label">Moving Date</label>
+			<div class="mb-3 row">
+		    <label class="form-label" for="movingDate" class="col-sm-2 col-form-label">Moving Date</label>
 		    <div class="col-sm-10">
 		      <input type="date" class="form-control" id="movingDate" name="movingDate" min="<?=htmlspecialchars($date->format("Y-m-d"))?>" value="<?=htmlspecialchars($movingDate)?>">
 		    </div>

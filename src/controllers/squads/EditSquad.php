@@ -63,19 +63,17 @@ include BASE_PATH . "views/squadMenu.php"; ?>
           <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['UpdateSuccess']);
           } ?>
 
-          <div class="form-group">
-            <label for="squadName">Squad Name</label>
+          <div class="mb-3">
+            <label class="form-label" for="squadName">Squad Name</label>
             <input type="text" class="form-control" id="squadName" name="squadName" placeholder="Enter Squad Name" value="<?= htmlspecialchars($row['SquadName']) ?>" required>
             <div class="invalid-feedback">
               Please provide a squad name.
             </div>
           </div>
-          <div class="form-group">
-            <label for="squadFee" class="form-label">Squad Fee</label>
+          <div class="mb-3">
+            <label class="form-label" for="squadFee" class="form-label">Squad Fee</label>
             <div class="input-group">
-              <div class="input-group-prepend">
-                <span class="input-group-text">&pound;</span>
-              </div>
+              <span class="input-group-text">&pound;</span>
               <input type="number" min="0" step="0.01" class="form-control" id="squadFee" name="squadFee" aria-describedby="squadFeeHelp" placeholder="eg 50.00" value="<?= htmlspecialchars($row['SquadFee']) ?>" required>
               <div class="invalid-feedback">
                 Please provide a monthly fee.
@@ -84,17 +82,17 @@ include BASE_PATH . "views/squadMenu.php"; ?>
             <small id="squadFeeHelp" class="form-text text-muted">A squad can have a fee of &pound;0.00 if it represents
               a group for non paying members</small>
           </div>
-          <div class="form-group d-none">
-            <label for="squadCoach">Squad Coach</label>
+          <div class="mb-3 d-none">
+            <label class="form-label" for="squadCoach">Squad Coach</label>
             <input type="text" class="form-control" id="squadCoach" name="squadCoach" placeholder="Enter Squad Coach" value="<?= htmlspecialchars($row['SquadCoach']) ?>">
           </div>
-          <div class="form-group">
-            <label for="squadTimetable">Squad Timetable</label>
+          <div class="mb-3">
+            <label class="form-label" for="squadTimetable">Squad Timetable</label>
             <input type="text" class="form-control" id="squadTimetable" name="squadTimetable" placeholder="Enter Squad Timetable Address" value="<?= htmlspecialchars($row['SquadTimetable']) ?>">
           </div>
-          <div class="form-group">
-            <label for="squadCoC">Squad Code of Conduct</label>
-            <select class="custom-select" id="squadCoC" name="squadCoC" aria-describedby="conductSelectHelpBlock">
+          <div class="mb-3">
+            <label class="form-label" for="squadCoC">Squad Code of Conduct</label>
+            <select class="form-select" id="squadCoC" name="squadCoC" aria-describedby="conductSelectHelpBlock">
               <?php while ($codeDetails = $codesOfConduct->fetch(PDO::FETCH_ASSOC)) { ?>
                 <option value="<?= htmlspecialchars($codeDetails['ID']) ?>" <?php if ($row['SquadCoC'] == $codeDetails['ID']) { ?>selected<?php } ?>>
                   <?= htmlspecialchars($codeDetails['Title']) ?>
@@ -108,9 +106,9 @@ include BASE_PATH . "views/squadMenu.php"; ?>
             </small>
           </div>
           <div class="alert alert-danger">
-            <div class="form-group mb-0">
-              <label for="squadDeleteDanger"><strong>Danger Zone</strong> <br>Delete this squad by entering this key "<span class="mono"><?= htmlspecialchars($row['SquadKey']) ?></span>" in the box below</label>
-              <input type="text" class="form-control mono" id="squadDeleteDanger" name="squadDeleteDanger" placeholder="Enter the key" onselectstart="return false" onpaste="return false;" onCopy="return false" onCut="return false" onDrag="return false" onDrop="return false" autocomplete=off>
+            <div class="mb-3 mb-0">
+              <label class="form-label" for="squadDeleteDanger"><strong>Danger Zone</strong> <br>Delete this squad by entering this key "<span class="font-monospace"><?= htmlspecialchars($row['SquadKey']) ?></span>" in the box below</label>
+              <input type="text" class="form-control font-monospace" id="squadDeleteDanger" name="squadDeleteDanger" placeholder="Enter the key" onselectstart="return false" onpaste="return false;" onCopy="return false" onCut="return false" onDrag="return false" onDrop="return false" autocomplete=off>
             </div>
           </div>
           <p>

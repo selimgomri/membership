@@ -36,8 +36,8 @@ include BASE_PATH . "views/header.php";
           Manage your new direct debit
         </p>
       </div>
-      <div class="d-none d-sm-flex col-sm-auto ml-auto">
-        <img style="max-height:50px;" src="<?= htmlspecialchars(autoUrl("public/img/directdebit/directdebit.png")) ?>" srcset="<?= htmlspecialchars(autoUrl("public/img/directdebit/directdebit@2x.png")) ?> 2x, <?= htmlspecialchars(autoUrl("public/img/directdebit/directdebit@3x.png")) ?> 3x" alt="Direct
+      <div class="d-none d-sm-flex col-sm-auto ms-auto">
+        <img style="max-height:50px;" src="<?= htmlspecialchars(autoUrl("img/directdebit/directdebit.png", false)) ?>" srcset="<?= htmlspecialchars(autoUrl("img/directdebit/directdebit@2x.png", false)) ?> 2x, <?= htmlspecialchars(autoUrl("img/directdebit/directdebit@3x.png", false)) ?> 3x" alt="Direct
 				Debit Logo">
       </div>
     </div>
@@ -68,16 +68,16 @@ include BASE_PATH . "views/header.php";
       <?php if ($mandate) {
         do { ?>
           <div class="card card-body mb-3">
-            <h2><?php if ($used) { ?>Your Direct Debit Mandate<?php $user = false; } else { ?>Old Mandate<?php } ?> <span class="badge badge-secondary"><?php if ($mandate['Status'] == 'pending') { ?>Pending<?php } else if ($mandate['Status'] == 'accepted') { ?>Active<?php } ?></span></h2>
+            <h2><?php if ($used) { ?>Your Direct Debit Mandate<?php $user = false; } else { ?>Old Mandate<?php } ?> <span class="badge bg-secondary"><?php if ($mandate['Status'] == 'pending') { ?>Pending<?php } else if ($mandate['Status'] == 'accepted') { ?>Active<?php } ?></span></h2>
             <dl class="row">
               <dt class="col-sm-3">Sort code</dt>
-              <dd class="col-sm-9 mono"><?= htmlspecialchars(implode("-", str_split($mandate['SortCode'], 2))) ?></dd>
+              <dd class="col-sm-9 font-monospace"><?= htmlspecialchars(implode("-", str_split($mandate['SortCode'], 2))) ?></dd>
 
               <dt class="col-sm-3">Account number</dt>
-              <dd class="col-sm-9 mono">&middot;&middot;&middot;&middot;<?= htmlspecialchars($mandate['Last4']) ?></dd>
+              <dd class="col-sm-9 font-monospace">&middot;&middot;&middot;&middot;<?= htmlspecialchars($mandate['Last4']) ?></dd>
 
               <dt class="col-sm-3">Payment reference</dt>
-              <dd class="col-sm-9 mono"><?= htmlspecialchars($mandate['Reference']) ?></dd>
+              <dd class="col-sm-9 font-monospace"><?= htmlspecialchars($mandate['Reference']) ?></dd>
             </dl>
 
             <p class="mb-0">

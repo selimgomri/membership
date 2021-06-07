@@ -104,7 +104,7 @@ if ($currentUser == null && false) {
 
       <p class="mt-2"><a href="mailto:support@myswimmingclub.uk" title="Support Hotline">Email SCDS</a> or <a href="tel:+441912494320">call SCDS on +44 191 249 4320</a> for help and support if the issue persists.</p>
 
-      <div id="trace" class="mono d-none">
+      <div id="trace" class="font-monospace d-none">
         <?php foreach ($trace as $key => $item) { ?>
           <?php if (isset($item['file']) && isset($item['line'])) { ?>
             <strong><?= htmlspecialchars('./' . str_replace(BASE_PATH, '', $item['file'])) ?></strong> <?= htmlspecialchars($item['line']) ?><?php if (isset($item['function'])) { ?> (<?= htmlspecialchars($item['function']) ?>)<?php } ?><br>

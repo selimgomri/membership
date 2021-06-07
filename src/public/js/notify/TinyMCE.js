@@ -1,7 +1,7 @@
 tinymce.init({
-  relative_urls : false,
-  remove_script_host : false,
-  document_base_url : document.getElementById('message').dataset.documentBaseUrl,
+  relative_urls: false,
+  remove_script_host: false,
+  document_base_url: document.getElementById('message').dataset.documentBaseUrl,
   selector: '#message',
   branding: false,
   plugins: [
@@ -18,30 +18,36 @@ tinymce.init({
   fontsize_formats: '12pt',
   font_formats: 'Default="Open Sans", "Source Sans Pro", arial,helvetica,sans-serif;',
   style_formats: [
-    { title: 'Headings', items: [
-      { title: 'Heading 1', format: 'h1' },
-      { title: 'Heading 2', format: 'h2' },
-      { title: 'Heading 3', format: 'h3' },
-      { title: 'Heading 4', format: 'h4' },
-      { title: 'Heading 5', format: 'h5' },
-      { title: 'Heading 6', format: 'h6' }
-    ]},
-    { title: 'Inline', items: [
-      { title: 'Bold', format: 'bold' },
-      { title: 'Italic', format: 'italic' },
-      { title: 'Underline', format: 'underline' },
-      { title: 'Strikethrough', format: 'strikethrough' },
-      { title: 'Superscript', format: 'superscript' },
-      { title: 'Subscript', format: 'subscript' },
-      { title: 'Code', format: 'code' }
-    ]},
-    { title: 'Blocks', items: [
-      { title: 'Paragraph', format: 'p' },
-      { title: 'Blockquote', format: 'blockquote' },
-      { title: 'Div', format: 'div' },
-      { title: 'Pre', format: 'pre' }
-    ]}
-  ],  
+    {
+      title: 'Headings', items: [
+        { title: 'Heading 1', format: 'h1' },
+        { title: 'Heading 2', format: 'h2' },
+        { title: 'Heading 3', format: 'h3' },
+        { title: 'Heading 4', format: 'h4' },
+        { title: 'Heading 5', format: 'h5' },
+        { title: 'Heading 6', format: 'h6' }
+      ]
+    },
+    {
+      title: 'Inline', items: [
+        { title: 'Bold', format: 'bold' },
+        { title: 'Italic', format: 'italic' },
+        { title: 'Underline', format: 'underline' },
+        { title: 'Strikethrough', format: 'strikethrough' },
+        { title: 'Superscript', format: 'superscript' },
+        { title: 'Subscript', format: 'subscript' },
+        { title: 'Code', format: 'code' }
+      ]
+    },
+    {
+      title: 'Blocks', items: [
+        { title: 'Paragraph', format: 'p' },
+        { title: 'Blockquote', format: 'blockquote' },
+        { title: 'Div', format: 'div' },
+        { title: 'Pre', format: 'pre' }
+      ]
+    }
+  ],
   menu: {
     edit: { title: 'Edit', items: 'undo redo | cut copy paste | selectall | searchreplace' },
     view: { title: 'View', items: 'code | visualaid visualchars visualblocks | spellchecker | preview fullscreen' },
@@ -68,10 +74,11 @@ if (force) {
   force.addEventListener('change', event => {
     if (force.checked) {
       force.checked = false;
-      $('#force-alert-modal').modal('show');
+      let modal = new bootstrap.Modal(document.getElementById('force-alert-modal'));
+      modal.show();
 
       document.getElementById('accept').addEventListener('click', event => {
-        $('#force-alert-modal').modal('hide');
+        modal.hide();
         if (force) {
           force.checked = true;
         }

@@ -36,21 +36,21 @@ include BASE_PATH . 'views/header.php'; ?>
 
 			<?= \SCDS\CSRF::write() ?>
 
-			<div class="form-group">
-				<label for="report_url">Page Address</label>
+			<div class="mb-3">
+				<label class="form-label" for="report_url">Page Address</label>
 				<input type="url" value="<?= htmlspecialchars($target) ?>" readonly class="form-control" id="report_url" name="report_url">
 			</div>
 
-			<div class="form-group">
-				<label for="email-address">Email Address</label>
+			<div class="mb-3">
+				<label class="form-label" for="email-address">Email Address</label>
 				<input type="email" <?php if (isset(app()->user)) { ?>value="<?= htmlspecialchars(app()->user->getEmail()) ?>" readonly<?php } else { ?> <?php } ?> class="form-control" id="email-address" name="email-address" required>
 				<div class="invalid-feedback">
 					As you're not logged in, please enter your email address so we can get in touch about the issue.
 				</div>
 			</div>
 
-			<div class="form-group">
-				<label for="Message">What's Wrong?</label>
+			<div class="mb-3">
+				<label class="form-label" for="Message">What's Wrong?</label>
 				<textarea class="form-control" id="Message" name="Message" rows="3" aria-describedby="MHelp"></textarea>
 				<small id="MHelp" class="form-text text-muted">You don't need to fill out this box if you don't want to</small>
 			</div>

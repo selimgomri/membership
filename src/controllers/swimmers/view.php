@@ -29,8 +29,8 @@ $pagetitle = htmlspecialchars($member->getFullName());
 
 $pageHead = [
   'body' => [
-    'data-spy="scroll"',
-    'data-target="#member-page-menu"'
+    'data-bs-spy="scroll"',
+    'data-bs-target="#member-page-menu"'
   ]
 ];
 
@@ -88,7 +88,7 @@ include BASE_PATH . 'views/header.php';
         </p>
         <div class="mb-3 d-lg-none"></div>
       </div>
-      <div class="text-lg-right col-lg">
+      <div class="text-lg-end col-lg">
         <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent' || $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') { ?>
           <p>
             <a href="<?= htmlspecialchars(autoUrl("members/" . $id . "/edit")) ?>" class="btn btn-success">
@@ -98,7 +98,7 @@ include BASE_PATH . 'views/header.php';
         <?php } ?>
         <?php if ($user && $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Parent') { ?>
           <div class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               Quick actions
             </button>
             <div class="dropdown-menu dropdown-menu-lg-end" aria-labelledby="dropdownMenuButton">
@@ -209,7 +209,7 @@ include BASE_PATH . 'views/header.php';
 
         <div class="col-6">
           <dt class="text-truncate">
-            Sex (for the purposes of competition) <a tabindex="0" data-toggle="popover" data-trigger="focus" title="" data-content="The sex <?= htmlspecialchars($member->getForename()) ?> competes under, even if this is not the same as their gender identity." data-original-title="What does this mean?"><i class="fa fa-question-circle" aria-hidden="true"></i></a>
+            Sex (for the purposes of competition) <a tabindex="0" data-bs-toggle="popover" data-bs-trigger="focus" title="" data-bs-content="The sex <?= htmlspecialchars($member->getForename()) ?> competes under, even if this is not the same as their gender identity." data-original-title="What does this mean?"><i class="fa fa-question-circle" aria-hidden="true"></i></a>
           </dt>
           <dd>
             <?= htmlspecialchars($member->getSex()) ?>
@@ -219,7 +219,7 @@ include BASE_PATH . 'views/header.php';
         <?php if ($member->showGender()) { ?>
           <div class="col-6">
             <dt class="text-truncate">
-              Gender Identity <a tabindex="0" data-toggle="popover" data-trigger="focus" title="" data-content="Your gender identity is a way to describe how you feel about your gender. You might identify your gender as a boy or a girl or something different. This is different from your sex, which is related to your physical body and biology." data-original-title="What is gender identity?"><i class="fa fa-question-circle" aria-hidden="true"></i></a>
+              Gender Identity <a tabindex="0" data-bs-toggle="popover" data-bs-trigger="focus" title="" data-bs-content="Your gender identity is a way to describe how you feel about your gender. You might identify your gender as a boy or a girl or something different. This is different from your sex, which is related to your physical body and biology." data-original-title="What is gender identity?"><i class="fa fa-question-circle" aria-hidden="true"></i></a>
             </dt>
             <dd>
               <?= htmlspecialchars($member->getGenderIdentity()) ?>
@@ -228,7 +228,7 @@ include BASE_PATH . 'views/header.php';
 
           <div class="col-6">
             <dt class="text-truncate">
-              Gender Pronouns <a tabindex="0" data-toggle="popover" data-trigger="focus" title="" data-content="The words we use to refer to someone like, ‘he’, ‘she’ and ‘they’. Members can choose their pronouns so that club staff don't misgender them." data-original-title="What are pronouns?"><i class="fa fa-question-circle" aria-hidden="true"></i></a>
+              Gender Pronouns <a tabindex="0" data-bs-toggle="popover" data-bs-trigger="focus" title="" data-bs-content="The words we use to refer to someone like, ‘he’, ‘she’ and ‘they’. Members can choose their pronouns so that club staff don't misgender them." data-original-title="What are pronouns?"><i class="fa fa-question-circle" aria-hidden="true"></i></a>
             </dt>
             <dd>
               <?= htmlspecialchars($member->getGenderPronouns()) ?>
@@ -368,9 +368,11 @@ include BASE_PATH . 'views/header.php';
                     <div class="mb-2 d-sm-none d-md-flex d-lg-none"></div>
                   </div>
                   <div class="col">
-                    <a href="<?= htmlspecialchars($ec->getRFCContactNumber()) ?>" class="btn btn-block btn-success">
-                      <i class="fa fa-phone" aria-hidden="true"></i> <?= htmlspecialchars($ec->getNationalContactNumber()) ?>
-                    </a>
+                    <div class="d-grid gap-2">
+                      <a href="<?= htmlspecialchars($ec->getRFCContactNumber()) ?>" class="btn btn-success">
+                        <i class="fa fa-phone" aria-hidden="true"></i> <?= htmlspecialchars($ec->getNationalContactNumber()) ?>
+                      </a>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -553,7 +555,7 @@ include BASE_PATH . 'views/header.php';
       </p>
 
       <?php if ($pbs) { ?>
-        <h3><span class="badge badge-info">BETA</span> PBs <small class="text-muted">direct from British Swimming</small></h3>
+        <h3><span class="badge bg-info">BETA</span> PBs <small class="text-muted">direct from British Swimming</small></h3>
 
         <div class="row">
           <div class="col-sm-6">
@@ -650,13 +652,13 @@ include BASE_PATH . 'views/header.php';
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="modal-title">Modal title</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+
         </button>
       </div>
       <div id="modal-body" class="modal-body"></div>
       <div id="modal-footer" class="modal-footer">
-        <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Close</button>
       </div>
     </div>
   </div>

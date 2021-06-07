@@ -79,7 +79,7 @@ include BASE_PATH . "views/postsMenu.php"; ?>
         <div class="mb-3 d-lg-none"></div>
       </div>
       <?php if (app()->user->hasPermission('Admin')) { ?>
-        <div class="col-lg-auto ml-auto">
+        <div class="col-lg-auto ms-auto">
           <a href="<?= htmlspecialchars(autoUrl('pages/new')) ?>" class="btn btn-success">Add page</a>
         </div>
       <?php } ?>

@@ -82,11 +82,11 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
 
     $content = "";
     if (app('request')->isMobile()) {
-      $content .= '<table class="table table-sm">';
+      $content .= '<table class="table table-sm table-light">';
     } else {
-      $content .= '<table class="table table-hover">';
+      $content .= '<table class="table table-hover table-light">';
     }
-    $content .= '<thead class="thead-light"><tr><th>Swimmer</th><th>Swims</th><th class="d-print-none"><abbr title="Lock entries and mark as paid">Admin</abbr></th></tr></thead><tbody>';
+    $content .= '<thead class=""><tr><th>Swimmer</th><th>Swims</th><th class="d-print-none"><abbr title="Lock entries and mark as paid">Admin</abbr></th></tr></thead><tbody>';
 
     // For loop iterates through the rows of the database result, producing rows for the table
     while ($row = $results->fetch(PDO::FETCH_ASSOC)) {
@@ -226,18 +226,18 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
 
       // If the entry has been processes, show a ticked checkbox
       $content .= "
-      <div class=\"custom-control custom-checkbox\">
+      <div class=\"form-check\">
         <input type=\"checkbox\" value=\"1\" ";
         if ($row['EntryProcessed'] == 1) {
           $content .= ' checked ';
         }
-        $content .= " data-button-action=\"mark-processed\" class=\"custom-control-input\" id=\"processedEntry-" . $row['EntryID'] . "\">
-        <label class=\"custom-control-label\" for=\"processedEntry-" . $row['EntryID'] . "\">Processed?</label>
+        $content .= " data-button-action=\"mark-processed\" class=\"form-check-input\" id=\"processedEntry-" . $row['EntryID'] . "\">
+        <label class=\"form-check-label\" for=\"processedEntry-" . $row['EntryID'] . "\">Processed?</label>
       </div>";
 
       // If the entry has been processes, show a ticked checkbox
       $content .= "
-      <div class=\"custom-control custom-checkbox\">
+      <div class=\"form-check\">
         <input type=\"checkbox\" value=\"1\" ";
       if ($row['Charged'] || $row['PaymentID'] != null) {
         $content .= ' checked ';
@@ -251,8 +251,8 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
       } catch (Exception $e) {
         $amount = "UNKNOWN";
       }
-      $content .= " data-button-action=\"mark-paid\" class=\"custom-control-input\" id=\"chargedEntry-" . $row['EntryID'] . "\">
-        <label class=\"custom-control-label\" for=\"chargedEntry-" . $row['EntryID'] . "\">Paid? (&pound;" . htmlspecialchars($amount) . ")</label>
+      $content .= " data-button-action=\"mark-paid\" class=\"form-check-input\" id=\"chargedEntry-" . $row['EntryID'] . "\">
+        <label class=\"form-check-label\" for=\"chargedEntry-" . $row['EntryID'] . "\">Paid? (&pound;" . htmlspecialchars($amount) . ")</label>
       </div>";
 
       $content .= '</td>';

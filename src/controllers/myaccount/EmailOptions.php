@@ -114,45 +114,45 @@ include BASE_PATH . "views/header.php";
 
     	<div class="cell">
     		<form method="post">
-    			<div class="form-group">
-    		    <label for="EmailAddress">Your email address</label>
+    			<div class="mb-3">
+    		    <label class="form-label" for="EmailAddress">Your email address</label>
     		    <input type="email" class="form-control" id="EmailAddress" name="EmailAddress" placeholder="name@example.com" value="<?=htmlentities($email)?>">
     				<?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['EmailUpdateNew'])) { ?>
     				<small class="form-text">Once verified, your account email address will change to <?=htmlentities($_SESSION['TENANT-' . app()->tenant->getId()]['EmailUpdateNew'])?></small>
     				<?php } ?>
     		  </div>
 
-    			<div class="form-group">
-    				<div class="custom-control custom-switch">
-    					<input type="checkbox" class="custom-control-input" value="1" id="EmailComms" aria-describedby="EmailCommsHelp" name="EmailComms" <?=$emailChecked?> >
-              <label class="custom-control-label" for="EmailComms">Receive squad updates by email</label>
+    			<div class="mb-3">
+    				<div class="form-switch mb-2">
+    					<input class="form-check-input" type="checkbox" value="1" id="EmailComms" aria-describedby="EmailCommsHelp" name="EmailComms" <?=$emailChecked?> >
+              <label class="form-check-label" for="EmailComms">Receive squad updates by email</label>
     					<small id="EmailCommsHelp" class="form-text text-muted">Squad updates include emails from your coaches. You'll still receive emails relating to your account if you don't receive updates.</small>
     				</div>
     			</div>
 
 					<?php if ($currentUser->hasPermission('Parent')) { ?>
-    			<div class="form-group">
-    				<div class="custom-control custom-switch">
-    					<input type="checkbox" class="custom-control-input" value="1" id="SecurityComms" aria-describedby="SecurityCommsHelp" name="SecurityComms" <?=$emailChecked_security?> >
-              <label class="custom-control-label" for="SecurityComms">Receive account security emails</label>
+    			<div class="mb-3">
+    				<div class="form-switch mb-2">
+    					<input class="form-check-input" type="checkbox" value="1" id="SecurityComms" aria-describedby="SecurityCommsHelp" name="SecurityComms" <?=$emailChecked_security?> >
+              <label class="form-check-label" for="SecurityComms">Receive account security emails</label>
     					<small id="SecurityCommsHelp" class="form-text text-muted">Receive emails whenever somebody logs in to your account from an unrecognised <abbr title="Internet Protocol">IP</abbr> address.</small>
     				</div>
     			</div>
 
-    			<div class="form-group">
-    				<div class="custom-control custom-switch">
-    					<input type="checkbox" class="custom-control-input" value="1" id="PaymentComms" aria-describedby="PaymentCommsHelp" name="PaymentComms" <?php echo $emailChecked_payments; ?> >
-              <label class="custom-control-label" for="PaymentComms">Receive payment emails</label>
+    			<div class="mb-3">
+    				<div class="form-switch mb-2">
+    					<input class="form-check-input" type="checkbox" value="1" id="PaymentComms" aria-describedby="PaymentCommsHelp" name="PaymentComms" <?php echo $emailChecked_payments; ?> >
+              <label class="form-check-label" for="PaymentComms">Receive payment emails</label>
     					<small id="PaymentCommsHelp" class="form-text text-muted">If you opt out, you'll still receive emails required for regulatory purposes.</small>
     				</div>
     			</div>
 					<?php } ?>
 
     			<?php if ($currentUser->hasPermission('Admin')) { ?>
-    			<div class="form-group">
-    				<div class="custom-control custom-switch">
-    					<input type="checkbox" class="custom-control-input" value="1" id="NewMemberComms" aria-describedby="NewMemberCommsHelp" name="NewMemberComms" <?php echo $emailChecked_new_member; ?> >
-              <label class="custom-control-label" for="NewMemberComms">Receive new member emails</label>
+    			<div class="mb-3">
+    				<div class="form-switch mb-2">
+    					<input class="form-check-input" type="checkbox" value="1" id="NewMemberComms" aria-describedby="NewMemberCommsHelp" name="NewMemberComms" <?php echo $emailChecked_new_member; ?> >
+              <label class="form-check-label" for="NewMemberComms">Receive new member emails</label>
     					<small id="NewMemberCommsHelp" class="form-text text-muted">Get notified when new members are added.</small>
     				</div>
     			</div>
@@ -211,16 +211,16 @@ include BASE_PATH . "views/header.php";
 						</div>
 					<?php } ?>
 
-          <div class="form-row">
+          <div class="row">
             <div class="col-md">
-              <div class="form-group">
-                <label for="new-cc-name">Name</label>
+              <div class="mb-3">
+                <label class="form-label" for="new-cc-name">Name</label>
                 <input type="text" class="form-control" id="new-cc-name" name="new-cc-name" placeholder="Joe Bloggs" required>
               </div>
             </div>
             <div class="col-md">
-              <div class="form-group">
-                <label for="new-cc">CC Email Address</label>
+              <div class="mb-3">
+                <label class="form-label" for="new-cc">CC Email Address</label>
                 <input type="email" class="form-control" id="new-cc" name="new-cc" placeholder="joe.bloggs@example.com" required>
               </div>
             </div>

@@ -57,34 +57,34 @@ include BASE_PATH . 'views/header.php';
 
         <form method="post" class="needs-validation" novalidate>
 
-          <div class="form-group">
-            <label for="class-name">Class Name</label>
+          <div class="mb-3">
+            <label class="form-label" for="class-name">Class Name</label>
             <input type="text" name="class-name" id="class-name" class="form-control" required value="<?= htmlspecialchars($class['Name']) ?>">
             <div class="invalid-feedback">
               Please provide a name for this type of membership
             </div>
           </div>
 
-          <div class="form-group">
-            <label for="class-description">Description (optional)</label>
+          <div class="mb-3">
+            <label class="form-label" for="class-description">Description (optional)</label>
             <textarea class="form-control" name="class-description" id="class-description" rows="5"><?= htmlspecialchars($class['Description']) ?></textarea>
           </div>
 
-          <div class="form-group" id="fee-type">
+          <div class="mb-3" id="fee-type">
             <p class="mb-2">Fee type</p>
-            <div class="custom-control custom-radio">
-              <input type="radio" id="fee-n" name="class-fee-type" class="custom-control-input" <?php if ($json->type == 'NSwimmers') { ?>checked<?php } ?> value="NSwimmers" required>
-              <label class="custom-control-label" for="fee-n">N Members</label>
+            <div class="form-check">
+              <input type="radio" id="fee-n" name="class-fee-type" class="form-check-input" <?php if ($json->type == 'NSwimmers') { ?>checked<?php } ?> value="NSwimmers" required>
+              <label class="form-check-label" for="fee-n">N Members</label>
             </div>
-            <div class="custom-control custom-radio">
-              <input type="radio" id="fee-person" name="class-fee-type" class="custom-control-input" <?php if ($json->type == 'PerPerson') { ?>checked<?php } ?> value="PerPerson">
-              <label class="custom-control-label" for="fee-person">Per Person</label>
+            <div class="form-check">
+              <input type="radio" id="fee-person" name="class-fee-type" class="form-check-input" <?php if ($json->type == 'PerPerson') { ?>checked<?php } ?> value="PerPerson">
+              <label class="form-check-label" for="fee-person">Per Person</label>
             </div>
           </div>
 
           <div id="per-person" class="<?php if ($json->type != 'PerPerson') { ?>d-none<?php } ?>">
-            <div class="form-group">
-              <label for="class-price">Price</label>
+            <div class="mb-3">
+              <label class="form-label" for="class-price">Price</label>
               <input type="number" name="class-price" id="class-price" class="form-control person-fee-input" <?php if (isset($fees[0])) { ?> value="<?= htmlspecialchars($fees[0]) ?>" <?php } ?> min=" 0" step="0.01" placeholder="0" <?php if ($json->type == 'PerPerson') { ?>required<?php } ?>>
               <div class="invalid-feedback">
                 Please provide a price for this type of membership

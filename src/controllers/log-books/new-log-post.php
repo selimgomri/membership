@@ -27,7 +27,7 @@ if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel']) && $_SES
 $errors = [];
 $contentTypes = [
   'text/plain',
-  'text/plain-monospace',
+  'text/plain-font-monospacespace',
   'text/markdown'
 ];
 

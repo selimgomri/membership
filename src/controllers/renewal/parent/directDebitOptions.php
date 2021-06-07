@@ -89,16 +89,20 @@ if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['RegRenewalDDSuccess']))
           <?php if (stripeDirectDebit(true)) { ?>
 
             <p>
-              <button type="submit" class="btn btn-success btn-lg btn-block">
+            <div class="d-grid gap-2">
+              <button type="submit" class="btn btn-success btn-lg">
                 Setup direct debit
               </button>
+            </div>
             </p>
 
           <?php } else if (app()->tenant->getGoCardlessAccessToken()) { ?>
             <p>
-              <button type="submit" class="btn btn-success btn-lg btn-block">
+            <div class="d-grid gap-2">
+              <button type="submit" class="btn btn-success btn-lg">
                 Setup direct debit
               </button>
+            </div>
             </p>
           <?php } else { ?>
             <p>
@@ -107,7 +111,11 @@ if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['RegRenewalDDSuccess']))
           <?php } ?>
 
           <?php if (!$hasStripeMandate && app()->tenant->getBooleanKey('ALLOW_DIRECT_DEBIT_OPT_OUT')) { ?>
-            <p><button type="submit" name="avoid-dd" value="1" class="btn btn-outline-dark btn-sm btn-block">I want to pay my fees another way</button></p>
+            <p>
+            <div class="d-grid gap-2">
+              <button type="submit" name="avoid-dd" value="1" class="btn btn-outline-dark btn-sm">I want to pay my fees another way</button>
+            </div>
+            </p>
           <?php } ?>
         </form>
 

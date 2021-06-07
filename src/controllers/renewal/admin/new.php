@@ -28,25 +28,25 @@ $val = [
 					unset($_SESSION['TENANT-' . app()->tenant->getId()]['NewRenewalForm']);
 				} ?>
 
-				<div class="form-group">
-					<label for="name">Renewal Name</label>
+				<div class="mb-3">
+					<label class="form-label" for="name">Renewal Name</label>
 					<input type="text" class="form-control" id="name" name="name" placeholder="For <?= htmlspecialchars($datePlus->format('Y')) ?>" value="<?php if (isset($val[0])) { ?><?= htmlspecialchars($val[0]) ?><?php } ?>" required>
 					<div class="invalid-feedback">
 						Enter a name for the renewal period
 					</div>
 				</div>
 
-				<div class="form-row">
-					<div class="form-group col-md-6">
-						<label for="start">Start Date</label>
+				<div class="row">
+					<div class="mb-3 col-md-6">
+						<label class="form-label" for="start">Start Date</label>
 						<input type="date" class="form-control" id="start" name="start" value="<?= htmlspecialchars($date->format('Y-m-d')) ?>" min="<?= htmlspecialchars($date->format('Y-m-d')) ?>" required>
 						<div class="invalid-feedback">
 							Enter a start date
 						</div>
 					</div>
 
-					<div class="form-group col-md-6">
-						<label for="end">End Date</label>
+					<div class="mb-3 col-md-6">
+						<label class="form-label" for="end">End Date</label>
 						<input type="date" class="form-control" id="end" name="end" value="<?= htmlspecialchars($datePlus->format('Y-m-d')) ?>" min="<?= htmlspecialchars($date->format('Y-m-d')) ?>" required>
 						<div class="invalid-feedback">
 							Enter an end date

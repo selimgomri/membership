@@ -70,8 +70,8 @@ include BASE_PATH . 'views/header.php';
       <?php if ($squad) { ?>
         <form method="post" class="needs-validation" novalidate>
 
-          <div class="form-group">
-            <label for="date-eighteen">Members aged 18 <strong>on or before</strong>...</label>
+          <div class="mb-3">
+            <label class="form-label" for="date-eighteen">Members aged 18 <strong>on or before</strong>...</label>
             <input type="date" name="date-eighteen" id="date-eighteen" class="form-control" max="<?= htmlspecialchars($dateToday->format('Y-m-d')) ?>" required value="<?= htmlspecialchars($date->format('Y-m-d')) ?>">
             <div class="invalid-feedback">
               Please provide a date
@@ -89,17 +89,17 @@ include BASE_PATH . 'views/header.php';
                 <div class="row align-items-start">
                   <!-- Normal -->
                   <div class="col">
-                    <div class="form-group mb-0">
-                      <label for="<?= htmlspecialchars('normal-price-' . $squad['SquadID']) ?>">Normal Price</label>
+                    <div class="mb-3 mb-0">
+                      <label class="form-label" for="<?= htmlspecialchars('normal-price-' . $squad['SquadID']) ?>">Normal Price</label>
                       <input class="form-control" type="number" name="<?= htmlspecialchars('normal-price-' . $squad['SquadID']) ?>" id="<?= htmlspecialchars('normal-price-' . $squad['SquadID']) ?>" value="<?= htmlspecialchars($fee) ?>" disabled>
                     </div>
                   </div>
 
                   <!-- Discount -->
                   <div class="col">
-                    <div class="form-group mb-0">
-                      <label for="<?= htmlspecialchars('discount-amount-' . $squad['SquadID']) ?>">Discount amount</label>
-                      <input class="form-control discount-price-boxes" type="number" name="<?= htmlspecialchars('discount-amount-' . $squad['SquadID']) ?>" id="<?= htmlspecialchars('discount-amount-' . $squad['SquadID']) ?>" value="<?php if (isset($fees['squads'][(string) $squad['SquadID']])) { ?><?= htmlspecialchars((string) (\Brick\Math\BigDecimal::of((string) $fees['squads'][(string) $squad['SquadID']]))->withPointMovedLeft(2)->toScale(2)) ?><?php } else { ?><?= htmlspecialchars('0.00') ?><?php } ?>" min="0" max="<?= htmlspecialchars($fee) ?>" required data-target="<?= htmlspecialchars('new-price-' . $squad['SquadID']) ?>" data-fee="<?= htmlspecialchars($fee) ?>" step="0.01">
+                    <div class="mb-3 mb-0">
+                      <label class="form-label" for="<?= htmlspecialchars('discount-amount-' . $squad['SquadID']) ?>">Discount amount</label>
+                      <input class="form-control discount-price-boxes" type="number" name="<?= htmlspecialchars('discount-amount-' . $squad['SquadID']) ?>" id="<?= htmlspecialchars('discount-amount-' . $squad['SquadID']) ?>" value="<?php if (isset($fees['squads'][(string) $squad['SquadID']])) { ?><?= htmlspecialchars((string) (\Brick\Math\BigDecimal::of((string) $fees['squads'][(string) $squad['SquadID']]))->withPointMovedLeft(2)->toScale(2)) ?><?php } else { ?><?= htmlspecialchars('0.00') ?><?php } ?>" min="0" max="<?= htmlspecialchars($fee) ?>" required data-bs-target="<?= htmlspecialchars('new-price-' . $squad['SquadID']) ?>" data-fee="<?= htmlspecialchars($fee) ?>" step="0.01">
                       <div class="invalid-feedback">
                         Please set a discount amount which is between &pound;0 and £<?= htmlspecialchars($squad['SquadFee']) ?>
                       </div>
@@ -108,8 +108,8 @@ include BASE_PATH . 'views/header.php';
 
                   <!-- New amount -->
                   <div class="col">
-                    <div class="form-group mb-0">
-                      <label for="<?= htmlspecialchars('new-price-' . $squad['SquadID']) ?>">Discounted Price</label>
+                    <div class="mb-3 mb-0">
+                      <label class="form-label" for="<?= htmlspecialchars('new-price-' . $squad['SquadID']) ?>">Discounted Price</label>
                       <input class="form-control" type="number" name="<?= htmlspecialchars('new-price-' . $squad['SquadID']) ?>" id="<?= htmlspecialchars('new-price-' . $squad['SquadID']) ?>" disabled>
                     </div>
                   </div>

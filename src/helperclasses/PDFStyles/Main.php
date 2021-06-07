@@ -162,7 +162,7 @@
     width: auto;
     max-width: 100%;
   }
-  .text-right {
+  .text-end {
     text-align: right;
   }
   .row::after {

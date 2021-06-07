@@ -12,20 +12,26 @@ include BASE_PATH . "views/paymentsMenu.php";
 
 ?>
 
-<div class="container">
+<div class="bg-light mt-n3 py-3 mb-3">
+	<div class="container">
 
-	<nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="<?=autoUrl("payments")?>">Payments</a></li>
-      <li class="breadcrumb-item active" aria-current="page">History</li>
-    </ol>
-  </nav>
+		<nav aria-label="breadcrumb">
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a href="<?= autoUrl("payments") ?>">Payments</a></li>
+				<li class="breadcrumb-item active" aria-current="page">History</li>
+			</ol>
+		</nav>
 
-	<div class="">
-		<h1 class="">Statement History</h1>
-		<p class="lead">Previous Payments and Refunds</p>
-		<?=paymentHistory(null, $user)?>
+		<div class="">
+			<h1 class="">Statement History</h1>
+			<p class="lead mb-0">Previous Payments and Refunds</p>
+		</div>
 	</div>
+</div>
+
+<div class="container">
+	<?= paymentHistory(null, $user) ?>
+</div>
 </div>
 
 <?php

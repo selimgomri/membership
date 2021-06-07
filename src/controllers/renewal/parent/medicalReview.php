@@ -48,18 +48,18 @@ include BASE_PATH . "views/renewalTitleBar.php";
 					$no = " checked ";
 				} ?>
 
-				<div class="custom-control custom-radio">
-				  <input type="radio" value="0" <?=$no?> id="medConDisNo" name="medConDis" class="custom-control-input" onclick="toggleState('medConDisDetails', 'medConDis')">
-				  <label class="custom-control-label" for="medConDisNo">No</label>
+				<div class="form-check">
+				  <input type="radio" value="0" <?=$no?> id="medConDisNo" name="medConDis" class="form-check-input" onclick="toggleState('medConDisDetails', 'medConDis')">
+				  <label class="form-check-label" for="medConDisNo">No</label>
 				</div>
-				<div class="custom-control custom-radio">
-				  <input type="radio" value="1" <?=$yes?> id="medConDisYes" name="medConDis" class="custom-control-input" onclick="toggleState('medConDisDetails', 'medConDis')">
-				  <label class="custom-control-label" for="medConDisYes">Yes</label>
+				<div class="form-check">
+				  <input type="radio" value="1" <?=$yes?> id="medConDisYes" name="medConDis" class="form-check-input" onclick="toggleState('medConDisDetails', 'medConDis')">
+				  <label class="form-check-label" for="medConDisYes">Yes</label>
 				</div>
 			</div>
 
-			<div class="form-group">
-		    <label for="medConDisDetails">If yes give details</label>
+			<div class="mb-3">
+		    <label class="form-label" for="medConDisDetails">If yes give details</label>
 		    <textarea class="form-control" id="medConDisDetails" name="medConDisDetails"
 		    rows="3" <?php if ($yes == "") { ?>disabled<?php } ?>><?=htmlspecialchars($row['Conditions'])?></textarea>
 		  </div>
@@ -77,20 +77,20 @@ include BASE_PATH . "views/renewalTitleBar.php";
 					$no = " checked ";
 				} ?>
 
-				<div class="custom-control custom-radio">
+				<div class="form-check">
 				  <input type="radio" value="0" <?=$no?> id="allergiesNo"
-				  name="allergies" class="custom-control-input" onclick="toggleState('allergiesDetails', 'allergies')">
-				  <label class="custom-control-label" for="allergiesNo">No</label>
+				  name="allergies" class="form-check-input" onclick="toggleState('allergiesDetails', 'allergies')">
+				  <label class="form-check-label" for="allergiesNo">No</label>
 				</div>
-				<div class="custom-control custom-radio">
+				<div class="form-check">
 				  <input type="radio" value="1" <?=$yes?> id="allergiesYes"
-				  name="allergies" class="custom-control-input" onclick="toggleState('allergiesDetails', 'allergies')">
-				  <label class="custom-control-label" for="allergiesYes">Yes</label>
+				  name="allergies" class="form-check-input" onclick="toggleState('allergiesDetails', 'allergies')">
+				  <label class="form-check-label" for="allergiesYes">Yes</label>
 				</div>
 			</div>
 
-			<div class="form-group">
-		    <label for="allergiesDetails">If yes give details</label>
+			<div class="mb-3">
+		    <label class="form-label" for="allergiesDetails">If yes give details</label>
 		    <textarea class="form-control" id="allergiesDetails" name="allergiesDetails"
 		    rows="3" <?php if ($yes == "") { ?>disabled<?php } ?>><?=htmlspecialchars($row['Allergies'])?></textarea>
 		  </div>
@@ -108,18 +108,18 @@ include BASE_PATH . "views/renewalTitleBar.php";
 					$no = " checked ";
 				} ?>
 
-				<div class="custom-control custom-radio">
-				  <input type="radio" value="0" <?=$no?> id="medicineNo" name="medicine" class="custom-control-input" onclick="toggleState('medicineDetails', 'medicine')">
-				  <label class="custom-control-label" for="medicineNo">No</label>
+				<div class="form-check">
+				  <input type="radio" value="0" <?=$no?> id="medicineNo" name="medicine" class="form-check-input" onclick="toggleState('medicineDetails', 'medicine')">
+				  <label class="form-check-label" for="medicineNo">No</label>
 				</div>
-				<div class="custom-control custom-radio">
-				  <input type="radio" value="1" <?=$yes?> id="medicineYes" name="medicine" class="custom-control-input" onclick="toggleState('medicineDetails', 'medicine')">
-				  <label class="custom-control-label" for="medicineYes">Yes</label>
+				<div class="form-check">
+				  <input type="radio" value="1" <?=$yes?> id="medicineYes" name="medicine" class="form-check-input" onclick="toggleState('medicineDetails', 'medicine')">
+				  <label class="form-check-label" for="medicineYes">Yes</label>
 				</div>
 			</div>
 
-			<div class="form-group">
-		    <label for="medConDisDetails">If yes give details</label>
+			<div class="mb-3">
+		    <label class="form-label" for="medConDisDetails">If yes give details</label>
 		    <textarea class="form-control" id="medicineDetails" name="medicineDetails"
 		    rows="3" <?php if ($yes == "") { ?>disabled<?php } ?>><?=htmlspecialchars($row['Medication'])?></textarea>
 		  </div>

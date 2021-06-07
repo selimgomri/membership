@@ -1,5 +1,7 @@
 <?php
 
+$pagetitle = 'Document';
+
 $db = app()->db;
 $tenant = app()->tenant;
 
@@ -37,12 +39,14 @@ if ($data == null) {
 $swimsArray = ['50Free','100Free','200Free','400Free','800Free','1500Free','50Back','100Back','200Back','50Breast','100Breast','200Breast','50Fly','100Fly','200Fly','100IM','200IM','400IM',];
 $swimsTextArray = ['50 Fr','100 Fr','200 Fr','400 Fr','800 Fr','1500 Fr','50 Bk','100 Bk','200 Bk','50 Br','100 Br','200 Br','50 Fly','100 Fly','200 Fly','100 IM','200 IM','400 IM'];
 
-ob_start();?>
+ob_start();
+
+?>
 
 <!DOCTYPE html>
 <html>
   <head>
-  <meta charset='utf-8'>
+  <meta charset="utf-8">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i" rel="stylesheet" type="text/css">
   <!--<link href="https://fonts.googleapis.com/css?family=Open+Sans:700,700i" rel="stylesheet" type="text/css">-->
   <?php include BASE_PATH . 'helperclasses/PDFStyles/Main.php'; ?>
@@ -66,13 +70,6 @@ ob_start();?>
     <p>
       Generated at <?=$now->format("H:i \o\\n d/m/Y")?>
     </p>
-
-    <!--
-    <p>
-      <strong><?=$name?></strong><br>
-      Parent
-    </p>
-    -->
 
     <div class="primary-box mb-3" id="title">
       <h1 class="mb-0">

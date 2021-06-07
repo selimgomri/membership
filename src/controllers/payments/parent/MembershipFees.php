@@ -92,36 +92,45 @@ include BASE_PATH . 'views/header.php';
 
 ?>
 
+<div class="bg-light mt-n3 py-3 mb-3">
+  <div class="container">
+
+    <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Parent') { ?>
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="<?= autoUrl("users") ?>">Users</a></li>
+          <li class="breadcrumb-item"><a href="<?= autoUrl("users/" . $id) ?>"><?= htmlspecialchars(mb_substr($info["Forename"], 0, 1, 'utf-8') . mb_substr($info["Surname"], 0, 1, 'utf-8')) ?></a></li>
+          <li class="breadcrumb-item active" aria-current="page">Annual membership</li>
+        </ol>
+      </nav>
+    <?php } else { ?>
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="<?= autoUrl("payments") ?>">Payments</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Annual membership</li>
+        </ol>
+      </nav>
+    <?php } ?>
+
+    <div class="row">
+      <div class="col-lg-8">
+        <h1>Membership fees<?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Parent') { ?> for <?= htmlspecialchars($info['Forename']) ?><?php } ?></h1>
+        <p class="lead mb-0">Club and Swim England membership fees are paid yearly and are due on 1 January.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="container">
-
-  <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Parent') { ?>
-    <nav aria-label="breadcrumb">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="<?= autoUrl("users") ?>">Users</a></li>
-        <li class="breadcrumb-item"><a href="<?= autoUrl("users/" . $id) ?>"><?= htmlspecialchars(mb_substr($info["Forename"], 0, 1, 'utf-8') . mb_substr($info["Surname"], 0, 1, 'utf-8')) ?></a></li>
-        <li class="breadcrumb-item active" aria-current="page">Annual membership</li>
-      </ol>
-    </nav>
-  <?php } else { ?>
-    <nav aria-label="breadcrumb">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="<?= autoUrl("payments") ?>">Payments</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Annual membership</li>
-      </ol>
-    </nav>
-  <?php } ?>
-
   <div class="row">
     <div class="col-lg-8">
-      <h1>Membership fees<?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Parent') { ?> for <?= htmlspecialchars($info['Forename']) ?><?php } ?></h1>
-      <p class="lead">Club and Swim England membership fees are paid yearly and are due on 1 January.</p>
 
       <p>The fees you're charged are dependent on the number of members linked to this account and the type of each member.</p>
 
       <h2>Your Membership Fees</h2>
       <div class="table-responsive-md">
-        <table class="table">
-          <thead class="">
+        <table class="table table-light">
+          <thead>
             <tr class="bg-primary text-light">
               <th>
                 Club Membership
@@ -140,7 +149,7 @@ include BASE_PATH . 'views/header.php';
                 </th>
               </tr>
             </thead>
-            <thead class="thead-light">
+            <thead>
               <tr>
                 <th>
                   Member
@@ -172,7 +181,7 @@ include BASE_PATH . 'views/header.php';
               </th>
             </tr>
           </thead>
-          <thead class="thead-light">
+          <thead>
             <tr>
               <th>
                 Member

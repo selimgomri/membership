@@ -150,8 +150,8 @@ include BASE_PATH . "views/renewalTitleBar.php";
 			Check that these are as you expected before you continue.
 		</p>
 		<div class="table-responsive-md">
-			<table class="table">
-				<thead class="">
+			<table class="table table-light">
+				<thead>
 					<tr class="bg-primary text-light">
 						<th>
 							Club Membership
@@ -169,7 +169,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 								</th>
 							</tr>
 						</thead>
-						<thead class="thead-light">
+						<thead>
 							<tr>
 								<th>
 									Member
@@ -215,7 +215,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 					</th>
 				</tr>
 			</thead>
-			<thead class="thead-light">
+			<thead>
 				<tr>
 					<th>
 						Member
@@ -307,39 +307,39 @@ include BASE_PATH . "views/renewalTitleBar.php";
 
 					<div class="mb-3" id="payment-method-select">
 						<?php if ($tenant->getBooleanKey('MEMBERSHIP_FEE_PM_CARD') && $tenant->getStripeAccount()) { ?>
-							<div class="custom-control custom-radio">
-								<input type="radio" id="payment-method-card" name="payment-method" class="custom-control-input" value="card" checked>
-								<label class="custom-control-label" for="payment-method-card">Credit/Debit Card</label>
+							<div class="form-check">
+								<input type="radio" id="payment-method-card" name="payment-method" class="form-check-input" value="card" checked>
+								<label class="form-check-label" for="payment-method-card">Credit/Debit Card</label>
 							</div>
 						<?php } ?>
 						<?php if ($tenant->getBooleanKey('MEMBERSHIP_FEE_PM_DD') && ($tenant->getStripeAccount() || $tenant->getGoCardlessAccessToken()) && $tenant->getKey('USE_DIRECT_DEBIT') && ($hasStripeMandate || $hasGCMandate)) { ?>
-							<div class="custom-control custom-radio">
-								<input type="radio" id="payment-method-dd" name="payment-method" class="custom-control-input" value="dd">
-								<label class="custom-control-label" for="payment-method-dd">As part of my next Direct Debit payment</label>
+							<div class="form-check">
+								<input type="radio" id="payment-method-dd" name="payment-method" class="form-check-input" value="dd">
+								<label class="form-check-label" for="payment-method-dd">As part of my next Direct Debit payment</label>
 							</div>
 						<?php } ?>
 						<?php if ($tenant->getKey('USE_DIRECT_DEBIT') && !$hasStripeMandate && $tenant->getBooleanKey('ALLOW_DIRECT_DEBIT_OPT_OUT')) { ?>
-							<div class="custom-control custom-radio">
-								<input type="radio" id="payment-method-manual" name="payment-method" class="custom-control-input" value="manual">
-								<label class="custom-control-label" for="payment-method-manual">Manually</label>
+							<div class="form-check">
+								<input type="radio" id="payment-method-manual" name="payment-method" class="form-check-input" value="manual">
+								<label class="form-check-label" for="payment-method-manual">Manually</label>
 							</div>
 						<?php } ?>
 						<?php if ($tenant->getBooleanKey('MEMBERSHIP_FEE_PM_BACS')) { ?>
-							<div class="custom-control custom-radio">
-								<input type="radio" id="payment-method-bacs" name="payment-method" class="custom-control-input" value="bacs">
-								<label class="custom-control-label" for="payment-method-bacs">Bank Transfer</label>
+							<div class="form-check">
+								<input type="radio" id="payment-method-bacs" name="payment-method" class="form-check-input" value="bacs">
+								<label class="form-check-label" for="payment-method-bacs">Bank Transfer</label>
 							</div>
 						<?php } ?>
 						<?php if ($tenant->getBooleanKey('MEMBERSHIP_FEE_PM_CASH')) { ?>
-							<div class="custom-control custom-radio">
-								<input type="radio" id="payment-method-cash" name="payment-method" class="custom-control-input" value="cash">
-								<label class="custom-control-label" for="payment-method-cash">Cash</label>
+							<div class="form-check">
+								<input type="radio" id="payment-method-cash" name="payment-method" class="form-check-input" value="cash">
+								<label class="form-check-label" for="payment-method-cash">Cash</label>
 							</div>
 						<?php } ?>
 						<?php if ($tenant->getBooleanKey('MEMBERSHIP_FEE_PM_CHEQUE')) { ?>
-							<div class="custom-control custom-radio">
-								<input type="radio" id="payment-method-cheque" name="payment-method" class="custom-control-input" value="cheque">
-								<label class="custom-control-label" for="payment-method-cheque">Cheque</label>
+							<div class="form-check">
+								<input type="radio" id="payment-method-cheque" name="payment-method" class="form-check-input" value="cheque">
+								<label class="form-check-label" for="payment-method-cheque">Cheque</label>
 							</div>
 						<?php } ?>
 					</div>

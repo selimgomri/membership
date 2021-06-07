@@ -37,7 +37,7 @@ include BASE_PATH . 'views/header.php';
         </p>
         <div class="mb-3 d-lg-none"></div>
       </div>
-      <div class="col text-right">
+      <div class="col text-end">
         <p class="mb-0">
           <?php if (isset($_GET['return'])) { ?><a href="<?=htmlspecialchars($_GET['return'])?>" class="btn btn-dark">Back</a><?php } ?>
           <button type="submit" class="btn btn-success">Save <i class="fa fa-floppy-o" aria-hidden="true"></i></button>
@@ -79,14 +79,14 @@ include BASE_PATH . 'views/header.php';
         <input type="hidden" name="return" value="<?=htmlspecialchars($_GET['return'])?>">
         <?php } ?>
 
-        <div class="form-group">
-          <label for="username">Swim England number</label>
+        <div class="mb-3">
+          <label class="form-label" for="username">Swim England number</label>
           <input type="text" class="form-control" id="username" name="username" aria-describedby="username-help" value="<?=htmlspecialchars($member['se'])?>" disabled>
           <small id="username-help" class="form-text text-muted"><?=htmlspecialchars($member['fn'])?> will log in with their Swim England number</small>
         </div>
 
-        <div class="form-group">
-          <label for="password-1">Password</label>
+        <div class="mb-3">
+          <label class="form-label" for="password-1">Password</label>
           <input type="password" class="form-control" id="password-1" name="password-1" aria-describedby="pw-help" autocomplete="new-password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" required>
           <small id="pw-help" class="form-text text-muted">Use 8 characters or more, with at least one lowercase letter, at least one uppercase letter and at least one number</small>
           <div class="invalid-feedback">
@@ -94,8 +94,8 @@ include BASE_PATH . 'views/header.php';
           </div>
         </div>
 
-        <div class="form-group">
-          <label for="password-2">Confirm password</label>
+        <div class="mb-3">
+          <label class="form-label" for="password-2">Confirm password</label>
           <input type="password" class="form-control" id="password-2" name="password-2" autocomplete="new-password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" required>
           <div class="invalid-feedback">
             You must provide password that is at least 8 characters long with at least one lowercase letter, at least one uppercase letter and at least one number

@@ -47,9 +47,9 @@ include BASE_PATH . "views/root/header.php";
 
         <?= \SCDS\CSRF::write() ?>
 
-        <div class="form-group">
-          <label for="subscription-tenant">Tenant</label>
-          <select name="subscription-tenant" id="subscription-tenant" class="custom-select" required data-payment-methods-ajax-url="<?= htmlspecialchars(autoUrl('admin/payments/subscriptions/new/get-tenant-payment-methods')) ?>">
+        <div class="mb-3">
+          <label class="form-label" for="subscription-tenant">Tenant</label>
+          <select name="subscription-tenant" id="subscription-tenant" class="form-select" required data-payment-methods-ajax-url="<?= htmlspecialchars(autoUrl('admin/payments/subscriptions/new/get-tenant-payment-methods')) ?>">
             <option value="" selected disabled>Select a customer</option>
             <?php while ($tenant = $getTenants->fetch(PDO::FETCH_ASSOC)) { ?>
               <option value="<?= htmlspecialchars($tenant['ID']) ?>"><?= htmlspecialchars($tenant['Name']) ?></option>
@@ -60,7 +60,7 @@ include BASE_PATH . "views/root/header.php";
           </div>
         </div>
 
-        <div class="form-group">
+        <div class="mb-3">
           <p class="mb-2">
             Products and plans
           </p>
@@ -68,7 +68,7 @@ include BASE_PATH . "views/root/header.php";
           <div id="subscription-plans-box" class="mb-3"></div>
 
           <p>
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-plan-modal">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-plan-modal">
               Add a product plan
             </button>
           </p>
@@ -76,21 +76,21 @@ include BASE_PATH . "views/root/header.php";
 
         <input type="hidden" name="subscription-plans-object" id="subscription-plans-object" value="">
 
-        <div class="form-group" id="pays-auto-radios">
+        <div class="mb-3" id="pays-auto-radios">
           <p class="mb-2">Bills when?</p>
-          <div class="custom-control custom-radio">
-            <input type="radio" id="bills-when-immediately" name="bills-when" class="custom-control-input" value="immediately" required checked>
-            <label class="custom-control-label" for="bills-when-immediately">Bill selected payment method immediately</label>
+          <div class="form-check">
+            <input type="radio" id="bills-when-immediately" name="bills-when" class="form-check-input" value="immediately" required checked>
+            <label class="form-check-label" for="bills-when-immediately">Bill selected payment method immediately</label>
           </div>
-          <div class="custom-control custom-radio">
-            <input type="radio" id="bills-when-manually" name="bills-when" class="custom-control-input" value="chooses">
-            <label class="custom-control-label" for="bills-when-manually">Customer makes manual payment</label>
+          <div class="form-check">
+            <input type="radio" id="bills-when-manually" name="bills-when" class="form-check-input" value="chooses">
+            <label class="form-check-label" for="bills-when-manually">Customer makes manual payment</label>
           </div>
         </div>
 
-        <div class="form-group" id="payment-method-box">
-          <label for="subscription-payment-method">Payment method</label>
-          <select name="subscription-payment-method" id="subscription-payment-method" class="custom-select" required disabled>
+        <div class="mb-3" id="payment-method-box">
+          <label class="form-label" for="subscription-payment-method">Payment method</label>
+          <select name="subscription-payment-method" id="subscription-payment-method" class="form-select" required disabled>
             <option value="" selected disabled>Select a payment method</option>
           </select>
           <div class="invalid-feedback">
@@ -98,18 +98,18 @@ include BASE_PATH . "views/root/header.php";
           </div>
         </div>
 
-        <div class="form-group">
-          <label for="subscription-invoice-memo">Invoice memo</label>
+        <div class="mb-3">
+          <label class="form-label" for="subscription-invoice-memo">Invoice memo</label>
           <textarea class="form-control" name="subscription-invoice-memo" id="subscription-invoice-memo" rows="4"></textarea>
         </div>
 
-        <div class="form-group">
-          <label for="subscription-invoice-footer">Invoice footer</label>
+        <div class="mb-3">
+          <label class="form-label" for="subscription-invoice-footer">Invoice footer</label>
           <textarea class="form-control" name="subscription-invoice-footer" id="subscription-invoice-footer" rows="4"></textarea>
         </div>
 
-        <div class="form-group">
-          <label for="invoice-date">Invoice date</label>
+        <div class="mb-3">
+          <label class="form-label" for="invoice-date">Invoice date</label>
           <input type="date" name="invoice-date" id="invoice-date" class="form-control" min="<?= htmlspecialchars($today->format('Y-m-d')) ?>" value="<?= htmlspecialchars($today->format('Y-m-d')) ?>">
           <div class="invalid-feedback">
             Please provide a valid date to start billing this subscription on
@@ -134,8 +134,8 @@ include BASE_PATH . "views/root/header.php";
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="add-plan-modal-label">Add plan</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+          
         </button>
       </div>
       <div class="modal-body">
@@ -143,9 +143,9 @@ include BASE_PATH . "views/root/header.php";
 
           <?= \SCDS\CSRF::write() ?>
 
-          <div class="form-group">
-            <label for="product-select">Product</label>
-            <select name="product-select" id="product-select" class="custom-select" required data-plans-ajax-url="<?= htmlspecialchars(autoUrl('admin/payments/subscriptions/new/get-product-plans')) ?>">
+          <div class="mb-3">
+            <label class="form-label" for="product-select">Product</label>
+            <select name="product-select" id="product-select" class="form-select" required data-plans-ajax-url="<?= htmlspecialchars(autoUrl('admin/payments/subscriptions/new/get-product-plans')) ?>">
               <option value="" selected disabled>Select a product</option>
               <?php while ($product = $getProducts->fetch(PDO::FETCH_ASSOC)) { ?>
                 <option id="<?= htmlspecialchars('product-select-' . $product['ID']) ?>" value="<?= htmlspecialchars($product['ID']) ?>" data-name="<?= htmlspecialchars($product['Name']) ?>"><?= htmlspecialchars($product['Name']) ?></option>
@@ -156,9 +156,9 @@ include BASE_PATH . "views/root/header.php";
             </div>
           </div>
 
-          <div class="form-group">
-            <label for="plan-select">Plan</label>
-            <select name="plan-select" id="plan-select" class="custom-select" required>
+          <div class="mb-3">
+            <label class="form-label" for="plan-select">Plan</label>
+            <select name="plan-select" id="plan-select" class="form-select" required>
               <option value="" selected disabled>Select a plan</option>
             </select>
             <div class="invalid-feedback">
@@ -166,8 +166,8 @@ include BASE_PATH . "views/root/header.php";
             </div>
           </div>
 
-          <div class="form-group">
-            <label for="plan-quantity">Quantity</label>
+          <div class="mb-3">
+            <label class="form-label" for="plan-quantity">Quantity</label>
             <input type="number" name="plan-quantity" id="plan-quantity" class="form-control" min="1" step="1" required value="1">
             <div class="invalid-feedback">
               You must enter a valid quantity
@@ -177,7 +177,7 @@ include BASE_PATH . "views/root/header.php";
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button type="submit" form="add-plan-form" class="btn btn-primary">Add plan</button>
       </div>
     </div>

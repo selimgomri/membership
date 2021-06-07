@@ -40,9 +40,9 @@ if (isset($customBackground) && $customBackground) {
 
 <body class="<?= $bg ?> account--body <?php if (isset($pageHead['body-class'])) {
                                         foreach ($pageHead['body-class'] as $item) { ?> <?= $item ?> <?php }
-                                                                                                } ?>" <?php if (isset($pageHead['body'])) {
-                                                                                                                                                foreach ($pageHead['body'] as $item) { ?> <?= $item ?> <?php }
-                                                                                                                                                                                                                } ?>>
+                                                                                                  } ?>" <?php if (isset($pageHead['body'])) {
+                                                                                                        foreach ($pageHead['body'] as $item) { ?> <?= $item ?> <?php }
+                                                                                                                                                                                                    } ?>>
 
   <?php if (bool(getenv('IS_DEV'))) { ?>
     <div class="bg-warning bg-striped py-1">
@@ -52,7 +52,7 @@ if (isset($customBackground) && $customBackground) {
     </div>
   <?php } ?>
 
-  <div class="sr-only sr-only-focusable">
+  <div class="visually-hidden visually-hidden-focusable">
     <a href="#maincontent">Skip to main content</a>
   </div>
 
@@ -101,7 +101,7 @@ if (isset($customBackground) && $customBackground) {
           <p class="mb-0">
             <strong>
               You are in User Simulation Mode simulating <?=
-                                                            $_SESSION['TENANT-' . app()->tenant->getId()]['UserSimulation']['SimUserName'] ?>
+                                                          $_SESSION['TENANT-' . app()->tenant->getId()]['UserSimulation']['SimUserName'] ?>
             </strong>
           </p>
           <p class="mb-0">
@@ -197,18 +197,18 @@ if (isset($customBackground) && $customBackground) {
 
     <div class="text-white py-2 top-bar bg-primary-dark hide-a-underline" style="font-size:0.875rem;">
       <div class="<?= $container_class ?> d-flex">
-        <div class="mr-auto">
-          <span class="mr-2">
+        <div class="me-auto">
+          <span class="me-2">
             <a href="https://www.twitter.com/CLSASC" target="_blank" class="text-white" title="Twitter">
               <i class="fa fa-twitter fa-fw" aria-hidden="true"></i>
-              <span class="sr-only">Chester-le-Street ASC on Twitter</span>
+              <span class="visually-hidden">Chester-le-Street ASC on Twitter</span>
             </a>
           </span>
 
-          <span class="mr-2">
+          <span class="me-2">
             <a href="https://www.facebook.com/CLSASC" target="_blank" class="text-white" title="Facebook">
               <i class="fa fa-facebook fa-fw" aria-hidden="true"></i>
-              <span class="sr-only">Chester-le-Street ASC on Facebook</span>
+              <span class="visually-hidden">Chester-le-Street ASC on Facebook</span>
             </a>
           </span>
         </div>
@@ -222,17 +222,17 @@ if (isset($customBackground) && $customBackground) {
           <span class="d-none" id="top-bar-login-status">0</span>
         <?php } ?>
 
-        <div class="ml-2 top-bar d-lg-none">
+        <div class="ms-2 top-bar d-lg-none">
           <span>
-            <a data-toggle="collapse" href="#mobSearch" role="button" aria-expanded="false" aria-controls="mobSearch" class="text-white" title="Search the site">
+            <a data-bs-toggle="collapse" href="#mobSearch" role="button" aria-expanded="false" aria-controls="mobSearch" class="text-white" title="Search the site">
               Search
             </a>
           </span>
         </div>
 
-        <div class="ml-2 top-bar">
+        <div class="ms-2 top-bar">
           <span>
-            <a id="top-bar-more-link" href="#top-bar-more" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="top-bar-more" class="text-white d-none" title="More Links">
+            <a id="top-bar-more-link" href="#top-bar-more" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="top-bar-more" class="text-white d-none" title="More Links">
               More <i class="fa fa-caret-down" aria-hidden="true"></i>
             </a>
           </span>
@@ -252,17 +252,15 @@ if (isset($customBackground) && $customBackground) {
     <div class="collapse" id="mobSearch">
       <div class="text-white py-3 d-lg-none bg-primary-darker">
         <form class="container" action="https://www.chesterlestreetasc.co.uk" id="head-search" method="get">
-          <label for="s" class="sr-only">Search</label>
+          <label class="form-label" for="s" class="visually-hidden">Search</label>
           <div class="input-group">
             <input class="form-control bg-primary text-white border-primary" id="s" name="s" placeholder="Search the site" type="search">
-            <div class="input-group-append">
-              <button type="submit" class="btn btn-primary">
-                <i class="fa fa-search"></i>
-                <span class="sr-only">
-                  Search
-                </span>
-              </button>
-            </div>
+            <button type="submit" class="btn btn-primary">
+              <i class="fa fa-search"></i>
+              <span class="visually-hidden">
+                Search
+              </span>
+            </button>
           </div>
         </form>
       </div>
@@ -275,7 +273,7 @@ if (isset($customBackground) && $customBackground) {
             <a class="logowhite" href="<?= autoUrl("") ?>" title="Membership Dashboard"></a>
           </div>
           <div class="col d-none d-lg-flex">
-            <p class="lead mb-0 ml-auto text-right">Club Membership</p>
+            <p class="lead mb-0 ms-auto text-end">Club Membership</p>
           </div>
         </div>
       </div>
@@ -295,7 +293,7 @@ if (isset($customBackground) && $customBackground) {
               <img src="<?php echo autoUrl("img/chesterIcon.svg", false); ?>" width="20" height="20"> Club Membership
             <?php } ?>
           </a>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#chesterNavbar" aria-controls="chesterNavbar" aria-expanded="false" aria-label="Toggle navigation">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#chesterNavbar" aria-controls="chesterNavbar" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
 

@@ -35,14 +35,14 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
   if ($row = $swimmers->fetch(PDO::FETCH_ASSOC)) { ?>
     <div class="table-responsive-md">
       <?php if (app('request')->isMobile()) {
-      ?><table class="table table-sm"><?php
+      ?><table class="table table-sm table-light"><?php
                                     } else {
-                                      ?><table class="table table-hover"><?php
+                                      ?><table class="table table-hover table-light"><?php
                                                                         } ?>
-          <thead class="thead-light">
+          <thead>
             <tr>
               <th>Name</th>
-              <th>Squad</th>
+              <th>Squads</th>
               <th>Swim England Number</th>
               <th>Access Key</th>
             </tr>
@@ -68,10 +68,10 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
                 <?php if ($row['ASANumber'] == null) {
                   $memID = $row['MemberID'];
                   $asaN = $tenant->getKey('ASA_CLUB_CODE') . $memID;
-                ?><td><span class="mono"><?= htmlspecialchars($asaN) ?></span></td><?php
+                ?><td><span class="font-monospace"><?= htmlspecialchars($asaN) ?></span></td><?php
                                                                                     $updateASA->execute([$asaN, $memID]);
                                                                                   } else { ?>
-                  <td><span class="mono"><?= htmlspecialchars($row['ASANumber']) ?></span></td>
+                  <td><span class="font-monospace"><?= htmlspecialchars($row['ASANumber']) ?></span></td>
                 <?php } ?>
                 <td><samp><?= htmlspecialchars($row['AccessKey']) ?></samp></td>
               </tr>

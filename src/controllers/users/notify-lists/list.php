@@ -90,7 +90,7 @@ include BASE_PATH . "views/header.php";
               <p class="mb-0"><strong><?=htmlspecialchars($list['Name'])?></strong></p>
               <p class="mb-0"><?=htmlspecialchars($list['Description'])?></p>
             </div>
-            <div class="col text-right">
+            <div class="col text-end">
               <span>
                 <a class="btn btn-primary" href="<?=autoUrl("users/" . $id . "/targeted-lists/remove?list=" . $list['ID'] . "")?>">Remove</a>
               </span>

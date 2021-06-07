@@ -1,9 +1,8 @@
 document.addEventListener('DOMContentLoaded', function () {
   // your code here
-  $(function () {
-    $('[data-toggle="popover"]').popover({
-      trigger: 'focus'
-    })
+  let popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
+  let popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+    return new bootstrap.Popover(popoverTriggerEl)
   });
 }, false);
 

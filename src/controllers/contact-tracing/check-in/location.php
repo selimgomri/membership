@@ -128,9 +128,9 @@ include BASE_PATH . 'views/header.php';
 
             <form action="<?= htmlspecialchars(autoUrl('contact-tracing/check-in/' . $id)) ?>" method="get">
 
-              <div class="form-group">
-                <label for="squad-list">Select squad</label>
-                <select class="custom-select" id="squad-list" name="squad">
+              <div class="mb-3">
+                <label class="form-label" for="squad-list">Select squad</label>
+                <select class="form-select" id="squad-list" name="squad">
                   <?php do { ?>
                     <option value="<?= htmlspecialchars($squad['SquadID']) ?>"><?= htmlspecialchars($squad['SquadName']) ?></option>
                   <?php } while ($squad = $userSquads->fetch(PDO::FETCH_ASSOC)); ?>
@@ -170,9 +170,9 @@ include BASE_PATH . 'views/header.php';
               Let us know if you're here or just dropping off your members.
             </p>
 
-            <div class="custom-control custom-checkbox">
-              <input type="checkbox" class="custom-control-input" id="user" name="user" value="1">
-              <label class="custom-control-label" for="user"><?= htmlspecialchars(app()->user->getName()) ?></label>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="user" name="user" value="1">
+              <label class="form-check-label" for="user"><?= htmlspecialchars(app()->user->getName()) ?></label>
             </div>
           </div>
 
@@ -184,9 +184,9 @@ include BASE_PATH . 'views/header.php';
             <div class="cell">
               <h3>Members</h3>
               <?php do { ?>
-                <div class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="<?= htmlspecialchars('member-' . $member['id']) ?>" name="<?= htmlspecialchars('member-' . $member['id']) ?>" value="1">
-                  <label class="custom-control-label" for="<?= htmlspecialchars('member-' . $member['id']) ?>"><?= htmlspecialchars($member['fn'] . ' ' . $member['sn']) ?></label>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="<?= htmlspecialchars('member-' . $member['id']) ?>" name="<?= htmlspecialchars('member-' . $member['id']) ?>" value="1">
+                  <label class="form-check-label" for="<?= htmlspecialchars('member-' . $member['id']) ?>"><?= htmlspecialchars($member['fn'] . ' ' . $member['sn']) ?></label>
                 </div>
               <?php } while ($member = $members->fetch(PDO::FETCH_ASSOC)); ?>
             </div>
@@ -197,9 +197,9 @@ include BASE_PATH . 'views/header.php';
             <div class="cell">
               <h3>Previous guests</h3>
               <?php do { ?>
-                <div class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="<?= htmlspecialchars('guest-' . $guest['ID']) ?>" name="<?= htmlspecialchars('guest-' . $guest['ID']) ?>" value="1">
-                  <label class="custom-control-label" for="<?= htmlspecialchars('guest-' . $guest['ID']) ?>"><?= htmlspecialchars($guest['GuestName']) ?> <em><?= htmlspecialchars($guest['GuestPhone']) ?></em></label>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="<?= htmlspecialchars('guest-' . $guest['ID']) ?>" name="<?= htmlspecialchars('guest-' . $guest['ID']) ?>" value="1">
+                  <label class="form-check-label" for="<?= htmlspecialchars('guest-' . $guest['ID']) ?>"><?= htmlspecialchars($guest['GuestName']) ?> <em><?= htmlspecialchars($guest['GuestPhone']) ?></em></label>
                 </div>
               <?php } while ($guest = $guests->fetch(PDO::FETCH_ASSOC)); ?>
             </div>
@@ -245,7 +245,7 @@ include BASE_PATH . 'views/header.php';
         </h2>
 
         <p>
-          If you have an account, <a href="<?= htmlspecialchars(autoUrl('login?target=' . urlencode($tenant->getCodeId() . '/contact-tracing/check-in/' . $id))) ?>">please sign in</a> so we can pre-fill your details
+          If you have an account, <a href="<?= htmlspecialchars(autoUrl('login?target=' . urlencode('contact-tracing/check-in/' . $id))) ?>">please sign in</a> so we can pre-fill your details
         </p>
 
         <form method="post" class="needs-validation" novalidate>
@@ -259,15 +259,15 @@ include BASE_PATH . 'views/header.php';
             </p>
 
             <p>
-              <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#member-collapse" aria-expanded="false" aria-controls="member-collapse">
+              <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#member-collapse" aria-expanded="false" aria-controls="member-collapse">
                 I'm a member <i class="fa fa-caret-down" aria-hidden="true"></i>
               </button>
             </p>
             <div class="collapse" id="member-collapse">
               <div class="cell">
-                <div class="form-group">
-                  <label for="squad">Squad</label>
-                  <select class="custom-select" id="squad" name="squad">
+                <div class="mb-3">
+                  <label class="form-label" for="squad">Squad</label>
+                  <select class="form-select" id="squad" name="squad">
                     <option selected>Select a squad</option>
                     <?php do { ?>
                       <option value="<?= htmlspecialchars($squad['SquadID']) ?>"><?= htmlspecialchars($squad['SquadName']) ?></option>
@@ -275,8 +275,8 @@ include BASE_PATH . 'views/header.php';
                   </select>
                 </div>
 
-                <div class="form-group mb-0">
-                  <label for="date-of-birth">Date of birth</label>
+                <div class="mb-3 mb-0">
+                  <label class="form-label" for="date-of-birth">Date of birth</label>
                   <input type="date" name="date-of-birth" id="date-of-birth" class="form-control">
                 </div>
               </div>

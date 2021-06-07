@@ -58,8 +58,8 @@ include BASE_PATH . "views/header.php";
       <?php } ?>
 
       <form method="post" class="needs-validation" novalidate>
-        <div class="form-group">
-          <label for="name">Venue Name</label>
+        <div class="mb-3">
+          <label class="form-label" for="name">Venue Name</label>
           <input type="text" class="form-control" name="name" id="name" aria-describedby="nameHelp" placeholder="Enter name" value="<?=$venue_details['name']?>" required>
           <div class="invalid-feedback">
             You must enter a venue name
@@ -67,8 +67,8 @@ include BASE_PATH . "views/header.php";
           <small id="nameHelp" class="form-text text-muted">Enter the venue name, not the building. For example, this might be the "Small Pool, Anytown Leisure Centre" or the "Main Pool, Anytown Leisure Centre".</small>
         </div>
 
-        <div class="form-group">
-          <label for="address">Address</label>
+        <div class="mb-3">
+          <label class="form-label" for="address">Address</label>
           <input type="text" class="form-control" name="address" id="address" aria-describedby="addressHelp" placeholder="Enter address" value="<?=$venue_details['address']?>" required>
           <div class="invalid-feedback">
             You must enter an address

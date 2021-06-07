@@ -50,7 +50,7 @@ include BASE_PATH . "views/swimmersMenu.php";
 				</p>
 				<div class="mb-3 d-lg-none"></div>
 			</div>
-			<div class="ml-auto col-lg-auto">
+			<div class="ms-auto col-lg-auto">
 				<button type="submit" form="form" class="btn btn-success">
 					Save
 					</a>
@@ -69,19 +69,19 @@ include BASE_PATH . "views/swimmersMenu.php";
 					unset($_SESSION['TENANT-' . app()->tenant->getId()]['NewRenewalErrorInfo']);
 				} ?>
 
-				<div class="form-group">
-					<label for="name">Renewal Name</label>
+				<div class="mb-3">
+					<label class="form-label" for="name">Renewal Name</label>
 					<input type="text" class="form-control" id="name" name="name" value="<?= htmlspecialchars($row['Name']) ?>" required>
 				</div>
 
-				<div class="form-row">
-					<div class="form-group col-md-6">
-						<label for="start">Start Date</label>
+				<div class="row">
+					<div class="mb-3 col-md-6">
+						<label class="form-label" for="start">Start Date</label>
 						<input type="date" class="form-control" id="start" name="start" value="<?= htmlspecialchars($from->format('Y-m-d')) ?>" min="<?= htmlspecialchars($min->format('Y-m-d')) ?>" required>
 					</div>
 
-					<div class="form-group col-md-6">
-						<label for="end">End Date</label>
+					<div class="mb-3 col-md-6">
+						<label class="form-label" for="end">End Date</label>
 						<input type="date" class="form-control" id="end" name="end" value="<?= htmlspecialchars($to->format('Y-m-d')) ?>" required>
 					</div>
 				</div>

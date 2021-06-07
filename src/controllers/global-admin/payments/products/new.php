@@ -39,16 +39,16 @@ include BASE_PATH . "views/root/header.php";
 
         <?= \SCDS\CSRF::write() ?>
 
-        <div class="form-group">
-          <label for="product-name">Name</label>
+        <div class="mb-3">
+          <label class="form-label" for="product-name">Name</label>
           <input type="text" name="product-name" id="product-name" required class="form-control">
           <div class="invalid-feedback">
             Provide a name for this product
           </div>
         </div>
 
-        <div class="form-group">
-          <label for="product-description">Description</label>
+        <div class="mb-3">
+          <label class="form-label" for="product-description">Description</label>
           <textarea name="product-description" id="product-description" rows="4" class="form-control"></textarea>
         </div>
 

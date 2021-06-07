@@ -34,9 +34,9 @@ if ($_POST['response'] == "getSwimmers") {
                 <?=htmlspecialchars($row['SquadName'])?>
               </p>
             </div>
-            <div class="col text-right">
+            <div class="col text-end">
               <button type="button" id="RelationDrop-<?=$row['ID']?>"
-                class="btn btn-link" value="<?=$row['ID']?>">
+                class="btn btn-light" value="<?=$row['ID']?>">
                 Remove
               </button>
             </div>

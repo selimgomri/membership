@@ -53,7 +53,7 @@ $title = null;
       <div class="col-sm-8">
         <h1>Editing <?= htmlspecialchars($row['MForename'] . ' ' . $row['MSurname']) ?></h1>
       </div>
-      <div class="col-sm-4 text-right">
+      <div class="col-sm-4 text-end">
         <button type="submit" class="btn btn-success">Save</button> <a class="btn btn-dark" href="<?= autoUrl("members/" . $id) ?>">Exit
           Edit Mode</a>
       </div>
@@ -120,38 +120,38 @@ $title = null;
           </div>
         <?php } ?>
 
-        <div class="form-row">
+        <div class="row">
           <div class="col-sm-4">
-            <div class="form-group">
-              <label for="forename">Forename</label>
+            <div class="mb-3">
+              <label class="form-label" for="forename">Forename</label>
               <input type="text" class="form-control" id="forename" name="forename" placeholder="Enter a forename" value="<?= htmlspecialchars($row['MForename']) ?>" required <?php if ($locked) { ?>disabled<?php } ?>>
             </div>
           </div>
           <div class="col-sm-4">
-            <div class="form-group">
-              <label for="middlenames">Middle Names</label>
+            <div class="mb-3">
+              <label class="form-label" for="middlenames">Middle Names</label>
               <input type="text" class="form-control" id="middlenames" name="middlenames" placeholder="Enter a middlename" value="<?= htmlspecialchars($row['MMiddleNames']) ?>" <?php if ($locked) { ?>disabled<?php } ?>>
             </div>
           </div>
           <div class="col-sm-4">
-            <div class="form-group">
-              <label for="surname">Surname</label>
+            <div class="mb-3">
+              <label class="form-label" for="surname">Surname</label>
               <input type="text" class="form-control" id="surname" name="surname" placeholder="Enter a surname" value="<?= htmlspecialchars($row['MSurname']) ?>" required <?php if ($locked) { ?>disabled<?php } ?>>
             </div>
           </div>
         </div>
-        <div class="form-group">
-          <label for="datebirth">Date of Birth</label>
+        <div class="mb-3">
+          <label class="form-label" for="datebirth">Date of Birth</label>
           <input type="date" class="form-control" id="datebirth" name="datebirth" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}" placeholder="YYYY-MM-DD" value="<?= htmlspecialchars($row['DateOfBirth']) ?>" required <?php if ($locked) { ?>disabled<?php } ?>>
         </div>
-        <div class="form-group">
-          <label for="asaregnumber">Swim England Registration Number</label>
+        <div class="mb-3">
+          <label class="form-label" for="asaregnumber">Swim England Registration Number</label>
           <input type="test" class="form-control" id="asaregnumber" name="asaregnumber" placeholder="Swim England Registration Numer" value="<?= htmlspecialchars($row['ASANumber']) ?>" readonly>
         </div>
 
-        <div class="form-group">
-          <label for="country">Home Nations Country</label>
-          <select class="custom-select" id="country" name="country" placeholder="Select">
+        <div class="mb-3">
+          <label class="form-label" for="country">Home Nations Country</label>
+          <select class="form-select" id="country" name="country" placeholder="Select">
             <?php foreach ($countries as $key => $value) {
               $selected = '';
               if ($row['Country'] == $key) {
@@ -163,17 +163,17 @@ $title = null;
         </div>
 
         <?php if ($row['Gender'] == "Male") { ?>
-          <div class="form-group">
-            <label for="sex">Sex</label>
-            <select class="custom-select" id="sex" name="sex" placeholder="Select" <?php if ($locked) { ?>disabled<?php } ?>>
+          <div class="mb-3">
+            <label class="form-label" for="sex">Sex</label>
+            <select class="form-select" id="sex" name="sex" placeholder="Select" <?php if ($locked) { ?>disabled<?php } ?>>
               <option value="Male" selected>Male</option>
               <option value="Female">Female</option>
             </select>
           </div>
         <?php } else { ?>
-          <div class="form-group">
-            <label for="sex">Sex</label>
-            <select class="custom-select" id="sex" name="sex" placeholder="Select" <?php if ($locked) { ?>disabled<?php } ?>>
+          <div class="mb-3">
+            <label class="form-label" for="sex">Sex</label>
+            <select class="form-select" id="sex" name="sex" placeholder="Select" <?php if ($locked) { ?>disabled<?php } ?>>
               <option value="Male">Male</option>
               <option value="Female" selected>Female</option>
             </select>
@@ -186,12 +186,12 @@ $title = null;
                                                 "/medical") ?>" target="_blank">Edit medical details</a>
           </p>
         </div>
-        <div class="form-group">
-          <label for="otherNotes">Other Notes</label>
+        <div class="mb-3">
+          <label class="form-label" for="otherNotes">Other Notes</label>
           <textarea class="form-control" id="otherNotes" name="otherNotes" rows="3" placeholder="Tell us any other notes for coaches"><?= htmlspecialchars($row['OtherNotes']) ?></textarea>
         </div>
         <?php if ($age < 18) { ?>
-          <div class="form-group">
+          <div class="mb-3">
             <?php
             $photo = [];
             if ($row['Website'] == 1) {
@@ -215,33 +215,33 @@ $title = null;
                 $row['MSurname']) ?> in the following circumstances. Tick boxes only
               if you wish to grant us photography permission.
             </p>
-            <div class="custom-control custom-checkbox">
-              <input type="checkbox" value="1" class="custom-control-input" name="webPhoto" id="webPhoto" <?= $photo[0] ?>>
-              <label class="custom-control-label" for="webPhoto">
+            <div class="form-check">
+              <input type="checkbox" value="1" class="form-check-input" name="webPhoto" id="webPhoto" <?= $photo[0] ?>>
+              <label class="form-check-label" for="webPhoto">
                 Take photographs to use on the clubs website
               </label>
             </div>
-            <div class="custom-control custom-checkbox">
-              <input type="checkbox" value="1" class="custom-control-input" name="socPhoto" id="socPhoto" <?= $photo[1] ?>>
-              <label class="custom-control-label" for="socPhoto">
+            <div class="form-check">
+              <input type="checkbox" value="1" class="form-check-input" name="socPhoto" id="socPhoto" <?= $photo[1] ?>>
+              <label class="form-check-label" for="socPhoto">
                 Take photographs to use on social media sites
               </label>
             </div>
-            <div class="custom-control custom-checkbox">
-              <input type="checkbox" value="1" class="custom-control-input" name="noticePhoto" id="noticePhoto" <?= $photo[2] ?>>
-              <label class="custom-control-label" for="noticePhoto">
+            <div class="form-check">
+              <input type="checkbox" value="1" class="form-check-input" name="noticePhoto" id="noticePhoto" <?= $photo[2] ?>>
+              <label class="form-check-label" for="noticePhoto">
                 Take photographs to use on club noticeboards
               </label>
             </div>
-            <div class="custom-control custom-checkbox">
-              <input type="checkbox" value="1" class="custom-control-input" name="trainFilm" id="trainFilm" <?= $photo[3] ?>>
-              <label class="custom-control-label" for="trainFilm">
+            <div class="form-check">
+              <input type="checkbox" value="1" class="form-check-input" name="trainFilm" id="trainFilm" <?= $photo[3] ?>>
+              <label class="form-check-label" for="trainFilm">
                 Filming for training purposes only
               </label>
             </div>
-            <div class="custom-control custom-checkbox">
-              <input type="checkbox" value="1" class="custom-control-input" name="proPhoto" id="proPhoto" <?= $photo[4] ?>>
-              <label class="custom-control-label" for="proPhoto">
+            <div class="form-check">
+              <input type="checkbox" value="1" class="form-check-input" name="proPhoto" id="proPhoto" <?= $photo[4] ?>>
+              <label class="form-check-label" for="proPhoto">
                 Employ a professional photographer (approved by the club) who will take
                 photographs in competitions and/or club events.
               </label>
@@ -263,15 +263,15 @@ $title = null;
         ?>
         <div class="alert alert-danger">
           <p><strong>Danger Zone</strong> <br>Actions here can be irreversible. Be careful what you do.</p>
-          <div class="form-group">
-            <label for="disconnect">Disconnect swimmer from your account with this key: <span class="mono"><?= htmlspecialchars($disconnectKey) ?></span></label>
-            <input type="text" class="form-control mono" id="disconnect" name="disconnect" aria-describedby="disconnectHelp" placeholder="Enter the key" onselectstart="return false" onpaste="return false;" onCopy="return false" onCut="return false" onDrag="return false" onDrop="return false" autocomplete=off>
+          <div class="mb-3">
+            <label class="form-label" for="disconnect">Disconnect swimmer from your account with this key: <span class="font-monospace"><?= htmlspecialchars($disconnectKey) ?></span></label>
+            <input type="text" class="form-control font-monospace" id="disconnect" name="disconnect" aria-describedby="disconnectHelp" placeholder="Enter the key" onselectstart="return false" onpaste="return false;" onCopy="return false" onCut="return false" onDrag="return false" onDrop="return false" autocomplete=off>
             <small id="disconnectHelp" class="form-text">Enter the key above and press the <strong>Delete or Disconnect</strong> button. This will dissassociate this swimmer from your account in all of our systems. You will need to request a new Access Key to add the swimmer again.</small>
           </div>
           <input type="hidden" value="<?= $disconnectKey ?>" name="disconnectKey">
-          <div class="form-group">
-            <label for="swimmerDeleteDanger">Delete this Swimmer with this key: <span class="mono"><?= htmlspecialchars($row['AccessKey']) ?></span></label>
-            <input type="text" class="form-control mono" id="swimmerDeleteDanger" name="swimmerDeleteDanger" aria-describedby="swimmerDeleteDangerHelp" placeholder="Enter the key" onselectstart="return false" onpaste="return false;" onCopy="return false" onCut="return false" onDrag="return false" onDrop="return false" autocomplete=off>
+          <div class="mb-3">
+            <label class="form-label" for="swimmerDeleteDanger">Delete this Swimmer with this key: <span class="font-monospace"><?= htmlspecialchars($row['AccessKey']) ?></span></label>
+            <input type="text" class="form-control font-monospace" id="swimmerDeleteDanger" name="swimmerDeleteDanger" aria-describedby="swimmerDeleteDangerHelp" placeholder="Enter the key" onselectstart="return false" onpaste="return false;" onCopy="return false" onCut="return false" onDrag="return false" onDrop="return false" autocomplete=off>
             <small id="swimmerDeleteDangerHelp" class="form-text">Enter the key above and press <strong>Delete or Disconnect</strong>. This will delete this swimmer from all of our systems.</small>
           </div>
           <p class="mb-0">

@@ -55,7 +55,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
   <link rel="manifest" href="<?= autoUrl("manifest.webmanifest") ?>">
   <meta name="X-SCDS-Membership-Tracking" content="no">
   <script src="https://js.stripe.com/v3/"></script>
-  <link rel="stylesheet preload" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,700|Roboto+Mono|Merriweather:400,600">
+  <link rel="stylesheet preload" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,700|Roboto+font-monospace|Merriweather:400,600">
   <link rel="stylesheet preload" href="<?= htmlspecialchars($stylesheet) ?>">
 
   <!-- Generic icon -->
@@ -92,7 +92,7 @@ Chester-le-Street ASC is a non profit unincorporated association.
                                           foreach ($pageHead['body'] as $item) { ?> <?= $item ?> <?php }
                                                                                               } ?>>
 
-  <div class="sr-only sr-only-focusable">
+  <div class="visually-hidden visually-hidden-focusable">
     <a href="#maincontent">Skip to main content</a>
   </div>
 

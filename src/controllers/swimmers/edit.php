@@ -72,7 +72,7 @@ include BASE_PATH . "views/swimmersMenu.php";
       <div class="col-md-8">
         <h1>Editing <?= htmlspecialchars($row['MForename'] . ' ' . $row['MSurname']) ?> </h1>
       </div>
-      <div class="col text-md-right">
+      <div class="col text-md-end">
         <button type="submit" class="btn btn-success" form="edit-form">Save</button>
         <a class="btn btn-dark" href="<?= htmlspecialchars(autoUrl("members/$id")) ?>">Back</a>
       </div>
@@ -113,10 +113,10 @@ include BASE_PATH . "views/swimmersMenu.php";
 
         <h2>Basic Information</h2>
 
-        <div class="form-row">
+        <div class="row">
           <div class="col">
-            <div class="form-group">
-              <label for="forename">First name</label>
+            <div class="mb-3">
+              <label class="form-label" for="forename">First name</label>
               <input type="text" name="forename" id="forename" class="form-control" required min="1" max="255" value="<?= htmlspecialchars($row['MForename']) ?>">
               <div class="invalid-feedback">
                 You must enter a first name
@@ -125,15 +125,15 @@ include BASE_PATH . "views/swimmersMenu.php";
           </div>
 
           <div class="col">
-            <div class="form-group">
-              <label for="middle-names">Middle names</label>
+            <div class="mb-3">
+              <label class="form-label" for="middle-names">Middle names</label>
               <input type="text" name="middle-names" id="foremiddle-namesname" class="form-control" max="255" value="<?= htmlspecialchars($row['MMiddleNames']) ?>">
             </div>
           </div>
 
           <div class="col">
-            <div class="form-group">
-              <label for="surname">Last name</label>
+            <div class="mb-3">
+              <label class="form-label" for="surname">Last name</label>
               <input type="text" name="surname" id="surname" class="form-control" required min="1" max="255" value="<?= htmlspecialchars($row['MSurname']) ?>">
               <div class="invalid-feedback">
                 You must enter a last name
@@ -142,61 +142,61 @@ include BASE_PATH . "views/swimmersMenu.php";
           </div>
         </div>
 
-        <div class="form-group">
-          <label for="dob">Date of birth</label>
+        <div class="mb-3">
+          <label class="form-label" for="dob">Date of birth</label>
           <input type="date" name="dob" id="dob" class="form-control" required max="<?= htmlspecialchars($date->format("Y-m-d")) ?>" pattern="[0-9]{4}-[0-1]{1}[0-9]{1}-[0-3]{1}[0-9]{1}" placeholder="YYYY-MM-DD" value="<?= htmlspecialchars($row['DateOfBirth']) ?>">
           <div class="invalid-feedback">
             You must enter a valid date - If you have not been shown a date picker, enter the date in the format YYYY-MM-DD
           </div>
         </div>
 
-        <div class="form-group">
+        <div class="mb-3">
           <p class="mb-2">
-            Sex (for the purposes of competition) <a tabindex="0" data-toggle="popover" data-trigger="focus" title="" data-content="<?php if ($isMemberUser) { ?>Please select the sex you compete under, even if this is not the same as your gender identity. You can select your gender identity (for use internally at <?= htmlspecialchars(app()->tenant->getName()) ?>) below.<?php } else { ?>Select the sex <?= htmlspecialchars($row['MForename']) ?> competes under, even if this is not the same as their gender identity. They can select their gender identity (for use internally at <?= htmlspecialchars(app()->tenant->getName()) ?>) if they visit this page themselves.<?php } ?>" data-original-title="What does this mean?"><i class="fa fa-question-circle" aria-hidden="true"></i></a>
+            Sex (for the purposes of competition) <a tabindex="0" data-bs-toggle="popover" data-bs-trigger="focus" title="" data-bs-content="<?php if ($isMemberUser) { ?>Please select the sex you compete under, even if this is not the same as your gender identity. You can select your gender identity (for use internally at <?= htmlspecialchars(app()->tenant->getName()) ?>) below.<?php } else { ?>Select the sex <?= htmlspecialchars($row['MForename']) ?> competes under, even if this is not the same as their gender identity. They can select their gender identity (for use internally at <?= htmlspecialchars(app()->tenant->getName()) ?>) if they visit this page themselves.<?php } ?>" data-original-title="What does this mean?"><i class="fa fa-question-circle" aria-hidden="true"></i></a>
           </p>
-          <div class="custom-control custom-radio">
-            <input type="radio" id="sex-m" name="sex" class="custom-control-input" value="Male" <?php if ($row['Gender'] == 'Male') { ?>checked<?php } ?>>
-            <label class="custom-control-label" for="sex-m">Male</label>
+          <div class="form-check">
+            <input type="radio" id="sex-m" name="sex" class="form-check-input" value="Male" <?php if ($row['Gender'] == 'Male') { ?>checked<?php } ?>>
+            <label class="form-check-label" for="sex-m">Male</label>
           </div>
-          <div class="custom-control custom-radio">
-            <input type="radio" id="sex-f" name="sex" class="custom-control-input" value="Female" <?php if ($row['Gender'] == 'Female') { ?>checked<?php } ?>>
-            <label class="custom-control-label" for="sex-f">Female</label>
+          <div class="form-check">
+            <input type="radio" id="sex-f" name="sex" class="form-check-input" value="Female" <?php if ($row['Gender'] == 'Female') { ?>checked<?php } ?>>
+            <label class="form-check-label" for="sex-f">Female</label>
           </div>
         </div>
 
         <?php if ($isMemberUser) { ?>
-          <div class="form-row mb-1">
+          <div class="row mb-1">
             <div class="col-lg">
               <div class="card card-body mb-2">
-                <div class="form-group" id="gender-radio">
+                <div class="mb-3" id="gender-radio">
                   <p class="mb-2">
-                    Gender <a tabindex="0" data-toggle="popover" data-trigger="focus" title="" data-content="Your gender identity is a way to describe how you feel about your gender. You might identify your gender as a boy or a girl or something different. This is different from your sex, which is related to your physical body and biology." data-original-title="What is gender identity?"><i class="fa fa-question-circle" aria-hidden="true"></i></a>
+                    Gender <a tabindex="0" data-bs-toggle="popover" data-bs-trigger="focus" title="" data-bs-content="Your gender identity is a way to describe how you feel about your gender. You might identify your gender as a boy or a girl or something different. This is different from your sex, which is related to your physical body and biology." data-original-title="What is gender identity?"><i class="fa fa-question-circle" aria-hidden="true"></i></a>
                   </p>
                   <?php $other = true; ?>
                   <?php if ($row['GenderIdentity'] == '' || $row['GenderIdentity'] == null) $other = false; ?>
-                  <div class="custom-control custom-radio">
-                    <input type="radio" id="gender-m" name="gender" class="custom-control-input" value="M" <?php if ($row['GenderIdentity'] == 'Male') {
+                  <div class="form-check">
+                    <input type="radio" id="gender-m" name="gender" class="form-check-input" value="M" <?php if ($row['GenderIdentity'] == 'Male') {
                                                                                                               $other = false; ?>checked<?php } ?> required>
-                    <label class="custom-control-label" for="gender-m">Male</label>
+                    <label class="form-check-label" for="gender-m">Male</label>
                   </div>
-                  <div class="custom-control custom-radio">
-                    <input type="radio" id="gender-f" name="gender" class="custom-control-input" value="F" <?php if ($row['GenderIdentity'] == 'Female') {
+                  <div class="form-check">
+                    <input type="radio" id="gender-f" name="gender" class="form-check-input" value="F" <?php if ($row['GenderIdentity'] == 'Female') {
                                                                                                               $other = false; ?>checked<?php } ?>>
-                    <label class="custom-control-label" for="gender-f">Female</label>
+                    <label class="form-check-label" for="gender-f">Female</label>
                   </div>
-                  <div class="custom-control custom-radio">
-                    <input type="radio" id="gender-nb" name="gender" class="custom-control-input" value="NB" <?php if ($row['GenderIdentity'] == 'Non binary') {
+                  <div class="form-check">
+                    <input type="radio" id="gender-nb" name="gender" class="form-check-input" value="NB" <?php if ($row['GenderIdentity'] == 'Non binary') {
                                                                                                                 $other = false; ?>checked<?php } ?>>
-                    <label class="custom-control-label" for="gender-nb">Non binary</label>
+                    <label class="form-check-label" for="gender-nb">Non binary</label>
                   </div>
-                  <div class="custom-control custom-radio">
-                    <input type="radio" id="gender-o" name="gender" class="custom-control-input" value="O" <?php if ($other) { ?>checked<?php } ?>>
-                    <label class="custom-control-label" for="gender-o">Other (please describe)</label>
+                  <div class="form-check">
+                    <input type="radio" id="gender-o" name="gender" class="form-check-input" value="O" <?php if ($other) { ?>checked<?php } ?>>
+                    <label class="form-check-label" for="gender-o">Other (please describe)</label>
                   </div>
                 </div>
 
-                <div class="form-group mb-0">
-                  <label for="gender-custom">Other...</label>
+                <div class="mb-3 mb-0">
+                  <label class="form-label" for="gender-custom">Other...</label>
                   <input type="text" name="gender-custom" id="gender-custom" class="form-control" <?php if (!$other) { ?>disabled<?php } else { ?>required value="<?= htmlspecialchars($row['GenderIdentity']) ?>" <?php } ?> max="256">
                   <div class="invalid-feedback">
                     Please enter a custom gender identity.
@@ -207,35 +207,35 @@ include BASE_PATH . "views/swimmersMenu.php";
 
             <div class="col-lg">
               <div class="card card-body mb-2">
-                <div class="form-group" id="gender-pronoun-radio">
+                <div class="mb-3" id="gender-pronoun-radio">
                   <p class="mb-2">
-                    Gender pronouns <a tabindex="0" data-toggle="popover" data-trigger="focus" title="" data-content="The words we use to refer to someone like, ‘he’, ‘she’ and ‘they’. We allow you to choose your pronouns so that you're never mis-gendered." data-original-title="What are pronouns?"><i class="fa fa-question-circle" aria-hidden="true"></i></a>
+                    Gender pronouns <a tabindex="0" data-bs-toggle="popover" data-bs-trigger="focus" title="" data-bs-content="The words we use to refer to someone like, ‘he’, ‘she’ and ‘they’. We allow you to choose your pronouns so that you're never mis-gendered." data-original-title="What are pronouns?"><i class="fa fa-question-circle" aria-hidden="true"></i></a>
                   </p>
                   <?php $other = true; ?>
                   <?php if ($row['GenderPronouns'] == '' || $row['GenderPronouns'] == null) $other = false; ?>
-                  <div class="custom-control custom-radio">
-                    <input type="radio" id="gender-pronoun-m" name="gender-pronoun" class="custom-control-input" value="M" <?php if ($row['GenderPronouns'] == 'He/Him/His') {
+                  <div class="form-check">
+                    <input type="radio" id="gender-pronoun-m" name="gender-pronoun" class="form-check-input" value="M" <?php if ($row['GenderPronouns'] == 'He/Him/His') {
                                                                                                                               $other = false; ?>checked<?php } ?> required>
-                    <label class="custom-control-label" for="gender-pronoun-m">He/Him/His</label>
+                    <label class="form-check-label" for="gender-pronoun-m">He/Him/His</label>
                   </div>
-                  <div class="custom-control custom-radio">
-                    <input type="radio" id="gender-pronoun-f" name="gender-pronoun" class="custom-control-input" value="F" <?php if ($row['GenderPronouns'] == 'She/Her/Hers') {
+                  <div class="form-check">
+                    <input type="radio" id="gender-pronoun-f" name="gender-pronoun" class="form-check-input" value="F" <?php if ($row['GenderPronouns'] == 'She/Her/Hers') {
                                                                                                                               $other = false; ?>checked<?php } ?>>
-                    <label class="custom-control-label" for="gender-pronoun-f">She/Her/Hers</label>
+                    <label class="form-check-label" for="gender-pronoun-f">She/Her/Hers</label>
                   </div>
-                  <div class="custom-control custom-radio">
-                    <input type="radio" id="gender-pronoun-neutral" name="gender-pronoun" class="custom-control-input" value="NB" <?php if ($row['GenderPronouns'] == 'They/Them/Theirs') {
+                  <div class="form-check">
+                    <input type="radio" id="gender-pronoun-neutral" name="gender-pronoun" class="form-check-input" value="NB" <?php if ($row['GenderPronouns'] == 'They/Them/Theirs') {
                                                                                                                                     $other = false; ?>checked<?php } ?>>
-                    <label class="custom-control-label" for="gender-pronoun-neutral">They/Them/Theirs</label>
+                    <label class="form-check-label" for="gender-pronoun-neutral">They/Them/Theirs</label>
                   </div>
-                  <div class="custom-control custom-radio">
-                    <input type="radio" id="gender-pronoun-o" name="gender-pronoun" class="custom-control-input" value="O" <?php if ($other) { ?>checked<?php } ?>>
-                    <label class="custom-control-label" for="gender-pronoun-o">Other (please describe)</label>
+                  <div class="form-check">
+                    <input type="radio" id="gender-pronoun-o" name="gender-pronoun" class="form-check-input" value="O" <?php if ($other) { ?>checked<?php } ?>>
+                    <label class="form-check-label" for="gender-pronoun-o">Other (please describe)</label>
                   </div>
                 </div>
 
-                <div class="form-group mb-0">
-                  <label for="gender-pronoun-custom">Other...</label>
+                <div class="mb-3 mb-0">
+                  <label class="form-label" for="gender-pronoun-custom">Other...</label>
                   <input type="text" name="gender-pronoun-custom" id="gender-pronoun-custom" class="form-control" <?php if (!$other) { ?>disabled<?php } else { ?>required value="<?= htmlspecialchars($row['GenderPronouns']) ?>" <?php } ?> max="256">
                   <div class="invalid-feedback">
                     Please enter a custom pronoun. Where appropriate, use a similar format to those above.
@@ -245,17 +245,17 @@ include BASE_PATH . "views/swimmersMenu.php";
             </div>
           </div>
 
-          <div class="form-group">
+          <div class="mb-3">
             <p class="mb-2">
-              Show my gender and pronouns to club staff throughout the membership system <a tabindex="0" data-toggle="popover" data-trigger="focus" title="" data-content="Choosing to show your pronouns to club staff helps us make sure you're not mis-gendered. If you do, places we'll show your information include registers, squad lists and gala information (internally). If you choose no, we'll completely hide your chosen gender and pronouns from all club staff." data-original-title="Why show our staff your pronouns?"><i class="fa fa-question-circle" aria-hidden="true"></i></a>
+              Show my gender and pronouns to club staff throughout the membership system <a tabindex="0" data-bs-toggle="popover" data-bs-trigger="focus" title="" data-bs-content="Choosing to show your pronouns to club staff helps us make sure you're not mis-gendered. If you do, places we'll show your information include registers, squad lists and gala information (internally). If you choose no, we'll completely hide your chosen gender and pronouns from all club staff." data-original-title="Why show our staff your pronouns?"><i class="fa fa-question-circle" aria-hidden="true"></i></a>
             </p>
-            <div class="custom-control custom-radio">
-              <input type="radio" id="show-gender-and-pronounds-yes" name="show-gender-and-pronounds" class="custom-control-input" value="1" <?php if (bool($row['GenderDisplay']) && !($row['GenderIdentity'] == '' || $row['GenderIdentity'] == null)) { ?>checked<?php } ?>>
-              <label class="custom-control-label" for="show-gender-and-pronounds-yes">Yes</label>
+            <div class="form-check">
+              <input type="radio" id="show-gender-and-pronounds-yes" name="show-gender-and-pronounds" class="form-check-input" value="1" <?php if (bool($row['GenderDisplay']) && !($row['GenderIdentity'] == '' || $row['GenderIdentity'] == null)) { ?>checked<?php } ?>>
+              <label class="form-check-label" for="show-gender-and-pronounds-yes">Yes</label>
             </div>
-            <div class="custom-control custom-radio">
-              <input type="radio" id="show-gender-and-pronounds-no" name="show-gender-and-pronounds" class="custom-control-input" value="0" <?php if (!bool($row['GenderDisplay']) || ($row['GenderIdentity'] == '' || $row['GenderIdentity'] == null)) { ?>checked<?php } ?>>
-              <label class="custom-control-label" for="show-gender-and-pronounds-no">No</label>
+            <div class="form-check">
+              <input type="radio" id="show-gender-and-pronounds-no" name="show-gender-and-pronounds" class="form-check-input" value="0" <?php if (!bool($row['GenderDisplay']) || ($row['GenderIdentity'] == '' || $row['GenderIdentity'] == null)) { ?>checked<?php } ?>>
+              <label class="form-check-label" for="show-gender-and-pronounds-no">No</label>
             </div>
           </div>
 
@@ -264,17 +264,17 @@ include BASE_PATH . "views/swimmersMenu.php";
         <?php if ($admin) { ?>
           <h2>Membership Details</h2>
 
-          <div class="form-row">
+          <div class="row">
             <div class="col">
-              <div class="form-group">
-                <label for="asa">Swim England Registration Number</label>
+              <div class="mb-3">
+                <label class="form-label" for="asa">Swim England Registration Number</label>
                 <input type="text" name="asa" id="asa" class="form-control" value="<?= htmlspecialchars($row['ASANumber']) ?>">
               </div>
             </div>
             <div class="col">
-              <div class="form-group">
-                <label for="cat">Swim England Membership Category</label>
-                <select class="custom-select overflow-hidden" id="cat" name="cat" placeholder="Select">
+              <div class="mb-3">
+                <label class="form-label" for="cat">Swim England Membership Category</label>
+                <select class="form-select overflow-hidden" id="cat" name="cat" placeholder="Select">
                   <option value="0" <?php if ($row['ASACategory'] == 0) { ?>selected<?php } ?>>Not a Swim England Member</option>
                   <option value="1" <?php if ($row['ASACategory'] == 1) { ?>selected<?php } ?>>Category 1</option>
                   <option value="2" <?php if ($row['ASACategory'] == 2) { ?>selected<?php } ?>>Category 2</option>
@@ -284,9 +284,9 @@ include BASE_PATH . "views/swimmersMenu.php";
             </div>
           </div>
 
-          <div class="form-group">
-            <label for="club-cat">Club Membership Category</label>
-            <select class="custom-select overflow-hidden" id="club-cat" name="club-cat" placeholder="Select" required>
+          <div class="mb-3">
+            <label class="form-label" for="club-cat">Club Membership Category</label>
+            <select class="form-select overflow-hidden" id="club-cat" name="club-cat" placeholder="Select" required>
               <?php do {
                 $selected = '';
                 if ($row['ClubCategory'] == $clubCategory['ID']) {
@@ -297,9 +297,9 @@ include BASE_PATH . "views/swimmersMenu.php";
             </select>
           </div>
 
-          <div class="form-group">
-            <label for="country">Home Nations Country</label>
-            <select class="custom-select overflow-hidden" id="country" name="country" placeholder="Select">
+          <div class="mb-3">
+            <label class="form-label" for="country">Home Nations Country</label>
+            <select class="form-select overflow-hidden" id="country" name="country" placeholder="Select">
               <?php foreach ($countries as $key => $value) {
                 $selected = '';
                 if ($row['Country'] == $key) {
@@ -310,51 +310,51 @@ include BASE_PATH . "views/swimmersMenu.php";
             </select>
           </div>
 
-          <div class="form-row">
+          <div class="row">
             <div class="col-lg">
-              <div class="form-group">
+              <div class="mb-3">
                 <p class="mb-2">
                   Club pays Swim England fees?
                 </p>
-                <div class="custom-control custom-radio">
-                  <input type="radio" id="sep-no" name="sep" class="custom-control-input" <?php if (!bool($row['ASAPaid'])) { ?>checked<?php } ?> value="0">
-                  <label class="custom-control-label" for="sep-no">No</label>
+                <div class="form-check">
+                  <input type="radio" id="sep-no" name="sep" class="form-check-input" <?php if (!bool($row['ASAPaid'])) { ?>checked<?php } ?> value="0">
+                  <label class="form-check-label" for="sep-no">No</label>
                 </div>
-                <div class="custom-control custom-radio">
-                  <input type="radio" id="sep-yes" name="sep" class="custom-control-input" <?php if (bool($row['ASAPaid'])) { ?>checked<?php } ?> value="1">
-                  <label class="custom-control-label" for="sep-yes">Yes</label>
+                <div class="form-check">
+                  <input type="radio" id="sep-yes" name="sep" class="form-check-input" <?php if (bool($row['ASAPaid'])) { ?>checked<?php } ?> value="1">
+                  <label class="form-check-label" for="sep-yes">Yes</label>
                 </div>
               </div>
             </div>
 
             <div class="col-lg">
-              <div class="form-group">
+              <div class="mb-3">
                 <p class="mb-2">
                   Club pays Club Membership fees?
                 </p>
-                <div class="custom-control custom-radio">
-                  <input type="radio" id="cp-no" name="cp" class="custom-control-input" <?php if (!bool($row['ClubPaid'])) { ?>checked<?php } ?> value="0">
-                  <label class="custom-control-label" for="cp-no">No</label>
+                <div class="form-check">
+                  <input type="radio" id="cp-no" name="cp" class="form-check-input" <?php if (!bool($row['ClubPaid'])) { ?>checked<?php } ?> value="0">
+                  <label class="form-check-label" for="cp-no">No</label>
                 </div>
-                <div class="custom-control custom-radio">
-                  <input type="radio" id="cp-yes" name="cp" class="custom-control-input" <?php if (bool($row['ClubPaid'])) { ?>checked<?php } ?> value="1">
-                  <label class="custom-control-label" for="cp-yes">Yes</label>
+                <div class="form-check">
+                  <input type="radio" id="cp-yes" name="cp" class="form-check-input" <?php if (bool($row['ClubPaid'])) { ?>checked<?php } ?> value="1">
+                  <label class="form-check-label" for="cp-yes">Yes</label>
                 </div>
               </div>
             </div>
 
             <div class="col-lg">
-              <div class="form-group">
+              <div class="mb-3">
                 <p class="mb-2">
                   Swimmer membership status
                 </p>
-                <div class="custom-control custom-radio">
-                  <input type="radio" id="member-status-active" name="member-status" class="custom-control-input" checked disabled value="1">
-                  <label class="custom-control-label" for="member-status-active">Active</label>
+                <div class="form-check">
+                  <input type="radio" id="member-status-active" name="member-status" class="form-check-input" checked disabled value="1">
+                  <label class="form-check-label" for="member-status-active">Active</label>
                 </div>
-                <div class="custom-control custom-radio">
-                  <input type="radio" id="member-status-suspended" name="member-status" class="custom-control-input" disabled value="0">
-                  <label class="custom-control-label" for="member-status-suspended">Suspended</label>
+                <div class="form-check">
+                  <input type="radio" id="member-status-suspended" name="member-status" class="form-check-input" disabled value="0">
+                  <label class="form-check-label" for="member-status-suspended">Suspended</label>
                 </div>
               </div>
             </div>
@@ -363,13 +363,13 @@ include BASE_PATH . "views/swimmersMenu.php";
 
         <h2>Notes</h2>
 
-        <div class="form-group">
+        <div class="mb-3">
           <label>Medical notes</label>
           <a class="d-block" href="<?= htmlspecialchars(autoUrl("members/$id/medical")) ?>" target="_self">Edit medical notes</a>
         </div>
 
-        <div class="form-group">
-          <label for="other-notes">Other Notes</label>
+        <div class="mb-3">
+          <label class="form-label" for="other-notes">Other Notes</label>
           <textarea class="form-control" id="other-notes" name="other-notes" rows="3" placeholder="Tell us any other notes for coaches"><?= htmlspecialchars($row['OtherNotes']) ?></textarea>
         </div>
 
@@ -393,34 +393,34 @@ include BASE_PATH . "views/swimmersMenu.php";
               If you do not give your consent, please also inform <?= htmlspecialchars($row['MForename']) ?> so that they know, if possible, not to get into any photos.
             </p>
 
-            <div class="form-group">
-              <div class="custom-control custom-checkbox">
-                <input type="checkbox" value="1" class="custom-control-input" name="webPhoto" id="webPhoto" <?php if (isset($photo['Website']) && $photo['Website']) { ?>checked<?php } ?>>
-                <label class="custom-control-label" for="webPhoto">
+            <div class="mb-3">
+              <div class="form-check">
+                <input type="checkbox" value="1" class="form-check-input" name="webPhoto" id="webPhoto" <?php if (isset($photo['Website']) && $photo['Website']) { ?>checked<?php } ?>>
+                <label class="form-check-label" for="webPhoto">
                   Take photographs to use on the clubs website
                 </label>
               </div>
-              <div class="custom-control custom-checkbox">
-                <input type="checkbox" value="1" class="custom-control-input" name="socPhoto" id="socPhoto" <?php if (isset($photo['Social']) && $photo['Social']) { ?>checked<?php } ?>>
-                <label class="custom-control-label" for="socPhoto">
+              <div class="form-check">
+                <input type="checkbox" value="1" class="form-check-input" name="socPhoto" id="socPhoto" <?php if (isset($photo['Social']) && $photo['Social']) { ?>checked<?php } ?>>
+                <label class="form-check-label" for="socPhoto">
                   Take photographs to use on social media sites
                 </label>
               </div>
-              <div class="custom-control custom-checkbox">
-                <input type="checkbox" value="1" class="custom-control-input" name="noticePhoto" id="noticePhoto" <?php if (isset($photo['Noticeboard']) && $photo['Noticeboard']) { ?>checked<?php } ?>>
-                <label class="custom-control-label" for="noticePhoto">
+              <div class="form-check">
+                <input type="checkbox" value="1" class="form-check-input" name="noticePhoto" id="noticePhoto" <?php if (isset($photo['Noticeboard']) && $photo['Noticeboard']) { ?>checked<?php } ?>>
+                <label class="form-check-label" for="noticePhoto">
                   Take photographs to use on club noticeboards
                 </label>
               </div>
-              <div class="custom-control custom-checkbox">
-                <input type="checkbox" value="1" class="custom-control-input" name="trainFilm" id="trainFilm" <?php if (isset($photo['FilmTraining']) && $photo['FilmTraining']) { ?>checked<?php } ?>>
-                <label class="custom-control-label" for="trainFilm">
+              <div class="form-check">
+                <input type="checkbox" value="1" class="form-check-input" name="trainFilm" id="trainFilm" <?php if (isset($photo['FilmTraining']) && $photo['FilmTraining']) { ?>checked<?php } ?>>
+                <label class="form-check-label" for="trainFilm">
                   Filming for training purposes only
                 </label>
               </div>
-              <div class="custom-control custom-checkbox">
-                <input type="checkbox" value="1" class="custom-control-input" name="proPhoto" id="proPhoto" <?php if (isset($photo['ProPhoto']) && $photo['ProPhoto']) { ?>checked<?php } ?>>
-                <label class="custom-control-label" for="proPhoto">
+              <div class="form-check">
+                <input type="checkbox" value="1" class="form-check-input" name="proPhoto" id="proPhoto" <?php if (isset($photo['ProPhoto']) && $photo['ProPhoto']) { ?>checked<?php } ?>>
+                <label class="form-check-label" for="proPhoto">
                   Employ a professional photographer (approved by the club) who will take
                   photographs in competitions and/or club events.
                 </label>
@@ -464,15 +464,15 @@ include BASE_PATH . "views/swimmersMenu.php";
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="main-modal-title">Modal title</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+          
         </button>
       </div>
       <div class="modal-body" id="main-modal-body">
         ...
       </div>
       <div class="modal-footer" id="main-modal-footer">
-        <button type="button" class="btn btn-dark" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Cancel</button>
         <button type="button" id="modal-confirm-button" class="btn btn-success">Confirm</button>
       </div>
     </div>

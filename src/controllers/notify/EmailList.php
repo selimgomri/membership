@@ -23,8 +23,8 @@ include BASE_PATH . "views/notifyMenu.php";
 	<p class="lead">Messages listed here are queued to be sent in batches.</p>
 	<?php if ($mail != null) { ?>
 		<div class="table-responsive-md">
-			<table class="table">
-				<thead class="thead-light">
+			<table class="table table-light">
+				<thead">
 					<tr>
 						<th>Name</th>
 						<th>Subject</th>

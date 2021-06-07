@@ -52,10 +52,10 @@ include BASE_PATH . 'views/header.php';
 
           <?php for ($m = 1; $m <= 12; $m++) {
             $month =  mktime(0, 0, 0, $m, 1); ?>
-            <div class="form-group">
-              <div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" id="month-<?= htmlspecialchars(date('m', $month)) ?>" name="month-<?= htmlspecialchars(date('m', $month)) ?>" <?php if ($squadFeeMonths != null && bool($squadFeeMonths[date('m', $month)])) { ?>checked<?php } ?>>
-                <label class="custom-control-label" for="month-<?= htmlspecialchars(date('m', $month)) ?>">
+            <div class="mb-3">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="month-<?= htmlspecialchars(date('m', $month)) ?>" name="month-<?= htmlspecialchars(date('m', $month)) ?>" <?php if ($squadFeeMonths != null && bool($squadFeeMonths[date('m', $month)])) { ?>checked<?php } ?>>
+                <label class="form-check-label" for="month-<?= htmlspecialchars(date('m', $month)) ?>">
                   No fees in <?= htmlspecialchars(date('F', $month)) ?>
                 </label>
               </div>

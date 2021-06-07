@@ -110,13 +110,13 @@ include BASE_PATH . 'views/header.php';
         <div class="col-4 col-sm-3 col-md-2 text-truncate">
           <strong>Date</strong>
         </div>
-        <div class="col-4 col-sm-3 col-md-2 text-right">
+        <div class="col-4 col-sm-3 col-md-2 text-end">
           <strong>Time</strong>
         </div>
         <div class="col-8 col-sm-6 col-md-5 col-lg-4 text-truncate d-none d-sm-block">
           <strong>Gala</strong>
         </div>
-        <div class="col-4 col-sm-6 col-md-3 text-right text-lg-left col-lg-2 d-sm-none d-md-block text-truncate">
+        <div class="col-4 col-sm-6 col-md-3 text-end text-lg-start col-lg-2 d-sm-none d-md-block text-truncate">
           <strong>City</strong>
         </div>
       </div>
@@ -128,8 +128,8 @@ include BASE_PATH . 'views/header.php';
         <div class="col-4 col-sm-3 col-md-2 text-truncate">
           <?=htmlspecialchars((new DateTime($result['Date'], new DateTimeZone('Europe/London')))->format("d/m/Y"))?>
         </div>
-        <div class="col-4 col-sm-3 col-md-2 text-right">
-          <span class="mono"><?=htmlspecialchars($result['Time'])?></span>
+        <div class="col-4 col-sm-3 col-md-2 text-end">
+          <span class="font-monospace"><?=htmlspecialchars($result['Time'])?></span>
         </div>
         <div class="col-8 col-sm-6 col-md-5 col-lg-4 text-truncate d-none d-sm-block" title="<?php if ($result['GalaName'] == null) { ?><?=htmlspecialchars($result['Name'])?><?php } else { ?><?=htmlspecialchars($result['GalaName'])?><?php } ?>">
           <?php if ($result['GalaName'] == null) { ?>
@@ -138,7 +138,7 @@ include BASE_PATH . 'views/header.php';
           <?=htmlspecialchars($result['GalaName'])?>
           <?php } ?>
         </div>
-        <div class="col-4 col-sm-6 col-md-3 text-right text-lg-left col-lg-2 d-sm-none d-md-block text-truncate">
+        <div class="col-4 col-sm-6 col-md-3 text-end text-lg-start col-lg-2 d-sm-none d-md-block text-truncate">
           <?=htmlspecialchars($result['City'])?>
         </div>
       </div>

@@ -31,28 +31,28 @@ include BASE_PATH . 'views/header.php';
           </div>
           <div class="col">
             <div class="row">
-              <div class="col-6 text-right">
+              <div class="col-6 text-end">
                 Subtotal
               </div>
               <div class="col-6">
                 &pound;<?=htmlspecialchars((string) \Brick\Math\BigInteger::of((string) $data['debits'])->toBigDecimal()->withPointMovedLeft(2))?>
               </div>
 
-              <div class="col-6 text-right">
+              <div class="col-6 text-end">
                 Credits
               </div>
               <div class="col-6">
                 &pound;<?=htmlspecialchars((string) \Brick\Math\BigInteger::of((string) $data['credits'])->toBigDecimal()->withPointMovedLeft(2))?>
               </div>
 
-              <div class="col-6 text-right">
+              <div class="col-6 text-end">
                 Taxes
               </div>
               <div class="col-6">
                 &pound;0.00
               </div>
 
-              <div class="col-6 text-right">
+              <div class="col-6 text-end">
                 <strong>Total</strong>
               </div>
               <div class="col-6">

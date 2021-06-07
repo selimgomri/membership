@@ -89,8 +89,8 @@ include BASE_PATH . 'views/header.php';
           <h2>About You</h2>
 
           <!-- Mobile -->
-          <div class="form-group">
-            <label for="mobile-number">Mobile phone number</label>
+          <div class="mb-3">
+            <label class="form-label" for="mobile-number">Mobile phone number</label>
             <input type="tel" class="form-control" name="mobile-number" id="mobile-number" required placeholder="<?= htmlspecialchars($examplePhone) ?>" aria-describedby="mobile-number-help">
             <div class="invalid-feedback">
               You must provide a valid phone number (with no spaces).
@@ -108,8 +108,8 @@ include BASE_PATH . 'views/header.php';
             </p>
 
             <?php do { ?>
-              <div class="form-group">
-                <label for="<?= htmlspecialchars('swim-england-' . $member['MemberID']) ?>"><?= htmlspecialchars($member['MForename'] . ' ' . $member['MSurname']) ?> Swim England/Swim Wales/Scottish Swimming Number</label>
+              <div class="mb-3">
+                <label class="form-label" for="<?= htmlspecialchars('swim-england-' . $member['MemberID']) ?>"><?= htmlspecialchars($member['MForename'] . ' ' . $member['MSurname']) ?> Swim England/Swim Wales/Scottish Swimming Number</label>
                 <input type="text" aria-describedby="<?= htmlspecialchars('help-swim-england-' . $member['MemberID']) ?>" name="<?= htmlspecialchars('swim-england-' . $member['MemberID']) ?>" id="<?= htmlspecialchars('swim-england-' . $member['MemberID']) ?>" class="form-control">
                 <small class="text-muted" id="<?= htmlspecialchars('help-swim-england-' . $member['MemberID']) ?>">You can skip this field if you want to</small>
               </div>
@@ -130,10 +130,10 @@ include BASE_PATH . 'views/header.php';
           <?= htmlspecialchars($user['EmailAddress']) ?>
         </p>
 
-        <div class="form-row" id="password-form-row">
+        <div class="row" id="password-row">
           <div class="col-sm">
-            <div class="form-group">
-              <label for="password-1">Create a password</label>
+            <div class="mb-3">
+              <label class="form-label" for="password-1">Create a password</label>
               <input type="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" class="form-control" id="password-1" name="password-1" autocomplete="new-password" required aria-describedby="pwHelp">
               <small id="pwHelp" class="form-text text-muted">
                 Use 8 characters or more, with at least one lowercase letter, at least one uppercase letter and at least one number
@@ -145,8 +145,8 @@ include BASE_PATH . 'views/header.php';
           </div>
 
           <div class="col-sm">
-            <div class="form-group">
-              <label for="password-2">Confirm your password</label>
+            <div class="mb-3">
+              <label class="form-label" for="password-2">Confirm your password</label>
               <input type="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" class="form-control" id="password-2" name="password-2" autocomplete="new-password" required aria-describedby="pwConfirmHelp">
               <small id="pwConfirmHelp" class="form-text text-muted">Repeat your password</small>
               <div class="invalid-feedback" id="password-2-invalid-feedback">
@@ -171,20 +171,20 @@ include BASE_PATH . 'views/header.php';
 
         <div class="row">
           <div class="col-md-8 col-lg-6">
-            <div class="form-group">
-              <div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" name="emailAuthorise" id="emailAuthorise" value="1" <?= $email ?>>
-                <label class="custom-control-label" for="emailAuthorise">
+            <div class="mb-3">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="emailAuthorise" id="emailAuthorise" value="1" <?= $email ?>>
+                <label class="form-check-label" for="emailAuthorise">
                   I wish to receive important email updates about my squads.
                   This includes emails about session cancellations.
                 </label>
               </div>
             </div>
 
-            <div class="form-group">
-              <div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" name="smsAuthorise" id="smsAuthorise" value="1" <?= $sms ?>>
-                <label class="custom-control-label" for="smsAuthorise">
+            <div class="mb-3">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="smsAuthorise" id="smsAuthorise" value="1" <?= $sms ?>>
+                <label class="form-check-label" for="smsAuthorise">
                   I wish to receive text message notifications
                 </label>
                 <small class="d-block"><?= htmlspecialchars(app()->tenant->getName()) ?> may not offer this service</small>

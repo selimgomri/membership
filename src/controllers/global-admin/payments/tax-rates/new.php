@@ -39,17 +39,17 @@ include BASE_PATH . "views/root/header.php";
 
         <?= \SCDS\CSRF::write() ?>
 
-        <div class="form-group">
-          <label for="rate-name">Name</label>
+        <div class="mb-3">
+          <label class="form-label" for="rate-name">Name</label>
           <input type="text" name="rate-name" id="rate-name" required class="form-control">
           <div class="invalid-feedback">
             Provide a name for this tax rate
           </div>
         </div>
 
-        <div class="form-group">
-          <label for="rate-type">Type</label>
-          <select class="custom-select" name="rate-type" id="rate-type" required>
+        <div class="mb-3">
+          <label class="form-label" for="rate-type">Type</label>
+          <select class="form-select" name="rate-type" id="rate-type" required>
             <option value="vat" selected>VAT (Value Added Tax)</option>
           </select>
           <div class="invalid-feedback">
@@ -57,30 +57,28 @@ include BASE_PATH . "views/root/header.php";
           </div>
         </div>
 
-        <div class="form-group">
-          <label for="rate-region">Region</label>
+        <div class="mb-3">
+          <label class="form-label" for="rate-region">Region</label>
           <input type="text" name="rate-region" id="rate-region" required class="form-control">
           <div class="invalid-feedback">
             Provide the region for this tax rate
           </div>
         </div>
 
-        <div class="form-group">
-          <label for="rate">Rate</label>
+        <div class="mb-3">
+          <label class="form-label" for="rate">Rate</label>
           <div class="input-group">
             <input type="number" min="0" max="100" step="0.01" name="rate" id="rate" required class="form-control">
-            <div class="input-group-append">
-              <span class="input-group-text rounded-right">%</span>
-            </div>
+            <span class="input-group-text rounded-end">%</span>
             <div class="invalid-feedback">
               Provide a valid tax rate
             </div>
           </div>
         </div>
 
-        <div class="form-group">
-          <label for="rate-in-ex">Prices inclusive or exclusive of tax</label>
-          <select class="custom-select" name="rate-in-ex" id="rate-in-ex" required>
+        <div class="mb-3">
+          <label class="form-label" for="rate-in-ex">Prices inclusive or exclusive of tax</label>
+          <select class="form-select" name="rate-in-ex" id="rate-in-ex" required>
             <option value="inclusive" selected>Inclusive</option>
             <option value="exclusive">Exclusive</option>
           </select>

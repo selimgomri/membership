@@ -33,8 +33,8 @@ include BASE_PATH . 'views/header.php';
 
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="<?=autoUrl("galas")?>">Galas</a></li>
-      <li class="breadcrumb-item"><a href="<?=autoUrl("galas/" . $id)?>">#<?=htmlspecialchars($id)?></a></li>
+      <li class="breadcrumb-item"><a href="<?= autoUrl("galas") ?>">Galas</a></li>
+      <li class="breadcrumb-item"><a href="<?= autoUrl("galas/" . $id) ?>">#<?= htmlspecialchars($id) ?></a></li>
       <li class="breadcrumb-item active" aria-current="page">Prices and events</li>
     </ol>
   </nav>
@@ -42,7 +42,7 @@ include BASE_PATH . 'views/header.php';
   <div class="row">
     <div class="col-lg-8">
       <h1>Pricing and events</h1>
-      <p class="lead">Manage events and entry fees for <?=htmlspecialchars($gala['name'])?>.</p>
+      <p class="lead">Manage events and entry fees for <?= htmlspecialchars($gala['name']) ?>.</p>
 
       <p>You can select events which will be run at this gala and enter the price for each of these events.</p>
 
@@ -54,7 +54,8 @@ include BASE_PATH . 'views/header.php';
             <strong>Your changes have been saved successfully.</strong>
           </p>
         </div>
-      <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['PricesSaved']); } ?>
+      <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['PricesSaved']);
+      } ?>
 
       <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['PricesNotSaved']) && $_SESSION['TENANT-' . app()->tenant->getId()]['PricesNotSaved']) { ?>
         <div class="alert alert-warning">
@@ -65,26 +66,25 @@ include BASE_PATH . 'views/header.php';
             Please double check the events and prices below. If you see anything you don't expect, please try changing it and saving again.
           </p>
         </div>
-      <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['PricesNotSaved']); } ?>
+      <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['PricesNotSaved']);
+      } ?>
 
       <form method="post">
 
         <ul class="list-group mb-3">
-        <?php foreach ($swimsArray as $eventKey => $event) { ?>
-          <li class="list-group-item">
-            <h2><?=$event?></h2>
+          <?php foreach ($swimsArray as $eventKey => $event) { ?>
+            <li class="list-group-item">
+              <h2><?= $event ?></h2>
 
-            <div class="input-group mb-3">
-              <div class="input-group-prepend">
+              <div class="input-group mb-3">
                 <div class="input-group-text">
-                  <input type="checkbox" aria-label="Tick to confirm event" <?php if ($galaData->getEvent($eventKey)->isEnabled()) { ?> checked <?php } ?> value="1" name="<?=$eventKey?>-check">
+                  <input class="form-check-input mt-0" type="checkbox" aria-label="Tick to confirm <?= $event ?> at this competition" <?php if ($galaData->getEvent($eventKey)->isEnabled()) { ?> checked <?php } ?> value="1" name="<?= $eventKey ?>-check">
                 </div>
-                <span class="input-group-text" id="<?=$eventKey?>-price-addon">&pound;</span>
+                <span class="input-group-text" id="<?= $eventKey ?>-price-addon">&pound;</span>
+                <input type="number" step="0.01" min="0" class="form-control" id="<?= $eventKey ?>-price" name="<?= $eventKey ?>-price" aria-label="<?= $event ?> price" value="<?= htmlspecialchars($galaData->getEvent($eventKey)->getPriceAsString()) ?>">
               </div>
-              <input type="number" step="0.01" min="0" class="form-control" id="<?=$eventKey?>-price" name="<?=$eventKey?>-price" aria-label="<?=$event?> price" value="<?=htmlspecialchars($galaData->getEvent($eventKey)->getPriceAsString())?>">
-            </div>
-          </li>
-        <?php } ?>
+            </li>
+          <?php } ?>
         </ul>
 
         <p>

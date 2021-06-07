@@ -68,14 +68,14 @@ include BASE_PATH . 'views/header.php';
               <h2 class="mb-0 h4"><?= htmlspecialchars($mandate['Surname'] . ', ' . $mandate['Forename']) ?></h2>
               <div class="mb-3 d-md-none"></div>
             </div>
-            <div class="col text-md-right">
+            <div class="col text-md-end">
               <?php if ($stripeDD) { ?>
-                <p class="mono mb-0"><strong>Sort Code</strong> <span class="mono"><?= htmlspecialchars(implode("-", str_split($stripeDD['SortCode'], 2))) ?></span>
+                <p class="font-monospace mb-0"><strong>Sort Code</strong> <span class="font-monospace"><?= htmlspecialchars(implode("-", str_split($stripeDD['SortCode'], 2))) ?></span>
                 </p>
-                <p class="mono mb-0"><strong>Account Number</strong> <span class="mono">&middot;&middot;&middot;&middot;<?= htmlspecialchars($stripeDD['Last4']) ?></span></p>
+                <p class="font-monospace mb-0"><strong>Account Number</strong> <span class="font-monospace">&middot;&middot;&middot;&middot;<?= htmlspecialchars($stripeDD['Last4']) ?></span></p>
               <?php } else { ?>
-                <p class="mono mb-0">No mandate</p>
-                <p class="mono mb-0">Contact user</p>
+                <p class="font-monospace mb-0">No mandate</p>
+                <p class="font-monospace mb-0">Contact user</p>
               <?php } ?>
             </div>
           </div>

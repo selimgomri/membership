@@ -103,7 +103,7 @@ include BASE_PATH . "views/root/header.php";
     </div>
   <?php } ?>
 
-  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#staticBackdrop">
+  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
     Add plan
   </button>
 
@@ -115,8 +115,8 @@ include BASE_PATH . "views/root/header.php";
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="staticBackdropLabel">Add plan</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+
         </button>
       </div>
       <div class="modal-body">
@@ -126,36 +126,34 @@ include BASE_PATH . "views/root/header.php";
 
           <?= \SCDS\CSRF::write() ?>
 
-          <div class="form-group">
-            <label for="plan-name">Name</label>
+          <div class="mb-3">
+            <label class="form-label" for="plan-name">Name</label>
             <input type="text" name="plan-name" id="plan-name" class="form-control" required>
             <div class="invalid-feedback">You must supply a name for this plan</div>
           </div>
 
-          <div class="form-group">
-            <label for="plan-price">Price per unit</label>
+          <div class="mb-3">
+            <label class="form-label" for="plan-price">Price per unit</label>
             <input type="number" min="0" step="0.01" name="plan-price" id="plan-price" class="form-control" required>
             <div class="invalid-feedback">You must supply a price per unit for this plan</div>
           </div>
 
-          <div class="form-group">
-            <label for="plan-currency">Currency</label>
-            <select class="custom-select" required name="plan-currency" id="plan-currency">
+          <div class="mb-3">
+            <label class="form-label" for="plan-currency">Currency</label>
+            <select class="form-select" required name="plan-currency" id="plan-currency">
               <option value="gbp" selected>British Pounds (GBP)</option>
             </select>
             <div class="invalid-feedback">You must supply a currency for this plan</div>
           </div>
 
-          <div class="form-group">
+          <div class="mb-3">
             <p class="mb-2">
               Billing interval (frequency)
             </p>
             <div class="input-group">
-              <div class="input-group-prepend">
-                <span class="input-group-text">Every</span>
-              </div>
+              <span class="input-group-text">Every</span>
               <input type="number" min="1" step="1" value="1" aria-label="Billing Frequency" class="form-control" name="plan-frequency-n" id="plan-frequency-n" required>
-              <select class="custom-select" aria-label="Billing Frequency Type" required name="plan-frequency-type" id="plan-frequency-type">
+              <select class="form-select" aria-label="Billing Frequency Type" required name="plan-frequency-type" id="plan-frequency-type">
                 <option value="days">Days</option>
                 <option value="weeks">Weeks</option>
                 <option value="months" selected>Months</option>
@@ -167,7 +165,7 @@ include BASE_PATH . "views/root/header.php";
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button type="submit" form="new-plan-form" class="btn btn-primary">Add plan</button>
       </div>
     </div>

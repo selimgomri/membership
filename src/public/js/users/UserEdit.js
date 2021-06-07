@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function(event) { 
+document.addEventListener("DOMContentLoaded", function (event) {
   function apply() {
     var type = document.getElementById('accountType');
     var typeValue = type.value;
@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     document.getElementById('main-modal-title').textContent = 'Confirm resending registration email';
 
     // Set buttons
-    document.getElementById('main-modal-footer').innerHTML = '<button type="button" class="btn btn-dark" data-dismiss="modal">Cancel</button><button type="button" id="modal-confirm-button" class="btn btn-success">Confirm resend</button>';
+    document.getElementById('main-modal-footer').innerHTML = '<button type="button" class="btn btn-dark" data-bs-dismiss="modal">Cancel</button><button type="button" id="modal-confirm-button" class="btn btn-success">Confirm resend</button>';
 
     // Compose modal body content
     var bodyContent = '<p>Are you sure you want to resend the registration email to <span id="modal-user-name"></span>?</p>';
@@ -36,7 +36,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
     // Setup confirm event listeners
     document.getElementById('modal-confirm-button').addEventListener('click', resendRegistrationEmail);
 
-    $('#main-modal').modal('show');
+    let modal = new bootstrap.Modal(document.getElementById('main-modal'));
+    modal.show();
   }
 
   function resendRegistrationEmail() {
@@ -47,7 +48,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
       if (this.readyState == 4 && this.status == 200) {
         var json = JSON.parse(this.responseText);
 
-        $('#main-modal').modal('hide');
+        let modal = new bootstrap.Modal(document.getElementById('main-modal'));
+        modal.hide();
         // Setup resend status alert
         var resendStatus = document.getElementById('resend-status');
         resendStatus.innerHTML = '<div id="resend-status-alert"><div id="resend-status-content"></div><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div></div>';

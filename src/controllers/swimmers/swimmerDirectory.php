@@ -60,10 +60,10 @@ if (isset($_POST['squad'])) {
 <div class="container-fluid">
 
   <div class="d-print-none">
-    <div class="form-row">
+    <div class="row">
       <div class="col-md-6 mb-3">
-        <label for="squad">Select a squad</label>
-        <select class="custom-select" placeholder="Select a Squad" id="squad" name="squad">
+        <label class="form-label" for="squad">Select a squad</label>
+        <select class="form-select" placeholder="Select a Squad" id="squad" name="squad">
           <option value="allSquads">Show All Squads</option>;
           <?php while ($squad = $squads->fetch(PDO::FETCH_ASSOC)) { ?>
             <option value="<?= $squad['id'] ?>" <?php if ($squad['id'] == $squadID) { ?>selected<?php } ?>>
@@ -73,7 +73,7 @@ if (isset($_POST['squad'])) {
         </select>
       </div>
       <div class="col-md-6 mb-3">
-        <label for="search">Search by name</label>
+        <label class="form-label" for="search">Search by name</label>
         <input class="form-control" placeholder="Search by name" id="search" name="search" value="<?= htmlspecialchars($search) ?>">
       </div>
     </div>

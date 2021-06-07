@@ -54,13 +54,13 @@ include BASE_PATH . 'views/header.php';
               <h2 class="mb-0 h4"><?= htmlspecialchars($mandate['Surname'] . ', ' . $mandate['Forename']) ?></h2>
               <div class="mb-3 d-md-none"></div>
             </div>
-            <div class="col text-md-right">
+            <div class="col text-md-end">
               <?php if ($mandate['BankName']) { ?>
-                <p class="mono mb-0"><?= htmlspecialchars(getBankName($mandate['BankName'])) ?></p>
-                <p class="mono mb-0"><?= htmlspecialchars($mandate['AccountHolderName']) ?>, &#0149;&#0149;&#0149;&#0149;&#0149;&#0149;<?= htmlspecialchars($mandate['AccountNumEnd']) ?></p>
+                <p class="font-monospace mb-0"><?= htmlspecialchars(getBankName($mandate['BankName'])) ?></p>
+                <p class="font-monospace mb-0"><?= htmlspecialchars($mandate['AccountHolderName']) ?>, &#0149;&#0149;&#0149;&#0149;&#0149;&#0149;<?= htmlspecialchars($mandate['AccountNumEnd']) ?></p>
               <?php } else { ?>
-                <p class="mono mb-0">No mandate</p>
-                <p class="mono mb-0">Contact user</p>
+                <p class="font-monospace mb-0">No mandate</p>
+                <p class="font-monospace mb-0">Contact user</p>
               <?php } ?>
             </div>
           </div>

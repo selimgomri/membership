@@ -67,7 +67,8 @@ if (table) {
       document.getElementById('approve-button').dataset.submission = reviewId;
       document.getElementById('reject-button').dataset.submission = reviewId;
 
-      $('#reviewModal').modal('show');
+      let modal = new bootstrap.Modal(document.getElementById('reviewModal'));
+      modal.show();
     } else if (event.target.dataset.action && event.target.dataset.action == 'void') {
       document.getElementById('revokeModalLabel').textContent = 'Void ' + event.target.dataset.memberName + '\'s Form';
       let body = document.getElementById('revokeModalBody');
@@ -103,7 +104,8 @@ if (table) {
         req.send('submission=' + encodeURI(submission) + '&action=void');
       });
 
-      $('#revokeModal').modal('show')
+      let modal = new bootstrap.Modal(document.getElementById('revokeModal'));
+      modal.show();
     }
   });
 }
@@ -175,5 +177,6 @@ document.getElementById('voidAllButton').addEventListener('click', (event) => {
     req.send('squad=' + encodeURI(squad) + '&action=void');
   });
 
-  $('#revokeModal').modal('show')
+  let modal = new bootstrap.Modal(document.getElementById('revokeModal'));
+  modal.show();
 });

@@ -105,10 +105,10 @@ include BASE_PATH . 'views/header.php';
         <div class="row">
         <?php for ($i = 0; $i < sizeof($sessions); $i++) { ?>
         <div class="col-sm-6 col-lg-4 col-xl-3">
-          <div class="form-group">
-            <div class="custom-control custom-checkbox">
-              <input type="checkbox" class="custom-control-input" id="<?=$swimmer['id']?>-<?=$sessions[$i]['ID']?>" name="<?=$swimmer['id']?>-<?=$sessions[$i]['ID']?>" <?=$checked[$i]?>>
-              <label class="custom-control-label" for="<?=$swimmer['id']?>-<?=$sessions[$i]['ID']?>">
+          <div class="mb-3">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="<?=$swimmer['id']?>-<?=$sessions[$i]['ID']?>" name="<?=$swimmer['id']?>-<?=$sessions[$i]['ID']?>" <?=$checked[$i]?>>
+              <label class="form-check-label" for="<?=$swimmer['id']?>-<?=$sessions[$i]['ID']?>">
                 <?=htmlspecialchars($sessions[$i]['Name'])?>
               </label>
             </div>

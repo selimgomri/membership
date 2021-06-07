@@ -109,7 +109,7 @@ include BASE_PATH . "views/root/header.php";
 
   <div class="container">
     <div class="row justify-content-between">
-      <div class="col-lg-3 border-right">
+      <div class="col-lg-3 border-end">
       <?php if ($toc && $data = $toc->getYamlData()) { ?>
       <?= $toc->render() ?>
       <?php } ?>
@@ -128,7 +128,7 @@ include BASE_PATH . "views/root/header.php";
         </aside>
       </div>
       <?php if (sizeof($headings) > 1) { ?>
-        <nav class="col-lg-2 border-left">
+        <nav class="col-lg-2 border-start">
           <ul class="list-unstyled">
             <?php for ($i = 1; $i < sizeof($headings); $i++) {
               $heading = $headings[$i]; ?>

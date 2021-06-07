@@ -18,7 +18,7 @@ include BASE_PATH . 'views/header.php';
   <div class="row">
     <div class="col-lg-8">
       <h1>Member upload (for Uni of Sheffield only)</h1>
-      <p class="lead">Batch upload members from a <span class="mono">CSV</span> file.</p>
+      <p class="lead">Batch upload members from a <span class="font-monospace">CSV</span> file.</p>
 
       <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['UploadSuccess']) && $_SESSION['TENANT-' . app()->tenant->getId()]['UploadSuccess']) { ?>
         <div class="alert alert-success">
@@ -62,26 +62,26 @@ include BASE_PATH . 'views/header.php';
       </p>
 
       <p>
-        Columns marked <span class="badge badge-info">Disregarded</span> should be kept in the CSV so that you don't need to manipulate the layout, but the data in these columns will be ignored.
+        Columns marked <span class="badge bg-info">Disregarded</span> should be kept in the CSV so that you don't need to manipulate the layout, but the data in these columns will be ignored.
       </p>
 
       <p>
-        We will check for existing members by checking if their email address is already in the system. Existing members will not be added again. For this to work, members must not change their email address from their <span class="mono">@sheffield.ac.uk</span> email.
+        We will check for existing members by checking if their email address is already in the system. Existing members will not be added again. For this to work, members must not change their email address from their <span class="font-monospace">@sheffield.ac.uk</span> email.
       </p>
 
-      <ol class="mono">
-        <li>Empty column <span class="badge badge-info">Disregarded</span></li>
-        <li>Member ID <span class="badge badge-info">Disregarded</span></li>
-        <li>UCard Number <span class="badge badge-info">Disregarded</span></li>
+      <ol class="font-monospace">
+        <li>Empty column <span class="badge bg-info">Disregarded</span></li>
+        <li>Member ID <span class="badge bg-info">Disregarded</span></li>
+        <li>UCard Number <span class="badge bg-info">Disregarded</span></li>
         <li>Name - We will automatically explode this into first and last</li>
         <li>Date of birth (DD/MM/YYYY format)</li>
-        <li>Age <span class="badge badge-info">Disregarded</span></li>
+        <li>Age <span class="badge bg-info">Disregarded</span></li>
         <li>Gender/Sex as one of Male or Female</li>
         <li>Email Address (@sheffield.ac.uk)</li>
-        <li>Subscription <span class="badge badge-info">Disregarded</span></li>
-        <li>Empty column <span class="badge badge-info">Disregarded</span></li>
-        <li>Subscription Start Date <span class="badge badge-info">Disregarded</span></li>
-        <li>Subscription End Date <span class="badge badge-info">Disregarded</span></li>
+        <li>Subscription <span class="badge bg-info">Disregarded</span></li>
+        <li>Empty column <span class="badge bg-info">Disregarded</span></li>
+        <li>Subscription Start Date <span class="badge bg-info">Disregarded</span></li>
+        <li>Subscription End Date <span class="badge bg-info">Disregarded</span></li>
       </ol>
 
       <form enctype="multipart/form-data" method="post" class="needs-validation" novalidate>
@@ -90,14 +90,11 @@ include BASE_PATH . 'views/header.php';
         <?= \SCDS\CSRF::write() ?>
         <input type="hidden" name="MAX_FILE_SIZE" value="30000">
 
-        <div class="form-group">
-          <label>Select a member file to upload</label>
-          <div class="custom-file">
-            <input type="file" class="custom-file-input" id="file-upload" name="file-upload" accept="text/csv" required>
-            <label class="custom-file-label" for="file-upload">Choose file</label>
-            <div class="invalid-feedback">
-              Please select a CSV file to upload
-            </div>
+        <div class="mb-3">
+          <label class="form-label" for="file-upload">Select a member file to upload</label>
+          <input type="file" class="form-control" id="file-upload" name="file-upload" accept="text/csv" required>
+          <div class="invalid-feedback">
+            Please select a CSV file to upload
           </div>
         </div>
 

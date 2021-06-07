@@ -124,43 +124,43 @@ function registerSheetGenerator($date, $sessionId)
               // END OF COVID STUFF
               ?>
               <li class="list-group-item py-3">
-                <div class="bg-white my-n3 py-3 sticky-top">
+                <div class="my-n3 py-3 sticky-top">
                   <div class="row align-items-center">
                     <div class="col">
-                      <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input checkbox-input" id="member-<?= htmlspecialchars($row['id']) ?>" <?php if (bool($row['tick'])) { ?>checked<?php } ?> data-indeterminate="<?php if (bool($row['indeterminate'])) { ?>true<?php } else { ?>false<?php } ?>"" data-week-id=" <?= htmlspecialchars($row['week_id']) ?>" data-session-id="<?= htmlspecialchars($row['session_id']) ?>" data-member-id="<?= htmlspecialchars($row['id']) ?>">
-                        <label class="custom-control-label d-block" for="member-<?= htmlspecialchars($row['id']) ?>"><?= htmlspecialchars($row['fn'] . ' ' . $row['sn']) ?><?php if ($row['show_gender']) { ?><br><em><?= htmlspecialchars($row['gender_identity']) ?>, <?= htmlspecialchars($row['gender_pronouns']) ?></em><?php } ?></label>
+                      <div class="form-check">
+                        <input type="checkbox" class="form-check-input checkbox-input" id="member-<?= htmlspecialchars($row['id']) ?>" <?php if (bool($row['tick'])) { ?>checked<?php } ?> data-indeterminate="<?php if (bool($row['indeterminate'])) { ?>true<?php } else { ?>false<?php } ?>"" data-week-id=" <?= htmlspecialchars($row['week_id']) ?>" data-session-id="<?= htmlspecialchars($row['session_id']) ?>" data-member-id="<?= htmlspecialchars($row['id']) ?>">
+                        <label class="form-check-label d-block" for="member-<?= htmlspecialchars($row['id']) ?>"><?= htmlspecialchars($row['fn'] . ' ' . $row['sn']) ?><?php if ($row['show_gender']) { ?><br><em><?= htmlspecialchars($row['gender_identity']) ?>, <?= htmlspecialchars($row['gender_pronouns']) ?></em><?php } ?></label>
                       </div>
                     </div>
                     <?php if (sizeof($row['medical']) > 0 || sizeof($row['photo']) > 0 || $row['notes'] || sizeof($row['contacts']) > 0) { ?>
                       <div class="col-auto">
-                        <div class="<?php if (sizeof($row['medical']) > 0 || sizeof($row['photo']) > 0 || $row['notes'] || sizeof($row['contacts']) > 0) { ?>mb-1<?php } ?> text-right">
+                        <div class="<?php if (sizeof($row['medical']) > 0 || sizeof($row['photo']) > 0 || $row['notes'] || sizeof($row['contacts']) > 0) { ?>mb-1<?php } ?> text-end">
                           <?php if ($cvRALatest && bool($cvRALatest['MemberAgreement'])) { ?>
-                            <span class="badge badge-sm badge-success">
-                              RA <i class="fa fa-check-circle" aria-hidden="true"></i> <span class="sr-only">Valid declaration</span>
+                            <span class="badge badge-sm bg-success">
+                              RA <i class="fa fa-check-circle" aria-hidden="true"></i> <span class="visually-hidden">Valid declaration</span>
                             </span>
                           <?php } else { ?>
-                            <span class="badge badge-sm badge-danger">
-                              RA <i class="fa fa-times-circle" aria-hidden="true"></i> <span class="sr-only">form not submitted or new submission required</span>
+                            <span class="badge badge-sm bg-danger">
+                              RA <i class="fa fa-times-circle" aria-hidden="true"></i> <span class="visually-hidden">form not submitted or new submission required</span>
                             </span>
                           <?php } ?>
                           <?php if ($cvLatest) { ?>
                             <?php if (bool($cvLatest['OfficerApproval'])) { ?>
-                              <span class="badge badge-sm badge-success">
-                                HS <i class="fa fa-check-circle" aria-hidden="true"></i><span class="sr-only">Survey submitted and approved</span>
+                              <span class="badge badge-sm bg-success">
+                                HS <i class="fa fa-check-circle" aria-hidden="true"></i><span class="visually-hidden">Survey submitted and approved</span>
                               </span>
                             <?php } else if (!bool($cvLatest['OfficerApproval']) && $cvLatest['ApprovedBy']) { ?>
-                              <span class="badge badge-sm badge-danger">
-                                HS <i class="fa fa-times-circle" aria-hidden="true"></i><span class="sr-only">Survey submitted and rejected</span>
+                              <span class="badge badge-sm bg-danger">
+                                HS <i class="fa fa-times-circle" aria-hidden="true"></i><span class="visually-hidden">Survey submitted and rejected</span>
                               </span>
                             <?php } else if (!bool($cvLatest['OfficerApproval']) && !$cvLatest['ApprovedBy']) { ?>
-                              <span class="badge badge-sm badge-warning">
-                                HS <i class="fa fa-minus-circle" aria-hidden="true"></i><span class="sr-only">Survey submitted pending approval</span>
+                              <span class="badge badge-sm bg-warning">
+                                HS <i class="fa fa-minus-circle" aria-hidden="true"></i><span class="visually-hidden">Survey submitted pending approval</span>
                               </span>
                             <?php } ?>
                           <?php } else { ?>
-                            <span class="badge badge-sm badge-danger">
-                              NO HS <span class="sr-only">Survey submitted</span>
+                            <span class="badge badge-sm bg-danger">
+                              NO HS <span class="visually-hidden">Survey submitted</span>
                             </span>
                           <?php } ?>
                         </div>
@@ -196,15 +196,17 @@ function registerSheetGenerator($date, $sessionId)
                             <div class="col-md-6 col-xl-4">
                               <div class="card card-body mb-2">
                                 <div class="row align-items-center">
-                                  <div class="col-sm-6 col-md-12 col-lg-6">
+                                  <div class="col-12 text-center">
                                     <div class="text-truncate"><strong><?= htmlspecialchars($ec->getName()) ?></strong></div>
                                     <div class="text-truncate"><?= htmlspecialchars($ec->getRelation()) ?></div>
-                                    <div class="mb-2 d-sm-none d-md-flex d-lg-none"></div>
+                                    <div class="mb-2"></div>
                                   </div>
                                   <div class="col">
-                                    <a href="<?= htmlspecialchars($ec->getRFCContactNumber()) ?>" class="btn btn-block btn-success">
-                                      <i class="fa fa-phone" aria-hidden="true"></i> <?= htmlspecialchars($ec->getInternationalContactNumber()) ?>
-                                    </a>
+                                    <div class="d-grid gap-2">
+                                      <a href="<?= htmlspecialchars($ec->getRFCContactNumber()) ?>" class="btn btn-success">
+                                        <i class="fa fa-phone" aria-hidden="true"></i> <?= htmlspecialchars($ec->getInternationalContactNumber()) ?>
+                                      </a>
+                                    </div>
                                   </div>
                                 </div>
                               </div>

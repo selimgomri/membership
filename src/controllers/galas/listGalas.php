@@ -124,7 +124,7 @@ include "galaMenu.php"; ?>
             <div>
               <span class="title mb-0 justify-content-between align-items-start">
                 <span><?=htmlspecialchars($gala['GalaName'])?></span>
-                <?php if ($now <= $closingDate) {?><span class="ml-2 badge badge-primary">ENTRIES OPEN</span><?php } ?>
+                <?php if ($now <= $closingDate) {?><span class="ms-2 badge bg-primary">ENTRIES OPEN</span><?php } ?>
               </span>
               <span class="d-flex mb-3"><?=htmlspecialchars($gala['GalaVenue'])?></span>
             </div>

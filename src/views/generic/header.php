@@ -29,7 +29,7 @@ if (isset($customBackground) && $customBackground) {
                                                                                                           foreach ($pageHead['body'] as $item) { ?> <?= $item ?> <?php }
                                                                                                                                                               } ?>>
 
-  <div class="sr-only sr-only-focusable">
+  <div class="visually-hidden visually-hidden-focusable">
     <a href="#maincontent">Skip to main content</a>
   </div>
 
@@ -104,24 +104,6 @@ if (isset($customBackground) && $customBackground) {
         </div>
       </div>
     </noscript>
-
-    <?php if (isset($_SESSION['Browser']['OSName']) && $_SESSION['Browser']['OSName'] == "Android" && isset($_SESSION['Browser']['OSVersion']) && (float) $_SESSION['Browser']['OSVersion'] <= 7.1) { ?>
-      <div class="bg-warning text-dark py-3 d-print-none small">
-        <div class="<?= $container_class ?>">
-          <p class="h2">
-            <strong>
-              Your device will not be supported from March 2021
-            </strong>
-          </p>
-          <p>
-            It looks like you're using Android version <?= htmlspecialchars($_SESSION['Browser']['OSVersion']) ?>. From February, you won't be able to access this site on your device because the DST Root X3 certificate will expire.
-          </p>
-          <p class="mb-0">
-            Upgrade to at least Android 7.1.1 now or <strong><a class="text-dark" href="https://www.firefox.com">install Firefox by Mozilla</a></strong>. Firefox uses it's own root certificate list which avoids this problem and has great protections for your privacy with built in features including tracking protection.
-          </p>
-        </div>
-      </div>
-    <?php } ?>
 
     <?php if ($_SESSION['Browser']['Name'] == "Internet Explorer") { ?>
       <div class="bg-warning text-dark py-3 d-print-none">
@@ -201,7 +183,7 @@ if (isset($customBackground) && $customBackground) {
           <div class="row justify-content-between align-items-center py-3 mb-0 d-none d-md-flex">
             <div class="col-auto">
               <h1 class="mb-0">
-                <a href="<?= htmlspecialchars(autoUrl("")) ?>" class="<?= $clubLogoColour ?> text-decoration-none">
+                <a href="<?= htmlspecialchars(autoUrl("")) ?>" class="<?= $clubLogoColour ?> text-decoration-none fw-bold">
                   <?php if ($tenant->getKey('LOGO_DIR') && $tenant->getKey('SHOW_LOGO')) { ?>
                     <img src="<?= htmlspecialchars(getUploadedAssetUrl($logos . 'logo-75.png')) ?>" srcset="<?= htmlspecialchars(getUploadedAssetUrl($logos . 'logo-75@2x.png')) ?> 2x, <?= htmlspecialchars(getUploadedAssetUrl($logos . 'logo-75@3x.png')) ?> 3x" alt="<?= htmlspecialchars($tenant->getName()) ?>" class="img-fluid" style="height: 75px">
                   <?php } else { ?>
@@ -234,7 +216,7 @@ if (isset($customBackground) && $customBackground) {
                       <?= htmlspecialchars(app()->tenant->getKey('ASA_CLUB_CODE')) ?> Club Membership
                     <?php } ?>
                   </a>
-                  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#chesterNavbar" aria-controls="chesterNavbar" aria-expanded="false" aria-label="Toggle navigation">
+                  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#chesterNavbar" aria-controls="chesterNavbar" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                   </button>
 
@@ -273,7 +255,7 @@ if (isset($customBackground) && $customBackground) {
             <h1 class="primary"><?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?></h1>
           <?php } ?>
         </div>
-        <div class="col text-right">
+        <div class="col text-end">
           <!-- <p class="mb-0"> -->
           <address>
             <strong><?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?></strong><br>

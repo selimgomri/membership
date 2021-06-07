@@ -45,8 +45,8 @@ include BASE_PATH . 'views/header.php';
 
         <form method="get">
 
-          <div class="form-group">
-            <label for="member-id">Membership Number</label>
+          <div class="mb-3">
+            <label class="form-label" for="member-id">Membership Number</label>
             <input type="number" name="member-id" id="member-id" class="form-control" min="0" required <?php if (isset($member)) { ?>value="<?= htmlspecialchars($member->MemberID()) ?>" <?php } ?>>
             <div class="invalid-feedback">
               Please enter a valid number

@@ -41,7 +41,7 @@ include BASE_PATH . "views/head.php";
 							accordance to their terms of service and privacy policies. You can
 							view or remove app access in your Account.
 						</p>
-						<div class="text-right">
+						<div class="text-end">
 							<a class="btn btn-light" href="">Cancel</a>
 							<a class="btn btn-success" href="">Allow</a>
 						</div>

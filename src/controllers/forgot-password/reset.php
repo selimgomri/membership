@@ -19,17 +19,17 @@ if ($user = $getUser->fetchColumn()) {
 			<div class="row">
 				<div class="col-sm-6 col-md-8">
 
-					<div class="form-row" id="password-form-row">
-						<div class="form-group col-md-6">
-							<label for="password-1">Password</label>
+					<div class="row" id="password-row">
+						<div class="mb-3 col-md-6">
+							<label class="form-label" for="password-1">Password</label>
 							<input type="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" required class="form-control" name="password-1" id="password-1" aria-describedby="pwHelp">
 							<small id="pwHelp" class="form-text text-muted">Use 8 characters or more, with at least one lowercase letter, at least one uppercase letter and at least one number</small>
 							<div class="invalid-feedback">
 								You must provide password that is at least 8 characters long with at least one lowercase letter, at least one uppercase letter and at least one number
 							</div>
 						</div>
-						<div class="form-group col-md-6">
-							<label for="password-2">Confirm password</label>
+						<div class="mb-3 col-md-6">
+							<label class="form-label" for="password-2">Confirm password</label>
 							<input type="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" required class="form-control" name="password-2" id="password-2">
 							<div class="invalid-feedback">
 								Passwords do not match

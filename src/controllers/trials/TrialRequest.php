@@ -88,22 +88,22 @@ include BASE_PATH . 'views/header.php';
       <?php } ?>
 
       <form method="post">
-        <div class="form-group">
-          <label for="trial-date">Trial Date</label>
+        <div class="mb-3">
+          <label class="form-label" for="trial-date">Trial Date</label>
           <input type="date" class="form-control" id="trial-date" name="trial-date" value="<?=date("Y-m-d", strtotime($swimmer['TrialStart']))?>">
         </div>
 
-        <div class="form-row">
+        <div class="row">
           <div class="col">
-            <div class="form-group">
-              <label for="trial-start">Trial Start Time</label>
+            <div class="mb-3">
+              <label class="form-label" for="trial-start">Trial Start Time</label>
               <input type="time" class="form-control" id="trial-start" name="trial-start" value="<?=date("H:i", strtotime($swimmer['TrialStart']))?>">
             </div>
           </div>
 
           <div class="col">
-            <div class="form-group">
-              <label for="trial-end">Trial End Time</label>
+            <div class="mb-3">
+              <label class="form-label" for="trial-end">Trial End Time</label>
               <input type="time" class="form-control" id="trial-end" name="trial-end" value="<?=date("H:i", strtotime($swimmer['TrialEnd']))?>">
             </div>
           </div>

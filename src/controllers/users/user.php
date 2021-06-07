@@ -82,8 +82,8 @@ foreach ($perms as $key => $value) {
 
 $pageHead = [
   'body' => [
-    'data-spy="scroll"',
-    'data-target="#member-page-menu"'
+    'data-bs-spy="scroll"',
+    'data-bs-target="#member-page-menu"'
   ]
 ];
 
@@ -118,7 +118,7 @@ include BASE_PATH . "views/header.php";
         <?php } ?>
       </div>
       <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') { ?>
-        <div class="col text-sm-right">
+        <div class="col text-sm-end">
           <p class="mb-0">
             <a href="<?= htmlspecialchars(autoUrl("users/" . $id . "/edit")) ?>" class="btn btn-success">
               Edit
@@ -367,9 +367,9 @@ include BASE_PATH . "views/header.php";
                   <div class="col-lg">
                     <h4>Stripe DD (New System)</h4>
                     <?php if ($stripeDD) { ?>
-                      <p class="mb-0"><strong>Sort Code</strong> <span class="mono"><?= htmlspecialchars(implode("-", str_split($stripeDD['SortCode'], 2))) ?></span>
+                      <p class="mb-0"><strong>Sort Code</strong> <span class="font-monospace"><?= htmlspecialchars(implode("-", str_split($stripeDD['SortCode'], 2))) ?></span>
                       </p>
-                      <p class="mb-0"><strong>Account Number</strong> <span class="mono">&middot;&middot;&middot;&middot;<?= htmlspecialchars($stripeDD['Last4']) ?></span></p>
+                      <p class="mb-0"><strong>Account Number</strong> <span class="font-monospace">&middot;&middot;&middot;&middot;<?= htmlspecialchars($stripeDD['Last4']) ?></span></p>
                     <?php } else { ?>
                       <p class="mb-0">No Direct Debit set up</p>
                     <?php } ?>
@@ -384,7 +384,7 @@ include BASE_PATH . "views/header.php";
                       <?php } ?>
                       <p class="mb-0"><?= $bankName ?><abbr title="<?= htmlspecialchars(mb_strtoupper(bankDetails($id, "bank_name"))) ?>"><?= htmlspecialchars(getBankName(bankDetails($id, "bank_name"))) ?></abbr>
                       </p>
-                      <p class="mb-0 mono">&middot;&middot;&middot;&middot;&middot;&middot;<?= mb_strtoupper(bankDetails($id, "account_number_end")) ?></p>
+                      <p class="mb-0 font-monospace">&middot;&middot;&middot;&middot;&middot;&middot;<?= mb_strtoupper(bankDetails($id, "account_number_end")) ?></p>
 
                     <?php } else { ?>
                       <p class="mb-0">No Direct Debit set up</p>
@@ -611,15 +611,15 @@ include BASE_PATH . "views/header.php";
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="main-modal-title">Modal title</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+          
         </button>
       </div>
       <div class="modal-body" id="main-modal-body">
         ...
       </div>
       <div class="modal-footer" id="main-modal-footer">
-        <button type="button" class="btn btn-dark" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Cancel</button>
         <button type="button" id="modal-confirm-button" class="btn btn-success">Confirm</button>
       </div>
     </div>

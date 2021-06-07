@@ -139,7 +139,7 @@ ob_start();?>
   <body>
     <?php include BASE_PATH . 'helperclasses/PDFStyles/Letterhead.php'; ?>
 
-    <div class="row mb-3 text-right">
+    <div class="row mb-3 text-end">
       <div class="split-50">
       </div>
       <div class="split-50">
@@ -148,7 +148,7 @@ ob_start();?>
         </p>
 
         <p>
-          Internal Reference: <span class="mono">SPM<?=htmlspecialchars($id)?></span>
+          Internal Reference: <span class="font-monospace">SPM<?=htmlspecialchars($id)?></span>
         </p>
 
         <p>
@@ -191,7 +191,7 @@ ob_start();?>
         <div class="row">
           <dt class="split-50"><?=htmlspecialchars($item['Name'])?><br><?=htmlspecialchars($item['Description'])?></dt>
           <dd class="split-50">
-            <span class="mono">
+            <span class="font-monospace">
               &pound;<?=number_format($item['Amount']/100, 2, '.', '')?>
             </span>
           </dd>
@@ -218,7 +218,7 @@ ob_start();?>
       <div class="row">
         <dt class="split-50"><strong>Total</strong></dt>
         <dd class="split-50">
-          <span class="mono">
+          <span class="font-monospace">
             &pound;<?=number_format($pm['Amount']/100, 2, '.', '')?>
           </span>
         </dd>
@@ -232,7 +232,7 @@ ob_start();?>
       <div class="row">
         <dt class="split-50">Amount</dt>
         <dd class="split-50">
-          <span class="mono">
+          <span class="font-monospace">
             &pound;<?=number_format($payment->amount/100, 2, '.', '')?>
           </span>
         </dd>
@@ -242,7 +242,7 @@ ob_start();?>
       <div class="row">
         <dt class="split-50">Card</dt>
         <dd class="split-50">
-          <span class="mono">
+          <span class="font-monospace">
             <?=htmlspecialchars(getCardBrand($card->brand))?> <?=htmlspecialchars($card->funding)?> card<br>
             **** **** **** <?=htmlspecialchars($card->last4)?>
           </span>
@@ -255,7 +255,7 @@ ob_start();?>
       <div class="row">
         <dt class="split-50">Verification</dt>
         <dd class="split-50">
-          <span class="mono">
+          <span class="font-monospace">
             Verified using 3D Secure
           </span>
         </dd>
@@ -267,7 +267,7 @@ ob_start();?>
       <div class="row">
         <dt class="split-50">Mobile wallet</dt>
         <dd class="split-50">
-          <span class="mono">
+          <span class="font-monospace">
             <?=getWalletName($card->wallet->type)?>
           </span>
         </dd>
@@ -277,7 +277,7 @@ ob_start();?>
       <div class="row">
         <dt class="split-50">Device account number</dt>
         <dd class="split-50">
-          <span class="mono">
+          <span class="font-monospace">
             **** **** **** <?=htmlspecialchars($card->wallet->dynamic_last4)?>
           </span>
         </dd>
@@ -289,7 +289,7 @@ ob_start();?>
       <div class="row">
         <dt class="split-50">Outcome</dt>
         <dd class="split-50">
-          <span class="mono">
+          <span class="font-monospace">
             <?=outcomeTypeInfo($payment->charges->data[0]->outcome->type)?>
           </span>
         </dd>
@@ -304,7 +304,7 @@ ob_start();?>
       <div class="row">
         <dt class="split-50">Billing address</dt>
         <dd class="split-50">
-          <span class="mono">
+          <span class="font-monospace">
             <address class="mb-0">
               <?php if (isset($payment->charges->data[0]->billing_details->name)) { ?>
                 <?=htmlspecialchars($payment->charges->data[0]->billing_details->name)?>

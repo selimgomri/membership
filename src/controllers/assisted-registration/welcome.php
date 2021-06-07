@@ -55,8 +55,8 @@ include BASE_PATH . 'views/header.php';
 
       <form method="post">
         <?=\SCDS\CSRF::write()?>
-        <div class="form-group">
-          <label for="email-address">Parent email address</label>
+        <div class="mb-3">
+          <label class="form-label" for="email-address">Parent email address</label>
           <input type="email" class="form-control" id="email-address" name="email-address" placeholder="Enter email">
         </div>
         <p>

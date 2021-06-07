@@ -21,7 +21,7 @@ include BASE_PATH . 'views/header.php';
     <div class="row align-items-center">
       <div class="col">
         <h1>
-          Book a session <span class="badge badge-info" title="This is a new service. Your feedback is always welcome - send an email to feedback@myswimmingclub.uk or call us on +44 191 249 4320">BETA</span>
+          Book a session
         </h1>
         <p class="lead mb-0">
           Book numbers limited or pay as you go sessions

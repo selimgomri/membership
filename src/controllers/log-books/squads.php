@@ -17,7 +17,7 @@ include BASE_PATH . 'views/header.php';
 
 <div class="container">
 
-  <h1>Log books <span class="badge badge-info">BETA</span></h1>
+  <h1>Log books <span class="badge bg-info">BETA</span></h1>
   <p class="lead">
     Select a squad to view member's log books
   </p>

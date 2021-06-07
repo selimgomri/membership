@@ -31,7 +31,7 @@ ob_start(); ?>
 <body>
   <?php include BASE_PATH . 'helperclasses/PDFStyles/Letterhead.php'; ?>
 
-  <div class="row mb-3 text-right">
+  <div class="row mb-3 text-end">
     <div class="split-50">
     </div>
     <div class="split-50">
@@ -102,10 +102,10 @@ ob_start(); ?>
           <td>
             <?= htmlspecialchars($item->details) ?>
           </td>
-          <td class="mono">
+          <td class="font-monospace">
             <?= number_format($item->credits / 100, 2, '.', '') ?>
           </td>
-          <td class="mono">
+          <td class="font-monospace">
             <?= number_format($item->debits / 100, 2, '.', '') ?>
           </td>
           <td>
@@ -125,10 +125,10 @@ ob_start(); ?>
         <td>
           Net Income
         </td>
-        <td class="mono">
+        <td class="font-monospace">
           <?= number_format($netIncome / 100, 2, '.', '') ?>
         </td>
-        <td class="mono">
+        <td class="font-monospace">
           <?= number_format($netCosts / 100, 2, '.', '') ?>
         </td>
         <td>

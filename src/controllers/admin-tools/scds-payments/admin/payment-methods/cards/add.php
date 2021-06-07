@@ -71,8 +71,8 @@ include BASE_PATH . "views/root/head.php";
 
       <form action="<?= htmlspecialchars(autoUrl("payments-admin/payment-cards/add")) ?>" method="post" id="payment-form" class="mb-5 needs-validation" novalidate>
         <div id="form-hideable" class="show fade">
-          <div class="form-group">
-            <label for="cardholder-name">Cardholder name</label>
+          <div class="mb-3">
+            <label class="form-label" for="cardholder-name">Cardholder name</label>
             <input type="text" class="form-control pm-can-disable" id="cardholder-name" placeholder="C F Frost" required aria-describedby="cardholder-name-help" autocomplete="cc-name">
             <small id="cardholder-name-help" class="form-text text-muted">The name shown on your card</small>
             <div class="invalid-feedback">
@@ -80,25 +80,25 @@ include BASE_PATH . "views/root/head.php";
             </div>
           </div>
 
-          <div class="form-group">
-            <label for="addr-line-1">Address line 1</label>
+          <div class="mb-3">
+            <label class="form-label" for="addr-line-1">Address line 1</label>
             <input type="text" class="form-control pm-can-disable" id="addr-line-1" placeholder="1 Burns Green" required autocomplete="address-line1">
             <div class="invalid-feedback">
               You must provide your address
             </div>
           </div>
 
-          <div class="form-group">
-            <label for="addr-post-code">Post Code</label>
+          <div class="mb-3">
+            <label class="form-label" for="addr-post-code">Post Code</label>
             <input type="text" class="form-control pm-can-disable text-uppercase" id="addr-post-code" placeholder="NE99 1AA" required autocomplete="postal-code">
             <div class="invalid-feedback">
               You must provide your post code
             </div>
           </div>
 
-          <div class="form-group">
-            <label for="addr-post-code">Country</label>
-            <select class="custom-select pm-can-disable" required id="addr-country" autocomplete="country">
+          <div class="mb-3">
+            <label class="form-label" for="addr-post-code">Country</label>
+            <select class="form-select pm-can-disable" required id="addr-country" autocomplete="country">
               <?php foreach ($countries as $code => $name) { ?>
                 <option <?php if ($code == 'GB') { ?>selected<?php } ?> value="<?= htmlspecialchars($code) ?>"><?= htmlspecialchars($name) ?></option>
               <?php } ?>
@@ -109,23 +109,21 @@ include BASE_PATH . "views/root/head.php";
           </div>
 
           <!-- Multiple Part Element -->
-          <div class="form-group">
-            <label for="card-number-element">
+          <div class="mb-3">
+            <label class="form-label" for="card-number-element">
               Card number
             </label>
             <div class="input-group">
-              <div class="input-group-prepend">
-                <span class="input-group-text" id="card-brand-element"><img class="fa fa-fw" src="<?= autoUrl("public/img/stripe/network-svgs/credit-card.svg") ?>" aria-hidden="true"></span>
-              </div>
+                <span class="input-group-text" id="card-brand-element"><img class="fa fa-fw" src="<?= htmlspecialchars(autoUrl("img/stripe/network-svgs/credit-card.svg", false)) ?>" aria-hidden="true"></span>
               <div id="card-number-element" class="form-control stripe-form-control"></div>
               <div id="card-number-element-errors" class="stripe-feedback"></div>
             </div>
           </div>
 
-          <div class="form-row">
+          <div class="row">
             <div class="col">
-              <div class="form-group">
-                <label for="card-expiry-element">
+              <div class="mb-3">
+                <label class="form-label" for="card-expiry-element">
                   Expires
                 </label>
                 <span id="card-expiry-element" class="form-control pm-can-disable"></span>
@@ -133,8 +131,8 @@ include BASE_PATH . "views/root/head.php";
               </div>
             </div>
             <div class="col">
-              <div class="form-group">
-                <label for="card-cvc-element">
+              <div class="mb-3">
+                <label class="form-label" for="card-cvc-element">
                   CVC
                 </label>
                 <span id="card-cvc-element" class="form-control pm-can-disable"></span>

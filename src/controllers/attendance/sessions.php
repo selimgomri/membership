@@ -66,8 +66,8 @@ include "attendanceMenu.php";
           Add or end scheduled squad sessions.
         </p>
       </div>
-      <div class="col text-right">
-        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#add-session-modal">
+      <div class="col text-end">
+        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#add-session-modal">
           Add new session
         </button>
       </div>
@@ -83,9 +83,9 @@ include "attendanceMenu.php";
       <div class="card card-body h-100">
         <h2>Select a Squad to Manage its Sessions</h2>
         <form>
-          <div class="form-group">
-            <label for="squad">Select Squad</label>
-            <select class="custom-select" name="squad" id="squad">
+          <div class="mb-3">
+            <label class="form-label" for="squad">Select Squad</label>
+            <select class="form-select" name="squad" id="squad">
               <option value="" selected disabled>Choose a squad</option>
               <?php do { ?>
                 <option value="<?= $squad['id'] ?>" <?php if ($selectedSquad == $squad['id']) { ?>selected<?php } ?>>
@@ -114,8 +114,8 @@ include "attendanceMenu.php";
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="add-session-modal-label">Add a new session</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+          
         </button>
       </div>
       <div class="modal-body">
@@ -144,17 +144,17 @@ include "attendanceMenu.php";
           <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['AddSessionError']);
           } ?>
 
-          <div class="form-group">
-            <label for="session-name">Session Name</label>
+          <div class="mb-3">
+            <label class="form-label" for="session-name">Session Name</label>
             <input class="form-control add-session-form-reset-input" type="text" name="session-name" id="session-name" required placeholder="e.g. Swimming, Land Training, Diving, Water Polo" data-default-value="">
             <div class="invalid-feedback">
               You must provide a name for this session such as <em>Swimming</em>, <em>Land Training</em>, <em>Diving</em> or <em>Water Polo</em>
             </div>
           </div>
 
-          <div class="form-group">
-            <label for="session-venue">Session Venue</label>
-            <select class="custom-select add-session-form-reset-input" name="session-venue" id="session-venue" required data-default-value="">
+          <div class="mb-3">
+            <label class="form-label" for="session-venue">Session Venue</label>
+            <select class="form-select add-session-form-reset-input" name="session-venue" id="session-venue" required data-default-value="">
               <option selected disabled value="">Select a Venue</option>
               <?php if ($venue) { ?>
                 <?php do { ?>
@@ -167,24 +167,24 @@ include "attendanceMenu.php";
             </div>
           </div>
 
-          <div class="form-group" id="recurrence-radios">
+          <div class="mb-3" id="recurrence-radios">
             <p class="mb-2">
               Recurrence
             </p>
-            <div class="custom-control custom-radio">
-              <input type="radio" id="recurring-session" name="recurring" class="custom-control-input" value="recurring" checked required>
-              <label class="custom-control-label" for="recurring-session">Weekly until cancelled</label>
+            <div class="form-check">
+              <input type="radio" id="recurring-session" name="recurring" class="form-check-input" value="recurring" checked required>
+              <label class="form-check-label" for="recurring-session">Weekly until cancelled</label>
             </div>
-            <div class="custom-control custom-radio">
-              <input type="radio" id="recurring-one-off" name="recurring" class="custom-control-input" value="one-off">
-              <label class="custom-control-label" for="recurring-one-off">One-off</label>
+            <div class="form-check">
+              <input type="radio" id="recurring-one-off" name="recurring" class="form-check-input" value="one-off">
+              <label class="form-check-label" for="recurring-one-off">One-off</label>
             </div>
           </div>
 
-          <div class="form-row">
+          <div class="row">
             <div class="col">
-              <div class="form-group">
-                <label for="session-date">Session Date</label>
+              <div class="mb-3">
+                <label class="form-label" for="session-date">Session Date</label>
                 <input type="date" class="form-control add-session-form-reset-input" name="session-date" id="session-date" placeholder="<?= htmlspecialchars($dateToday->format('Y-m-d')) ?>" value="<?= htmlspecialchars($dateToday->format('Y-m-d')) ?>" required data-default-value="<?= htmlspecialchars($dateToday->format('Y-m-d')) ?>" min="<?= htmlspecialchars($dateToday->format('Y-m-d')) ?>">
                 <div class="invalid-feedback">
                   You must provide a date for this session
@@ -193,8 +193,8 @@ include "attendanceMenu.php";
             </div>
 
             <div class="col" id="show-until-container">
-              <div class="form-group">
-                <label for="session-end-date">Show Until</label>
+              <div class="mb-3">
+                <label class="form-label" for="session-end-date">Show Until</label>
                 <input type="date" aria-labelledby="session-end-date-help" class="form-control add-session-form-reset-input" name="session-end-date" id="session-end-date" placeholder="<?= htmlspecialchars($datePlusYear->format('Y-m-d')) ?>" value="<?= htmlspecialchars($datePlusYear->format('Y-m-d')) ?>" data-default-value="<?= htmlspecialchars($datePlusYear->format('Y-m-d')) ?>" min="<?= htmlspecialchars($dateToday->format('Y-m-d')) ?>">
                 <div class="invalid-feedback">
                   You must provide a valid end date for this session
@@ -206,10 +206,10 @@ include "attendanceMenu.php";
             </div>
           </div>
 
-          <div class="form-row">
+          <div class="row">
             <div class="col">
-              <div class="form-group">
-                <label for="session-start-time">Start Time</label>
+              <div class="mb-3">
+                <label class="form-label" for="session-start-time">Start Time</label>
                 <input type="time" class="form-control add-session-form-reset-input" name="session-start-time" id="session-start-time" placeholder="0" value="18:00" required data-default-value="18:00">
                 <small id="session-start-time-help" class="form-text text-muted">
                   Make sure to use 24 Hour Time
@@ -217,8 +217,8 @@ include "attendanceMenu.php";
               </div>
             </div>
             <div class="col">
-              <div class="form-group">
-                <label for="session-end-time">End Time</label>
+              <div class="mb-3">
+                <label class="form-label" for="session-end-time">End Time</label>
                 <input type="time" class="form-control add-session-form-reset-input" name="session-end-time" id="session-end-time" placeholder="0" value="18:30" required data-default-value="18:30">
                 <small id="session-end-time-help" class="form-text text-muted">
                   Make sure to use 24 Hour Time
@@ -235,9 +235,9 @@ include "attendanceMenu.php";
             <div class="row">
               <?php do { ?>
                 <div class="col-6 col-md-4 col-lg-3 mb-2">
-                  <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input add-session-form-squad-checkboxes" id="squad-check-<?= htmlspecialchars($squadNew['SquadID']) ?>" name="squad-<?= htmlspecialchars($squadNew['SquadID']) ?>" value="1">
-                    <label class="custom-control-label" for="squad-check-<?= htmlspecialchars($squadNew['SquadID']) ?>"><?= htmlspecialchars($squadNew['SquadName']) ?></label>
+                  <div class="form-check">
+                    <input type="checkbox" class="form-check-input add-session-form-squad-checkboxes" id="squad-check-<?= htmlspecialchars($squadNew['SquadID']) ?>" name="squad-<?= htmlspecialchars($squadNew['SquadID']) ?>" value="1">
+                    <label class="form-check-label" for="squad-check-<?= htmlspecialchars($squadNew['SquadID']) ?>"><?= htmlspecialchars($squadNew['SquadName']) ?></label>
                   </div>
                 </div>
               <?php } while ($squadNew = $getSquadsNew->fetch(PDO::FETCH_ASSOC)); ?>
@@ -252,31 +252,31 @@ include "attendanceMenu.php";
             </p>
           <?php } ?>
 
-          <div class="form-group mb-0">
+          <div class="mb-3 mb-0">
             <p class="mb-2">
               Attendance monitoring
             </p>
-            <div class="custom-control custom-radio">
-              <input type="radio" id="main-sequence-all" name="main-sequence" class="custom-control-input" value="all" checked required>
-              <label class="custom-control-label" for="main-sequence-all">This session is for all squad members</label>
+            <div class="form-check">
+              <input type="radio" id="main-sequence-all" name="main-sequence" class="form-check-input" value="all" checked required>
+              <label class="form-check-label" for="main-sequence-all">This session is for all squad members</label>
             </div>
-            <div class="custom-control custom-radio">
-              <input type="radio" id="main-sequence-some" name="main-sequence" class="custom-control-input" value="some">
-              <label class="custom-control-label" for="main-sequence-some">This session is only for some squad members</label>
+            <div class="form-check">
+              <input type="radio" id="main-sequence-some" name="main-sequence" class="form-check-input" value="some">
+              <label class="form-check-label" for="main-sequence-some">This session is only for some squad members</label>
             </div>
           </div>
 
-          <div class="d-none show-if-one-off form-group mb-0 mt-3">
+          <div class="d-none show-if-one-off mb-3 mb-0 mt-3">
             <p class="mb-2">
               Require booking for this session
             </p>
-            <div class="custom-control custom-radio">
-              <input type="radio" id="require-booking-no" name="require-booking" class="custom-control-input" value="0" checked required>
-              <label class="custom-control-label" for="require-booking-no">Don't require booking</label>
+            <div class="form-check">
+              <input type="radio" id="require-booking-no" name="require-booking" class="form-check-input" value="0" checked required>
+              <label class="form-check-label" for="require-booking-no">Don't require booking</label>
             </div>
-            <div class="custom-control custom-radio">
-              <input type="radio" id="require-booking-yes" name="require-booking" class="custom-control-input" value="1">
-              <label class="custom-control-label" for="require-booking-yes">Require booking</label>
+            <div class="form-check">
+              <input type="radio" id="require-booking-yes" name="require-booking" class="form-check-input" value="1">
+              <label class="form-check-label" for="require-booking-yes">Require booking</label>
             </div>
           </div>
 
@@ -286,8 +286,8 @@ include "attendanceMenu.php";
       </div>
       <div class="modal-footer">
         <div class="row">
-          <div class="col-auto text-right">
-            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+          <div class="col-auto text-end">
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
             <button type="submit" form="new-session-form" class="btn btn-success">Add session</button>
           </div>
         </div>

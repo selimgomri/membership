@@ -6,11 +6,11 @@ var stripeElementStyle = {
   base: {
     iconColor: '#ced4da',
     lineHeight: '1.5',
-    height: '38px',
+    height: '33px',
     color: '#212529',
     fontWeight: 400,
-    fontFamily: '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"',
-    fontSize: '16px',
+    fontFamily: 'system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"',
+    fontSize: '14px',
     fontSmoothing: 'antialiased',
     '::placeholder': {
       color: '#868e96',
@@ -24,19 +24,19 @@ var stripeElementStyle = {
 
 function setCardBrandIcon(brand) {
   root = document.getElementById('app-js-info').dataset.root;
-  var content = '<img class="fa fa-fw" src="' + root + '/public/img/stripe/network-svgs/credit-card.svg" aria-hidden="true">';
+  var content = '<img class="fa fa-fw" src="' + root + '/img/stripe/network-svgs/credit-card.svg" aria-hidden="true">';
   if (brand === 'visa') {
-    content = '<img class="fa fa-fw" src="' + root + '/public/img/stripe/visa.svg" aria-hidden="true">';
+    content = '<img class="fa fa-fw" src="' + root + '/img/stripe/visa.svg" aria-hidden="true">';
   } else if (brand === 'mastercard') {
-    content = '<img class="fa fa-fw" src="' + root + '/public/img/stripe/mastercard.svg" aria-hidden="true">';
+    content = '<img class="fa fa-fw" src="' + root + '/img/stripe/mastercard.svg" aria-hidden="true">';
   } else if (brand === 'amex') {
-    content = '<img class="fa fa-fw" src="' + root + '/public/img/stripe/amex.svg" aria-hidden="true">';
+    content = '<img class="fa fa-fw" src="' + root + '/img/stripe/amex.svg" aria-hidden="true">';
   } else if (brand === 'discover') {
-    content = '<img class="fa fa-fw" src="' + root + '/public/img/stripe/network-svgs/discover.svg" aria-hidden="true">';
+    content = '<img class="fa fa-fw" src="' + root + '/img/stripe/network-svgs/discover.svg" aria-hidden="true">';
   } else if (brand === 'diners') {
-    content = '<img class="fa fa-fw" src="' + root + '/public/img/stripe/network-svgs/diners.svg" aria-hidden="true">';
+    content = '<img class="fa fa-fw" src="' + root + '/img/stripe/network-svgs/diners.svg" aria-hidden="true">';
   } else if (brand === 'jcb') {
-    content = '<img class="fa fa-fw" src="' + root + '/public/img/stripe/network-svgs/jcb.svg" aria-hidden="true">';
+    content = '<img class="fa fa-fw" src="' + root + '/img/stripe/network-svgs/jcb.svg" aria-hidden="true">';
   }
   document.getElementById('card-brand-element').innerHTML = content;
 }

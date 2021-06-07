@@ -79,7 +79,7 @@ if (!function_exists('chesterStandardMenu')) {
 
     <?php if (!(isset($_SESSION['TENANT-' . app()->tenant->getId()]['UserID']) && user_needs_registration($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'])) && (!isset($use_website_menu) || !$use_website_menu)) { ?>
       <div class="collapse navbar-collapse offcanvas-collapse" id="chesterNavbar">
-        <ul class="navbar-nav mr-auto">
+        <ul class="navbar-nav me-auto">
           <?php if (!empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) { ?>
             <li class="nav-item">
               <a class="nav-link" href="<?= htmlspecialchars(autoUrl('')) ?>">Home</a>
@@ -93,7 +93,7 @@ if (!function_exists('chesterStandardMenu')) {
               $getSwimmers->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
               ?>
               <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="swimmersDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <a class="nav-link dropdown-toggle" href="#" id="swimmersDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   My Members
                 </a>
                 <div class="dropdown-menu" aria-labelledby="swimmersDropdown">
@@ -140,7 +140,7 @@ if (!function_exists('chesterStandardMenu')) {
               <?php } ?>
             <?php } else { ?>
               <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="swimmerDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <a class="nav-link dropdown-toggle" href="#" id="swimmerDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   Members &amp; Squads
                 </a>
                 <div class="dropdown-menu" aria-labelledby="swimmerDropdown">
@@ -168,7 +168,7 @@ if (!function_exists('chesterStandardMenu')) {
 
             <?php if ($user->hasPermissions(['Admin', 'Coach', 'Committee'])) { ?>
               <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="swimmerDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <a class="nav-link dropdown-toggle" href="#" id="swimmerDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   Registers
                 </a>
                 <div class="dropdown-menu" aria-labelledby="registerDropdown">
@@ -191,7 +191,7 @@ if (!function_exists('chesterStandardMenu')) {
                 $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Galas"
               ) { ?>
                 <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" id="usersMenu" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <a class="nav-link dropdown-toggle" href="#" id="usersMenu" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Users
                   </a>
                   <div class="dropdown-menu" aria-labelledby="usersMenu">
@@ -219,7 +219,7 @@ if (!function_exists('chesterStandardMenu')) {
               <?php } ?>
               <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Admin") { ?>
                 <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" id="paymentsAdminDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <a class="nav-link dropdown-toggle" href="#" id="paymentsAdminDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Pay
                   </a>
                   <div class="dropdown-menu" aria-labelledby="paymentsAdminDropdown">
@@ -268,7 +268,7 @@ if (!function_exists('chesterStandardMenu')) {
               <?php } ?>
               <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Admin" || $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Coach" || $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Galas") { ?>
                 <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" id="notifyDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <a class="nav-link dropdown-toggle" href="#" id="notifyDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Notify
                   </a>
                   <div class="dropdown-menu" aria-labelledby="notifyDropdown">
@@ -284,7 +284,7 @@ if (!function_exists('chesterStandardMenu')) {
               <?php } ?>
             <?php } ?>
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="galaDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <a class="nav-link dropdown-toggle" href="#" id="galaDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Galas
               </a>
               <div class="dropdown-menu" aria-labelledby="galaDropdown">
@@ -358,7 +358,7 @@ if (!function_exists('chesterStandardMenu')) {
               $hasStripeMandate = $getCountNewMandates->fetchColumn() > 0;
             ?>
               <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="paymentsParentDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <a class="nav-link dropdown-toggle" href="#" id="paymentsParentDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   Pay
                 </a>
                 <div class="dropdown-menu" aria-labelledby="paymentsParentDropdown">
@@ -409,7 +409,7 @@ if (!function_exists('chesterStandardMenu')) {
             <?php } ?>
             <?php if (isset(app()->user) && app()->user->hasPermission('Admin')) { ?>
               <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="postDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <a class="nav-link dropdown-toggle" href="#" id="postDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   Pages
                 </a>
                 <div class="dropdown-menu" aria-labelledby="postDropdown">
@@ -454,10 +454,10 @@ if (!function_exists('chesterStandardMenu')) {
           $user_name = preg_replace("/( +)/", '&nbsp;', htmlspecialchars($currentUser->getFirstName())); ?>
           <ul class="navbar-nav">
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+              <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
                 <?= $user_name ?> <i class="fa fa-user-circle-o" aria-hidden="true"></i>
               </a>
-              <div class="dropdown-menu dropdown-menu-right">
+              <div class="dropdown-menu dropdown-menu-end">
                 <span class="dropdown-item-text">Signed&nbsp;in&nbsp;as&nbsp;<strong><?= $user_name ?></strong></span>
                 <div class="dropdown-divider"></div>
                 <?php $perms = $currentUser->getPrintPermissions();
@@ -466,12 +466,6 @@ if (!function_exists('chesterStandardMenu')) {
                   <?php foreach ($perms as $perm => $name) { ?>
                     <a class="dropdown-item" href="<?= autoUrl("account-switch?type=" . urlencode($perm)) ?>"><?= htmlspecialchars($name) ?><?php if ($perm == $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel']) { ?> <i class="text-primary fa fa-check-circle fa-fw" aria-hidden="true"></i><?php } ?></a>
                   <?php } ?>
-                  <div class="dropdown-divider"></div>
-                <?php } ?>
-                <?php if (isset(app()->tenant) && app()->tenant->getKey('ASA_CLUB_CODE') == 'UOSZ') { ?>
-                  <h6 class="dropdown-header">UoS Swimming and Water Polo</h6>
-                  <a class="dropdown-item" target="_blank" href="https://github.com/Swimming-Club-Data-Systems/Membership/issues?q=is%3Aissue+is%3Aopen+label%3AUOSSWPC">Feature Requests and Issues</a>
-                  <a class="dropdown-item" target="_blank" href="https://www.facebook.com/groups/69294080736">Facebook Group</a>
                   <div class="dropdown-divider"></div>
                 <?php } ?>
                 <h6 class="dropdown-header">Account settings</h6>

@@ -162,19 +162,6 @@ $this->get('/robots.txt', function () {
   echo "User-agent: *\r\nDisallow: /webhooks/\r\nDisallow: /webhooks\r\nDisallow: /css\r\nDisallow: /js\r\nDisallow: /public\r\nDisallow: /files";
 });
 
-$this->group('/db', function () {
-  // Handle database migrations
-  include BASE_PATH . 'controllers/migrations/router.php';
-});
-
-$this->get('/public/*/viewer', function () {
-  $array = $this->getArrayCopy();
-  $filename = $array[sizeof($array) - 1];
-  // pre($filename);
-  $type = 'public';
-  require BASE_PATH . 'controllers/public/Viewer.php';
-});
-
 $this->get('/public/css/colour.css', function () {
   require BASE_PATH . 'public/css/colour.css';
 });
@@ -708,13 +695,6 @@ if (empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) {
     }
   }
 }
-
-$this->get('/files/*/viewer', function () {
-  $array = $this->getArrayCopy();
-  $filename = $array[sizeof($array) - 1];
-  $type = 'files';
-  require BASE_PATH . 'controllers/public/Viewer.php';
-});
 
 $this->get('/files/*', function () {
   $array = $this->getArrayCopy();

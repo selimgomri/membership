@@ -26,12 +26,10 @@ include BASE_PATH . "views/paymentsMenu.php";
   </nav>
 	<div>
 		<h1>Find a parent's transaction history</h1>
-		<div class="form-group">
-	    <label class="sr-only" for="search">Search by Surname</label>
+		<div class="mb-3">
+	    <label class="visually-hidden" for="search">Search by Surname</label>
 			<div class="input-group">
-				<div class="input-group-prepend">
-			    <span class="input-group-text">Search</span>
-			  </div>
+				<span class="input-group-text">Search</span>
 	    	<input class="form-control" placeholder="Surname" id="search" name="search" value="<?=htmlspecialchars($search)?>">
 			</div>
 	  </div>

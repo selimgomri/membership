@@ -146,7 +146,7 @@ function loadListeners() {
       document.getElementById('contact-number').value = event.target.dataset.contactNumber;
 
       // Set footer
-      // <button type="button" class="btn btn-dark" data-dismiss="modal">Cancel</button>
+      // <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Cancel</button>
       let dismissButton = document.createElement('BUTTON');
       dismissButton.classList.add('btn', 'btn-dark');
       dismissButton.dataset.dismiss = 'modal';
@@ -166,7 +166,8 @@ function loadListeners() {
       modal.removeEventListener('submit', newContactSubmitHandler);
       modal.addEventListener('submit', editContactSubmitHandler);
 
-      $('#edit-delete-modal').modal('show');
+      let modal = new bootstrap.Modal(document.getElementById('edit-delete-modal'));
+      modal.show();
     }
     if (event.target.dataset.type && event.target.dataset.type == 'delete-button') {
       // Handle delete
@@ -184,7 +185,7 @@ function loadListeners() {
       modalBody.appendChild(p);
 
       // Set footer
-      // <button type="button" class="btn btn-dark" data-dismiss="modal">Cancel</button>
+      // <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Cancel</button>
       let dismissButton = document.createElement('BUTTON');
       dismissButton.classList.add('btn', 'btn-dark');
       dismissButton.dataset.dismiss = 'modal';
@@ -214,7 +215,8 @@ function loadListeners() {
             if (json.status == 200) {
               // location.reload();
               loadView();
-              $('#edit-delete-modal').modal('hide');
+              let modal = new bootstrap.Modal(document.getElementById('edit-delete-modal'));
+              modal.hide();
             } else {
               alert(json.error);
             }
@@ -228,7 +230,8 @@ function loadListeners() {
         req.send('contact-id=' + encodeURI(event.target.dataset.contactId));
       });
 
-      $('#edit-delete-modal').modal('show');
+      let modal = new bootstrap.Modal(document.getElementById('edit-delete-modal'));
+      modal.show();
     }
   });
 
@@ -242,7 +245,7 @@ function loadListeners() {
     setForm(modalBody);
 
     // Set footer
-    // <button type="button" class="btn btn-dark" data-dismiss="modal">Cancel</button>
+    // <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Cancel</button>
     let dismissButton = document.createElement('BUTTON');
     dismissButton.classList.add('btn', 'btn-dark');
     dismissButton.dataset.dismiss = 'modal';
@@ -262,7 +265,8 @@ function loadListeners() {
     modal.removeEventListener('submit', editContactSubmitHandler);
     modal.addEventListener('submit', newContactSubmitHandler);
 
-    $('#edit-delete-modal').modal('show');
+    let modal = new bootstrap.Modal(document.getElementById('edit-delete-modal'));
+    modal.show();
   });
 }
 loadListeners();
@@ -281,7 +285,8 @@ function newContactSubmitHandler(event) {
       if (json.status == 200) {
         // location.reload();
         loadView();
-        $('#edit-delete-modal').modal('hide');
+        let modal = new bootstrap.Modal(document.getElementById('edit-delete-modal'));
+        modal.hide();
       } else {
         alert(json.error);
       }
@@ -309,7 +314,8 @@ function editContactSubmitHandler(event) {
       if (json.status == 200) {
         // location.reload();
         loadView();
-        $('#edit-delete-modal').modal('hide');
+        let modal = new bootstrap.Modal(document.getElementById('edit-delete-modal'));
+        modal.hide();
       } else {
         alert(json.error);
       }

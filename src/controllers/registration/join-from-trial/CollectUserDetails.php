@@ -55,24 +55,24 @@ include BASE_PATH . 'views/header.php';
         -->
 
         <div>
-          <div class="form-row mb-3">
+          <div class="row mb-3">
             <div class="col">
-              <label for="forename">First name</label>
+              <label class="form-label" for="forename">First name</label>
               <input type="text" name="forename" id="forename" class="form-control" placeholder="First name" value="<?=htmlspecialchars(trim($value['forename']))?>" required>
               <div class="invalid-feedback">
                 Please enter a first name.
               </div>
             </div>
             <div class="col">
-              <label for="surname">Last name</label>
+              <label class="form-label" for="surname">Last name</label>
               <input type="text" name="surname" id="surname" class="form-control" placeholder="Last name" value="<?=htmlspecialchars(trim($value['surname']))?>" required>
               <div class="invalid-feedback">
                 Please enter a last name.
               </div>
             </div>
           </div>
-          <div class="form-group">
-            <label for="email">Email address</label>
+          <div class="mb-3">
+            <label class="form-label" for="email">Email address</label>
             <input type="email" name="email-addr" id="email-addr" class="form-control" placeholder="abc@example.com" value="<?=htmlspecialchars(trim($value['email-addr']))?>" required>
             <div class="invalid-feedback">
               Please enter a valid email.
@@ -82,8 +82,8 @@ include BASE_PATH . 'views/header.php';
             </div>
           </div>
 
-          <div class="form-group">
-            <label for="mobile">Mobile number</label>
+          <div class="mb-3">
+            <label class="form-label" for="mobile">Mobile number</label>
             <input type="tel" name="mobile" id="mobile" class="form-control" placeholder="07123456789" value="<?=htmlspecialchars(trim($value['mobile']))?>" required>
             <div class="invalid-feedback">
               Please enter a number.
@@ -96,16 +96,16 @@ include BASE_PATH . 'views/header.php';
 
         <h2>Set a password</h2>
         <div>
-          <div class="form-row mb-3">
+          <div class="row mb-3">
             <div class="col">
-              <label for="password1">Password</label>
+              <label class="form-label" for="password1">Password</label>
               <input type="password" name="password1" id="password1" class="form-control" placeholder="Password" value="<?=htmlspecialchars(trim($value['password1']))?>" required>
               <div class="invalid-feedback">
                 Please enter a password.
               </div>
             </div>
             <div class="col">
-              <label for="password2">Confirm password</label>
+              <label class="form-label" for="password2">Confirm password</label>
               <input type="password" name="password2" id="password2" class="form-control" placeholder="Password" value="<?=htmlspecialchars(trim($value['password2']))?>" required>
               <div class="invalid-feedback">
                 Please enter a password.
@@ -116,18 +116,18 @@ include BASE_PATH . 'views/header.php';
 
         <h2>Choose notification preferences </h2>
         <div class="mb-3">
-          <div class="custom-control custom-checkbox">
-            <input type="checkbox" class="custom-control-input"
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox"
             name="allow-email" id="allow-email" value="1" <?=$email?> checked>
-            <label class="custom-control-label" for="allow-email">
+            <label class="form-check-label" for="allow-email">
               I wish to receive important email updates about my squads
             </label>
           </div>
 
-          <div class="custom-control custom-checkbox">
-            <input type="checkbox" class="custom-control-input" name="allow-sms"
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="allow-sms"
             id="allow-sms" value="1" <?=$sms?> checked>
-            <label class="custom-control-label" for="allow-sms">
+            <label class="form-check-label" for="allow-sms">
               I wish to receive text message notifications
             </label>
           </div>

@@ -95,12 +95,12 @@ $_SESSION['TENANT-' . app()->tenant->getId()]['RegistrationMode'] = $mode;
         <div class="row">
           <div class="col-md-10 col-lg-8">
 
-            <div class="form-row">
+            <div class="row">
 
               <div class="col">
 
-                <div class="form-group">
-                  <label for="forename">First Name</label>
+                <div class="mb-3">
+                  <label class="form-label" for="forename">First Name</label>
                   <input class="form-control" type="text" name="forename"
                   id="forename" placeholder="First" required
                   value="<?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['RegistrationForename'])) { ?><?=htmlspecialchars($_SESSION['TENANT-' . app()->tenant->getId()]['RegistrationForename'])?><?php } ?>" autocomplete="given-name">
@@ -113,8 +113,8 @@ $_SESSION['TENANT-' . app()->tenant->getId()]['RegistrationMode'] = $mode;
 
               <div class="col">
 
-                <div class="form-group">
-                  <label for="surname">Last Name</label>
+                <div class="mb-3">
+                  <label class="form-label" for="surname">Last Name</label>
                   <input class="form-control" type="text" name="surname"
                   id="surname" placeholder="Last" required
                   value="<?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['RegistrationSurname'])) { ?><?=htmlspecialchars($_SESSION['TENANT-' . app()->tenant->getId()]['RegistrationSurname'])?><?php } ?>" autocomplete="family-name">
@@ -127,8 +127,8 @@ $_SESSION['TENANT-' . app()->tenant->getId()]['RegistrationMode'] = $mode;
 
             </div>
 
-            <div class="form-group">
-              <label for="email">Email Address</label>
+            <div class="mb-3">
+              <label class="form-label" for="email">Email Address</label>
               <input class="form-control mb-0 text-lowercase" type="email" name="email" id="email-address" placeholder="yourname@example.com" required value="<?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['RegistrationEmail'])) { ?><?=htmlspecialchars($_SESSION['TENANT-' . app()->tenant->getId()]['RegistrationEmail'])?><?php } ?>" autocomplete="email">
               <small id="emailHelp" class="form-text text-muted">
                 Your email address will only be used inside <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?> and SCDS.
@@ -141,8 +141,8 @@ $_SESSION['TENANT-' . app()->tenant->getId()]['RegistrationMode'] = $mode;
         </div>
         <div class="row">
           <div class="col-md-10 col-lg-8">
-            <div class="form-group">
-              <label for="mobile">Mobile Number</label>
+            <div class="mb-3">
+              <label class="form-label" for="mobile">Mobile Number</label>
               <input class="form-control" type="tel" pattern="\+{0,1}[0-9]*" name="mobile" id="mobile" placeholder="01234 567890" required value="<?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['RegistrationMobile'])) { ?><?=htmlspecialchars($_SESSION['TENANT-' . app()->tenant->getId()]['RegistrationMobile'])?><?php } ?>" autocomplete="tel">
               <small id="mobileHelp" class="form-text text-muted">If you don't have a mobile, use your landline number.</small>
               <div class="invalid-feedback">
@@ -155,10 +155,10 @@ $_SESSION['TENANT-' . app()->tenant->getId()]['RegistrationMode'] = $mode;
         <!--<h2>Password</h2>-->
         <div class="row">
           <div class="col-md-10 col-lg-8">
-            <div class="form-row">
+            <div class="row">
               <div class="col">
-                <div class="form-group">
-                  <label for="password1">Password</label>
+                <div class="mb-3">
+                  <label class="form-label" for="password1">Password</label>
                   <input class="form-control" type="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" aria-describedby="pwHelp" name="password1" id="password1" placeholder="Password" required autocomplete="new-password">
                   <small id="pwHelp" class="form-text text-muted">Use 8 characters or more, with at least one lowercase letter, at least one uppercase letter and at least one number</small>
                   <div class="invalid-feedback">
@@ -168,8 +168,8 @@ $_SESSION['TENANT-' . app()->tenant->getId()]['RegistrationMode'] = $mode;
               </div>
 
               <div class="col">
-                <div class="form-group">
-                  <label for="password2">Confirm Password</label>
+                <div class="mb-3">
+                  <label class="form-label" for="password2">Confirm Password</label>
                   <input class="form-control" type="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" name="password2" id="password2" aria-describedby="pwConfirmHelp" placeholder="Password" required autocomplete="new-password">
                   <small id="pwConfirmHelp" class="form-text text-muted">Repeat your password</small>
                   <div class="invalid-feedback">
@@ -197,22 +197,22 @@ $_SESSION['TENANT-' . app()->tenant->getId()]['RegistrationMode'] = $mode;
 
         <div class="row">
           <div class="col-md-10 col-lg-8">
-            <div class="form-group">
-              <div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input"
+            <div class="mb-3">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox"
                 name="emailAuthorise" id="emailAuthorise" value="1" <?=$email?>>
-                <label class="custom-control-label" for="emailAuthorise">
+                <label class="form-check-label" for="emailAuthorise">
                   I wish to receive important email updates about my squads.
                   This includes emails about session cancellations.
                 </label>
               </div>
             </div>
 
-            <div class="form-group">
-              <div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input"
+            <div class="mb-3">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox"
                 name="smsAuthorise" id="smsAuthorise" value="1" <?=$sms?>>
-                <label class="custom-control-label" for="smsAuthorise">
+                <label class="form-check-label" for="smsAuthorise">
                   I wish to receive text message notifications
                 </label>
               </div>

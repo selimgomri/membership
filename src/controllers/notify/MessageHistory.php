@@ -91,7 +91,7 @@ include BASE_PATH . "views/notifyMenu.php"; ?>
         </div>
       <?php } else { ?>
         <p class="lead">
-          Page <?php echo $page; ?> of <?php echo $numPages; ?>
+          Page <?= htmlspecialchars($page) ?> of <?= htmlspecialchars($numPages) ?>
         </p>
         <?php do {
           $info = json_decode($row['JSONData']);
@@ -109,13 +109,11 @@ include BASE_PATH . "views/notifyMenu.php"; ?>
             }
           }
         ?>
-          <div class="cell p-0">
-            <div class="p-3">
-              <p>
-                <strong>
-                  <?= htmlspecialchars($row['Subject']) ?>
-                </strong>
-              </p>
+          <div class="card mb-3">
+            <div class="card-header">
+              <h5 class="card-title">
+                <?= htmlspecialchars($row['Subject']) ?>
+              </h5>
               <dl class="row mb-0 small">
                 <?php echo $sender; ?>
                 <?php if ($row['JSONData'] != "") { ?>
@@ -137,7 +135,7 @@ include BASE_PATH . "views/notifyMenu.php"; ?>
                     $array = array_merge($squads, $lists, $galas);
                     sort($array);
                     foreach ($array as $s) { ?>
-                      <span class="badge badge-pill rounded badge-dark">
+                      <span class="badge rounded-pill rounded bg-dark">
                         <?= htmlspecialchars(mb_strimwidth($s, 0, 40)) ?>
                       </span><?php
                             } ?>
@@ -170,6 +168,7 @@ include BASE_PATH . "views/notifyMenu.php"; ?>
                       foreach ($attachments as $a) {
                         $faClass = ' fa-file-o ';
                         $download = false;
+                        $disposition = 'inline';
 
                         if (isset($a->MIME) && $a->MIME) {
 
@@ -208,8 +207,10 @@ include BASE_PATH . "views/notifyMenu.php"; ?>
                           $download = true;
                         }
 
+                        if ($download) $disposition = 'attachment';
+
                       ?>
-                        <a href="<?= htmlspecialchars(autoUrl("files/" . $a->URI)) ?>" class="d-block mb-1 text-truncate text-decoration-none" <?php if ($download) { ?> download="" <?php } else { ?> target="_blank" <?php } ?>>
+                        <a href="<?= htmlspecialchars(autoUrl("files/" . $a->URI . "?filename=" . urlencode($a->Filename) . "&disposition=" . urlencode($disposition))) ?>" class="d-block mb-1 text-truncate text-decoration-none" <?php if ($download) { ?> download="" <?php } else { ?> target="_blank" <?php } ?>>
                           <span class="fa <?= htmlspecialchars($faClass) ?> fa-fw"></span> <?= htmlspecialchars($a->Filename) ?>
                         </a>
                       <?php
@@ -219,7 +220,7 @@ include BASE_PATH . "views/notifyMenu.php"; ?>
               </dl>
             <?php } ?>
             </div>
-            <div class="p-3 pt-0 bg-light force-wrap">
+            <div class="card-body force-wrap">
               <?php echo $row['Message']; ?>
             </div>
           </div>

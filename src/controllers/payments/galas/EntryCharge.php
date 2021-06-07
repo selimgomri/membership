@@ -188,15 +188,13 @@ include BASE_PATH . 'views/header.php';
 								</div>
 								<?php } ?>
 
-								<div class="form-group mb-0">
-									<label for="<?=$entry['EntryID']?>-amount">
+								<div class="mb-3 mb-0">
+									<label class="form-label" for="<?=$entry['EntryID']?>-amount">
 										Amount to charge
 									</label>
 									<div class="input-group">
-										<div class="input-group-prepend">
-											<div class="input-group-text mono">&pound;</div>
-										</div>
-										<input type="number" pattern="[0-9]*([\.,][0-9]*)?" class="form-control mono" id="<?=$entry['EntryID']?>-amount" name="<?=$entry['EntryID']?>-amount" placeholder="0.00" value="<?=htmlspecialchars((string) (\Brick\Math\BigDecimal::of((string) $entry['FeeToPay'])->toScale(2)))?>" <?php if ($hasNoDD || $entry['Charged'] || $notReady) { ?> disabled <?php } ?> min="0" max="150" step="0.01">
+										<div class="input-group-text font-monospace">&pound;</div>
+										<input type="number" pattern="[0-9]*([\.,][0-9]*)?" class="form-control font-monospace" id="<?=$entry['EntryID']?>-amount" name="<?=$entry['EntryID']?>-amount" placeholder="0.00" value="<?=htmlspecialchars((string) (\Brick\Math\BigDecimal::of((string) $entry['FeeToPay'])->toScale(2)))?>" <?php if ($hasNoDD || $entry['Charged'] || $notReady) { ?> disabled <?php } ?> min="0" max="150" step="0.01">
 									</div>
 								</div>
 							</div>

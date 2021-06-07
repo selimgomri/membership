@@ -131,7 +131,7 @@ ob_start();?>
                 <strong>Age at end of year:</strong> <?=htmlspecialchars($entry->age_at_end_of_year)?><br>
               </p>
             </div>
-            <div class="split-50 text-right">
+            <div class="split-50 text-end">
               <?php if ($entry->charged && isset($entry->payment_intent->id) && $entry->payment_intent->id != null) { ?>
               <p>Paid for by credit/debit card</p>
               <?php } else if ($entry->charged && isset($entry->payment_item->id) && $entry->payment_item->id != null) { ?>

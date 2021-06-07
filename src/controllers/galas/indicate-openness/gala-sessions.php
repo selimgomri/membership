@@ -67,8 +67,8 @@ include BASE_PATH . 'views/header.php';
       <form method="post">
 
         <?php if ($session == null) { ?>
-        <div class="form-group">
-          <label for="numSessions">Number of sessions</label>
+        <div class="mb-3">
+          <label class="form-label" for="numSessions">Number of sessions</label>
           <input type="number" class="form-control" id="numSessions" name="numSessions" placeholder="Enter number of sessions" aria-describedby="numSessionsHelp">
           <small id="numSessionsHelp" class="form-text text-muted">We'll try to automatically name sessions. You can change these names in a moment.</small>
         </div>
@@ -77,8 +77,8 @@ include BASE_PATH . 'views/header.php';
           do { ?>
         <div class="row align-items-end mb-3">
           <div class="col-9">
-            <div class="form-group mb-0">
-              <label for="session-<?=$session['ID']?>">Session <?=$i?> name</label>
+            <div class="mb-3 mb-0">
+              <label class="form-label" for="session-<?=$session['ID']?>">Session <?=$i?> name</label>
               <input type="text" class="form-control" id="session-<?=$session['ID']?>" name="session-<?=$session['ID']?>" value="<?=htmlspecialchars($session['Name'])?>" placeholder="Enter name of session">
             </div>
           </div>
@@ -89,8 +89,8 @@ include BASE_PATH . 'views/header.php';
           </div>
         </div>
         <?php $i++; } while ($session = $getSessions->fetch(PDO::FETCH_ASSOC)); ?>
-        <div class="form-group">
-          <label for="newSession">Add a session</label>
+        <div class="mb-3">
+          <label class="form-label" for="newSession">Add a session</label>
           <input type="text" class="form-control" id="newSession" name="newSession" placeholder="Enter name of new session">
         </div>
         <?php } ?>

@@ -102,11 +102,11 @@ include BASE_PATH . 'views/header.php';
               </p>
 
               <p>
-                Status: <span class="mono bg-light p-1"><?= htmlspecialchars($dispute['Status']) ?></span>
+                Status: <span class="font-monospace bg-light p-1"><?= htmlspecialchars($dispute['Status']) ?></span>
               </p>
 
               <p>
-                Reason: <span class="mono bg-light p-1"><?= htmlspecialchars($dispute['Reason']) ?></span>
+                Reason: <span class="font-monospace bg-light p-1"><?= htmlspecialchars($dispute['Reason']) ?></span>
               </p>
 
               <?php if (!bool($dispute['EvidencePastDue']) && $evidenceDue) { ?>

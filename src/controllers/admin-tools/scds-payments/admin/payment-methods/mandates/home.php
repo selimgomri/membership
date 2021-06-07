@@ -33,8 +33,8 @@ include BASE_PATH . "views/root/head.php";
         <p class="mb-0">Manage your Direct Debit Instruction</p>
       </div>
     </div>
-    <div class="d-none d-sm-flex col-sm-auto ml-auto">
-      <img style="max-height:50px;" src="<?= htmlspecialchars(autoUrl("public/img/directdebit/directdebit.png")) ?>" srcset="<?= htmlspecialchars(autoUrl("public/img/directdebit/directdebit@2x.png")) ?> 2x, <?= htmlspecialchars(autoUrl("public/img/directdebit/directdebit@3x.png")) ?> 3x" alt="Direct Debit Logo">
+    <div class="d-none d-sm-flex col-sm-auto ms-auto">
+      <img style="max-height:50px;" src="<?= htmlspecialchars(autoUrl("img/directdebit/directdebit.png", false)) ?>" srcset="<?= htmlspecialchars(autoUrl("img/directdebit/directdebit@2x.png", false)) ?> 2x, <?= htmlspecialchars(autoUrl("img/directdebit/directdebit@3x.png", false)) ?> 3x" alt="Direct Debit Logo">
     </div>
   </div>
 
@@ -85,17 +85,17 @@ include BASE_PATH . "views/root/head.php";
             $methodDetails = json_decode($mandate['MethodDetails']);
           ?>
             <li class="list-group-item" id="<?= htmlspecialchars('mandate-' . $mandate['ID']) ?>">
-              <h2><?= htmlspecialchars(implode("-", str_split($json->sort_code, 2))) ?> - &middot;&middot;&middot;&middot;<?= htmlspecialchars($json->last4) ?><?php if ($default == $mandate['ID']) { ?> <span class="badge badge-success">Default</span><?php } ?></h2>
+              <h2><?= htmlspecialchars(implode("-", str_split($json->sort_code, 2))) ?> - &middot;&middot;&middot;&middot;<?= htmlspecialchars($json->last4) ?><?php if ($default == $mandate['ID']) { ?> <span class="badge bg-success">Default</span><?php } ?></h2>
 
               <dl class="row">
                 <dt class="col-sm-3">Sort code</dt>
-                <dd class="col-sm-9 mono"><?= htmlspecialchars(implode("-", str_split($json->sort_code, 2))) ?></dd>
+                <dd class="col-sm-9 font-monospace"><?= htmlspecialchars(implode("-", str_split($json->sort_code, 2))) ?></dd>
 
                 <dt class="col-sm-3">Account number</dt>
-                <dd class="col-sm-9 mono">&middot;&middot;&middot;&middot;<?= htmlspecialchars($json->last4) ?></dd>
+                <dd class="col-sm-9 font-monospace">&middot;&middot;&middot;&middot;<?= htmlspecialchars($json->last4) ?></dd>
 
                 <dt class="col-sm-3">Payment reference</dt>
-                <dd class="col-sm-9 mono"><?= htmlspecialchars($methodDetails->bacs_debit->reference) ?></dd>
+                <dd class="col-sm-9 font-monospace"><?= htmlspecialchars($methodDetails->bacs_debit->reference) ?></dd>
 
                 <dt class="col-sm-3">Active</dt>
                 <dd class="col-sm-9"><?php if ($mandate['Status'] == 'active') { ?>Yes<?php } else { ?>No<?php } ?></dd>
@@ -126,8 +126,8 @@ include BASE_PATH . "views/root/head.php";
         </div>
         <div class="card-body">
           <form method="post">
-            <div class="form-group">
-              <select class="custom-select" id="default-mandate" name="default-mandate">
+            <div class="mb-3">
+              <select class="form-select" id="default-mandate" name="default-mandate">
                 <option <?php if ($default == null) { ?>selected<?php } ?> disabled value="nothing">Select a default mandate</option>
                 <?php while ($mandate = $getUsableMandates->fetch(PDO::FETCH_ASSOC)) {
                   $json = json_decode($mandate['TypeData']);

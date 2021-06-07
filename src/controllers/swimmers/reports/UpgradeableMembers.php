@@ -94,10 +94,10 @@ include BASE_PATH . 'views/header.php';
                 <div class="mb-3 d-md-none"></div>
               </div>
               <div class="col-md">
-                <label for="<?=htmlspecialchars("se-cat-" . $member['id'])?>" class="d-none">
+                <label class="form-label" for="<?=htmlspecialchars("se-cat-" . $member['id'])?>" class="d-none">
                   Swim England Membership Category
                 </label>
-                <select class="custom-select" id="<?=htmlspecialchars("se-cat-" . $member['id'])?>" name="<?=htmlspecialchars("se-cat-" . $member['id'])?>">
+                <select class="form-select" id="<?=htmlspecialchars("se-cat-" . $member['id'])?>" name="<?=htmlspecialchars("se-cat-" . $member['id'])?>">
                   <option value="0" <?php if ($member['cat'] == 0) { ?>selected<?php } ?>>Not an SE member</option>
                   <option value="1" <?php if ($member['cat'] == 1) { ?>selected<?php } ?>>SE Cat One</option>
                   <option value="2" <?php if ($member['cat'] == 2) { ?>selected<?php } ?>>SE Cat Two</option>
@@ -105,7 +105,7 @@ include BASE_PATH . 'views/header.php';
                 </select>
                 <div class="mb-3 d-md-none"></div>
               </div>
-              <div class="col-md text-md-right">
+              <div class="col-md text-md-end">
                 <?=htmlspecialchars($dob->format("j F Y"))?> (<?=htmlspecialchars($age)?>)
               </div>
             </div>

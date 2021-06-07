@@ -123,16 +123,16 @@ include "galaMenu.php"; ?>
         if ($galaData->getEvent($swimsArray[$i])->isEnabled()) {
           if ($row[$swimsArray[$i]] == 1) { ?>
             <div class="col-sm-4 col-md-2">
-              <div class="custom-control custom-checkbox">
-                <input type="checkbox" value="1" class="custom-control-input" id="<?php echo $swimsArray[$i]; ?>" checked <?php echo $disabled; ?>  name="<?php echo $swimsArray[$i]; ?>" data-event-fee="<?=htmlspecialchars($galaData->getEvent($swimsArray[$i])->getPrice())?>">
-                <label class="custom-control-label" for="<?php echo $swimsArray[$i]; ?>"><?php echo $swimsTextArray[$i]; ?></label>
+              <div class="form-check">
+                <input type="checkbox" value="1" class="form-check-input" id="<?php echo $swimsArray[$i]; ?>" checked <?php echo $disabled; ?>  name="<?php echo $swimsArray[$i]; ?>" data-event-fee="<?=htmlspecialchars($galaData->getEvent($swimsArray[$i])->getPrice())?>">
+                <label class="form-check-label" for="<?php echo $swimsArray[$i]; ?>"><?php echo $swimsTextArray[$i]; ?></label>
               </div>
             </div>
           <?php } else { ?>
             <div class="col-sm-4 col-md-2">
-              <div class="custom-control custom-checkbox">
-                <input type="checkbox" value="1" class="custom-control-input" id="<?php echo $swimsArray[$i]; ?>" <?php echo $disabled; ?>  name="<?php echo $swimsArray[$i]; ?>" data-event-fee="<?=htmlspecialchars($galaData->getEvent($swimsArray[$i])->getPrice())?>">
-                <label class="custom-control-label" for="<?php echo $swimsArray[$i]; ?>"><?php echo $swimsTextArray[$i]; ?></label>
+              <div class="form-check">
+                <input type="checkbox" value="1" class="form-check-input" id="<?php echo $swimsArray[$i]; ?>" <?php echo $disabled; ?>  name="<?php echo $swimsArray[$i]; ?>" data-event-fee="<?=htmlspecialchars($galaData->getEvent($swimsArray[$i])->getPrice())?>">
+                <label class="form-check-label" for="<?php echo $swimsArray[$i]; ?>"><?php echo $swimsTextArray[$i]; ?></label>
               </div>
             </div>
           <?php }
@@ -162,7 +162,7 @@ include "galaMenu.php"; ?>
         <p class="lead"><?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent') { ?>You<?php } else { ?><?=htmlspecialchars($parentName)?><?php } ?> paid for this gala entry by card</p>
         <div class="row align-items-center mb-3">
           <div class="col-auto">
-            <img src="<?=autoUrl("public/img/stripe/" . $row['Brand'] . ".png")?>" srcset="<?=autoUrl("public/img/stripe/" . $row['Brand'] . "@2x.png")?> 2x, <?=autoUrl("public/img/stripe/" . $row['Brand'] . "@3x.png")?> 3x" style="width:40px;"> <span class="sr-only"><?=htmlspecialchars(getCardBrand($row['Brand']))?></span>
+            <img src="<?=autoUrl("img/stripe/" . $row['Brand'] . ".png", false)?>" srcset="<?=autoUrl("img/stripe/" . $row['Brand'] . "@2x.png", false)?> 2x, <?=autoUrl("img/stripe/" . $row['Brand'] . "@3x.png", false)?> 3x" style="width:40px;"> <span class="visually-hidden"><?=htmlspecialchars(getCardBrand($row['Brand']))?></span>
           </div>
           <div class="col-auto">
             <p class="my-0">

@@ -52,7 +52,7 @@ include BASE_PATH . "views/root/header.php";
       <?php } else { ?>
         <h1>No club</h1>
         <p class="lead">
-          We could not find a tenant matching <span class="mono"><?= htmlspecialchars($club) ?></span>.
+          We could not find a tenant matching <span class="font-monospace"><?= htmlspecialchars($club) ?></span>.
         </p>
 
         <p>

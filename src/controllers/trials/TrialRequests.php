@@ -44,7 +44,7 @@ include BASE_PATH . 'views/header.php';
           Contact <?=htmlspecialchars($parent['PFirst'] . ' ' . $parent['PLast'])?> via email at <a href="mailto:<?=htmlspecialchars($parent['Email'])?>"><?=htmlspecialchars($parent['Email'])?></a>
         </p>
 
-        <div class="form-row">
+        <div class="row">
           <div class="col-md">
             <a href="<?=autoUrl("trials/" . $parent['ID'])?>" class="btn btn-block btn-dark">
               Trial Info
@@ -65,10 +65,10 @@ include BASE_PATH . 'views/header.php';
 
           <div class="col-md">
             <div class="dropdown">
-              <button class="btn btn-block btn-danger dropdown-toggle" type="button" id="deleteDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <button class="btn btn-block btn-danger dropdown-toggle" type="button" id="deleteDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Advanced
               </button>
-              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="deleteDropdown">
+              <div class="dropdown-menu dropdown-menu-end" aria-labelledby="deleteDropdown">
                 <a class="dropdown-item" href="<?=autoUrl($url_path . $parent['Hash'] . "/cancel/" . $parent['ID'])?>?redirect=<?=urlencode(autoUrl("trials"))?>">Cancel Trial Request</a>
               </div>
             </div>

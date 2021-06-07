@@ -201,7 +201,7 @@ function mySwimmersTable($link = null, $userID)
               </ul>
               <div class="mb-3 d-sm-none"></div>
             </div>
-            <div class="col text-sm-right">
+            <div class="col text-sm-end">
               <p class="mb-0">
                 <a href="https://www.swimmingresults.org/biogs/biogs_details.php?tiref=<?= htmlspecialchars($swimmer['ASANumber']) ?>" target="_blank" title="Swim England Biographical Data"><?= htmlspecialchars($swimmer['ASANumber']) ?> <i class="fa fa-external-link" aria-hidden="true"></i></a>
               </p>
@@ -260,15 +260,15 @@ function myMonthlyFeeTable($link = null, $userID)
     $ret = '<ul class="list-group">';
 
     // Squad fees
-    $ret .= '<li class="list-group-item"><div class="row"><div class="col">Squad fees</div><div class="col text-right">&pound;' . htmlspecialchars((string) \Brick\Math\BigInteger::of((string) $fees['squad_total'])->toBigDecimal()->withPointMovedLeft(2)) . '</div></div></li>';
+    $ret .= '<li class="list-group-item"><div class="row"><div class="col">Squad fees</div><div class="col text-end">&pound;' . htmlspecialchars((string) \Brick\Math\BigInteger::of((string) $fees['squad_total'])->toBigDecimal()->withPointMovedLeft(2)) . '</div></div></li>';
 
     // Extra fees
-    $ret .= '<li class="list-group-item"><div class="row"><div class="col">Extra fees</div><div class="col text-right">&pound;' . htmlspecialchars((string) \Brick\Math\BigInteger::of((string) $fees['extra_total'])->toBigDecimal()->withPointMovedLeft(2)) . '</div></div></li>';
+    $ret .= '<li class="list-group-item"><div class="row"><div class="col">Extra fees</div><div class="col text-end">&pound;' . htmlspecialchars((string) \Brick\Math\BigInteger::of((string) $fees['extra_total'])->toBigDecimal()->withPointMovedLeft(2)) . '</div></div></li>';
 
     $total = $fees['squad_total'] + $fees['extra_total'];
 
     // Total fees
-    $ret .= '<li class="list-group-item font-weight-bold bg-light"><div class="row"><div class="col">Monthly total</div><div class="col text-right">&pound;' . htmlspecialchars((string) \Brick\Math\BigInteger::of((string) $total)->toBigDecimal()->withPointMovedLeft(2)) . '</div></div></li>';
+    $ret .= '<li class="list-group-item font-weight-bold bg-light"><div class="row"><div class="col">Monthly total</div><div class="col text-end">&pound;' . htmlspecialchars((string) \Brick\Math\BigInteger::of((string) $total)->toBigDecimal()->withPointMovedLeft(2)) . '</div></div></li>';
 
     $ret .= '</ul>';
 
@@ -290,7 +290,25 @@ function autoUrl($relative, $includeClub = true)
 
   if (isset(app()->tenant)) {
     $club = app()->tenant;
-    if ($club && $includeClub && !getenv('MAIN_DOMAIN')) {
+    if ($club && $includeClub && getenv('DOMAIN_TYPE') == 'PRIMARY') {
+      if ($club->getCode()) {
+        $rootUrl .= mb_strtolower($club->getCode()) . '/';
+      } else if ($club->getId()) {
+        $rootUrl .= $club->getId() . '/';
+      }
+    }
+  }
+
+  return rtrim($rootUrl . $relative, '/');
+}
+
+function webhookUrl($relative, $includeClub = true) {
+  // Returns an absolute URL
+  $rootUrl = getenv('ROOT_URL');
+
+  if (isset(app()->tenant)) {
+    $club = app()->tenant;
+    if ($club && $includeClub) {
       if ($club->getCode()) {
         $rootUrl .= mb_strtolower($club->getCode()) . '/';
       } else if ($club->getId()) {
@@ -483,7 +501,7 @@ function paymentHistory($link = null, $user, $type = null)
                 <?php echo date('j F Y', strtotime($row['Date'])); ?>
               </p>
             </div>
-            <div class="col text-right">
+            <div class="col text-end">
               <p class="mb-0">
                 <strong>&pound;<?= (string) (\Brick\Math\BigDecimal::of((string) $row['Amount']))->withPointMovedLeft(2)->toScale(2) ?></strong>
               </p>
@@ -525,7 +543,7 @@ function feesToPay($link = null, $user)
                 <?= date('j F Y', strtotime($row['Date'])) ?>
               </p>
             </div>
-            <div class="col text-right">
+            <div class="col text-end">
               <p class="mb-0">
                 <?php if ($row['Type'] == 'Payment') { ?>
                   &pound;<?= (string) (\Brick\Math\BigDecimal::of((string) $row['Amount']))->withPointMovedLeft(2)->toScale(2) ?>

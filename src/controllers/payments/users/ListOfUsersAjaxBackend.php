@@ -24,8 +24,8 @@ $target = $_POST['target'];
 if ($row = $getSearch->fetch(PDO::FETCH_ASSOC)) {
   $output = '
   <div class="table-responsive-md">
-    <table class="table table-hover mb-0">
-      <thead class="thead-light">
+    <table class="table table-hover mb-0 table-light">
+      <thead>
         <tr>
           <th>Name</th>
 					<th>DD Status</th>

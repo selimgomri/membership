@@ -270,10 +270,10 @@ include BASE_PATH . 'views/header.php';
 
         <?php } ?>
 
-        <div class="form-group">
-          <div class="custom-control custom-checkbox">
-            <input type="checkbox" value="1" class="custom-control-input" name="agreement" id="agreement" required>
-            <label class="custom-control-label" for="agreement">
+        <div class="mb-3">
+          <div class="form-check">
+            <input type="checkbox" value="1" class="form-check-input" name="agreement" id="agreement" required>
+            <label class="form-check-label" for="agreement">
               I, <?=$name?> agree to the Code of Conduct of <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?> as
               outlined above
             </label>

@@ -49,15 +49,15 @@ include BASE_PATH . 'views/header.php';
         <form method="post">
 
           <p>When a new member is assigned to multiple squads, what should we charge them?.</p>
-          <div class="form-group">
-            <label for="upgrade">Options</label>
-            <div class="custom-control custom-radio">
-              <input type="radio" id="full-fee" value="Full" name="fee-option" class="custom-control-input" <?php if ($option == 'Full') { ?>checked<?php } ?>>
-              <label class="custom-control-label" for="full-fee">Charge the full fee for all squads</label>
+          <div class="mb-3">
+            <label class="form-label" for="upgrade">Options</label>
+            <div class="form-check">
+              <input type="radio" id="full-fee" value="Full" name="fee-option" class="form-check-input" <?php if ($option == 'Full') { ?>checked<?php } ?>>
+              <label class="form-check-label" for="full-fee">Charge the full fee for all squads</label>
             </div>
-            <div class="custom-control custom-radio">
-              <input type="radio" id="max-fee" value="MaxFee" name="fee-option" class="custom-control-input" <?php if ($option == 'MaxFee') { ?>checked<?php } ?> disabled>
-              <label class="custom-control-label" for="max-fee">Charge the maximum fee (from the member's squads)</label>
+            <div class="form-check">
+              <input type="radio" id="max-fee" value="MaxFee" name="fee-option" class="form-check-input" <?php if ($option == 'MaxFee') { ?>checked<?php } ?> disabled>
+              <label class="form-check-label" for="max-fee">Charge the maximum fee (from the member's squads)</label>
             </div>
           </div>
 

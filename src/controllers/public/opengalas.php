@@ -35,7 +35,7 @@ $entriesOpen = false;
 				<div>
 					<span class="title mb-0 justify-content-between align-items-start">
 						<span><?=htmlspecialchars($gala['GalaName'])?></span>
-						<span class="ml-2 badge badge-success">ENTRIES OPEN</span>
+						<span class="ms-2 badge bg-success">ENTRIES OPEN</span>
 					</span>
 					<span class="d-flex mb-3"><?=htmlspecialchars($gala['GalaVenue'])?></span>
 				</div>

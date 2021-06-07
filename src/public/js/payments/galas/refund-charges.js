@@ -7,7 +7,7 @@
 
 // Set up a listener to listen for confirm
 var modalButton = document.getElementById('modalConfirmButton');
-modalButton.addEventListener('click', function(event) {
+modalButton.addEventListener('click', function (event) {
   console.log(modalButton);
 
   // Extract the data
@@ -15,13 +15,13 @@ modalButton.addEventListener('click', function(event) {
   var entry = modalButton.dataset.entry;
   var refundAmount = modalButton.dataset.refundAmount;
   var amountRefunded = modalButton.dataset.amountRefunded;
-  
+
   modalButton.disabled = true;
   modalButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
 
   // On confirm make ajax request to server
   var xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function() {
+  xhttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
       // On response (JSON), show error state in modal or dismiss modal
       // and update details shown on the page (data supplied in JSON)
@@ -29,10 +29,11 @@ modalButton.addEventListener('click', function(event) {
       // field and hiding button if no money is refundable
       console.log(this.responseText);
       var response = JSON.parse(this.responseText);
-      $('#myModal').modal('hide');
+      let modal = new bootstrap.Modal(document.getElementById('myModal'));
+      modal.hide();
       if (response.status === 'success') {
         // Refund succeeded
-        document.getElementById(entry + '-refund-error-warning-box').innerHTML = '<div class="alert alert-success alert-dismissible fade show" role="alert"><p class="mb-0"><strong>Payment successfully refunded</strong></p><p class="mb-0">The total amount refunded is now &pound;' + (response.amount_refunded/100).toFixed(2) + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
+        document.getElementById(entry + '-refund-error-warning-box').innerHTML = '<div class="alert alert-success alert-dismissible fade show" role="alert"><p class="mb-0"><strong>Payment successfully refunded</strong></p><p class="mb-0">The total amount refunded is now &pound;' + (response.amount_refunded / 100).toFixed(2) + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
 
         // Update data shown
         // Disable buttons and fields if required  
@@ -42,7 +43,7 @@ modalButton.addEventListener('click', function(event) {
         }
 
         // Show refunded amount
-        document.getElementById(entry + '-amount-refunded').innerHTML = '<p><strong>&pound;' + (response.amount_refunded/100).toFixed(2) + '</strong> has already been refunded!</p>';
+        document.getElementById(entry + '-amount-refunded').innerHTML = '<p><strong>&pound;' + (response.amount_refunded / 100).toFixed(2) + '</strong> has already been refunded!</p>';
         // Update max value
         document.getElementById(entry + '-refund').max = (new BigNumber(response.amount_refundable)).shiftedBy(-2).decimalPlaces(2).toFormat(2);
         document.getElementById(entry + '-refund').value = null;
@@ -115,7 +116,8 @@ function clickPropogation(e) {
         modalButton.dataset.amountRefunded = amountRefunded;
         modalButton.disabled = false;
 
-        $('#myModal').modal('show');
+        let modal = new bootstrap.Modal(document.getElementById('myModal'));
+        modal.show();
       }
 
       element.blur();

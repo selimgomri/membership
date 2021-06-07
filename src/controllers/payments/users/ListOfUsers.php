@@ -18,12 +18,10 @@ include BASE_PATH . "views/paymentsMenu.php";
 <div class="container">
 	<div class="">
 		<h1 class="">Find a parent's current fees.</h1>
-		<div class="form-group">
-	    <label class="sr-only" for="search">Search by Surname</label>
+		<div class="mb-3">
+	    <label class="visually-hidden" for="search">Search by Surname</label>
 			<div class="input-group">
-				<div class="input-group-prepend">
-			    <span class="input-group-text">Search</span>
-			  </div>
+				<span class="input-group-text">Search</span>
 	    	<input class="form-control" placeholder="Surname" id="search" name="search" value="<?=htmlspecialchars($search)?>">
 			</div>
 	  </div>

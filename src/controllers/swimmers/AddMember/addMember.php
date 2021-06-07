@@ -53,10 +53,10 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 			<?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState']);
 			} ?>
 			<form method="post" class="needs-validation" novalidate>
-				<div class="form-row">
+				<div class="row g-2">
 					<div class="col-sm-4">
-						<div class="form-group">
-							<label for="forename">Forename</label>
+						<div class="mb-3">
+							<label class="form-label" for="forename">Forename</label>
 							<input type="text" class="form-control" id="forename" name="forename" placeholder="Enter a forename" required>
 							<div class="invalid-feedback">
 								Please provide a forename.
@@ -64,14 +64,14 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 						</div>
 					</div>
 					<div class="col-sm-4">
-						<div class="form-group">
-							<label for="middlenames">Middle Names</label>
+						<div class="mb-3">
+							<label class="form-label" for="middlenames">Middle Names</label>
 							<input type="text" class="form-control" id="middlenames" name="middlenames" placeholder="Enter a middlename">
 						</div>
 					</div>
 					<div class="col-sm-4">
-						<div class="form-group">
-							<label for="surname">Surname</label>
+						<div class="mb-3">
+							<label class="form-label" for="surname">Surname</label>
 							<input type="text" class="form-control" id="surname" name="surname" placeholder="Enter a surname" required>
 							<div class="invalid-feedback">
 								Please provide a surname.
@@ -79,25 +79,25 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 						</div>
 					</div>
 				</div>
-				<div class="form-group">
-					<label for="datebirth">Date of Birth</label>
+				<div class="mb-3">
+					<label class="form-label" for="datebirth">Date of Birth</label>
 					<input type="date" class="form-control" id="datebirth" name="datebirth" pattern="[0-9]{4}-[0-1]{1}[0-9]{1}-[0-3]{1}[0-9]{1}" placeholder="YYYY-MM-DD" required max="<?= htmlspecialchars($today->format('Y-m-d')) ?>" value="<?= htmlspecialchars($today->format('Y-m-d')) ?>">
 					<div class="invalid-feedback">
 						Please provide a valid date of birth, which is not in the future.
 					</div>
 				</div>
-				<div class="form-row">
+				<div class="row g-2">
 					<div class="col-sm-6">
-						<div class="form-group">
-							<label for="asa">Swim England Registration Number</label>
+						<div class="mb-3">
+							<label class="form-label" for="asa">Swim England Registration Number</label>
 							<input type="test" class="form-control" id="asa" name="asa" aria-describedby="asaHelp" placeholder="Swim England Registration Numer">
 							<small id="asaHelp" class="form-text text-muted">If a new member does not yet have a Swim England Number, leave this blank.</small>
 						</div>
 					</div>
 					<div class="col-sm-6">
-						<div class="form-group">
-							<label for="squad">Swim England Membership Category</label>
-							<select class="custom-select" placeholder="Select a Category" id="cat" name="cat" required>
+						<div class="mb-3">
+							<label class="form-label" for="squad">Swim England Membership Category</label>
+							<select class="form-select" placeholder="Select a Category" id="cat" name="cat" required>
 								<option value="0">Not a Swim England Member</option>
 								<option value="1">Category 1</option>
 								<option value="2" selected>Category 2</option>
@@ -106,9 +106,9 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 						</div>
 					</div>
 				</div>
-				<div class="form-group">
-					<label for="sex">Sex</label>
-					<select class="custom-select" id="sex" name="sex" placeholder="Select" required>
+				<div class="mb-3">
+					<label class="form-label" for="sex">Sex</label>
+					<select class="form-select" id="sex" name="sex" placeholder="Select" required>
 						<option value="Male">Male</option>
 						<option value="Female">Female</option>
 					</select>
@@ -123,9 +123,9 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 					<div class="row">
 						<?php do { ?>
 							<div class="col-6 col-md-4 col-lg-3 mb-2">
-								<div class="custom-control custom-checkbox">
-									<input type="checkbox" class="custom-control-input" id="squad-check-<?= htmlspecialchars($squad['SquadID']) ?>" name="squad-<?= htmlspecialchars($squad['SquadID']) ?>" value="1">
-									<label class="custom-control-label" for="squad-check-<?= htmlspecialchars($squad['SquadID']) ?>"><?= htmlspecialchars($squad['SquadName']) ?></label>
+								<div class="form-check">
+									<input class="form-check-input" type="checkbox" id="squad-check-<?= htmlspecialchars($squad['SquadID']) ?>" name="squad-<?= htmlspecialchars($squad['SquadID']) ?>" value="1">
+									<label class="form-check-label" for="squad-check-<?= htmlspecialchars($squad['SquadID']) ?>"><?= htmlspecialchars($squad['SquadName']) ?></label>
 								</div>
 							</div>
 						<?php } while ($squad = $squads->fetch(PDO::FETCH_ASSOC)); ?>
@@ -136,17 +136,17 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 					</p>
 				<?php } ?>
 
-				<div class="form-group">
-					<div class="custom-control custom-checkbox">
-						<input type="checkbox" class="custom-control-input" id="clubpays" name="clubpays" value="1" aria-describedby="cphelp">
-						<label class="custom-control-label" for="clubpays">Club pays Swim England fees?</label>
+				<div class="mb-3">
+					<div class="form-check">
+						<input class="form-check-input" type="checkbox" id="clubpays" name="clubpays" value="1" aria-describedby="cphelp">
+						<label class="form-check-label" for="clubpays">Club pays Swim England fees?</label>
 					</div>
 					<small id="cphelp" class="form-text text-muted">Tick the box if this swimmer will not pay any Swim England fees.</small>
 				</div>
 
-				<div class="form-group">
-					<label for="membership-class">Select membership class</label>
-					<select class="custom-select" id="membership-class" name="membership-class" required>
+				<div class="mb-3">
+					<label class="form-label" for="membership-class">Select membership class</label>
+					<select class="form-select" id="membership-class" name="membership-class" required>
 						<option value="" selected disabled>Choose a club membership class</option>
 						<?php do { ?>
 							<option value="<?= htmlspecialchars($class['ID']) ?>" <?php if ($tenant->getKey('DEFAULT_MEMBERSHIP_CLASS') == $class['ID']) { ?>selected<?php } ?>><?= htmlspecialchars($class['Name']) ?></option>
@@ -154,18 +154,18 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 					</select>
 				</div>
 
-				<div class="form-group">
-					<div class="custom-control custom-checkbox">
-						<input type="checkbox" class="custom-control-input" id="clubmemb" name="clubmemb" value="1" aria-describedby="clubmembhelp">
-						<label class="custom-control-label" for="clubmemb">Club pays Club Membership fees?</label>
+				<div class="mb-3">
+					<div class="form-check">
+						<input class="form-check-input" type="checkbox" id="clubmemb" name="clubmemb" value="1" aria-describedby="clubmembhelp">
+						<label class="form-check-label" for="clubmemb">Club pays Club Membership fees?</label>
 					</div>
 					<small id="clubmembhelp" class="form-text text-muted">Tick the box if this swimmer will not pay any annual club membership fees.</small>
 				</div>
 
-				<div class="form-group">
-					<div class="custom-control custom-checkbox">
-						<input type="checkbox" class="custom-control-input" id="transfer" name="transfer" value="1" aria-describedby="transfer-help">
-						<label class="custom-control-label" for="transfer">Transferring from another club?</label>
+				<div class="mb-3">
+					<div class="form-check">
+						<input class="form-check-input" type="checkbox" id="transfer" name="transfer" value="1" aria-describedby="transfer-help">
+						<label class="form-check-label" for="transfer">Transferring from another club?</label>
 					</div>
 					<small id="transfer-help" class="form-text text-muted">Tick the box if this swimmer is transferring from another swimming club - They will not be charged for Swim England membership fees. If it is almost a new Swim England membership year and this swimmer will not be completing membership renewal then leave the box unticked so they pay Swim England membership fees when registering.</small>
 				</div>

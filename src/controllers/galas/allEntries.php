@@ -49,11 +49,11 @@ include "galaMenu.php"; ?>
   <p class="lead">Search entries for upcoming galas. Search by Gala or Gala and Surname.</p>
 
   <form id="entry-details" data-page-url="<?=htmlspecialchars(autoUrl("galas/entries"))?>" data-ajax-url="<?=htmlspecialchars(autoUrl("galas/ajax/entries"))?>" data-processed-url="<?=htmlspecialchars(autoUrl("galas/ajax/entryProcessed"))?>" class="">
-    <div class="form-row d-print-none">
+    <div class="row d-print-none">
       <div class="col-md-4">
-        <div class="form-group">
+        <div class="mb-3">
           <label class="" for="gala">Select a Gala</label>
-          <select class="custom-select" placeholder="Select a Gala" id="galaID" name="galaID">
+          <select class="form-select" placeholder="Select a Gala" id="galaID" name="galaID">
             <option>Select a gala</option>
             <option value="allGalas" <?php if ($galaIDParam == "allGalas") { ?> selected <?php } ?>>Show All Gala
               Entries</option>
@@ -68,9 +68,9 @@ include "galaMenu.php"; ?>
         </div>
       </div>
       <div class="col-md-4">
-        <div class="form-group">
+        <div class="mb-3">
           <label class="" for="sex">Select Sex</label>
-          <select class="custom-select" placeholder="Select Sex" id="sex" name="sex">
+          <select class="form-select" placeholder="Select Sex" id="sex" name="sex">
             <option value="all" <?php if ($sex == "all") { ?> selected <?php } ?>>All Swimmers</option>
             <option value="f" <?php if ($sex == "f") { ?> selected <?php } ?>>
               Female
@@ -83,8 +83,8 @@ include "galaMenu.php"; ?>
       </div>
 
       <div class="col-md-4">
-        <div class="form-group">
-          <label for="gala">Enter Surname</label>
+        <div class="mb-3">
+          <label class="form-label" for="gala">Enter Surname</label>
           <input class="form-control" placeholder="Search" name="search" id="search"
             value="<?=htmlspecialchars($search)?>">
         </div>

@@ -85,17 +85,17 @@ include BASE_PATH . 'views/header.php';
         <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['AddSessionError']);
         } ?>
 
-        <div class="form-group">
-          <label for="session-name">Session Name</label>
+        <div class="mb-3">
+          <label class="form-label" for="session-name">Session Name</label>
           <input class="form-control" type="text" name="session-name" id="session-name" required placeholder="e.g. Swimming, Land Training, Diving, Water Polo">
           <div class="invalid-feedback">
             You must provide a name for this session such as <em>Swimming</em>, <em>Land Training</em>, <em>Diving</em> or <em>Water Polo</em>
           </div>
         </div>
 
-        <div class="form-group">
-          <label for="session-venue">Session Venue</label>
-          <select class="custom-select" name="session-venue" id="session-venue" required>
+        <div class="mb-3">
+          <label class="form-label" for="session-venue">Session Venue</label>
+          <select class="form-select" name="session-venue" id="session-venue" required>
             <option selected value="">Select a Venue</option>
             <?php if ($venue) { ?>
               <?php do { ?>
@@ -108,24 +108,24 @@ include BASE_PATH . 'views/header.php';
           </div>
         </div>
 
-        <div class="form-group" id="recurrence-radios">
+        <div class="mb-3" id="recurrence-radios">
           <p class="mb-2">
             Recurrence
           </p>
-          <div class="custom-control custom-radio">
-            <input type="radio" id="recurring-one-off" name="recurring" class="custom-control-input" checked required value="one-off">
-            <label class="custom-control-label" for="recurring-one-off">One-off</label>
+          <div class="form-check">
+            <input type="radio" id="recurring-one-off" name="recurring" class="form-check-input" checked required value="one-off">
+            <label class="form-check-label" for="recurring-one-off">One-off</label>
           </div>
-          <div class="custom-control custom-radio">
-            <input type="radio" id="recurring-session" name="recurring" class="custom-control-input" value="recurring">
-            <label class="custom-control-label" for="recurring-session">Weekly until cancelled</label>
+          <div class="form-check">
+            <input type="radio" id="recurring-session" name="recurring" class="form-check-input" value="recurring">
+            <label class="form-check-label" for="recurring-session">Weekly until cancelled</label>
           </div>
         </div>
 
-        <div class="form-row">
+        <div class="row">
           <div class="col">
-            <div class="form-group">
-              <label for="session-date">Session Date</label>
+            <div class="mb-3">
+              <label class="form-label" for="session-date">Session Date</label>
               <input type="date" class="form-control" name="session-date" id="session-date" placeholder="<?= htmlspecialchars($dateToday->format('Y-m-d')) ?>" value="<?= htmlspecialchars($dateToday->format('Y-m-d')) ?>" required>
               <div class="invalid-feedback">
                 You must provide a date for this session
@@ -134,8 +134,8 @@ include BASE_PATH . 'views/header.php';
           </div>
 
           <div class="col d-none" id="show-until-container">
-            <div class="form-group">
-              <label for="session-end-date">Show Until</label>
+            <div class="mb-3">
+              <label class="form-label" for="session-end-date">Show Until</label>
               <input type="date" aria-labelledby="session-end-date-help" class="form-control" name="session-end-date" id="session-end-date" placeholder="<?= htmlspecialchars($datePlusYear->format('Y-m-d')) ?>" value="<?= htmlspecialchars($datePlusYear->format('Y-m-d')) ?>">
               <div class="invalid-feedback">
                 You must provide a valid end date for this session
@@ -147,10 +147,10 @@ include BASE_PATH . 'views/header.php';
           </div>
         </div>
 
-        <div class="form-row">
+        <div class="row">
           <div class="col">
-            <div class="form-group">
-              <label for="session-start-time">Start Time</label>
+            <div class="mb-3">
+              <label class="form-label" for="session-start-time">Start Time</label>
               <input type="time" class="form-control" name="session-start-time" id="session-start-time" placeholder="0" value="18:00" required>
               <small id="session-start-time-help" class="form-text text-muted">
                 Make sure to use 24 Hour Time
@@ -158,8 +158,8 @@ include BASE_PATH . 'views/header.php';
             </div>
           </div>
           <div class="col">
-            <div class="form-group">
-              <label for="session-end-time">End Time</label>
+            <div class="mb-3">
+              <label class="form-label" for="session-end-time">End Time</label>
               <input type="time" class="form-control" name="session-end-time" id="session-end-time" placeholder="0" value="18:30" required>
               <small id="session-end-time-help" class="form-text text-muted">
                 Make sure to use 24 Hour Time
@@ -176,9 +176,9 @@ include BASE_PATH . 'views/header.php';
           <div class="row">
             <?php do { ?>
               <div class="col-6 col-md-4 col-lg-3 mb-2">
-                <div class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="squad-check-<?= htmlspecialchars($squad['SquadID']) ?>" name="squad-<?= htmlspecialchars($squad['SquadID']) ?>" value="1">
-                  <label class="custom-control-label" for="squad-check-<?= htmlspecialchars($squad['SquadID']) ?>"><?= htmlspecialchars($squad['SquadName']) ?></label>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="squad-check-<?= htmlspecialchars($squad['SquadID']) ?>" name="squad-<?= htmlspecialchars($squad['SquadID']) ?>" value="1">
+                  <label class="form-check-label" for="squad-check-<?= htmlspecialchars($squad['SquadID']) ?>"><?= htmlspecialchars($squad['SquadName']) ?></label>
                 </div>
               </div>
             <?php } while ($squad = $getSquads->fetch(PDO::FETCH_ASSOC)); ?>
@@ -196,7 +196,7 @@ include BASE_PATH . 'views/header.php';
         <?= \SCDS\CSRF::write() ?>
 
         <div class="d-md-flex py-3">
-          <button type="submit" class="btn btn-primary mr-sm-auto">
+          <button type="submit" class="btn btn-primary me-sm-auto">
             Add Session
           </button>
           <div class="show-if-one-off">

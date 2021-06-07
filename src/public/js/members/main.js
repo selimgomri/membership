@@ -6,11 +6,13 @@
  */
 
 // Enable popovers
-$(function() {
-  $('[data-toggle="popover"]').popover({
-    trigger: 'focus'
-  })
-});
+document.addEventListener('DOMContentLoaded', function () {
+  // your code here
+  let popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
+  let popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+    return new bootstrap.Popover(popoverTriggerEl)
+  });
+}, false);
 
 async function movesHandler(event) {
   if (event.target.dataset.action) {
@@ -231,9 +233,9 @@ function handleNewMove(event) {
     .then((squads) => {
       let title = 'New Move';
       let body = '<p>What type of move do you want to create?</p>';
-      body += '<p><button class="btn btn-primary btn-block" id="squad-to-squad">Squad to squad</button></p>';
-      body += '<p><button class="btn btn-primary btn-block" id="join-squad">Join a squad</button></p>';
-      body += '<p><button class="btn btn-primary btn-block" id="leave-squad">Leave a squad</button></p>';
+      body += '<p class="d-grid"><button class="btn btn-primary" id="squad-to-squad">Squad to squad</button></p>';
+      body += '<p class="d-grid"><button class="btn btn-primary" id="join-squad">Join a squad</button></p>';
+      body += '<p class="d-grid"><button class="btn btn-primary" id="leave-squad">Leave a squad</button></p>';
 
       body += '<p>Usually, you\'ll want to use <strong>squad to squad</strong> moves, where a member will move from one squad to another. <strong>Join a squad</strong> means a member will join a squad (in addition to all existing squads) and <strong>leave a squad</strong> allows you to remove a member from a specific squad.</p>';
 
@@ -267,12 +269,14 @@ function handleNewMove(event) {
         }
       }
 
-      $('#modal').modal('show');
+      let modal = new bootstrap.Modal(document.getElementById('modal'));
+      modal.show();
     })
     .catch((error) => {
       console.warn(error.message);
       showGetSquadsFailure();
-      $('#modal').modal('show');
+      let modal = new bootstrap.Modal(document.getElementById('modal'));
+      modal.show();
     })
 }
 
@@ -296,14 +300,15 @@ function squadToSquad(event) {
       let form = document.createElement('FORM');
 
       let fg = document.createElement('DIV');
-      fg.classList.add('form-group');
+      fg.classList.add('mb-3');
 
       let label = document.createElement('LABEL');
+      label.classList.add('form-label');
       label.appendChild(document.createTextNode('Leaving'));
       label.htmlFor = 'leave';
 
       let select = document.createElement('SELECT');
-      select.classList.add('custom-select');
+      select.classList.add('form-select');
       select.id = 'leave';
       select.name = 'leave';
 
@@ -321,14 +326,15 @@ function squadToSquad(event) {
       form.appendChild(fg);
 
       fg = document.createElement('DIV');
-      fg.classList.add('form-group');
+      fg.classList.add('mb-3');
 
       label = document.createElement('LABEL');
+      label.classList.add('form-label');
       label.appendChild(document.createTextNode('Joining'));
       label.htmlFor = 'join';
 
       select = document.createElement('SELECT');
-      select.classList.add('custom-select');
+      select.classList.add('form-select');
       select.id = 'join';
       select.name = 'join';
 
@@ -346,10 +352,10 @@ function squadToSquad(event) {
       form.appendChild(fg);
 
       fg = document.createElement('DIV');
-      fg.classList.add('form-group');
+      fg.classList.add('mb-3');
 
       let customRadio = document.createElement('DIV');
-      customRadio.classList.add('custom-control', 'custom-radio');
+      customRadio.classList.add('form-check');
 
       let radio = document.createElement('input');
       radio.type = 'radio';
@@ -357,11 +363,11 @@ function squadToSquad(event) {
       radio.checked = true;
       radio.id = 'move-when-1';
       radio.name = 'move-when'
-      radio.classList.add('custom-control-input');
+      radio.classList.add('form-check-input');
 
       label = document.createElement('label');
       label.appendChild(document.createTextNode('Move now'));
-      label.classList.add('custom-control-label');
+      label.classList.add('form-check-label');
       label.htmlFor = 'move-when-1';
 
       customRadio.appendChild(radio);
@@ -370,18 +376,18 @@ function squadToSquad(event) {
       fg.appendChild(customRadio);
 
       customRadio = document.createElement('DIV');
-      customRadio.classList.add('custom-control', 'custom-radio');
+      customRadio.classList.add('form-check');
 
       radio = document.createElement('input');
       radio.type = 'radio';
       radio.value = '1';
       radio.id = 'move-when-2';
       radio.name = 'move-when'
-      radio.classList.add('custom-control-input');
+      radio.classList.add('form-check-input');
 
       label = document.createElement('label');
       label.appendChild(document.createTextNode('Move on a specified date'));
-      label.classList.add('custom-control-label');
+      label.classList.add('form-check-label');
       label.htmlFor = 'move-when-2';
 
       customRadio.appendChild(radio);
@@ -392,10 +398,11 @@ function squadToSquad(event) {
       form.appendChild(fg);
 
       fg = document.createElement('DIV');
-      fg.classList.add('form-group', 'collapse');
+      fg.classList.add('mb-3', 'collapse');
       fg.id = 'date-group'
 
       label = document.createElement('label');
+      label.classList.add('form-label');
       label.appendChild(document.createTextNode('Date of move'));
       label.htmlFor = 'move-date';
 
@@ -417,10 +424,10 @@ function squadToSquad(event) {
        * Is paying
        */
       fg = document.createElement('DIV');
-      fg.classList.add('form-group');
+      fg.classList.add('mb-3');
 
       customRadio = document.createElement('DIV');
-      customRadio.classList.add('custom-control', 'custom-radio');
+      customRadio.classList.add('form-check');
 
       radio = document.createElement('input');
       radio.type = 'radio';
@@ -428,11 +435,11 @@ function squadToSquad(event) {
       radio.checked = true;
       radio.id = 'paying-yes';
       radio.name = 'paying'
-      radio.classList.add('custom-control-input');
+      radio.classList.add('form-check-input');
 
       label = document.createElement('label');
       label.appendChild(document.createTextNode('Will pay fees for this squad'));
-      label.classList.add('custom-control-label');
+      label.classList.add('form-check-label');
       label.htmlFor = 'paying-yes';
 
       customRadio.appendChild(radio);
@@ -441,18 +448,18 @@ function squadToSquad(event) {
       fg.appendChild(customRadio);
 
       customRadio = document.createElement('DIV');
-      customRadio.classList.add('custom-control', 'custom-radio');
+      customRadio.classList.add('form-check');
 
       radio = document.createElement('input');
       radio.type = 'radio';
       radio.value = '1';
       radio.id = 'paying-no';
       radio.name = 'paying'
-      radio.classList.add('custom-control-input');
+      radio.classList.add('form-check-input');
 
       label = document.createElement('label');
       label.appendChild(document.createTextNode('Won\'t pay fees for this squad'));
-      label.classList.add('custom-control-label');
+      label.classList.add('form-check-label');
       label.htmlFor = 'paying-no';
 
       customRadio.appendChild(radio);
@@ -544,14 +551,14 @@ function joinSquad(event) {
       let form = document.createElement('FORM');
 
       let fg = document.createElement('DIV');
-      fg.classList.add('form-group');
+      fg.classList.add('mb-3');
 
       let label = document.createElement('LABEL');
       label.appendChild(document.createTextNode('Join'));
       label.htmlFor = 'join';
 
       let select = document.createElement('SELECT');
-      select.classList.add('custom-select');
+      select.classList.add('form-select');
       select.id = 'join';
       select.name = 'join';
 
@@ -569,10 +576,10 @@ function joinSquad(event) {
       form.appendChild(fg);
 
       fg = document.createElement('DIV');
-      fg.classList.add('form-group');
+      fg.classList.add('mb-3');
 
       let customRadio = document.createElement('DIV');
-      customRadio.classList.add('custom-control', 'custom-radio');
+      customRadio.classList.add('form-check');
 
       let radio = document.createElement('input');
       radio.type = 'radio';
@@ -580,11 +587,11 @@ function joinSquad(event) {
       radio.checked = true;
       radio.id = 'move-when-1';
       radio.name = 'move-when'
-      radio.classList.add('custom-control-input');
+      radio.classList.add('form-check-input');
 
       label = document.createElement('label');
       label.appendChild(document.createTextNode('Move now'));
-      label.classList.add('custom-control-label');
+      label.classList.add('form-check-label');
       label.htmlFor = 'move-when-1';
 
       customRadio.appendChild(radio);
@@ -593,18 +600,18 @@ function joinSquad(event) {
       fg.appendChild(customRadio);
 
       customRadio = document.createElement('DIV');
-      customRadio.classList.add('custom-control', 'custom-radio');
+      customRadio.classList.add('form-check');
 
       radio = document.createElement('input');
       radio.type = 'radio';
       radio.value = '1';
       radio.id = 'move-when-2';
       radio.name = 'move-when'
-      radio.classList.add('custom-control-input');
+      radio.classList.add('form-check-input');
 
       label = document.createElement('label');
       label.appendChild(document.createTextNode('Move on a specified date'));
-      label.classList.add('custom-control-label');
+      label.classList.add('form-check-label');
       label.htmlFor = 'move-when-2';
 
       customRadio.appendChild(radio);
@@ -615,7 +622,7 @@ function joinSquad(event) {
       form.appendChild(fg);
 
       fg = document.createElement('DIV');
-      fg.classList.add('form-group', 'collapse');
+      fg.classList.add('mb-3', 'collapse');
       fg.id = 'date-group'
 
       label = document.createElement('label');
@@ -640,10 +647,10 @@ function joinSquad(event) {
        * Is paying
        */
       fg = document.createElement('DIV');
-      fg.classList.add('form-group');
+      fg.classList.add('mb-3');
 
       customRadio = document.createElement('DIV');
-      customRadio.classList.add('custom-control', 'custom-radio');
+      customRadio.classList.add('form-check');
 
       radio = document.createElement('input');
       radio.type = 'radio';
@@ -651,11 +658,11 @@ function joinSquad(event) {
       radio.checked = true;
       radio.id = 'paying-yes';
       radio.name = 'paying'
-      radio.classList.add('custom-control-input');
+      radio.classList.add('form-check-input');
 
       label = document.createElement('label');
       label.appendChild(document.createTextNode('Pays fees for this squad'));
-      label.classList.add('custom-control-label');
+      label.classList.add('form-check-label');
       label.htmlFor = 'paying-yes';
 
       customRadio.appendChild(radio);
@@ -664,18 +671,18 @@ function joinSquad(event) {
       fg.appendChild(customRadio);
 
       customRadio = document.createElement('DIV');
-      customRadio.classList.add('custom-control', 'custom-radio');
+      customRadio.classList.add('form-check');
 
       radio = document.createElement('input');
       radio.type = 'radio';
       radio.value = '1';
       radio.id = 'paying-no';
       radio.name = 'paying'
-      radio.classList.add('custom-control-input');
+      radio.classList.add('form-check-input');
 
       label = document.createElement('label');
       label.appendChild(document.createTextNode('Does not pay fees for this squad'));
-      label.classList.add('custom-control-label');
+      label.classList.add('form-check-label');
       label.htmlFor = 'paying-no';
 
       customRadio.appendChild(radio);
@@ -772,14 +779,14 @@ function leaveSquad(event) {
       let form = document.createElement('FORM');
 
       let fg = document.createElement('DIV');
-      fg.classList.add('form-group');
+      fg.classList.add('mb-3');
 
       let label = document.createElement('LABEL');
       label.appendChild(document.createTextNode('Leaving'));
       label.htmlFor = 'leave';
 
       let select = document.createElement('SELECT');
-      select.classList.add('custom-select');
+      select.classList.add('form-select');
       select.id = 'leave';
       select.name = 'leave';
 
@@ -797,10 +804,10 @@ function leaveSquad(event) {
       form.appendChild(fg);
 
       fg = document.createElement('DIV');
-      fg.classList.add('form-group');
+      fg.classList.add('mb-3');
 
       let customRadio = document.createElement('DIV');
-      customRadio.classList.add('custom-control', 'custom-radio');
+      customRadio.classList.add('form-check');
 
       let radio = document.createElement('input');
       radio.type = 'radio';
@@ -808,11 +815,11 @@ function leaveSquad(event) {
       radio.checked = true;
       radio.id = 'move-when-1';
       radio.name = 'move-when'
-      radio.classList.add('custom-control-input');
+      radio.classList.add('form-check-input');
 
       label = document.createElement('label');
       label.appendChild(document.createTextNode('Leave now'));
-      label.classList.add('custom-control-label');
+      label.classList.add('form-check-label');
       label.htmlFor = 'move-when-1';
 
       customRadio.appendChild(radio);
@@ -821,18 +828,18 @@ function leaveSquad(event) {
       fg.appendChild(customRadio);
 
       customRadio = document.createElement('DIV');
-      customRadio.classList.add('custom-control', 'custom-radio');
+      customRadio.classList.add('form-check');
 
       radio = document.createElement('input');
       radio.type = 'radio';
       radio.value = '1';
       radio.id = 'move-when-2';
       radio.name = 'move-when'
-      radio.classList.add('custom-control-input');
+      radio.classList.add('form-check-input');
 
       label = document.createElement('label');
       label.appendChild(document.createTextNode('Leave on a specified date'));
-      label.classList.add('custom-control-label');
+      label.classList.add('form-check-label');
       label.htmlFor = 'move-when-2';
 
       customRadio.appendChild(radio);
@@ -843,7 +850,7 @@ function leaveSquad(event) {
       form.appendChild(fg);
 
       fg = document.createElement('DIV');
-      fg.classList.add('form-group', 'collapse');
+      fg.classList.add('mb-3', 'collapse');
       fg.id = 'date-group'
 
       label = document.createElement('label');
@@ -949,9 +956,15 @@ function getSquads() {
  */
 function showHideDateGroup(event) {
   if (document.querySelector('input[name="move-when"]:checked').value == true) {
-    $('#date-group').collapse('show');
+    var myCollapse = document.getElementById('date-group');
+    var bsCollapse = new bootstrap.Collapse(myCollapse, {
+      show: true
+    });
   } else {
-    $('#date-group').collapse('hide');
+    var myCollapse = document.getElementById('date-group');
+    var bsCollapse = new bootstrap.Collapse(myCollapse, {
+      hide: true
+    });
   }
 }
 

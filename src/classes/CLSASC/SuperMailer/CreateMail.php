@@ -66,29 +66,21 @@ class CreateMail
 
   public function getFormattedHtml()
   {
-    $fontStack = '"Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"';
-    if (isset(app()->tenant) && app()->tenant->isCLS()) {
-      $fontStack = '"Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"';
-    }
+    $fontStack = 'system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"';
     $head = "
     <!DOCTYPE html>
     <html lang=\"en-gb\">
     <head>
       <meta charset=\"utf-8\">";
-    if (isset(app()->tenant) && (app()->tenant->isCLS())) {
-      $head .= "<link href=\"https://fonts.googleapis.com/css?family=Open+Sans:400,700\" rel=\"stylesheet\" type=\"text/css\">";
-    } else {
-      $head .= "<link href=\"https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700\" rel=\"stylesheet\" type=\"text/css\">";
-    }
     $head .= "
       <style type=\"text/css\">
         html, body {
           font-family: " . $fontStack . ";
           font-size: 16px;
-          background: #e3eef6;
+          background: #ffffff;
         }
 
-        p, h1, h2, h3, h4, h5, h6, ul, ol, img, .table, blockquote {
+        p, h1, h2, h3, h4, h5, h6, ul, ol, img, table, .table, blockquote, address {
           margin: 0 0 16px 0;
           font-family: " . $fontStack . ";
         }
@@ -110,22 +102,17 @@ class CreateMail
         cell {
           display: table;
           background: #eee;
-          padding: 1rem;
+          padding: 0rem;
           margin 0 0 1rem 0;
           width: 100%;
         }
       </style>
     </head>
     <body>
-    <div style=\"background:#e3eef6;\">
-      <table style=\"width:100%;border:0px;text-align:left;padding:10px 0px 10px 0px;background:#e3eef6;\"><tr><td align=\"center\">
-        <table style=\"width:100%;max-width:700px;border:0px;text-align:center;background:#ffffff;padding:10px 10px 0px 10px;\"><tr><td>";
-    if (isset(app()->tenant) && app()->tenant->isCLS()) {
-      $head .= "<img src=\"" . autoUrl("public/img/notify/NotifyLogo.png") . "\"
-        style=\"width:300px;max-width:100%;\" srcset=\"" .
-        autoUrl("public/img/notify/NotifyLogo@2x.png") . " 2x, " .
-        autoUrl("public/img/notify/NotifyLogo@3x.png") . " 3x\" alt=\"" . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . " Logo\">";
-    } else if (isset(app()->tenant) && $logos = app()->tenant->getKey('LOGO_DIR')) {
+    <div style=\"background:#ffffff;\">
+      <table style=\"width:100%;border:0px;text-align:left;padding:0px 0px 0px 0px;background:#ffffff;\"><tr><td align=\"center\">
+        <table style=\"width:100%;max-width:700px;border:0px;text-align:center;background:#ffffff;padding:0px 0px 0px 0px;\"><tr><td>";
+    if (isset(app()->tenant) && $logos = app()->tenant->getKey('LOGO_DIR')) {
       $head .= "<img src=\"" . getUploadedAssetUrl($logos . 'logo-150.png') . "\" srcset=\"" .
       getUploadedAssetUrl($logos . 'logo-150@2x.png') . " 2x, " .
       getUploadedAssetUrl($logos . 'logo-150@3x.png') . " 3x\" style=\"max-width:100%;max-height:150px;\" alt=\"" . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . " Logo\">";
@@ -135,7 +122,7 @@ class CreateMail
       $head .= "<img src=\"" . autoUrl('public/img/corporate/icons/apple-touch-icon-152x152.png') . "\" alt=\"SCDS Membership Logo\">";
     }
     $head .= "</td></tr></table>
-        <table style=\"width:100%;max-width:700px;border:0px;text-align:left;background:#ffffff;padding:0px 10px;\"><tr><td>
+        <table style=\"width:100%;max-width:700px;border:0px;text-align:left;background:#ffffff;padding:0px 0px;\"><tr><td>
     ";
     if (isset($this->showName) && $this->showName && (!isset($this->name) || $this->name == null)) {
       $head .= '<p class="small text-muted">Hello -name-, </p>';
@@ -144,7 +131,7 @@ class CreateMail
     }
 
     $foot = "</td></tr></table>
-    <table style=\"width:100%;max-width:700px;border:0px;background:#f8fcff;padding:0px 10px;\"><tr><td>
+    <table style=\"width:100%;max-width:700px;border:0px;background:#f8fcff;padding:0px 0px;\"><tr><td>
     <div
     class=\"bottom text-center\">";
     if (isset(app()->tenant)) {

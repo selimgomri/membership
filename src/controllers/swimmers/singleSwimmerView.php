@@ -149,7 +149,7 @@ if ($parent_id != null) {
 $content .= '
 <p>
   <div class="dropdown">
-    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       Quick actions
     </button>
     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -224,7 +224,7 @@ $content .= '<!--
     <li class="list-group-item">
       <p class="mb-0">
         <strong class="d-block text-gray-dark">Swim England Number</strong>
-        <a href="https://www.swimmingresults.org/biogs/biogs_details.php?tiref=' . htmlspecialchars($rowSwim["ASANumber"]) . '" target="_blank" title="ASA Biographical Data"><span class="mono">' . htmlspecialchars($rowSwim["ASANumber"]) . '</span> <i class="fa fa-external-link" aria-hidden="true"></i></a>
+        <a href="https://www.swimmingresults.org/biogs/biogs_details.php?tiref=' . htmlspecialchars($rowSwim["ASANumber"]) . '" target="_blank" title="ASA Biographical Data"><span class="font-monospace">' . htmlspecialchars($rowSwim["ASANumber"]) . '</span> <i class="fa fa-external-link" aria-hidden="true"></i></a>
       </p>
     </li>
     <li class="list-group-item">
@@ -363,7 +363,7 @@ $content .= '<!--
   $content .= '</ul><div class="card-body">';
 	if ($access == "Admin") {
     $content .= '
-	  <span class="d-block text-right d-print-none">
+	  <span class="d-block text-end d-print-none">
 	    <a class="btn btn-success" href="' . autoUrl("members/" . $id . "/edit") . '">Edit Details</a> <a class="btn btn-success" href="' . autoUrl("members/" . $id . "/medical") . '">Edit Medical Notes</a>
 	  </span>';
 	} else {
@@ -489,8 +489,8 @@ $content .= '<!--
     $evs = ['50m Free', '100m Free', '200m Free', '400m Free', '800m Free', '1500m Free',
     '50m Breast', '100m Breast', '200m Breast', '50m Fly', '100m Fly', '200m Fly',
     '50m Back', '100m Back', '200m Back', '100m IM', '200m IM', '400m IM'];
-    $content.= '<table class="table table-sm table-borderless table-striped mb-2">
-    <thead class="thead-light"><tr><th>Swim</th><th>Short Course</th>';
+    $content.= '<table class="table table-sm table-borderless table-striped mb-2 table-light">
+    <thead><tr><th>Swim</th><th>Short Course</th>';
     if (!$mob && $scy) {
       $content .= '<th>' . date("Y") . ' SC</th>';
     }

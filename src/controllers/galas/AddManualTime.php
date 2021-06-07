@@ -167,7 +167,7 @@ if ($row['CourseLength'] == 'LONG') {
 							}
 						}
 						?>
-						<div class="form-group mb-0 mt-2">
+						<div class="mb-3 mb-0 mt-2">
 							<div class="input-group">
 								<input type="number" class="form-control" placeholder="Minutes" name="<?=$swimsTimeArray[$i]?>Mins" id="<?=$swimsTimeArray[$i]?>Mins" autocomplete="off" pattern="[0-9]*" inputmode="numeric" min="0" value="<?=htmlspecialchars($mins)?>" <?=$locked?>>
 								<input type="number" class="form-control" placeholder="Seconds" name="<?=$swimsTimeArray[$i]?>Secs" id="<?=$swimsTimeArray[$i]?>Secs" autocomplete="off" pattern="[0-9]*" inputmode="numeric" min="0" max="59" value="<?=htmlspecialchars($secs)?>" <?=$locked?>>

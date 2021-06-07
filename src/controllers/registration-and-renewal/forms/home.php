@@ -91,7 +91,7 @@ include BASE_PATH . 'views/header.php';
         </p>
 
         <p>
-          <input type="text" readonly class="form-control-plaintext mono p-0" id="reg-renewal-id" value="<?= htmlspecialchars($id) ?>">
+          <input type="text" readonly class="form-control-plaintext font-monospace p-0" id="reg-renewal-id" value="<?= htmlspecialchars($id) ?>">
         </p>
 
         <p class="mb-0">

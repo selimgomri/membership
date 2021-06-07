@@ -59,11 +59,11 @@ include BASE_PATH . "views/header.php";
 
       <?php if ($gala != null) { ?>
       <form method="post">
-        <div class="form-group">
-          <label for="gala-select">
+        <div class="mb-3">
+          <label class="form-label" for="gala-select">
             Choose a gala
           </label>
-          <select class="custom-select" id="gala-select" name="gala-select">
+          <select class="form-select" id="gala-select" name="gala-select">
            <option selected>Select a gala</option>
             <?php do { ?>
               <option value="<?=$gala['GalaID']?>">

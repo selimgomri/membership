@@ -59,25 +59,25 @@ include BASE_PATH . "views/header.php";
       <div class="card card-body mb-3">
         <dl class="row mb-0">
           <dt class="col-sm-3">Tenant</dt>
-          <dd class="col-sm-9 mono text-truncate"><?= htmlspecialchars($tenant->getUuid()) ?></dd>
+          <dd class="col-sm-9 font-monospace text-truncate"><?= htmlspecialchars($tenant->getUuid()) ?></dd>
 
           <dt class="col-sm-3">Tenant ID</dt>
-          <dd class="col-sm-9 mono"><?= htmlspecialchars($tenant->getId()) ?></dd>
+          <dd class="col-sm-9 font-monospace"><?= htmlspecialchars($tenant->getId()) ?></dd>
 
           <dt class="col-sm-3">Tenant Name</dt>
-          <dd class="col-sm-9 mono"><?= htmlspecialchars($tenant->getName()) ?></dd>
+          <dd class="col-sm-9 font-monospace"><?= htmlspecialchars($tenant->getName()) ?></dd>
 
           <?php if ($tenant->getCode()) { ?>
             <dt class="col-sm-3">Tenant Code</dt>
-            <dd class="col-sm-9 mono"><?= htmlspecialchars($tenant->getCode()) ?></dd>
+            <dd class="col-sm-9 font-monospace"><?= htmlspecialchars($tenant->getCode()) ?></dd>
           <?php } ?>
 
           <?php if (isset(app()->user)) { ?>
             <dt class="col-sm-3">User</dt>
-            <dd class="col-sm-9 mono mb-0"><?= htmlspecialchars(app()->user->getId()) ?></dd>
+            <dd class="col-sm-9 font-monospace mb-0"><?= htmlspecialchars(app()->user->getId()) ?></dd>
           <?php } else { ?>
             <dt class="col-sm-3">User</dt>
-            <dd class="col-sm-9 mono mb-0">Not signed in</dd>
+            <dd class="col-sm-9 font-monospace mb-0">Not signed in</dd>
           <?php } ?>
         </dl>
       </div>

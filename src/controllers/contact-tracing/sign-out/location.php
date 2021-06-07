@@ -123,7 +123,7 @@ include BASE_PATH . 'views/header.php';
           <p class="mb-2">
             From
           </p>
-          <div class="form-row">
+          <div class="row">
             <div class="col">
               <input type="date" class="form-control" name="from-date" id="from-date" min="<?= htmlspecialchars($earliest->format('Y-m-d')) ?>" max="<?= htmlspecialchars($latest->format('Y-m-d')) ?>" required placeholder="<?= htmlspecialchars($from->format('Y-m-d')) ?>" value="<?= htmlspecialchars($from->format('Y-m-d')) ?>">
             </div>
@@ -137,7 +137,7 @@ include BASE_PATH . 'views/header.php';
           <p class="mb-2">
             To
           </p>
-          <div class="form-row">
+          <div class="row">
             <div class="col">
               <input type="date" class="form-control" name="to-date" id="to-date" min="<?= htmlspecialchars($earliest->format('Y-m-d')) ?>" max="<?= htmlspecialchars($latest->format('Y-m-d')) ?>" required placeholder="<?= htmlspecialchars($to->format('Y-m-d')) ?>" value="<?= htmlspecialchars($to->format('Y-m-d')) ?>">
             </div>
@@ -173,9 +173,9 @@ include BASE_PATH . 'views/header.php';
               $date->setTimezone(new DateTimeZone('Europe/London'));
             ?>
             <li class="list-group-item">
-              <div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" id="<?= htmlspecialchars('visitor-' . $visitor['ID']) ?>" name="<?= htmlspecialchars('visitor-' . $visitor['ID']) ?>" value="1" data-id="<?= htmlspecialchars($visitor['ID']) ?>" <?php if (bool($visitor['SignedOut'])) { ?>checked<?php } ?> >
-                <label class="custom-control-label d-block" for="<?= htmlspecialchars('visitor-' . $visitor['ID']) ?>"><?= htmlspecialchars($visitor['GuestName']) ?> <small>Arrived <?= htmlspecialchars($date->format('H:i, j F')) ?></small>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="<?= htmlspecialchars('visitor-' . $visitor['ID']) ?>" name="<?= htmlspecialchars('visitor-' . $visitor['ID']) ?>" value="1" data-id="<?= htmlspecialchars($visitor['ID']) ?>" <?php if (bool($visitor['SignedOut'])) { ?>checked<?php } ?> >
+                <label class="form-check-label d-block" for="<?= htmlspecialchars('visitor-' . $visitor['ID']) ?>"><?= htmlspecialchars($visitor['GuestName']) ?> <small>Arrived <?= htmlspecialchars($date->format('H:i, j F')) ?></small>
               </div>
             </li>
             <?php } while ($visitor = $getVisitors->fetch(PDO::FETCH_ASSOC)); ?>

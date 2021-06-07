@@ -29,9 +29,9 @@ include BASE_PATH . "views/root/head.php";
         <p class="mb-0">Add and edit your payment cards</p>
       </div>
     </div>
-    <div class="d-none d-sm-flex col-sm-auto ml-auto">
+    <div class="d-none d-sm-flex col-sm-auto ms-auto">
       <p class="mb-0">
-        <img class="apple-pay-row" src="<?= autoUrl("public/img/stripe/apple-pay-mark.svg") ?>" aria-hidden="true"> <img class="google-pay-row" src="<?= autoUrl("public/img/stripe/google-pay-mark.svg") ?>" aria-hidden="true"> <img class="visa-row" src="<?= autoUrl("public/img/stripe/visa.svg") ?>" aria-hidden="true"> <img class="mastercard-row" src="<?= autoUrl("public/img/stripe/mastercard.svg") ?>" aria-hidden="true"> <img class="amex-row" src="<?= autoUrl("public/img/stripe/amex.svg") ?>" aria-hidden="true">
+        <img class="apple-pay-row" src="<?= autoUrl("img/stripe/apple-pay-mark.svg", false) ?>" aria-hidden="true"> <img class="google-pay-row" src="<?= autoUrl("img/stripe/google-pay-mark.svg", false) ?>" aria-hidden="true"> <img class="visa-row" src="<?= autoUrl("img/stripe/visa.svg", false) ?>" aria-hidden="true"> <img class="mastercard-row" src="<?= autoUrl("img/stripe/mastercard.svg", false) ?>" aria-hidden="true"> <img class="amex-row" src="<?= autoUrl("img/stripe/amex.svg", false) ?>" aria-hidden="true">
       </p>
     </div>
   </div>
@@ -53,7 +53,7 @@ include BASE_PATH . "views/root/head.php";
             <a href="<?= htmlspecialchars(autoUrl('payments-admin/payment-methods/' . $paymentMethod['ID'])) ?>" class="list-group-item list-group-item-action">
               <div class="row align-items-center mb-2 text-dark">
                 <div class="col-auto">
-                  <img src="<?= htmlspecialchars(autoUrl("public/img/stripe/" . $typeData->brand . ".png")) ?>" srcset="<?= htmlspecialchars(autoUrl("public/img/stripe/" . $typeData->brand . "@2x.png")) ?> 2x, <?= htmlspecialchars(autoUrl("public/img/stripe/" . $typeData->brand . "@3x.png")) ?> 3x" style="width:40px;"> <span class="sr-only"><?= htmlspecialchars(getCardBrand($typeData->brand)) ?></span>
+                  <img src="<?= htmlspecialchars(autoUrl("img/stripe/" . $typeData->brand . ".png", false)) ?>" srcset="<?= htmlspecialchars(autoUrl("img/stripe/" . $typeData->brand . "@2x.png", false)) ?> 2x, <?= htmlspecialchars(autoUrl("img/stripe/" . $typeData->brand . "@3x.png", false)) ?> 3x" style="width:40px;"> <span class="visually-hidden"><?= htmlspecialchars(getCardBrand($typeData->brand)) ?></span>
                 </div>
                 <div class="col-auto">
                   <h2 class="h1 my-0">

@@ -14,7 +14,7 @@ if ($currentUser == null) {
 		<div class="col-lg-8">
 			<h1>Your club has not enabled Direct Debit payments</h1>
 			<p class="lead">Speak to your administrator for further help.</p>
-			<p class="mono mb-0">Reason: No API key</p>
+			<p class="font-monospace mb-0">Reason: No API key</p>
 			<hr>
 			<p>Please try the following:</p>
 			<ul>

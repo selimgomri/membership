@@ -14,7 +14,7 @@ if ($currentUser == null) {
 		<div class="col-lg-8">
 			<h1>You are not allowed access to the page you requested</h1>
 			<p class="lead">Please ensure that you are logged in with the correct account to access this resource.</p>
-			<p class="mono mb-0">Reason: Regulatory</p>
+			<p class="font-monospace mb-0">Reason: Regulatory</p>
 			<hr>
 			<p>Please try the following:</p>
 			<ul>

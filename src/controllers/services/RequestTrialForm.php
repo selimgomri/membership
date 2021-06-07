@@ -75,7 +75,7 @@ include BASE_PATH . 'views/header.php';
           <p>
             Are you applying for yourself or on behalf of a minor?
           </p>
-          <div class="form-row mb-3" id="apply-for-option">
+          <div class="row mb-3" id="apply-for-option">
             <div class="col-md">
               <button id="apply-for-child" class="btn btn-light btn-block" type="button" value="minor">A Minor</button>
             </div>
@@ -90,23 +90,23 @@ include BASE_PATH . 'views/header.php';
           We just need some details about you so we can get in touch.
         </p>
         <div class="mb-3">
-          <div class="form-row mb-3">
+          <div class="row mb-3">
             <div class="col">
-              <label for="forename">First name</label>
+              <label class="form-label" for="forename">First name</label>
               <input type="text" name="forename" id="forename" class="form-control" placeholder="First name" value="<?=htmlspecialchars(trim($value['forename']))?>" required>
               <div class="invalid-feedback">
                 Please enter a first name.
               </div>
             </div>
             <div class="col">
-              <label for="surname">Last name</label>
+              <label class="form-label" for="surname">Last name</label>
               <input type="text" name="surname" id="surname" class="form-control" placeholder="Last name" value="<?=htmlspecialchars(trim($value['surname']))?>" required>
               <div class="invalid-feedback">
                 Please enter a last name.
               </div>
             </div>
           </div>
-          <label for="email">Email address</label>
+          <label class="form-label" for="email">Email address</label>
           <input type="email" name="email-addr" id="email-addr" class="form-control" placeholder="abc@example.com" value="<?=htmlspecialchars(trim($value['email-addr']))?>" required>
           <div class="invalid-feedback">
             Please enter a valid email.
@@ -125,16 +125,16 @@ include BASE_PATH . 'views/header.php';
           </div>
 
           <div class="mb-3">
-            <div class="form-row mb-3 hide-if-parent">
+            <div class="row mb-3 hide-if-parent">
               <div class="col">
-                <label for="swimmer-forename">First name</label>
+                <label class="form-label" for="swimmer-forename">First name</label>
                 <input type="text" name="swimmer-forename" id="swimmer-forename" class="form-control" placeholder="First name" value="<?=htmlspecialchars(trim($value['swimmer-forename']))?>" required>
                 <div class="invalid-feedback">
                   Please enter a first name.
                 </div>
               </div>
               <div class="col">
-                <label for="swimmer-surname">Last name</label>
+                <label class="form-label" for="swimmer-surname">Last name</label>
                 <input type="text" name="swimmer-surname" id="swimmer-surname" class="form-control" placeholder="Last name" value="<?=htmlspecialchars(trim($value['swimmer-surname']))?>" required>
                 <div class="invalid-feedback">
                   Please enter a last name.
@@ -144,9 +144,9 @@ include BASE_PATH . 'views/header.php';
 
             <div class="mb-3">
               <label>Date of Birth</label>
-              <div class="form-row">
+              <div class="row">
                 <div class="col">
-                  <select class="custom-select" id="day" name="day" required>
+                  <select class="form-select" id="day" name="day" required>
                     <?php if ($value['day'] == null | $value['day'] == "") { ?>
                     <option disabled selected>Day</option>
                     <?php } else {?>
@@ -169,7 +169,7 @@ include BASE_PATH . 'views/header.php';
                   </div>
                 </div>
                 <div class="col">
-                  <select class="custom-select" id="month" name="month" required>
+                  <select class="form-select" id="month" name="month" required>
                     <?php if ($value['month'] == null | $value['month'] == "") { ?>
                     <option disabled selected>Month</option>
                     <?php } else {?>
@@ -192,7 +192,7 @@ include BASE_PATH . 'views/header.php';
                   </div>
                 </div>
                 <div class="col">
-                  <select class="custom-select" id="year" name="year" required>
+                  <select class="form-select" id="year" name="year" required>
                     <?php if ($value['year'] == null | $value['year'] == "") { ?>
                     <option disabled selected>Year</option>
                     <?php } else {?>
@@ -216,8 +216,8 @@ include BASE_PATH . 'views/header.php';
             </div>
 
             <div class="mb-3">
-              <label for="sex">Sex</label>
-              <select class="custom-select" id="sex" name="sex" required>
+              <label class="form-label" for="sex">Sex</label>
+              <select class="form-select" id="sex" name="sex" required>
                 <?php if ($value['sex'] == null | $value['sex'] == "") { ?>
                 <option disabled selected>Select a sex</option>
                 <?php } else {?>
@@ -239,8 +239,8 @@ include BASE_PATH . 'views/header.php';
             </div>
 
             <div class="mb-3">
-              <label for="experience">Level of Experience</label>
-              <select class="custom-select" id="experience" name="experience" required>
+              <label class="form-label" for="experience">Level of Experience</label>
+              <select class="form-select" id="experience" name="experience" required>
                 <?php if ($value['experience'] == null || $value['experience'] == "") { ?>
                 <option disabled selected>Select an option</option>
                 <?php } else {?>
@@ -274,13 +274,13 @@ include BASE_PATH . 'views/header.php';
             </div>
 
             <div class="mb-3">
-              <label for="swimmer-xp">About your Experience</label>
+              <label class="form-label" for="swimmer-xp">About your Experience</label>
               <textarea name="swimmer-xp" id="swimmer-xp" class="form-control" aria-describedby="xp-help"><?=htmlspecialchars(trim($value['swimmer-xp']))?></textarea>
               <small class="text-muted" id="xp-help">Tell us about any achievements or other details</small>
             </div>
 
             <div>
-              <label for="swimmer-med">Medical Notes (Optional)</label>
+              <label class="form-label" for="swimmer-med">Medical Notes (Optional)</label>
               <textarea name="swimmer-med" id="swimmer-med" class="form-control" aria-describedby="med-help"><?=htmlspecialchars(trim($value['swimmer-med']))?></textarea>
               <small class="text-muted" id="med-help">Let us know of any medical notes we should be aware of</small>
             </div>
@@ -293,11 +293,11 @@ include BASE_PATH . 'views/header.php';
             skip this box.
           </p>
           <div class="mb-3">
-            <label for="swimmer-club">Current Swimming Club (Optional)</label>
+            <label class="form-label" for="swimmer-club">Current Swimming Club (Optional)</label>
             <input type="test" name="swimmer-club" id="swimmer-club" class="form-control" placeholder="<?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?>" value="<?=htmlspecialchars(trim($value['swimmer-club']))?>">
           </div>
           <div class="mb-3">
-            <label for="swimmer-asa">Swim England Number (Optional)</label>
+            <label class="form-label" for="swimmer-asa">Swim England Number (Optional)</label>
             <input type="number" name="swimmer-asa" id="swimmer-asa" class="form-control" placeholder="123456" pattern="[0-9]*" inputmode="numeric" value="<?=htmlspecialchars(trim($value['swimmer-asa']))?>">
             <div class="invalid-feedback">
               Please enter a number.
@@ -307,7 +307,7 @@ include BASE_PATH . 'views/header.php';
 
         <h2>Final Details</h2>
         <div class="mb-3">
-          <label for="questions">Questions or Comments (Optional)</label>
+          <label class="form-label" for="questions">Questions or Comments (Optional)</label>
           <textarea name="questions" id="questions" class="form-control"><?=htmlspecialchars(trim($value['questions']))?></textarea>
         </div>
 

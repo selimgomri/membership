@@ -44,22 +44,26 @@ include BASE_PATH . 'views/header.php';
 
 ?>
 
+<div class="bg-light mt-n3 py-3 mb-3">
+  <div class="container">
+
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="<?= autoUrl("galas") ?>">Galas</a></li>
+        <li class="breadcrumb-item"><a href="<?= autoUrl("galas/" . $id) ?>">This Gala</a></li>
+        <li class="breadcrumb-item"><a href="<?= autoUrl("galas/" . $id . "/team-manager") ?>">TM Dashboard</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Swimmers</li>
+      </ol>
+    </nav>
+
+    <h1><?= htmlspecialchars($gala['name']) ?> swimmer information</h1>
+    <p class="lead mb-0">View swimmer medical information and emergency contact details</p>
+  </div>
+</div>
+
 <div class="container">
-
-  <nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="<?= autoUrl("galas") ?>">Galas</a></li>
-      <li class="breadcrumb-item"><a href="<?= autoUrl("galas/" . $id) ?>">This Gala</a></li>
-      <li class="breadcrumb-item"><a href="<?= autoUrl("galas/" . $id . "/team-manager") ?>">TM Dashboard</a></li>
-      <li class="breadcrumb-item active" aria-current="page">Swimmers</li>
-    </ol>
-  </nav>
-
   <div class="row">
     <div class="col-md-8">
-
-      <h1><?= htmlspecialchars($gala['name']) ?> swimmer information</h1>
-      <p class="lead">View swimmer medical information and emergency contact details</p>
 
       <div class="alert alert-danger">
         <p class="mb-0">You <strong>must not disclose data about any swimmers on this page</strong> to other people. If somebody needs access to this data, they will have been granted access to it via their own account.</p>
@@ -69,7 +73,7 @@ include BASE_PATH . 'views/header.php';
 
       <?php } else { ?>
 
-        <ul class="list-group">
+        <ul class="list-group" id="swimmer-details-accordion">
           <?php $i = 0;
           do {
             $squads->execute([
@@ -82,23 +86,23 @@ include BASE_PATH . 'views/header.php';
                 <div class="col-md">
                   <h2><?= htmlspecialchars($swimmer['fn'] . " " . $swimmer['sn']) ?></h2>
                   <p class="lead mb-0">
-                    <?php for ($i = 0; $i < sizeof($s); $i++) {
-                      if ($i > 0) {
+                    <?php for ($y = 0; $y < sizeof($s); $y++) {
+                      if ($y > 0) {
                     ?>, <?php
                       }
-                        ?><?= htmlspecialchars($s[$i]) ?><?php
-                                                } ?>
+                        ?><?= htmlspecialchars($s[$y]) ?><?php
+                                                        } ?>
                   </p>
                   <div class="d-md-none mb-3"></div>
                 </div>
-                <div class="col text-md-right">
-                  <a class="btn btn-primary" data-toggle="collapse" href="#swimmer-info-box-<?= $i ?>" role="button" aria-expanded="false" aria-controls="swimmer-info-box-<?= $i ?>">
+                <div class="col text-md-end">
+                  <button class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#swimmer-info-box-<?= $i ?>" role="button" aria-expanded="false" aria-controls="swimmer-info-box-<?= $i ?>">
                     Show information <i class="fa fa-chevron-down" aria-hidden="true"></i>
-                  </a>
+                  </button>
                 </div>
               </div>
 
-              <div class="collapse" id="swimmer-info-box-<?= $i ?>">
+              <div class="collapse" id="swimmer-info-box-<?= $i ?>" data-bs-parent="#swimmer-details-accordion">
 
                 <div class="d-md-block mb-3"></div>
 
@@ -142,22 +146,22 @@ include BASE_PATH . 'views/header.php';
                           <p class="mb-0">
                             <strong><?= htmlspecialchars($swimmer['pfn'] . " " . $swimmer['psn']) ?></strong>
                           </p>
-                          <p class="mb-0">
-                            <a href="<?= htmlspecialchars($mobile->format(PhoneNumberFormat::RFC3966)) ?>">
+                          <div class="d-grid mt-2">
+                            <a href="<?= htmlspecialchars($mobile->format(PhoneNumberFormat::RFC3966)) ?>" class="btn btn-success">
                               <?= htmlspecialchars($mobile->format(PhoneNumberFormat::NATIONAL)) ?>
                             </a>
-                          </p>
+                          </div>
                         </li>
-                        <?php for ($i = 0; $i < sizeof($contactsArray); $i++) { ?>
+                        <?php for ($y = 0; $y < sizeof($contactsArray); $y++) { ?>
                           <li class="list-group-item">
                             <p class="mb-0">
-                              <strong><?= htmlspecialchars($contactsArray[$i]->getName()) ?></strong>
+                              <strong><?= htmlspecialchars($contactsArray[$y]->getName()) ?></strong>
                             </p>
-                            <p class="mb-0">
-                              <a href="<?= htmlspecialchars($contactsArray[$i]->getRFCContactNumber()) ?>">
-                                <?= htmlspecialchars($contactsArray[$i]->getNationalContactNumber()) ?>
+                            <div class="d-grid mt-2">
+                              <a href="<?= htmlspecialchars($contactsArray[$y]->getRFCContactNumber()) ?>" class="btn btn-success">
+                                <?= htmlspecialchars($contactsArray[$y]->getNationalContactNumber()) ?>
                               </a>
-                            </p>
+                            </div>
                           </li>
                         <?php } ?>
                       </ul>
