@@ -127,5 +127,5 @@ include BASE_PATH . "views/notifyMenu.php";
 </div>
 
 <?php $footer = new \SCDS\Footer();
-$footer->addJs("public/js/notify/TargetedListEditor.js");
+$footer->addJS("js/notify/TargetedListEditor.js");
 $footer->render();

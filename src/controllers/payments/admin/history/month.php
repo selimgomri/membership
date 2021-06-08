@@ -97,7 +97,7 @@ include BASE_PATH . "views/paymentsMenu.php";
                 </a>
 							</td>
 							<td>
-								&pound;<?=htmlspecialchars(number_format(($row['Amount']/100),2,'.',''))?>
+								&pound;<?=(string) (\Brick\Math\BigDecimal::of((string) $row['Amount']))->withPointMovedLeft(2)->toScale(2)?>
 							</td>
 							<td>
 								<?=htmlspecialchars(paymentStatusString($row['Status'], $row['stripeFailureCode']))?>

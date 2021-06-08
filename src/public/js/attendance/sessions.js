@@ -167,10 +167,10 @@ function addSession() {
       document.getElementById('output').innerHTML = json.sessions_view;
 
       // Show alert
-      document.getElementById('status-message').innerHTML = '<div class="alert alert-success alert-dismissible fade show" role="alert"><strong>Success!</strong> We\'ve added the session to the system. If the session starts in the future, it won\'t appear on this page until that day.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
+      document.getElementById('status-message').innerHTML = '<div class="alert alert-success alert-dismissible fade show" role="alert"><strong>Success!</strong> We\'ve added the session to the system. If the session starts in the future, it won\'t appear on this page until that day.<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
     } else if (this.readyState == 4 && this.status != 200) {
       // Show alert
-      document.getElementById('status-message').innerHTML = '<div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>We could not add the session!</strong> Please check the details and try again.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
+      document.getElementById('status-message').innerHTML = '<div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>We could not add the session!</strong> Please check the details and try again.<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
     }
   }
   sessAjax.open('POST', ajaxInfo.ajaxUrl, true);

@@ -99,5 +99,5 @@ if (isset($renewal_trap) && $renewal_trap) {
 <?php
 
 $footer = new \SCDS\Footer();
-$footer->addJs("public/js/NeedsValidation.js");
+$footer->addJS("js/NeedsValidation.js");
 $footer->render();

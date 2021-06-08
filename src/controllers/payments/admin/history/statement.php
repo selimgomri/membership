@@ -207,49 +207,49 @@ include BASE_PATH . "views/paymentsMenu.php";
                 Amount
               </th>
             </tr>
-          </thead>
-          <tbody>
-            <?php
-            do {
-              $data = "";
-              if ($row['MetadataJSON'] != "" || $row['MetadataJSON'] != "") {
-                $json = json_decode($row['MetadataJSON']);
-                if ($json->PaymentType == "SquadFees"  || $json->PaymentType == "ExtraFees") {
-                  $data .= '<ul class="list-unstyled mb-0">';
-                  //echo sizeof($json->Members);
-                  //pre($json->Members);
-                  //echo $json->Members[0]->MemberName;
-                  $numMems = 0;
-                  if (isset($json->Members) && $json->Members != null) {
-                    $numMems = (int) sizeof($json->Members);
-                    for ($y = 0; $y < $numMems; $y++) {
-                      $data .= '<li>' . htmlspecialchars($json->Members[$y]->FeeName) . " (&pound;" . htmlspecialchars($json->Members[$y]->Fee) . ") for " . htmlspecialchars($json->Members[$y]->MemberName) . '</li>';
+            </thead>
+            <tbody>
+              <?php
+              do {
+                $data = "";
+                if ($row['MetadataJSON'] != "" || $row['MetadataJSON'] != "") {
+                  $json = json_decode($row['MetadataJSON']);
+                  if ($json->PaymentType == "SquadFees"  || $json->PaymentType == "ExtraFees") {
+                    $data .= '<ul class="list-unstyled mb-0">';
+                    //echo sizeof($json->Members);
+                    //pre($json->Members);
+                    //echo $json->Members[0]->MemberName;
+                    $numMems = 0;
+                    if (isset($json->Members) && $json->Members != null) {
+                      $numMems = (int) sizeof($json->Members);
+                      for ($y = 0; $y < $numMems; $y++) {
+                        $data .= '<li>' . htmlspecialchars($json->Members[$y]->FeeName) . " (&pound;" . htmlspecialchars($json->Members[$y]->Fee) . ") for " . htmlspecialchars($json->Members[$y]->MemberName) . '</li>';
+                      }
                     }
+                    $data .= '</ul>';
                   }
-                  $data .= '</ul>';
                 }
-              }
-            ?>
-              <tr>
-                <td>
-                  <?= date("D j M Y", strtotime($row['Date'])) ?>
-                </td>
-                <td>
-                  <?= htmlspecialchars($row['Name']) ?>
-                  <em><?= $data ?></em>
-                </td>
-                <td>
-                  <?php if ($row['Type'] == "Payment") { ?>
-                    &pound;<?= (string) (\Brick\Math\BigDecimal::of((string) $row['Amount']))->withPointMovedLeft(2)->toScale(2) ?>
-                  <?php } else { ?>
-                    -&pound;<?= (string) (\Brick\Math\BigDecimal::of((string) $row['Amount']))->withPointMovedLeft(2)->toScale(2) ?> (Credit)
-                  <?php } ?>
-                </td>
-              </tr>
-            <?php
-              $row = $payments->fetch(PDO::FETCH_ASSOC);
-            } while ($row != null); ?>
-          </tbody>
+              ?>
+                <tr>
+                  <td>
+                    <?= date("D j M Y", strtotime($row['Date'])) ?>
+                  </td>
+                  <td>
+                    <?= htmlspecialchars($row['Name']) ?>
+                    <em><?= $data ?></em>
+                  </td>
+                  <td>
+                    <?php if ($row['Type'] == "Payment") { ?>
+                      &pound;<?= (string) (\Brick\Math\BigDecimal::of((string) $row['Amount']))->withPointMovedLeft(2)->toScale(2) ?>
+                    <?php } else { ?>
+                      -&pound;<?= (string) (\Brick\Math\BigDecimal::of((string) $row['Amount']))->withPointMovedLeft(2)->toScale(2) ?> (Credit)
+                    <?php } ?>
+                  </td>
+                </tr>
+              <?php
+                $row = $payments->fetch(PDO::FETCH_ASSOC);
+              } while ($row != null); ?>
+            </tbody>
         </table>
       </div>
     <?php } ?>
@@ -268,16 +268,10 @@ include BASE_PATH . "views/paymentsMenu.php";
         Problems are very rare but when they do happen we'll work to resolve them
         as quickly as possible.
       </p>
-      <!--<p>
-          Print off this page and club staff can scan this code to access your
-          statement.
-        </p>
-        <img class="img-fluid d-block mb-3" src="<?= autoUrl("services/qr/0/150") ?>" srcset="<?= autoUrl("services/qr/0/300") ?> 2x, <?= autoUrl("services/qr/0/450") ?> 3x" alt="<?= htmlspecialchars(autoUrl("payments/history/statement/" . strtoupper($PaymentID))) ?>">
-      -->
 
       <h2>Questions about Direct Debit</h2>
       <p>
-        Full help and support for payments by Direct Debit is available on the support website.
+        Full help and support for payments by Direct Debit is available on the <a href="<?= htmlspecialchars(platformUrl('help-and-support')) ?>" target="_blank">support website</a>.
       </p>
       <p>
         Direct Debit payments to <?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?> are covered by the Direct Debit Guarantee.

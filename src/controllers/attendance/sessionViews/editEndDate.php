@@ -77,5 +77,5 @@ include BASE_PATH . "controllers/attendance/attendanceMenu.php";
 </div>
 
 <?php $footer = new \SCDS\Footer();
-$footer->addJs("public/js/attendance/edit-end-date.js");
+$footer->addJS("js/attendance/edit-end-date.js");
 $footer->render();

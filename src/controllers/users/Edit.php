@@ -176,5 +176,5 @@ include BASE_PATH . 'views/header.php';
 <?php
 
 $footer = new \SCDS\Footer();
-$footer->addJs("public/js/users/Edit.js");
+$footer->addJS("js/users/Edit.js");
 $footer->render();

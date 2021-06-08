@@ -118,5 +118,5 @@ unset($_SESSION['TENANT-' . app()->tenant->getId()]['EditVenueSuccess']);
 unset($_SESSION['TENANT-' . app()->tenant->getId()]['NewVenueSuccess']);
 
 $footer = new \SCDS\Footer();
-$footer->addJs("public/js/NeedsValidation.js");
+$footer->addJS("js/NeedsValidation.js");
 $footer->render();

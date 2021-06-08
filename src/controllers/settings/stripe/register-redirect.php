@@ -62,8 +62,8 @@ try {
 }
 
 if ($tenant) {
-  header("location: " . autoUrl($tenant->getCodeId() . "/settings/stripe"));
+  header("location: " . platformUrl($tenant->getCodeId() . "/settings/stripe"));
 } else {
   // Argh
-  header("location: " . autoUrl("/clubs", false));
+  header("location: " . platformUrl("/clubs"));
 }

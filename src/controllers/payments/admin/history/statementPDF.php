@@ -297,7 +297,7 @@ ob_start();?>
     </p>
 
     <h2 id="payment-questions">Questions about Direct Debit?</h2>
-    <p>Full help and support for payments by Direct Debit is available on the <a href="https://www.chesterlestreetasc.co.uk/support/onlinemembership/" target="_blank">Membership System Support Website</a>. Help and Support Documentation is provided by Chester-le-Street ASC to all clubs and users that use this service. If you need somebody to help you, please contact your own club.</p>
+    <p>Full help and support for payments by Direct Debit is available on the <a href="<?= htmlspecialchars(platformUrl('help-and-support')) ?>" target="_blank">Membership System Support Website</a>. Help and Support Documentation is provided by Swimming Club Data Systems to all clubs and users that use this service. If you need somebody to help you, please contact your own club.</p>
 
     <div class="row" id="payment-dd-guarantee">
       <div class="split-75">

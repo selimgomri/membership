@@ -253,6 +253,6 @@ if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegGetDetailsPostDat
 }
 
 $footer = new \SCDS\Footer();
-$footer->addJs("public/js/NeedsValidation.js");
-$footer->addJs("public/js/ajax-utilities/pwned-password-check.js");
+$footer->addJS("js/NeedsValidation.js");
+$footer->addJS("js/ajax-utilities/pwned-password-check.js");
 $footer->render();

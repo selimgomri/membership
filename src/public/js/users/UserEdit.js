@@ -52,7 +52,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         modal.hide();
         // Setup resend status alert
         var resendStatus = document.getElementById('resend-status');
-        resendStatus.innerHTML = '<div id="resend-status-alert"><div id="resend-status-content"></div><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div></div>';
+        resendStatus.innerHTML = '<div id="resend-status-alert"><div id="resend-status-content"></div><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div></div>';
 
         var resendStatusAlert = document.getElementById('resend-status-alert');
         resendStatusAlert.classList.add('alert', 'alert-dismissible', 'fade', 'show');

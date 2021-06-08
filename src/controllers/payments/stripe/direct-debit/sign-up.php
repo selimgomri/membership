@@ -136,5 +136,5 @@ if (isset($renewal_trap) && $renewal_trap) {
 <?php
 
 $footer = new \SCDS\Footer();
-$footer->addJs("public/js/payments/direct-debit/setup.js");
+$footer->addJS("js/payments/direct-debit/setup.js");
 $footer->render();

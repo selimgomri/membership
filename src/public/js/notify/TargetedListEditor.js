@@ -58,16 +58,16 @@ function addSwimmerToList() {
         document.getElementById("status").innerHTML =
         '<div class="mt-3 mb-0 alert alert-success alert-dismissible fade show" role="alert">' +
         '<strong>Successfully Added Swimmer</strong>'  +
-        '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
-        '<span aria-hidden="true">&times;</span>' +
+        '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">' +
+        '' +
         '</button>' +
         '</div>';
       } else {
         document.getElementById("status").innerHTML =
         '<div class="mt-3 mb-0 alert alert-warning alert-dismissible fade show" role="alert">' +
         '<strong>Unable to add swimmer</strong><br>They may already be on the list' +
-        '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
-        '<span aria-hidden="true">&times;</span>' +
+        '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">' +
+        '' +
         '</button>' +
         '</div>';
       }
@@ -79,8 +79,8 @@ function addSwimmerToList() {
     document.getElementById('status').innerHTML =
     '<div class="mt-3 mb-0 alert alert-warning alert-dismissible fade show" role="alert">' +
     '<strong>No swimmer selected</strong><br>Please select a swimmer to add to this list' +
-    '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
-    '<span aria-hidden="true">&times;</span>' +
+    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">' +
+    '' +
     '</button>' +
     '</div>';
   }
@@ -116,16 +116,16 @@ function addUserToList() {
         document.getElementById("user-status").innerHTML =
         '<div class="mt-3 mb-0 alert alert-success alert-dismissible fade show" role="alert">' +
         '<strong>Successfully Added Swimmer</strong>'  +
-        '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
-        '<span aria-hidden="true">&times;</span>' +
+        '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">' +
+        '' +
         '</button>' +
         '</div>';
       } else {
         document.getElementById("user-status").innerHTML =
         '<div class="mt-3 mb-0 alert alert-warning alert-dismissible fade show" role="alert">' +
         '<strong>Unable to add swimmer</strong><br>They may already be on the list' +
-        '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
-        '<span aria-hidden="true">&times;</span>' +
+        '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">' +
+        '' +
         '</button>' +
         '</div>';
       }
@@ -137,8 +137,8 @@ function addUserToList() {
     document.getElementById('user-status').innerHTML =
     '<div class="mt-3 mb-0 alert alert-warning alert-dismissible fade show" role="alert">' +
     '<strong>No swimmer selected</strong><br>Please select a user to add to this list' +
-    '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
-    '<span aria-hidden="true">&times;</span>' +
+    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">' +
+    '' +
     '</button>' +
     '</div>';
   }

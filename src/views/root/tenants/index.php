@@ -1,7 +1,7 @@
 <?php
 
 $db = app()->db;
-$getClubs = $db->query("SELECT `ID`, `Name`, `Code`, `Verified` FROM tenants WHERE `Verified` ORDER BY `Name` ASC");
+$getClubs = $db->query("SELECT `ID`, `Name`, `Code`, `Verified`, `Domain`, `UniqueID` FROM tenants WHERE `Verified` ORDER BY `Name` ASC");
 $club = $getClubs->fetch(PDO::FETCH_ASSOC);
 
 $pagetitle = "Clubs";
@@ -25,12 +25,13 @@ include BASE_PATH . "views/root/header.php";
         </div> -->
           <div class="list-group list-group-flush">
             <?php do {
-              $link = $club['ID'];
-              if ($club['Code']) {
-                $link = mb_strtolower($club['Code']);
+              $link = $club['Domain'];
+              if (!$link) {
+                $link = $club['UniqueID'] . '.' . getenv('MAIN_DOMAIN');
               }
+              $link = 'https://' . $link;
             ?>
-              <a class="list-group-item list-group-item-action" href="<?= htmlspecialchars(autoUrl($link)) ?>"><?= htmlspecialchars($club['Name']) ?></a>
+              <a class="list-group-item list-group-item-action" href="<?= htmlspecialchars($link) ?>"><?= htmlspecialchars($club['Name']) ?></a>
             <?php } while ($club = $getClubs->fetch(PDO::FETCH_ASSOC)); ?>
           </div>
         </div>

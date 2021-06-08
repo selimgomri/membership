@@ -163,7 +163,7 @@ include BASE_PATH . 'views/header.php';
 								<div id="<?=$entry['EntryID']?>-amount-refunded">
 								<?php if ($entry['Refunded']) { ?>
 								<p>
-									<strong>&pound;<?=number_format($entry['AmountRefunded']/100, 2)?></strong> has already been refunded!
+									<strong>&pound;<?=(string) (\Brick\Math\BigDecimal::of((string) $entry['AmountRefunded']))->withPointMovedLeft(2)->toScale(2)?></strong> has already been refunded!
 								</p>
 								<?php } ?>
 								</div>
@@ -297,6 +297,6 @@ include BASE_PATH . 'views/header.php';
 <?php
 
 $footer = new \SCDS\Footer();
-$footer->addJs("public/js/numerical/bignumber.min.js");
-$footer->addJs("public/js/payments/galas/refund-charges.js");
+$footer->addJS("js/numerical/bignumber.min.js");
+$footer->addJS("js/payments/galas/refund-charges.js");
 $footer->render();

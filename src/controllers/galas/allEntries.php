@@ -101,7 +101,7 @@ include "galaMenu.php"; ?>
 </div>
 
 <?php $footer = new \SCDS\Footer();
-$footer->addJs("public/js/gala-entries/ViewEntries.js");
+$footer->addJS("js/gala-entries/ViewEntries.js");
 $footer->render();
 
 ?>

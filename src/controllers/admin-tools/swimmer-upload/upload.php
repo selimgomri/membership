@@ -106,7 +106,7 @@ include BASE_PATH . 'views/header.php';
 <?php
 
 $footer = new \SCDS\Footer();
-$footer->addJs("public/js/bs-custom-file-input.min.js");
-$footer->addJs("public/js/file-input-init.js");
-$footer->addJs("public/js/NeedsValidation.js");
+$footer->addJS("js/bs-custom-file-input.min.js");
+$footer->addJS("js/file-input-init.js");
+$footer->addJS("js/NeedsValidation.js");
 $footer->render();

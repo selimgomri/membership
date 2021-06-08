@@ -86,5 +86,5 @@ if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['POST_DATA'])) {
 <?php
 
 $footer = new \SCDS\Footer();
-$footer->addJs("public/js/NeedsValidation.js");
+$footer->addJS("js/NeedsValidation.js");
 $footer->render();

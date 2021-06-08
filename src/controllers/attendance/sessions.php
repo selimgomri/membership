@@ -299,7 +299,7 @@ include "attendanceMenu.php";
 <?php
 
 $footer = new \SCDS\Footer();
-$footer->addJs("public/js/NeedsValidation.js");
-$footer->addJs("public/js/attendance/sessions.js");
+$footer->addJS("js/NeedsValidation.js");
+$footer->addJS("js/attendance/sessions.js");
 $footer->useFluidContainer();
 $footer->render();

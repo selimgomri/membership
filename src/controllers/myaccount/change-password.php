@@ -76,7 +76,7 @@ include BASE_PATH . "views/header.php";
 <div id="ajax-options" data-get-pwned-list-ajax-url="<?= htmlspecialchars(autoUrl('ajax-utilities/pwned-password-check')) ?>" data-cross-site-request-forgery-value="<?= htmlspecialchars(\SCDS\CSRF::getValue()) ?>"></div>
 
 <?php $footer = new \SCDS\Footer();
-$footer->addJs("public/js/NeedsValidation.js");
-$footer->addJs("public/js/ajax-utilities/pwned-password-check.js");
+$footer->addJS("js/NeedsValidation.js");
+$footer->addJS("js/ajax-utilities/pwned-password-check.js");
 $footer->useFluidContainer();
 $footer->render(); ?>

@@ -149,5 +149,5 @@ include BASE_PATH . 'views/header.php';
 <?php
 
 $footer = new Footer();
-$footer->addJs("public/js/payments/direct-debit/setup.js");
+$footer->addJS("js/payments/direct-debit/setup.js");
 $footer->render();
