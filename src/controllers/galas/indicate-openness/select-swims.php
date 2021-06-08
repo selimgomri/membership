@@ -44,11 +44,25 @@ include BASE_PATH . 'views/header.php';
 
 ?>
 
+<div class="bg-light mt-n3 py-3 mb-3">
+  <div class="container-fluid">
+
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl("galas")) ?>">Galas</a></li>
+        <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl("galas/$id")) ?>">#<?= htmlspecialchars($id) ?></a></li>
+        <li class="breadcrumb-item active" aria-current="page">Select Swims</li>
+      </ol>
+    </nav>
+
+    <h1>Select entries for <?= htmlspecialchars($gala['name']) ?></h1>
+    <p class="lead mb-0">Below are all members which have indicated they are available at at least one session.</p>
+  </div>
+</div>
+
 <div class="container-fluid">
   <div class="row">
     <div class="col-lg-8">
-      <h1>Select entries for <?= htmlspecialchars($gala['name']) ?></h1>
-      <p class="lead">Below are all members which have indicated they are available at at least one session.</p>
 
       <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['SuccessStatus']) && $_SESSION['TENANT-' . app()->tenant->getId()]['SuccessStatus']) { ?>
         <div class="alert alert-success">

@@ -44,6 +44,10 @@ if ($access == "Admin" || $access == "Coach" || $access == "Galas" || $rep) {
 		include 'Home.php';
 	});
 
+	$this->post('/file-uploads', function() {
+		include 'FileUploads.php';
+	});
+
   $this->group(['/new', '/newemail'], function() {
 
 		$access = $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'];

@@ -45,15 +45,31 @@ include BASE_PATH . "views/header.php";
 
 ?>
 
+<div class="bg-light mt-n3 py-3 mb-3">
+  <div class="container">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl("galas")) ?>">Galas</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Enter gala</li>
+      </ol>
+    </nav>
+
+    <div class="row">
+      <div class="col-lg-8">
+        <h1>
+          <?= htmlspecialchars($row['MForename']) ?>'s Gala Entry to <?= htmlspecialchars($row['GalaName']) ?>
+        </h1>
+        <p class="lead mb-0">
+          Here are the details...
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="container">
   <div class="row">
     <div class="col-md-8">
-      <h1>
-        <?=htmlspecialchars($row['MForename'])?>'s Gala Entry to <?=htmlspecialchars($row['GalaName'])?>
-      </h1>
-      <p class="lead">
-        Here are the details...
-      </p>
       <div class="alert alert-success">
         <p class="mb-0">
           An email confirmation is on it's way to

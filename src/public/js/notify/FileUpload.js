@@ -103,7 +103,7 @@ function printFileDetails(event) {
 
 // On load
 document.addEventListener('DOMContentLoaded', function (event) {
-  Get all file input elements (in case more than one)
+  // Get all file input elements (in case more than one)
   var inputs = document.querySelectorAll('input[type=file]');
 
   for (let i = 0; i < inputs.length; i++) {
