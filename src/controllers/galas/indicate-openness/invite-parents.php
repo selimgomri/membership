@@ -29,18 +29,24 @@ include BASE_PATH . 'views/header.php';
 
 ?>
 
+<div class="bg-light mt-n3 py-3 mb-3">
+  <div class="container">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="<?= autoUrl("galas") ?>">Galas</a></li>
+        <li class="breadcrumb-item"><a href="<?= autoUrl("galas/" . $id) ?>"><?= htmlspecialchars($gala['name']) ?></a></li>
+        <li class="breadcrumb-item active" aria-current="page">Invite Parents</li>
+      </ol>
+    </nav>
+
+    <h1>Invite members to enter <?= htmlspecialchars($gala['name']) ?></h1>
+    <p class="lead mb-0">Send an email to parents/members letting them know they can enter this gala.</p>
+  </div>
+</div>
+
 <div class="container">
-  <nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="<?= autoUrl("galas") ?>">Galas</a></li>
-      <li class="breadcrumb-item"><a href="<?= autoUrl("galas/" . $id) ?>"><?= htmlspecialchars($gala['name']) ?></a></li>
-      <li class="breadcrumb-item active" aria-current="page">Invite Parents</li>
-    </ol>
-  </nav>
   <div class="row">
     <div class="col-lg-8">
-      <h1>Invite parents to enter <?= htmlspecialchars($gala['name']) ?></h1>
-      <p class="lead">Send an email to parents letting them know their swimmers can enter this gala.</p>
 
       <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['SuccessStatus']) && $_SESSION['TENANT-' . app()->tenant->getId()]['SuccessStatus']) { ?>
         <div class="alert alert-success">Saved</div>

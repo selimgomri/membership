@@ -60,64 +60,94 @@ try {
   // Handle attachments early doors
   $attachments = [];
   $collectiveSize = 0;
-  for ($i = 0; $i < sizeof($_FILES['file-upload']['tmp_name']); $i++) {
-    if (is_uploaded_file($_FILES['file-upload']['tmp_name'][$i])) {
 
-      if (bool($_FILES['file-upload']['error'][$i])) {
-        // Error
-        // reportError($_FILES['file-upload']['error'][$i]);
-        if ($_FILES['file-upload']['error'][$i] == 2) {
-          // Too large
-          $_SESSION['TENANT-' . app()->tenant->getId()]['TooLargeError'] = true;
-        } else {
-          $_SESSION['TENANT-' . app()->tenant->getId()]['UploadError'] = true;
-        }
-        throw new Exception();
-      } else if (false/*$_FILES['file-upload']['type'][$i] != 'text/plain' && $_FILES['file-upload']['type'][$i] != 'application/octet-stream'*/) {
-        // Probably not a text file
-        reportError($_FILES['file-upload']['type'][$i]);
-        $_SESSION['TENANT-' . app()->tenant->getId()]['UploadError'] = true;
-        throw new Exception();
-      } else if ($_FILES['file-upload']['size'][$i] > 10485760) {
-        // Too large, stop
-        // reportError($_FILES['file-upload']['size'][$i]);
-        $_SESSION['TENANT-' . app()->tenant->getId()]['TooLargeError'] = true;
-        throw new Exception();
-      } else if ($_FILES['file-upload']['size'][$i] > 0) {
-        // Store uploaded files in filestore, if exists
-        if ($rootFilePath = $tenant->getFilePath()) {
-          // Work out filename for upload
-          $date = new DateTime('now', new DateTimeZone('Europe/London'));
-          $urlPath = 'notify/attachments/' . $date->format("Y/m/d") . '/';
-          $s3Path = $tenant->getId() . '/' . $urlPath;
-
-          $uuid = Ramsey\Uuid\Uuid::uuid4()->toString();
-          $filename = $uuid . '-' . preg_replace('@[^0-9a-z\.]+@i', '-', basename($_FILES['file-upload']['name'][$i]));
-
-          $filenamePath = $s3Path . $filename;
-          $url = $urlPath . $filename;
-        }
+  $attachmentsList = json_decode($_POST['email-attachments']);
+  for ($i = 0; $i < sizeof($attachmentsList); $i++) {
+    try {
+      if ($filesystem->fileExists($attachmentsList[$i]->s3_key)) {
+        $file = $filesystem->read($attachmentsList[$i]->s3_key);
+        $filesize = $filesystem->filesize($attachmentsList[$i]->s3_key);
+        $mimetype = $filesystem->mimeType($attachmentsList[$i]->s3_key);
 
         $collectiveSize += $_FILES['file-upload']['size'][$i];
         $attachments[] = [
-          'encoded' => base64_encode(file_get_contents($_FILES['file-upload']['tmp_name'][$i])),
-          'mime' => mime_content_type($_FILES['file-upload']['tmp_name'][$i]),
-          'filename' => $_FILES['file-upload']['name'][$i],
+          'encoded' => base64_encode($file),
+          'mime' => $mimetype,
+          'filename' => $attachmentsList[$i]->filename,
           'disposition' => 'attachment',
-          'tmp_name' => $_FILES['file-upload']['tmp_name'][$i],
-          'store_name' => $filenamePath,
-          'directory' => $path,
-          'url' => $url,
-          'uploaded' => false,
+          'store_name' => $attachmentsList[$i]->s3_key,
+          'directory' => null,
+          'url' => $attachmentsList[$i]->url,
+          'uploaded' => true,
         ];
-      } else {
-        // File upload error (no size)
-        reportError($_FILES);
-        $_SESSION['TENANT-' . app()->tenant->getId()]['UploadError'] = true;
-        throw new Exception();
       }
+    } catch (League\Flysystem\FilesystemException | League\Flysystem\UnableToReadFile | \Exception $e) {
+      // handle the error
+      reportError($e);
     }
   }
+
+  // Handle attachments early doors
+  // $attachments = [];
+  // $collectiveSize = 0;
+  // for ($i = 0; $i < sizeof($_FILES['file-upload']['tmp_name']); $i++) {
+  //   if (is_uploaded_file($_FILES['file-upload']['tmp_name'][$i])) {
+
+  //     if (bool($_FILES['file-upload']['error'][$i])) {
+  //       // Error
+  //       // reportError($_FILES['file-upload']['error'][$i]);
+  //       if ($_FILES['file-upload']['error'][$i] == 2) {
+  //         // Too large
+  //         $_SESSION['TENANT-' . app()->tenant->getId()]['TooLargeError'] = true;
+  //       } else {
+  //         $_SESSION['TENANT-' . app()->tenant->getId()]['UploadError'] = true;
+  //       }
+  //       throw new Exception();
+  //     } else if (false/*$_FILES['file-upload']['type'][$i] != 'text/plain' && $_FILES['file-upload']['type'][$i] != 'application/octet-stream'*/) {
+  //       // Probably not a text file
+  //       reportError($_FILES['file-upload']['type'][$i]);
+  //       $_SESSION['TENANT-' . app()->tenant->getId()]['UploadError'] = true;
+  //       throw new Exception();
+  //     } else if ($_FILES['file-upload']['size'][$i] > 10485760) {
+  //       // Too large, stop
+  //       // reportError($_FILES['file-upload']['size'][$i]);
+  //       $_SESSION['TENANT-' . app()->tenant->getId()]['TooLargeError'] = true;
+  //       throw new Exception();
+  //     } else if ($_FILES['file-upload']['size'][$i] > 0) {
+  //       // Store uploaded files in filestore, if exists
+  //       if ($rootFilePath = $tenant->getFilePath()) {
+  //         // Work out filename for upload
+  //         $date = new DateTime('now', new DateTimeZone('Europe/London'));
+  //         $urlPath = 'notify/attachments/' . $date->format("Y/m/d") . '/';
+  //         $s3Path = $tenant->getId() . '/' . $urlPath;
+
+  //         $uuid = Ramsey\Uuid\Uuid::uuid4()->toString();
+  //         $filename = $uuid . '-' . preg_replace('@[^0-9a-z\.]+@i', '-', basename($_FILES['file-upload']['name'][$i]));
+
+  //         $filenamePath = $s3Path . $filename;
+  //         $url = $urlPath . $filename;
+  //       }
+
+  //       $collectiveSize += $_FILES['file-upload']['size'][$i];
+  //       $attachments[] = [
+  //         'encoded' => base64_encode(file_get_contents($_FILES['file-upload']['tmp_name'][$i])),
+  //         'mime' => mime_content_type($_FILES['file-upload']['tmp_name'][$i]),
+  //         'filename' => $_FILES['file-upload']['name'][$i],
+  //         'disposition' => 'attachment',
+  //         'tmp_name' => $_FILES['file-upload']['tmp_name'][$i],
+  //         'store_name' => $filenamePath,
+  //         'directory' => $path,
+  //         'url' => $url,
+  //         'uploaded' => false,
+  //       ];
+  //     } else {
+  //       // File upload error (no size)
+  //       reportError($_FILES);
+  //       $_SESSION['TENANT-' . app()->tenant->getId()]['UploadError'] = true;
+  //       throw new Exception();
+  //     }
+  //   }
+  // }
 
   if ($collectiveSize > 10485760) {
     // Collectively too large attachments
@@ -125,7 +155,7 @@ try {
     throw new Exception();
   }
 
-  if (getenv('AWS_S3_BUCKET')) {
+  if (false && getenv('AWS_S3_BUCKET')) {
     for ($i = 0; $i < sizeof($attachments); $i++) {
 
       try {

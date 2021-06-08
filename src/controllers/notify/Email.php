@@ -77,6 +77,10 @@ function fieldValue($name)
   }
 }
 
+$uuid = \Ramsey\Uuid\Uuid::uuid4();
+$date = (new DateTime('now', new DateTimeZone('Europe/London')))->format('Y/m/d');
+$attachments = [];
+
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/notifyMenu.php";
 
@@ -266,7 +270,7 @@ include BASE_PATH . "views/notifyMenu.php";
 
     <input type="hidden" name="MAX_FILE_SIZE" value="10485760">
 
-    <div class="mb-3">
+    <!-- <div class="mb-3">
       <label class="form-label" for="file-upload">Select files to attach</label>
       <input type="file" class="form-control" id="file-upload" name="file-upload[]" multiple data-max-total-file-size="10485760" data-max-file-size="10485760" data-error-message-id="file-upload-invalid-feedback" aria-describedby="file-upload-multi-info">
       <small id="file-upload-multi-info" class="form-text text-muted">
@@ -275,7 +279,21 @@ include BASE_PATH . "views/notifyMenu.php";
       <div class="invalid-feedback" id="file-upload-invalid-feedback">
         Oh no!
       </div>
+    </div> -->
+
+    <input type="hidden" name="email-uuid" id="email-uuid" value="<?= htmlspecialchars($uuid) ?>">
+    <input type="hidden" name="email-date" id="email-date" value="<?= htmlspecialchars($date) ?>">
+    <input type="hidden" name="email-attachments" id="email-attachments" value="<?= htmlspecialchars(json_encode($attachments)) ?>">
+
+    <label class="form-label">Add attachments</label>
+    <div class="upload-drop card card-body mb-3" id="upload-zone" data-action="<?= htmlspecialchars(autoUrl('notify/file-uploads')) ?>" data-uuid="<?= htmlspecialchars($uuid) ?>" data-date="<?= htmlspecialchars($date) ?>" data-max-total-file-size="10" data-max-total-file-size-bytes="10485760" data-max-file-size-bytes="10485760">
+      <div class="dz-message d-flex flex-column text-center py-2">
+        <i class="fa fa-cloud-upload fa-3x" aria-hidden="true"></i>
+        Drag &amp; Drop attachments here or click to browse for files
+      </div>
+      <div class="dropzone-previews row g-2 mb-n2" id="upload-previews"></div>
     </div>
+    <p class="d-none text-danger mt-n2" id="file-warning-message"></p>
 
     <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Admin" || $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Galas") { ?>
 
@@ -351,6 +369,8 @@ include BASE_PATH . "views/notifyMenu.php";
 
 <?php $footer = new \SCDS\Footer();
 $footer->addJS("js/tinymce/tinymce.min.js");
-$footer->addJS("js/notify/TinyMCE.js?v=1");
-$footer->addJS("js/notify/FileUpload.js");
+// $footer->addJS("js/notify/TinyMCE.js?v=1");
+// $footer->addJS("js/notify/FileUpload.js");
+$footer->addJS("js/dropzone/dropzone.js");
+$footer->addJS("js/notify/FileUploadDropzone.js");
 $footer->render();

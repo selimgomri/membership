@@ -29,20 +29,26 @@ include BASE_PATH . 'views/header.php';
 
 ?>
 
+<div class="bg-light mt-n3 py-3 mb-3">
+  <div class="container">
+
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="<?= autoUrl("galas") ?>">Galas</a></li>
+        <li class="breadcrumb-item"><a href="<?= autoUrl("galas/" . $id) ?>">#<?= htmlspecialchars($id) ?></a></li>
+        <li class="breadcrumb-item active" aria-current="page">Prices and events</li>
+      </ol>
+    </nav>
+
+    <h1>Pricing and events</h1>
+    <p class="lead mb-0">Manage events and entry fees for <?= htmlspecialchars($gala['name']) ?>.</p>
+
+  </div>
+</div>
+
 <div class="container">
-
-  <nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="<?= autoUrl("galas") ?>">Galas</a></li>
-      <li class="breadcrumb-item"><a href="<?= autoUrl("galas/" . $id) ?>">#<?= htmlspecialchars($id) ?></a></li>
-      <li class="breadcrumb-item active" aria-current="page">Prices and events</li>
-    </ol>
-  </nav>
-
   <div class="row">
     <div class="col-lg-8">
-      <h1>Pricing and events</h1>
-      <p class="lead">Manage events and entry fees for <?= htmlspecialchars($gala['name']) ?>.</p>
 
       <p>You can select events which will be run at this gala and enter the price for each of these events.</p>
 
