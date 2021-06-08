@@ -1,4 +1,6 @@
 document.addEventListener("DOMContentLoaded", function (event) {
+  let modal = new bootstrap.Modal(document.getElementById('main-modal'));
+
   function apply() {
     var type = document.getElementById('accountType');
     var typeValue = type.value;
@@ -36,7 +38,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
     // Setup confirm event listeners
     document.getElementById('modal-confirm-button').addEventListener('click', resendRegistrationEmail);
 
-    let modal = new bootstrap.Modal(document.getElementById('main-modal'));
     modal.show();
   }
 
@@ -48,7 +49,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
       if (this.readyState == 4 && this.status == 200) {
         var json = JSON.parse(this.responseText);
 
-        let modal = new bootstrap.Modal(document.getElementById('main-modal'));
         modal.hide();
         // Setup resend status alert
         var resendStatus = document.getElementById('resend-status');

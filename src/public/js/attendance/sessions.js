@@ -1,4 +1,5 @@
 const ajaxInfo = document.getElementById('ajax-info').dataset;
+let addModal = document.getElementById('add-session-modal');
 
 let recurrenceChange = ((ev = null) => {
   let showUntil = document.getElementById('session-end-date');
@@ -39,8 +40,7 @@ document.getElementById('new-session-form').addEventListener('submit', ev => {
             window.location.href = response.redirect;
           } else {
             getSessions();
-            let modal = new bootstrap.Modal(document.getElementById('add-session-modal'));
-            modal.hide();
+            addModal.hide();
           }
         } else {
           // Error
@@ -53,7 +53,6 @@ document.getElementById('new-session-form').addEventListener('submit', ev => {
   }
 });
 
-let addModal = document.getElementById('add-session-modal');
 addModal.addEventListener('hidden.bs.modal', function (event) {
   let resetForms = document.getElementsByClassName('add-session-form-reset-input');
   document.getElementById('recurring-session').checked = true;

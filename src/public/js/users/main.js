@@ -1,3 +1,5 @@
+let modal = new bootstrap.Modal(document.getElementById('main-modal'));
+
 function deleteCoachFromSquad(user, squad) {
   let url = document.getElementById('coach-squad-assign').dataset.ajaxUrl;
   var xhttp = new XMLHttpRequest();
@@ -135,7 +137,6 @@ document.addEventListener('DOMContentLoaded', function (event) {
     // Setup confirm event listeners
     document.getElementById('modal-confirm-button').addEventListener('click', resendRegistrationEmail);
 
-    let modal = new bootstrap.Modal(document.getElementById('main-modal'));
     modal.show();
   }
 
@@ -147,7 +148,6 @@ document.addEventListener('DOMContentLoaded', function (event) {
       if (this.readyState == 4 && this.status == 200) {
         var json = JSON.parse(this.responseText);
 
-        let modal = new bootstrap.Modal(document.getElementById('main-modal'));
         modal.hide();
         // Setup resend status alert
         var resendStatus = document.getElementById('resend-status');
@@ -230,7 +230,6 @@ document.addEventListener('DOMContentLoaded', function (event) {
       xhttp.send('user=' + button.dataset.userId + '&password=' + password);
     });
 
-    let modal = new bootstrap.Modal(document.getElementById('main-modal'));
     modal.show();
   });
 
@@ -339,7 +338,6 @@ document.addEventListener('DOMContentLoaded', function (event) {
                 console.log(this.responseText);
                 var json = JSON.parse(this.responseText);
                 if (json.status == 200) {
-                  let modal = new bootstrap.Modal(document.getElementById('main-modal'));
                   modal.hide();
                   getCoachSquadList();
                 } else {
@@ -357,7 +355,6 @@ document.addEventListener('DOMContentLoaded', function (event) {
           }
         });
 
-        let modal = new bootstrap.Modal(document.getElementById('main-modal'));
         modal.show();
       } else {
         alert('Squad list not loaded.');

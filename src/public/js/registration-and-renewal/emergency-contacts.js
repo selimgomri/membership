@@ -5,6 +5,7 @@ let modalHeader = document.getElementById('edit-delete-modal-title');
 let modalBody = document.getElementById('edit-delete-modal-body');
 let modalFooter = document.getElementById('edit-delete-modal-footer');
 let modal = document.getElementById('edit-delete-modal');
+let modalObject = new bootstrap.Modal(document.getElementById('edit-delete-modal'));
 
 function loadViewError() {
   document.getElementById('view-window').innerHTML = `<div class="alert alert-danger"><p class="mb-0"><strong>An error has occurred</strong></p><p class="mb-0">We're unable to load the list of emergency contacts</div>`;
@@ -166,8 +167,7 @@ function loadListeners() {
       modal.removeEventListener('submit', newContactSubmitHandler);
       modal.addEventListener('submit', editContactSubmitHandler);
 
-      let modal = new bootstrap.Modal(document.getElementById('edit-delete-modal'));
-      modal.show();
+      modalObject.show();
     }
     if (event.target.dataset.type && event.target.dataset.type == 'delete-button') {
       // Handle delete
@@ -216,7 +216,7 @@ function loadListeners() {
               // location.reload();
               loadView();
               let modal = new bootstrap.Modal(document.getElementById('edit-delete-modal'));
-              modal.hide();
+              modalObject.hide();
             } else {
               alert(json.error);
             }
@@ -230,8 +230,7 @@ function loadListeners() {
         req.send('contact-id=' + encodeURI(event.target.dataset.contactId));
       });
 
-      let modal = new bootstrap.Modal(document.getElementById('edit-delete-modal'));
-      modal.show();
+      modalObject.show();
     }
   });
 
@@ -286,7 +285,7 @@ function newContactSubmitHandler(event) {
         // location.reload();
         loadView();
         let modal = new bootstrap.Modal(document.getElementById('edit-delete-modal'));
-        modal.hide();
+        modalObject.hide();
       } else {
         alert(json.error);
       }
@@ -315,7 +314,7 @@ function editContactSubmitHandler(event) {
         // location.reload();
         loadView();
         let modal = new bootstrap.Modal(document.getElementById('edit-delete-modal'));
-        modal.hide();
+        modalObject.hide();
       } else {
         alert(json.error);
       }

@@ -61,38 +61,42 @@ include BASE_PATH . 'views/header.php';
 
 ?>
 
+<div class="bg-light mt-n3 py-3 mb-3">
+	<div class="container">
+
+		<nav aria-label="breadcrumb">
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a href="<?= autoUrl("payments") ?>">Payments</a></li>
+				<li class="breadcrumb-item"><a href="<?= autoUrl("payments/galas") ?>">Galas</a></li>
+				<li class="breadcrumb-item active" aria-current="page">Charge for gala</li>
+			</ol>
+		</nav>
+
+		<h1>Charge for <?= htmlspecialchars($gala['name']) ?></h1>
+		<?php if ($gala['fixed']) { ?>
+			<p class="lead mb-0">
+				This gala costs &pound;<?= htmlspecialchars($gala['fee']) ?>
+			</p>
+		<?php } else { ?>
+			<p class="lead mb-0">
+				There is no fixed fee for this gala
+			</p>
+		<?php } ?>
+	</div>
+</div>
+
 <div class="container">
-
-	<nav aria-label="breadcrumb">
-		<ol class="breadcrumb">
-			<li class="breadcrumb-item"><a href="<?=autoUrl("payments")?>">Payments</a></li>
-			<li class="breadcrumb-item"><a href="<?=autoUrl("payments/galas")?>">Galas</a></li>
-			<li class="breadcrumb-item active" aria-current="page">Charge for gala</li>
-		</ol>
-	</nav>
-
-	<h1>Charge Parents for <?=htmlspecialchars($gala['name'])?></h1>
-	<?php if ($gala['fixed']) { ?>
-	<p class="lead">
-		This gala costs &pound;<?=htmlspecialchars($gala['fee'])?>
-	</p>
-	<?php } else { ?>
-	<p class="lead">
-		There is no fixed fee for this gala
-	</p>
-	<?php } ?>
-
 	<div class="row">
 		<div class="col-md-8">
 
-			<?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['ChargeUsersSuccess'])) { 
+			<?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['ChargeUsersSuccess'])) {
 				unset($_SESSION['TENANT-' . app()->tenant->getId()]['ChargeUsersSuccess']); ?>
 				<div class="alert alert-success">
 					<strong>We've successfully charged the parents</strong>
 				</div>
 			<?php } ?>
 
-			<?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['ChargeUsersFailure'])) { 
+			<?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['ChargeUsersFailure'])) {
 				unset($_SESSION['TENANT-' . app()->tenant->getId()]['ChargeUsersFailure']); ?>
 				<div class="alert alert-warning">
 					<strong>An error occurred.</strong> Please try again later.
@@ -124,123 +128,126 @@ include BASE_PATH . 'views/header.php';
 				This software will not let you charge more than &pound;150 for any individual gala entry.
 			</p>
 
-			<h2>Entries for this gala</h2>	
+			<h2>Entries for this gala</h2>
 
 			<form method="post" onsubmit="return confirm('Are you sure you want to charge parents? You won\'t be able to modify charges once you proceed.');">
 				<?php if ($entry != null) { ?>
-				<ul class="list-group mb-3">
-					<?php do { ?>
-					<?php $hasNoDD = ($entry['MandateID'] == null) || (getUserOption($entry['user'], 'GalaDirectDebitOptOut')); ?>
-					<?php $notReady = !$entry['Processed']; ?>
-					<?php if (!$hasNoDD && $entry['Processed'] && !$entry['Charged']) { $countChargeable++; } ?>
-					<li class="list-group-item <?php if ($hasNoDD || $notReady) { ?>list-group-item-danger<?php } ?> <?php if ($entry['Charged']) { ?>list-group-item-success<?php } ?>">
-						<div class="row">
-							<div class="col-sm-5 col-md-4 col-lg-6">
-								<h3><?=htmlspecialchars($entry['MForename'] . ' ' . $entry['MSurname'])?></h3>
+					<ul class="list-group mb-3">
+						<?php do { ?>
+							<?php $hasNoDD = ($entry['MandateID'] == null) || (getUserOption($entry['user'], 'GalaDirectDebitOptOut')); ?>
+							<?php $notReady = !$entry['Processed']; ?>
+							<?php if (!$hasNoDD && $entry['Processed'] && !$entry['Charged']) {
+								$countChargeable++;
+							} ?>
+							<li class="list-group-item <?php if ($hasNoDD || $notReady) { ?>list-group-item-danger<?php } ?> <?php if ($entry['Charged']) { ?>list-group-item-success<?php } ?>">
+								<div class="row">
+									<div class="col-sm-5 col-md-4 col-lg-6">
+										<h3><?= htmlspecialchars($entry['MForename'] . ' ' . $entry['MSurname']) ?></h3>
 
-								<p class="mb-0">
-									<?=htmlspecialchars($entry['MForename'])?> is entered in;
-								</p>
-								<ul class="list-unstyled">
-								<?php $count = 0; ?>
-								<?php foreach($swimsArray as $colTitle => $text) { ?>
-									<?php if ($entry[$colTitle]) { $count++; ?>
-									<li class="row">
-										<div class="col">
-											<?=$text?>
-										</div>
-										<?php if ($galaData->getEvent($colTitle)->isEnabled()) { ?>
-										<div class="col">
-											&pound;<?=$galaData->getEvent($colTitle)->getPriceAsString()?>
-										</div>
+										<p class="mb-0">
+											<?= htmlspecialchars($entry['MForename']) ?> is entered in;
+										</p>
+										<ul class="list-unstyled">
+											<?php $count = 0; ?>
+											<?php foreach ($swimsArray as $colTitle => $text) { ?>
+												<?php if ($entry[$colTitle]) {
+													$count++; ?>
+													<li class="row">
+														<div class="col">
+															<?= $text ?>
+														</div>
+														<?php if ($galaData->getEvent($colTitle)->isEnabled()) { ?>
+															<div class="col">
+																&pound;<?= $galaData->getEvent($colTitle)->getPriceAsString() ?>
+															</div>
+														<?php } ?>
+													</li>
+												<?php } ?>
+											<?php } ?>
+										</ul>
+									</div>
+									<div class="col">
+										<div class="d-sm-none mb-3"></div>
+										<p>
+											<?= mb_convert_case($numFormatter->format($count), MB_CASE_TITLE_SIMPLE) ?> event<?php if ($count != 1) { ?>s<?php } ?>
+										</p>
+
+										<?php if ($hasNoDD) { ?>
+											<p>
+												The parent does not have a Direct Debit set up or has requested to pay by other means.
+											</p>
 										<?php } ?>
-									</li>
-									<?php } ?>
-								<?php } ?>
-								</ul>
-							</div>
-							<div class="col">
-								<div class="d-sm-none mb-3"></div>
-								<p>
-									<?=mb_convert_case($numFormatter->format($count), MB_CASE_TITLE_SIMPLE)?> event<?php if ($count != 1) { ?>s<?php } ?>
-								</p>
+										<?php if ($entry['Charged']) { ?>
+											<p>
+												This entry has already been marked as being paid. This may mean it has been paid by Direct Debit, Cash, Card or Cheque.
+											</p>
+										<?php } ?>
+										<?php if ($notReady) { ?>
+											<p>
+												This entry has not yet been marked as processed and so cannot yet be charged for.
+											</p>
+										<?php } ?>
 
-								<?php if ($hasNoDD) { ?>
-								<p>
-									The parent does not have a Direct Debit set up or has requested to pay by other means.
-								</p>
-								<?php } ?>
-								<?php if ($entry['Charged']) { ?>
-								<p>
-									This entry has already been marked as being paid. This may mean it has been paid by Direct Debit, Cash, Card or Cheque.
-								</p>
-								<?php } ?>
-								<?php if ($notReady) { ?>
-								<p>
-									This entry has not yet been marked as processed and so cannot yet be charged for.
-								</p>
-								<?php } ?>
+										<?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['OverhighChargeAmount'][$entry['EntryID']]) && $_SESSION['TENANT-' . app()->tenant->getId()]['OverhighChargeAmount'][$entry['EntryID']]) {
+											unset($_SESSION['TENANT-' . app()->tenant->getId()]['OverhighChargeAmount'][$entry['EntryID']]); ?>
+											<div class="alert alert-danger">
+												<strong>Refund failed!</strong> You have attempted to refund more than the user has paid.
+											</div>
+										<?php } ?>
 
-								<?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['OverhighChargeAmount'][$entry['EntryID']]) && $_SESSION['TENANT-' . app()->tenant->getId()]['OverhighChargeAmount'][$entry['EntryID']]) {
-									unset($_SESSION['TENANT-' . app()->tenant->getId()]['OverhighChargeAmount'][$entry['EntryID']]); ?>
-								<div class="alert alert-danger">
-									<strong>Refund failed!</strong> You have attempted to refund more than the user has paid.
-								</div>
-								<?php } ?>
-
-								<div class="mb-3 mb-0">
-									<label class="form-label" for="<?=$entry['EntryID']?>-amount">
-										Amount to charge
-									</label>
-									<div class="input-group">
-										<div class="input-group-text font-monospace">&pound;</div>
-										<input type="number" pattern="[0-9]*([\.,][0-9]*)?" class="form-control font-monospace" id="<?=$entry['EntryID']?>-amount" name="<?=$entry['EntryID']?>-amount" placeholder="0.00" value="<?=htmlspecialchars((string) (\Brick\Math\BigDecimal::of((string) $entry['FeeToPay'])->toScale(2)))?>" <?php if ($hasNoDD || $entry['Charged'] || $notReady) { ?> disabled <?php } ?> min="0" max="150" step="0.01">
+										<div class="mb-3 mb-0">
+											<label class="form-label" for="<?= $entry['EntryID'] ?>-amount">
+												Amount to charge
+											</label>
+											<div class="input-group">
+												<div class="input-group-text font-monospace">&pound;</div>
+												<input type="number" pattern="[0-9]*([\.,][0-9]*)?" class="form-control font-monospace" id="<?= $entry['EntryID'] ?>-amount" name="<?= $entry['EntryID'] ?>-amount" placeholder="0.00" value="<?= htmlspecialchars((string) (\Brick\Math\BigDecimal::of((string) $entry['FeeToPay'])->toScale(2))) ?>" <?php if ($hasNoDD || $entry['Charged'] || $notReady) { ?> disabled <?php } ?> min="0" max="150" step="0.01">
+											</div>
+										</div>
 									</div>
 								</div>
-							</div>
-						</div>
-					</li>
-					<?php } while ($entry = $getEntries->fetch(PDO::FETCH_ASSOC)); ?>
-				</ul>
-
-				<?=SCDS\CSRF::write()?>
-				<?=SCDS\FormIdempotency::write()?>
-
-				<?php if ($countChargeable > 0) { ?>
-				<div class="cell bg-warning">
-					<h2>Are you sure you're ready?</h2>
-					<p class="lead">
-						You won't be able to modify charges once you press submit.
-					</p>
-
-					<p>
-						If you spot a mistake, you will have to handle it as a <strong>Manual Refund</strong> or as part of the <strong>Rejections Refund Process</strong>.
-					</p>
-
-					<p>
-						<button class="btn btn-danger" type="submit">Charge parents</button>
-					</p>
-				</div>
-				<?php } else { ?>
-				<div class="alert alert-warning">
-					<p><strong>There are no entries that can be charged for at this time</strong></p>
-					<p class="mb-0">
-						To charge for gala entries there must be at least one meeting the following criteria.
-					</p>
-					<ul class="mb-0">
-						<li>A direct debit mandate</li>
-						<li>Their parent must not have opted out for gala payments</li>
-						<li>The entry must be marked as processed</li>
-						<li>The entry must not already be marked as paid</li>
+							</li>
+						<?php } while ($entry = $getEntries->fetch(PDO::FETCH_ASSOC)); ?>
 					</ul>
-				</div>
-				<?php } ?>
+
+					<?= SCDS\CSRF::write() ?>
+					<?= SCDS\FormIdempotency::write() ?>
+
+					<?php if ($countChargeable > 0) { ?>
+						<div class="cell bg-warning">
+							<h2>Are you sure you're ready?</h2>
+							<p class="lead">
+								You won't be able to modify charges once you press submit.
+							</p>
+
+							<p>
+								If you spot a mistake, you will have to handle it as a <strong>Manual Refund</strong> or as part of the <strong>Rejections Refund Process</strong>.
+							</p>
+
+							<p>
+								<button class="btn btn-danger" type="submit">Charge parents</button>
+							</p>
+						</div>
+					<?php } else { ?>
+						<div class="alert alert-warning">
+							<p><strong>There are no entries that can be charged for at this time</strong></p>
+							<p class="mb-0">
+								To charge for gala entries there must be at least one meeting the following criteria.
+							</p>
+							<ul class="mb-0">
+								<li>A direct debit mandate</li>
+								<li>Their parent must not have opted out for gala payments</li>
+								<li>The entry must be marked as processed</li>
+								<li>The entry must not already be marked as paid</li>
+							</ul>
+						</div>
+					<?php } ?>
 			</form>
-			<?php } else { ?>
+		<?php } else { ?>
 			<div class="alert alert-warning">
 				<strong>There are no entries for this gala</strong>
 			</div>
-			<?php } ?>
+		<?php } ?>
 		</div>
 	</div>
 </div>

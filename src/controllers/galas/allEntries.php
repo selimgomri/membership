@@ -38,30 +38,34 @@ if ($galaIDParam == 0) {
 
 include BASE_PATH . "views/header.php";
 include "galaMenu.php"; ?>
-<div class="container">
-  <nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="<?=autoUrl("galas")?>">Galas</a></li>
-      <li class="breadcrumb-item active" aria-current="page">Gala entries</li>
-    </ol>
-  </nav>
-  <h1>Gala entries</h1>
-  <p class="lead">Search entries for upcoming galas. Search by Gala or Gala and Surname.</p>
+<div class="bg-light mt-n3 py-3 mb-3">
+  <div class="container">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="<?= autoUrl("galas") ?>">Galas</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Gala entries</li>
+      </ol>
+    </nav>
+    <h1>Gala entries</h1>
+    <p class="lead mb-0">Search entries for upcoming galas. Search by Gala or Gala and Surname.</p>
+  </div>
+</div>
 
-  <form id="entry-details" data-page-url="<?=htmlspecialchars(autoUrl("galas/entries"))?>" data-ajax-url="<?=htmlspecialchars(autoUrl("galas/ajax/entries"))?>" data-processed-url="<?=htmlspecialchars(autoUrl("galas/ajax/entryProcessed"))?>" class="">
+<div class="container">
+  <form id="entry-details" data-page-url="<?= htmlspecialchars(autoUrl("galas/entries")) ?>" data-ajax-url="<?= htmlspecialchars(autoUrl("galas/ajax/entries")) ?>" data-processed-url="<?= htmlspecialchars(autoUrl("galas/ajax/entryProcessed")) ?>" class="">
     <div class="row d-print-none">
       <div class="col-md-4">
         <div class="mb-3">
-          <label class="" for="gala">Select a Gala</label>
+          <label class="form-label" for="gala">Select a Gala</label>
           <select class="form-select" placeholder="Select a Gala" id="galaID" name="galaID">
             <option>Select a gala</option>
             <option value="allGalas" <?php if ($galaIDParam == "allGalas") { ?> selected <?php } ?>>Show All Gala
               Entries</option>
 
             <?php while ($row = $galas->fetch(PDO::FETCH_ASSOC)) { ?>
-            <option value="<?=$row['GalaID']?>" <?php if ($galaIDParam == $row['GalaID']) { ?> selected <?php } ?>>
-              <?=htmlspecialchars($row['GalaName'])?>
-            </option>
+              <option value="<?= $row['GalaID'] ?>" <?php if ($galaIDParam == $row['GalaID']) { ?> selected <?php } ?>>
+                <?= htmlspecialchars($row['GalaName']) ?>
+              </option>
             <?php } ?>
 
           </select>
@@ -69,7 +73,7 @@ include "galaMenu.php"; ?>
       </div>
       <div class="col-md-4">
         <div class="mb-3">
-          <label class="" for="sex">Select Sex</label>
+          <label class="form-label" for="sex">Select Sex</label>
           <select class="form-select" placeholder="Select Sex" id="sex" name="sex">
             <option value="all" <?php if ($sex == "all") { ?> selected <?php } ?>>All Swimmers</option>
             <option value="f" <?php if ($sex == "f") { ?> selected <?php } ?>>
@@ -85,8 +89,7 @@ include "galaMenu.php"; ?>
       <div class="col-md-4">
         <div class="mb-3">
           <label class="form-label" for="gala">Enter Surname</label>
-          <input class="form-control" placeholder="Search" name="search" id="search"
-            value="<?=htmlspecialchars($search)?>">
+          <input class="form-control" placeholder="Search" name="search" id="search" value="<?= htmlspecialchars($search) ?>">
         </div>
       </div>
     </div>

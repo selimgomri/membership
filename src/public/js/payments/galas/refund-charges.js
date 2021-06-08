@@ -5,7 +5,7 @@
  * Amounts entered by users are in decimal an MUST be converted
  */
 
- let modal = new bootstrap.Modal(document.getElementById('myModal'));
+let modal = new bootstrap.Modal(document.getElementById('myModal'));
 
 // Set up a listener to listen for confirm
 var modalButton = document.getElementById('modalConfirmButton');
