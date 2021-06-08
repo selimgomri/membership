@@ -158,6 +158,6 @@ include "galaMenu.php";
 </div>
 
 <?php $footer = new \SCDS\Footer();
-$footer->addJs("public/js/numerical/bignumber.min.js");
-$footer->addJs("public/js/gala-entries/NewEntry.js");
+$footer->addJS("js/numerical/bignumber.min.js");
+$footer->addJS("js/gala-entries/NewEntry.js");
 $footer->render();

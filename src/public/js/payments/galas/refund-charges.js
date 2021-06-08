@@ -5,6 +5,8 @@
  * Amounts entered by users are in decimal an MUST be converted
  */
 
+let modal = new bootstrap.Modal(document.getElementById('myModal'));
+
 // Set up a listener to listen for confirm
 var modalButton = document.getElementById('modalConfirmButton');
 modalButton.addEventListener('click', function (event) {
@@ -29,11 +31,10 @@ modalButton.addEventListener('click', function (event) {
       // field and hiding button if no money is refundable
       console.log(this.responseText);
       var response = JSON.parse(this.responseText);
-      let modal = new bootstrap.Modal(document.getElementById('myModal'));
       modal.hide();
       if (response.status === 'success') {
         // Refund succeeded
-        document.getElementById(entry + '-refund-error-warning-box').innerHTML = '<div class="alert alert-success alert-dismissible fade show" role="alert"><p class="mb-0"><strong>Payment successfully refunded</strong></p><p class="mb-0">The total amount refunded is now &pound;' + (response.amount_refunded / 100).toFixed(2) + '</p><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
+        document.getElementById(entry + '-refund-error-warning-box').innerHTML = '<div class="alert alert-success alert-dismissible fade show" role="alert"><p class="mb-0"><strong>Payment successfully refunded</strong></p><p class="mb-0">The total amount refunded is now &pound;' + (response.amount_refunded / 100).toFixed(2) + '</p><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
 
         // Update data shown
         // Disable buttons and fields if required  
@@ -51,7 +52,7 @@ modalButton.addEventListener('click', function (event) {
         document.getElementById(entry + '-refund').dataset.amountRefunded = response.amount_refunded;
       } else {
         // Alert user to error
-        document.getElementById(entry + '-refund-error-warning-box').innerHTML = '<div class="alert alert-danger alert-dismissible fade show" role="alert"><p class="mb-0"><strong>The refund request failed!</strong></p><p class="mb-0">' + response.error_message + '.</p><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
+        document.getElementById(entry + '-refund-error-warning-box').innerHTML = '<div class="alert alert-danger alert-dismissible fade show" role="alert"><p class="mb-0"><strong>The refund request failed!</strong></p><p class="mb-0">' + response.error_message + '.</p><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
       }
       console.log(response);
     }
@@ -88,13 +89,13 @@ function clickPropogation(e) {
       document.getElementById('refund-form-' + element.dataset.entryId).classList.remove('was-validated');
 
       if (refundAmount == null || refundAmount === 0) {
-        document.getElementById(element.dataset.entryId + '-refund-error-warning-box').innerHTML = '<div class="alert alert-warning alert-dismissible fade show" role="alert"><p class="mb-0"><strong>Sorry!</strong></p><p class="mb-0">You cannot make a refund for &pound;0.00.</p><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
+        document.getElementById(element.dataset.entryId + '-refund-error-warning-box').innerHTML = '<div class="alert alert-warning alert-dismissible fade show" role="alert"><p class="mb-0"><strong>Sorry!</strong></p><p class="mb-0">You cannot make a refund for &pound;0.00.</p><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
       } else if (refundAmount > maxRefundable) {
-        document.getElementById(element.dataset.entryId + '-refund-error-warning-box').innerHTML = '<div class="alert alert-warning alert-dismissible fade show" role="alert"><p class="mb-0"><strong>You can\'t refund that much!</strong></p><p>You tried to make a refund for &pound;' + refundAmountString + ' when the maximum you can refund is &pound;' + maxRefundableString + '.</p><p class="mb-0">This safeguard is in place to prevent you refunding more than was paid for the gala entry.</p><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
+        document.getElementById(element.dataset.entryId + '-refund-error-warning-box').innerHTML = '<div class="alert alert-warning alert-dismissible fade show" role="alert"><p class="mb-0"><strong>You can\'t refund that much!</strong></p><p>You tried to make a refund for &pound;' + refundAmountString + ' when the maximum you can refund is &pound;' + maxRefundableString + '.</p><p class="mb-0">This safeguard is in place to prevent you refunding more than was paid for the gala entry.</p><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
 
         document.getElementById('refund-form-' + element.dataset.entryId).classList.add('was-validated');
       } else if (refundAmount < 0) {
-        document.getElementById(element.dataset.entryId + '-refund-error-warning-box').innerHTML = '<div class="alert alert-warning alert-dismissible fade show" role="alert"><p class="mb-0"><strong>You can\'t make a negative refund!</strong></p><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
+        document.getElementById(element.dataset.entryId + '-refund-error-warning-box').innerHTML = '<div class="alert alert-warning alert-dismissible fade show" role="alert"><p class="mb-0"><strong>You can\'t make a negative refund!</strong></p><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
 
         document.getElementById('refund-form-' + element.dataset.entryId).classList.add('was-validated');
       } else {
@@ -116,7 +117,6 @@ function clickPropogation(e) {
         modalButton.dataset.amountRefunded = amountRefunded;
         modalButton.disabled = false;
 
-        let modal = new bootstrap.Modal(document.getElementById('myModal'));
         modal.show();
       }
 

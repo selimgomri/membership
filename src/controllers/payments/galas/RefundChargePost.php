@@ -72,7 +72,7 @@ while ($entry = $getEntries->fetch(PDO::FETCH_ASSOC)) {
 			$db->beginTransaction();
 
 			$amountString = number_format($_POST[$entry['EntryID'] . '-refund'], 2);
-			$totalString = number_format(($amount/100) + ($entry['AmountRefunded']/100), 2);
+			$totalString = (string) (\Brick\Math\BigDecimal::of((string) $amount + $entry['AmountRefunded']))->withPointMovedLeft(2)->toScale(2);
 
 			if (!$hasNoDD && $entry['Intent'] == null) {
 				// Refund via direct debit bills

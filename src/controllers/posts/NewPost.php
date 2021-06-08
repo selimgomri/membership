@@ -87,5 +87,5 @@ include BASE_PATH . "views/postsMenu.php";
 </div>
 
 <?php $footer = new \SCDS\Footer();
-$footer->addJs("public/js/posts/PostEditor.js");
+$footer->addJS("js/posts/PostEditor.js");
 $footer->render();

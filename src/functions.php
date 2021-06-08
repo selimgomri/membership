@@ -283,26 +283,23 @@ function autoUrl($relative, $includeClub = true)
   // Returns an absolute URL
   $rootUrl = getenv('ROOT_URL');
 
-  if (getenv('MAIN_DOMAIN')) {
-    $rootUrl = 'https://';
-    $rootUrl .= app('request')->hostname . '/';
-  }
-
-  if (isset(app()->tenant)) {
-    $club = app()->tenant;
-    if ($club && $includeClub && getenv('DOMAIN_TYPE') == 'PRIMARY') {
-      if ($club->getCode()) {
-        $rootUrl .= mb_strtolower($club->getCode()) . '/';
-      } else if ($club->getId()) {
-        $rootUrl .= $club->getId() . '/';
-      }
-    }
+  if (getenv('DOMAIN_TYPE') == 'SUBDOMAIN') {
+    $rootUrl = 'https://' . app('request')->hostname . '/';
   }
 
   return rtrim($rootUrl . $relative, '/');
 }
 
-function webhookUrl($relative, $includeClub = true) {
+function platformUrl($relative)
+{
+  // Returns an absolute URL
+  $rootUrl = getenv('ROOT_URL');
+
+  return rtrim($rootUrl . $relative, '/');
+}
+
+function webhookUrl($relative, $includeClub = true)
+{
   // Returns an absolute URL
   $rootUrl = getenv('ROOT_URL');
 

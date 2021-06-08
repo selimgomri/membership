@@ -627,6 +627,6 @@ include BASE_PATH . "views/header.php";
 </div>
 
 <?php $footer = new \SCDS\Footer();
-$footer->addJs("public/js/users/main.js");
+$footer->addJS("js/users/main.js");
 $footer->useFluidContainer();
 $footer->render();

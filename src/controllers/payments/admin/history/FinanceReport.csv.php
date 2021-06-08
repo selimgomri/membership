@@ -39,8 +39,8 @@ foreach ($items as $item) {
   $mainData = [
     $item->date,
     $item->details,
-    number_format($item->credits/100, 2, '.', ''),
-    number_format($item->debits/100, 2, '.', ''),
+    (string) (\Brick\Math\BigDecimal::of((string) $item->credits))->withPointMovedLeft(2)->toScale(2),
+    (string) (\Brick\Math\BigDecimal::of((string) $item->debits))->withPointMovedLeft(2)->toScale(2),
     $item->income,
     $item->status
   ];
@@ -51,7 +51,7 @@ foreach ($items as $item) {
     foreach ($types as $name) {
       if ($name == $item->grouping->object . $item->grouping->id) {
         // It's this column
-        $typeCols[] = number_format(($item->credits - $item->debits)/100, 2, '.', '');
+        $typeCols[] = (string) (\Brick\Math\BigDecimal::of((string) ($item->credits - $item->debits)))->withPointMovedLeft(2)->toScale(2);
       } else {
         // It's not this column
         $typeCols[] = '';

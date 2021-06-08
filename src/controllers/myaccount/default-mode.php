@@ -63,6 +63,6 @@ include BASE_PATH . "views/header.php";
 </div>
 
 <?php $footer = new \SCDS\Footer();
-$footer->addJs("public/js/NeedsValidation.js");
+$footer->addJS("js/NeedsValidation.js");
 $footer->useFluidContainer();
 $footer->render(); ?>

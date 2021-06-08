@@ -102,6 +102,6 @@ include BASE_PATH . 'views/header.php';
 
 $footer = new \SCDS\Footer();
 $footer->useFluidContainer();
-$footer->addJS("public/js/NeedsValidation.js");
-$footer->addJS("public/js/settings/logo-upload.js");
+$footer->addJS("js/NeedsValidation.js");
+$footer->addJS("js/settings/logo-upload.js");
 $footer->render();

@@ -104,7 +104,7 @@ for ($i = 0; $i < sizeof($rows); $i++) {
 
 	$member = $row['MForename'] . " " . $row['MSurname'];
 
-	$amount = '£' . number_format(($row['Amount']/100),2,'.','');
+	$amount = '£' . (string) (\Brick\Math\BigDecimal::of((string) $row['Amount']))->withPointMovedLeft(2)->toScale(2);
 
   $status_text = "";
   if (in_array($row['Status'], $paid)) {

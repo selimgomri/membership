@@ -96,5 +96,5 @@ include BASE_PATH . "views/paymentsMenu.php";
 </div>
 
 <?php $footer = new \SCDS\Footer();
-$footer->addJs("public/js/payments/ExtraMembers.js");
+$footer->addJS("js/payments/ExtraMembers.js");
 $footer->render();

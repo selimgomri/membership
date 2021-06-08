@@ -500,6 +500,6 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 </div>
 
 <?php $footer = new \SCDS\Footer();
-$footer->addJs("public/js/members/delete.js");
+$footer->addJS("js/members/delete.js");
 $footer->render();
 ?>

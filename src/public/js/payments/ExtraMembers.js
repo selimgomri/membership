@@ -66,8 +66,8 @@ function addSwimmerToExtra() {
       var response = JSON.parse(this.response);
       status.innerHTML =
       '<div class="mt-3 mb-0 alert alert-dismissible fade show" id="status-alert-box" role="alert">' + response.alertContent +
-      '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
-      '<span aria-hidden="true">&times;</span>' +
+      '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">' +
+      '' +
       '</button>' +
       '</div>';
       document.getElementById('status-alert-box').classList.add(response.alertClass);
@@ -78,8 +78,8 @@ function addSwimmerToExtra() {
       status.innerHTML =
       '<div class="mt-3 mb-0 alert alert-warning alert-dismissible fade show" role="alert">' +
       '<strong>An unknown error occurred</strong><br>Please try again later' +
-      '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
-      '<span aria-hidden="true">&times;</span>' +
+      '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">' +
+      '' +
       '</button>' +
       '</div>';
     }

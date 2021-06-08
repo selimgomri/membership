@@ -326,7 +326,7 @@ include BASE_PATH . 'views/header.php';
 <?php
 
 $footer = new \SCDS\Footer();
-$footer->addJs("public/js/numerical/bignumber.min.js");
-$footer->addJs("public/js/payments/NewInvoice.js?v=1");
-$footer->addJs("public/js/NeedsValidation.js");
+$footer->addJS("js/numerical/bignumber.min.js");
+$footer->addJS("js/payments/NewInvoice.js?v=1");
+$footer->addJS("js/NeedsValidation.js");
 $footer->render();

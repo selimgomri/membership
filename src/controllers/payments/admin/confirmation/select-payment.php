@@ -48,7 +48,7 @@ include BASE_PATH . 'views/header.php';
               <label class="form-check-label d-block" for="payment-<?=htmlspecialchars($paymentId)?>">
                 <?=htmlspecialchars($payment['Forename'] . ' ' . $payment['Surname'])?>: 
                 <span class="font-monospace">
-                  &pound;<?=number_format($payment['Amount']/100, 2, '.', '')?>, <?=htmlspecialchars($payment['Name'])?>, <?=htmlspecialchars($payment['Date'])?>
+                  &pound;<?= (string) (\Brick\Math\BigDecimal::of((string) $payment['Amount']))->withPointMovedLeft(2)->toScale(2) ?>, <?=htmlspecialchars($payment['Name'])?>, <?=htmlspecialchars($payment['Date'])?>
                 </span>
               </label>
             </div>

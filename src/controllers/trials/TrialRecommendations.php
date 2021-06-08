@@ -187,5 +187,5 @@ include BASE_PATH . 'views/header.php';
 
 unset($_SESSION['TENANT-' . app()->tenant->getId()]['TrialRecommendationsUpdated']);
 $footer = new \SCDS\Footer();
-$footer->addJs("public/js/NeedsValidation.js");
+$footer->addJS("js/NeedsValidation.js");
 $footer->render();

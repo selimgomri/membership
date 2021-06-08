@@ -346,7 +346,7 @@ unset($_SESSION['TENANT-' . app()->tenant->getId()]['RequestTrial-Errors']);
 unset($_SESSION['TENANT-' . app()->tenant->getId()]['RequestTrial-AddAnother']);
 
 $footer = new \SCDS\Footer();
-$footer->addJs("public/js/NeedsValidation.js");
-// $footer->addJs("public/js/request-a-trial/IsItYouOrYourChild.js");
-// $footer->addJs("public/js/request-a-trial/MultiSwimmers.js");
+$footer->addJS("js/NeedsValidation.js");
+// $footer->addJS("js/request-a-trial/IsItYouOrYourChild.js");
+// $footer->addJS("js/request-a-trial/MultiSwimmers.js");
 $footer->render();

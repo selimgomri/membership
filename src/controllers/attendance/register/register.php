@@ -203,12 +203,12 @@ include BASE_PATH . "views/header.php";
 
 <?php
 $footer = new \SCDS\Footer();
-$footer->addJs("public/js/NeedsValidation.js");
+$footer->addJS("js/NeedsValidation.js");
 if (bool(getenv("IS_DEV"))) {
   $footer->addExternalJs('https://apis.tenant-services.membership.myswimmingclub.uk/socket.io/socket.io.js');
 } else {
   $footer->addExternalJs('https://production-apis.tenant-services.membership.myswimmingclub.uk/socket.io/socket.io.js');
 }
-$footer->addJs("public/js/attendance/register/register.js?version=1");
+$footer->addJS("js/attendance/register/register.js?version=1");
 $footer->useFluidContainer();
 $footer->render();

@@ -89,5 +89,5 @@ if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['AssRegFormError'])) {
 }
 
 $footer = new \SCDS\Footer();
-$footer->addJs("public/js/NeedsValidation.js");
+$footer->addJS("js/NeedsValidation.js");
 $footer->render();

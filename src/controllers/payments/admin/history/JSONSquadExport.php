@@ -90,7 +90,7 @@ if ($row != null) {
   	} else {
   		$parent['Name'] = null;
   		$parent['FamilyTotal'] = (int) $row['Amount'];
-  		$parent['FamilyTotalString'] = '£' . number_format(($row['Amount']/100),2,'.','');
+  		$parent['FamilyTotalString'] = '£' . (string) (\Brick\Math\BigDecimal::of((string) $row['Amount']))->withPointMovedLeft(2)->toScale(2);
   		$parent['PaymentStatusString'] = "No Parent or Direct Debit Available";
   	}
 
@@ -98,7 +98,7 @@ if ($row != null) {
   		'Name'				=> $row['MForename'] . " " . $row['MSurname'],
   		'Description'	=> $row['Description'],
   		'Amount'			=> (int) $row['Amount'],
-  		'AmountString'=> '£' . number_format(($row['Amount']/100),2,'.',''),
+  		'AmountString'=> '£' . (string) (\Brick\Math\BigDecimal::of((string) $row['Amount']))->withPointMovedLeft(2)->toScale(2),
   		'ClubPaysFees'=> false
   	];
 

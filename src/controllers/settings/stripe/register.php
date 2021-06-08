@@ -9,4 +9,4 @@ if ($at = app()->tenant->getStripeAccount()) {
 }
 
 http_response_code(302);
-header('location: ' . webhookUrl('services/stripe/connect?tenant=' . urlencode($tenant->getUUID()) . '&user=' . urlencode($user->getId()) . '', false));
+header('location: ' . platformUrl('services/stripe/connect?tenant=' . urlencode($tenant->getUUID()) . '&user=' . urlencode($user->getId()) . ''));

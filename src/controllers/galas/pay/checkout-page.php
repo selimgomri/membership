@@ -465,7 +465,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
 <?php
 
 $footer = new \SCDS\Footer();
-$footer->addJs("public/js/payment-helpers.js");
-$footer->addJs("public/js/gala-checkout.js");
-$footer->addJs("public/js/NeedsValidation.js");
+$footer->addJS("js/payment-helpers.js");
+$footer->addJS("js/gala-checkout.js");
+$footer->addJS("js/NeedsValidation.js");
 $footer->render(); ?>

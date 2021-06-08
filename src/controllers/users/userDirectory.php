@@ -47,5 +47,5 @@ include BASE_PATH . "views/header.php";
 </div>
 
 <?php $footer = new \SCDS\Footer();
-$footer->addJs("public/js/users/list.js");
+$footer->addJS("js/users/list.js");
 $footer->render();

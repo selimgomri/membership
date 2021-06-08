@@ -189,6 +189,6 @@ include BASE_PATH . 'views/header.php';
 if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['UserCreationError'])) unset($_SESSION['TENANT-' . app()->tenant->getId()]['UserCreationError']);
 
 $footer = new \SCDS\Footer();
-$footer->addJs("public/js/NeedsValidation.js");
-$footer->addJs("public/js/ajax-utilities/pwned-password-check.js");
+$footer->addJS("js/NeedsValidation.js");
+$footer->addJS("js/ajax-utilities/pwned-password-check.js");
 $footer->render();

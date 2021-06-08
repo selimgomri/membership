@@ -499,7 +499,7 @@ if (!function_exists('chesterStandardMenu')) {
                   Your Login History
                 </a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" target="_blank" href="<?= htmlspecialchars(autoUrl('help-and-support', false)) ?>">Help</a>
+                <a class="dropdown-item" target="_blank" href="<?= htmlspecialchars(platformUrl('help-and-support')) ?>">Help</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="<?= autoUrl("logout") ?>">Logout</a>
               </div>

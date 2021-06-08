@@ -59,5 +59,5 @@ include BASE_PATH . 'views/header.php';
 <?php
 
 $footer = new \SCDS\Footer();
-$footer->addJs("public/js/NeedsValidation.js");
+$footer->addJS("js/NeedsValidation.js");
 $footer->render();

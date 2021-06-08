@@ -287,9 +287,9 @@ include BASE_PATH . 'views/header.php';
 
 $footer = new \SCDS\Footer();
 if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != "Parent") {
-  // $footer->addJs("public/js/Chart.min.js");
+  // $footer->addJS("js/Chart.min.js");
   if ($numSwimmers > 0) {
-    $footer->addJs("public/js/squads/squad-charts.js");
+    $footer->addJS("js/squads/squad-charts.js");
   }
 }
 $footer->render();
