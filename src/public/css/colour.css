@@ -2,6 +2,7 @@
 
 header("Content-Type: text/css;charset=UTF-8");
 header("Content-Disposition: inline");
+header("Cache-Control: max-age=86400");
 
 if (app()->tenant->getKey('SYSTEM_COLOUR')) {
 
