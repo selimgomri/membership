@@ -57,17 +57,11 @@ $totalFeeDiscounted += $clubFee;
 
 $asaFees = [];
 
-$asa1 = app()->tenant->getKey('ASA-County-Fee-L1') + app()->tenant->getKey('ASA-Regional-Fee-L1') + app()->tenant->getKey('ASA-National-Fee-L1');
-$asa2 = app()->tenant->getKey('ASA-County-Fee-L2') + app()->tenant->getKey('ASA-Regional-Fee-L2') + app()->tenant->getKey('ASA-National-Fee-L2');
-$asa3 = app()->tenant->getKey('ASA-County-Fee-L3') + app()->tenant->getKey('ASA-Regional-Fee-L3') + app()->tenant->getKey('ASA-National-Fee-L3');
-
 for ($i = 0; $i < $count; $i++) {
-  if ($member[$i]['ASACategory'] == 1 && !$member[$i]['ASAPaid']) {
-    $asaFees[$i] = $asa1;
-  } else if ($member[$i]['ASACategory'] == 2  && !$member[$i]['ASAPaid']) {
-    $asaFees[$i] = $asa2;
-  } else if ($member[$i]['ASACategory'] == 3  && !$member[$i]['ASAPaid']) {
-    $asaFees[$i] = $asa3;
+  if ($member[$i]['NGBCategory'] && !$member[$i]['ASAPaid']) {
+    $asaFees[$i] = MembershipClassInfo::getFee($member[$i]['NGBCategory']);
+  } else {
+    $asaFees[$i] = 0;
   }
 
   $totalFee += $asaFees[$i];

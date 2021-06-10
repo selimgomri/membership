@@ -4,7 +4,7 @@ namespace MembershipFees;
 
 class MembershipFeeClass
 {
-
+  private string $membershipType;
   private int $user;
   private $class;
   private $name;
@@ -16,7 +16,7 @@ class MembershipFeeClass
   private $fees;
   private $partial;
 
-  private function __construct($user, $class, $name, $description, $fees, $partial = false)
+  private function __construct($user, $class, $name, $description, $fees, $type, $partial = false)
   {
     $db = app()->db;
 
@@ -30,14 +30,25 @@ class MembershipFeeClass
     $this->upgradeType = $fees->upgrade_type;
     $this->classFees = $fees->fees;
     $this->partial = $partial;
+    $this->membershipType = $type;
 
-    // Get members with this class
-    $getMembers = $db->prepare("SELECT MemberID, MForename, MSurname, ClubPaid, RR FROM members WHERE UserID = ? AND ClubCategory = ? AND Active ORDER BY ClubPaid ASC, MForename ASC, MSurname ASC");
-    $getMembers->execute([
-      $this->user,
-      $class,
-    ]);
-    $this->members = $getMembers->fetchAll(\PDO::FETCH_ASSOC);
+    if ($this->membershipType == 'club') {
+      // Get members with this class
+      $getMembers = $db->prepare("SELECT MemberID, MForename, MSurname, ClubPaid, RR FROM members WHERE UserID = ? AND ClubCategory = ? AND Active ORDER BY ClubPaid ASC, MForename ASC, MSurname ASC");
+      $getMembers->execute([
+        $this->user,
+        $class,
+      ]);
+      $this->members = $getMembers->fetchAll(\PDO::FETCH_ASSOC);
+    } else if ($this->membershipType == 'national_governing_body') {
+      // Get members with this class
+      $getMembers = $db->prepare("SELECT MemberID, MForename, MSurname, ASAPaid AS ClubPaid, RR FROM members WHERE UserID = ? AND NGBCategory = ? AND Active ORDER BY ClubPaid ASC, MForename ASC, MSurname ASC");
+      $getMembers->execute([
+        $this->user,
+        $class,
+      ]);
+      $this->members = $getMembers->fetchAll(\PDO::FETCH_ASSOC);
+    }
 
     if ($this->type == 'NSwimmers') {
       $this->fees = NSwimmers::calculate($this->members, $this->classFees, $this->partial);
@@ -52,7 +63,7 @@ class MembershipFeeClass
     $tenant = app()->tenant;
 
     // Get the class
-    $getClass = $db->prepare("SELECT `Name`, `Description`, `Fees` FROM `clubMembershipClasses` WHERE `ID` = ? AND `Tenant` = ?");
+    $getClass = $db->prepare("SELECT `Name`, `Description`, `Fees`, `Type` FROM `clubMembershipClasses` WHERE `ID` = ? AND `Tenant` = ?");
     $getClass->execute([
       $class,
       $tenant->getId(),
@@ -69,6 +80,7 @@ class MembershipFeeClass
       $classDetails['Name'],
       $classDetails['Description'],
       $classDetails['Fees'],
+      $classDetails['Type'],
       $partial,
     );
 
@@ -103,5 +115,9 @@ class MembershipFeeClass
   public function getDescription()
   {
     return $this->description;
+  }
+
+  public function getMembershipType() {
+    return $this->membershipType;
   }
 }

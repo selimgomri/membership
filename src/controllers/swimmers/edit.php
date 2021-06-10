@@ -27,11 +27,17 @@ if (!$admin && $row['UserID'] != app()->user->getId()) {
   halt(404);
 }
 
-$getClubCategories = $db->prepare("SELECT `ID`, `Name` FROM `clubMembershipClasses` WHERE `Tenant` = ? ORDER BY `Name` ASC");
+$getClubCategories = $db->prepare("SELECT `ID`, `Name` FROM `clubMembershipClasses` WHERE `Tenant` = ? AND `Type` = 'club' ORDER BY `Name` ASC");
 $getClubCategories->execute([
   $tenant->getId()
 ]);
 $clubCategory = $getClubCategories->fetch(PDO::FETCH_ASSOC);
+
+$getNGBCategories = $db->prepare("SELECT `ID`, `Name` FROM `clubMembershipClasses` WHERE `Tenant` = ? AND `Type` = 'national_governing_body' ORDER BY `Name` ASC");
+$getNGBCategories->execute([
+  $tenant->getId()
+]);
+$ngbCategory = $getNGBCategories->fetch(PDO::FETCH_ASSOC);
 
 $member = new Member($id);
 $photoPermissions = $member->getPhotoPermissions();
@@ -176,17 +182,17 @@ include BASE_PATH . "views/swimmersMenu.php";
                   <?php if ($row['GenderIdentity'] == '' || $row['GenderIdentity'] == null) $other = false; ?>
                   <div class="form-check">
                     <input type="radio" id="gender-m" name="gender" class="form-check-input" value="M" <?php if ($row['GenderIdentity'] == 'Male') {
-                                                                                                              $other = false; ?>checked<?php } ?> required>
+                                                                                                          $other = false; ?>checked<?php } ?> required>
                     <label class="form-check-label" for="gender-m">Male</label>
                   </div>
                   <div class="form-check">
                     <input type="radio" id="gender-f" name="gender" class="form-check-input" value="F" <?php if ($row['GenderIdentity'] == 'Female') {
-                                                                                                              $other = false; ?>checked<?php } ?>>
+                                                                                                          $other = false; ?>checked<?php } ?>>
                     <label class="form-check-label" for="gender-f">Female</label>
                   </div>
                   <div class="form-check">
                     <input type="radio" id="gender-nb" name="gender" class="form-check-input" value="NB" <?php if ($row['GenderIdentity'] == 'Non binary') {
-                                                                                                                $other = false; ?>checked<?php } ?>>
+                                                                                                            $other = false; ?>checked<?php } ?>>
                     <label class="form-check-label" for="gender-nb">Non binary</label>
                   </div>
                   <div class="form-check">
@@ -215,17 +221,17 @@ include BASE_PATH . "views/swimmersMenu.php";
                   <?php if ($row['GenderPronouns'] == '' || $row['GenderPronouns'] == null) $other = false; ?>
                   <div class="form-check">
                     <input type="radio" id="gender-pronoun-m" name="gender-pronoun" class="form-check-input" value="M" <?php if ($row['GenderPronouns'] == 'He/Him/His') {
-                                                                                                                              $other = false; ?>checked<?php } ?> required>
+                                                                                                                          $other = false; ?>checked<?php } ?> required>
                     <label class="form-check-label" for="gender-pronoun-m">He/Him/His</label>
                   </div>
                   <div class="form-check">
                     <input type="radio" id="gender-pronoun-f" name="gender-pronoun" class="form-check-input" value="F" <?php if ($row['GenderPronouns'] == 'She/Her/Hers') {
-                                                                                                                              $other = false; ?>checked<?php } ?>>
+                                                                                                                          $other = false; ?>checked<?php } ?>>
                     <label class="form-check-label" for="gender-pronoun-f">She/Her/Hers</label>
                   </div>
                   <div class="form-check">
                     <input type="radio" id="gender-pronoun-neutral" name="gender-pronoun" class="form-check-input" value="NB" <?php if ($row['GenderPronouns'] == 'They/Them/Theirs') {
-                                                                                                                                    $other = false; ?>checked<?php } ?>>
+                                                                                                                                $other = false; ?>checked<?php } ?>>
                     <label class="form-check-label" for="gender-pronoun-neutral">They/Them/Theirs</label>
                   </div>
                   <div class="form-check">
@@ -267,20 +273,26 @@ include BASE_PATH . "views/swimmersMenu.php";
           <div class="row">
             <div class="col">
               <div class="mb-3">
-                <label class="form-label" for="asa">Swim England Registration Number</label>
+                <label class="form-label" for="asa"><?= htmlspecialchars($tenant->getKey('NGB_NAME')) ?> Registration Number</label>
                 <input type="text" name="asa" id="asa" class="form-control" value="<?= htmlspecialchars($row['ASANumber']) ?>">
               </div>
             </div>
             <div class="col">
               <div class="mb-3">
-                <label class="form-label" for="cat">Swim England Membership Category</label>
-                <select class="form-select overflow-hidden" id="cat" name="cat" placeholder="Select">
-                  <option value="0" <?php if ($row['ASACategory'] == 0) { ?>selected<?php } ?>>Not a Swim England Member</option>
-                  <option value="1" <?php if ($row['ASACategory'] == 1) { ?>selected<?php } ?>>Category 1</option>
-                  <option value="2" <?php if ($row['ASACategory'] == 2) { ?>selected<?php } ?>>Category 2</option>
-                  <option value="3" <?php if ($row['ASACategory'] == 3) { ?>selected<?php } ?>>Category 3</option>
+                <label class="form-label" for="ngb-cat"><?= htmlspecialchars($tenant->getKey('NGB_NAME')) ?> Membership Category</label>
+                <select class="form-select overflow-hidden" id="ngb-cat" name="ngb-cat" placeholder="Select" required>
+                  <option value="none">No <?= htmlspecialchars($tenant->getKey('NGB_NAME')) ?> membership</option>
+                  <?php do {
+                    $selected = '';
+                    if ($row['NGBCategory'] == $ngbCategory['ID']) {
+                      $selected = ' selected ';
+                    } ?>
+                    <option value="<?= htmlspecialchars($ngbCategory['ID']) ?>" <?= $selected ?>><?= htmlspecialchars($ngbCategory['Name']) ?></option>
+                  <?php } while ($ngbCategory = $getNGBCategories->fetch(PDO::FETCH_ASSOC)); ?>
                 </select>
               </div>
+
+
             </div>
           </div>
 
@@ -314,7 +326,7 @@ include BASE_PATH . "views/swimmersMenu.php";
             <div class="col-lg">
               <div class="mb-3">
                 <p class="mb-2">
-                  Club pays Swim England fees?
+                  Club pays NGB fees?
                 </p>
                 <div class="form-check">
                   <input type="radio" id="sep-no" name="sep" class="form-check-input" <?php if (!bool($row['ASAPaid'])) { ?>checked<?php } ?> value="0">
@@ -382,7 +394,7 @@ include BASE_PATH . "views/swimmersMenu.php";
             </p>
 
             <p>
-              <?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?> may wish to take photographs  <?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?>. Photographs will only be taken and published in accordance with Swim England policy which requires the club to obtain the consent of the parent or guardian to take and use photographs under the following circumstances.
+              <?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?> may wish to take photographs <?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?>. Photographs will only be taken and published in accordance with Swim England policy which requires the club to obtain the consent of the parent or guardian to take and use photographs under the following circumstances.
             </p>
 
             <p>
@@ -465,7 +477,7 @@ include BASE_PATH . "views/swimmersMenu.php";
       <div class="modal-header">
         <h5 class="modal-title" id="main-modal-title">Modal title</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-          
+
         </button>
       </div>
       <div class="modal-body" id="main-modal-body">

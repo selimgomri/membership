@@ -3,11 +3,17 @@
 $db = app()->db;
 $tenant = app()->tenant;
 
-$getClasses = $db->prepare("SELECT `ID`, `Name`, `Description` FROM `clubMembershipClasses` WHERE `Tenant` = ? ORDER BY `Name` ASC");
+$getClasses = $db->prepare("SELECT `ID`, `Name` FROM `clubMembershipClasses` WHERE `Tenant` = ? AND `Type` = 'club' ORDER BY `Name` ASC");
 $getClasses->execute([
-	$tenant->getId(),
+	$tenant->getId()
 ]);
 $class = $getClasses->fetch(PDO::FETCH_ASSOC);
+
+$getNGBCategories = $db->prepare("SELECT `ID`, `Name` FROM `clubMembershipClasses` WHERE `Tenant` = ? AND `Type` = 'national_governing_body' ORDER BY `Name` ASC");
+$getNGBCategories->execute([
+	$tenant->getId()
+]);
+$ngbCategory = $getNGBCategories->fetch(PDO::FETCH_ASSOC);
 
 $today = new DateTime('now', new DateTimeZone('Europe/London'));
 
@@ -89,19 +95,19 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 				<div class="row g-2">
 					<div class="col-sm-6">
 						<div class="mb-3">
-							<label class="form-label" for="asa">Swim England Registration Number</label>
-							<input type="test" class="form-control" id="asa" name="asa" aria-describedby="asaHelp" placeholder="Swim England Registration Numer">
-							<small id="asaHelp" class="form-text text-muted">If a new member does not yet have a Swim England Number, leave this blank.</small>
+							<label class="form-label" for="asa"><?= htmlspecialchars($tenant->getKey('NGB_NAME')) ?> Registration Number</label>
+							<input type="test" class="form-control" id="asa" name="asa" aria-describedby="asaHelp" placeholder="<?= htmlspecialchars($tenant->getKey('NGB_NAME')) ?> Registration Numer">
+							<small id="asaHelp" class="form-text text-muted">If a new member does not yet have a <?= htmlspecialchars($tenant->getKey('NGB_NAME')) ?> registration number, leave this blank.</small>
 						</div>
 					</div>
 					<div class="col-sm-6">
 						<div class="mb-3">
-							<label class="form-label" for="squad">Swim England Membership Category</label>
-							<select class="form-select" placeholder="Select a Category" id="cat" name="cat" required>
-								<option value="0">Not a Swim England Member</option>
-								<option value="1">Category 1</option>
-								<option value="2" selected>Category 2</option>
-								<option value="3">Category 3</option>
+							<label class="form-label" for="ngb-cat"><?= htmlspecialchars($tenant->getKey('NGB_NAME')) ?> Membership Category</label>
+							<select class="form-select overflow-hidden" id="ngb-cat" name="ngb-cat" placeholder="Select" required>
+								<option value="none">No <?= htmlspecialchars($tenant->getKey('NGB_NAME')) ?> membership</option>
+								<?php do { ?>
+									<option value="<?= htmlspecialchars($ngbCategory['ID']) ?>" <?php if ($tenant->getKey('DEFAULT_NGB_MEMBERSHIP_CLASS') == $ngbCategory['ID']) { ?>selected<?php } ?>><?= htmlspecialchars($ngbCategory['Name']) ?></option>
+								<?php } while ($ngbCategory = $getNGBCategories->fetch(PDO::FETCH_ASSOC)); ?>
 							</select>
 						</div>
 					</div>
@@ -139,7 +145,7 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 				<div class="mb-3">
 					<div class="form-check">
 						<input class="form-check-input" type="checkbox" id="clubpays" name="clubpays" value="1" aria-describedby="cphelp">
-						<label class="form-check-label" for="clubpays">Club pays Swim England fees?</label>
+						<label class="form-check-label" for="clubpays">Club pays NGB Membership fees?</label>
 					</div>
 					<small id="cphelp" class="form-text text-muted">Tick the box if this swimmer will not pay any Swim England fees.</small>
 				</div>

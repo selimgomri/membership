@@ -17,7 +17,7 @@ class Member extends Person
   private $squads;
   private bool $swimEnglandMember;
   private string $swimEnglandNumber;
-  private int $swimEnglandCategory;
+  private $governingBodyCategory;
   private bool $clubPaysFees;
   private bool $clubPaysSwimEngland;
   private bool $swimEnglandPayingClub;
@@ -70,7 +70,7 @@ class Member extends Person
     $this->clubMember = bool($info['ClubMember']);
     $this->swimEnglandMember = bool($info['ASAMember']);
     $this->swimEnglandNumber = $info['ASANumber'];
-    $this->swimEnglandCategory = $info['ASACategory'];
+    $this->governingBodyCategory = $info['NGBCategory'];
     $this->swimEnglandPayingClub = bool($info['ASAPrimary']);
     $this->clubCategory = $info['ClubCategory'];
     $this->country = $info['Country'];
@@ -148,9 +148,31 @@ class Member extends Person
     return $this->swimEnglandNumber;
   }
 
-  public function getSwimEnglandCategory()
+  public function getGoverningBodyCategoryID()
   {
-    return $this->swimEnglandCategory;
+    return $this->governingBodyCategory;
+  }
+
+  public function getGoverningBodyCategoryName()
+  {
+
+    if (!$this->getGoverningBodyCategoryID()) {
+      return 'NO MEMBERSHIP';
+    }
+
+    $db = app()->db;
+    $getCatName = $db->prepare("SELECT `Name` FROM `clubMembershipClasses` WHERE `ID` = ? AND `Tenant` = ?");
+    $getCatName->execute([
+      $this->getGoverningBodyCategoryID(),
+      $this->tenant,
+    ]);
+    $name = $getCatName->fetchColumn();
+
+    if (!$name) {
+      throw new \Exception('Missing category');
+    }
+
+    return $name;
   }
 
   public function getCountryCode()
