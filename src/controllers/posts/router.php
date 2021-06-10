@@ -34,7 +34,7 @@ $this->get('/{id}:int', function ($id) {
 });
 
 
-$this->get('/{id}:int/print.pdf', function ($club, $void, $id) {
+$this->get('/{id}:int/print.pdf', function ($id) {
 	include 'PrintPost.php';
 });
 
