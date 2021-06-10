@@ -96,9 +96,10 @@ $options = new Options([
   'fontCache' => getenv('FILE_STORE_PATH') . 'fonts/',
   'isFontSubsettingEnabled' => true,
   'isRemoteEnabled' => true,
-  'defaultFont' => 'Open Sans',
+  'defaultFont' => 'Source Sans Pro',
   'defaultMediaType' => 'all',
   'isPhpEnabled' => true,
+  'isHtml5ParserEnabled' => true,
 ]);
 $dompdf->setOptions($options);
 $dompdf->loadHtml($html);
