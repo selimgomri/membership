@@ -58,3 +58,15 @@
     line-height: normal;
   }
 }
+
+// SCDS Front Page
+
+.front-page-purple-section {
+  background: $primary;
+  color: $white;
+}
+
+.front-page-alternate-section {
+  background: $light;
+  color: $body-color;
+}

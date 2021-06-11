@@ -22,7 +22,7 @@ include BASE_PATH . "views/root/head.php";
     <div class="col-lg-8 col-md-10">
       <div class="">
         <p class="mb-5">
-          <a href="<?= htmlspecialchars(autoUrl('')) ?>" class="btn btn-outline-primary">Quit</a>
+          <a href="<?= htmlspecialchars(autoUrl('')) ?>" class="btn btn-outline-primary btn-outline-light-d">Quit</a>
         </p>
 
         <h1 class="">Login</h1>

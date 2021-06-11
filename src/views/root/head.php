@@ -1,6 +1,7 @@
 <?php
 
 $stylesheet = autoUrl(getCompiledAsset('scds.css'));
+$stylesheetDarkMode = autoUrl(getCompiledAsset('scds-dark-mode.css'));
 
 $bg = null;
 
@@ -57,6 +58,8 @@ Chester-le-Street ASC is a non profit unincorporated association.
   <script src="https://js.stripe.com/v3/"></script>
   <link rel="stylesheet preload" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,700|Roboto+font-monospace|Merriweather:400,600">
   <link rel="stylesheet preload" href="<?= htmlspecialchars($stylesheet) ?>">
+  <meta name="color-scheme" content="dark light">
+  <link rel="stylesheet preload" href="<?= htmlspecialchars($stylesheetDarkMode) ?>" media="(prefers-color-scheme: dark)">
 
   <!-- Generic icon -->
   <link rel="icon" href="<?= htmlspecialchars(autoUrl("img/corporate/scds.png")) ?>">
