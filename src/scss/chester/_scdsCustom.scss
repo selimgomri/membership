@@ -86,25 +86,6 @@ $cell-generic: true;
 $body-bg: $white;
 $body-color: $gray-900;
 
-$grid-breakpoints: (
-  xs: 0,
-  sm: 576px,
-  md: 768px,
-  lg: 992px,
-  xl: 1320px
-);
-
-// Grid containers
-//
-// Define the maximum width of `.container` for different screen sizes.
-
-$container-max-widths: (
-  sm: 540px,
-  md: 720px,
-  lg: 960px,
-  xl: 1280px
-);
-
 // Grid columns
 //
 // Set the number of columns and specify the width of the gutters.

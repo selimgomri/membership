@@ -96,7 +96,7 @@ include BASE_PATH . 'views/header.php';
               </p>
 
               <p class="mb-0">
-                <span class="text-primary">
+                <span class="text-link-color">
                   Edit card
                 </span>
               </p>

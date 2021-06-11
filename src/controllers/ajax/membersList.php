@@ -100,7 +100,7 @@ $row = $query->fetch(PDO::FETCH_ASSOC);
     <div class="row align-items-center">
       <div class="col-12 col-sm-4 col-md-3">
         <p class="mb-0">
-          <strong class="text-primary">
+          <strong class="text-link-color">
             <?=htmlspecialchars($row['MForename'] . " " . $row['MSurname'])?>
           </strong>
         </p>

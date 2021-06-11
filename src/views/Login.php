@@ -30,7 +30,7 @@ include BASE_PATH . "views/head.php";
     <div class="col-lg-8 col-md-10">
 
       <p class="mb-5">
-        <a href="<?= htmlspecialchars(autoUrl('')) ?>" class="btn btn-outline-primary">Quit</a>
+        <a href="<?= htmlspecialchars(autoUrl('')) ?>" class="btn btn-outline-primary btn-outline-light-d">Quit</a>
       </p>
 
       <div class="row align-items-center">
