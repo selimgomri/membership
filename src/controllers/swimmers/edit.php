@@ -80,7 +80,7 @@ include BASE_PATH . "views/swimmersMenu.php";
       </div>
       <div class="col text-md-end">
         <button type="submit" class="btn btn-success" form="edit-form">Save</button>
-        <a class="btn btn-dark btn-outline-light-d" href="<?= htmlspecialchars(autoUrl("members/$id")) ?>">Back</a>
+        <a class="btn btn-dark-l btn-outline-light-d" href="<?= htmlspecialchars(autoUrl("members/$id")) ?>">Back</a>
       </div>
     </div>
   </div>
@@ -484,7 +484,7 @@ include BASE_PATH . "views/swimmersMenu.php";
         ...
       </div>
       <div class="modal-footer" id="main-modal-footer">
-        <button type="button" class="btn btn-dark btn-outline-light-d" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-dark-l btn-outline-light-d" data-bs-dismiss="modal">Cancel</button>
         <button type="button" id="modal-confirm-button" class="btn btn-success">Confirm</button>
       </div>
     </div>

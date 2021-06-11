@@ -119,7 +119,7 @@ if ($added && $status) {
   }
   $content .= "<p><a href=\"" . autoUrl("galas") . "\" class=\"btn
   btn-success\">Return to Galas</a> <a href=\"" . autoUrl("galas/addgala") . "\"
-  class=\"btn btn-dark btn-outline-light-d\">Add another gala</a></p>";
+  class=\"btn btn-dark-l btn-outline-light-d\">Add another gala</a></p>";
 
   if ($id != null) {
     $_SESSION['TENANT-' . app()->tenant->getId()]['GalaAddedSuccess'] = true;

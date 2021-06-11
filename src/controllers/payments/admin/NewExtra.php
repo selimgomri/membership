@@ -62,7 +62,7 @@ include BASE_PATH . "views/paymentsMenu.php";
           </div>
 
           <p class="mb-0">
-            <button type="submit" class="btn btn-dark btn-outline-light-d">
+            <button type="submit" class="btn btn-dark-l btn-outline-light-d">
               Add extra
             </button>
           </p>

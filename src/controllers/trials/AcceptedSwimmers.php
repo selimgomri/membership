@@ -62,7 +62,7 @@ include BASE_PATH . 'views/header.php';
 
         <div class="row mb-1">
           <div class="col-md">
-            <a href="<?=autoUrl($url_path . $parent['Hash'] . "/invite")?>" class="btn btn-block btn-dark btn-outline-light-d">
+            <a href="<?=autoUrl($url_path . $parent['Hash'] . "/invite")?>" class="btn btn-block btn-dark-l btn-outline-light-d">
               Invite Parent
             </a>
           </div>
@@ -71,7 +71,7 @@ include BASE_PATH . 'views/header.php';
           </div>
 
           <div class="col-md">
-            <a href="<?=autoUrl("trials/recommendations/" . $parent['ID'])?>" class="btn btn-block btn-dark btn-outline-light-d">
+            <a href="<?=autoUrl("trials/recommendations/" . $parent['ID'])?>" class="btn btn-block btn-dark-l btn-outline-light-d">
               Edit Recommendations
             </a>
           </div>

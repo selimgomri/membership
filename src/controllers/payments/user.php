@@ -97,9 +97,9 @@ include BASE_PATH . "views/paymentsMenu.php";
 
           <div class="d-grid gap-2">
           <?php if ($mandate) { ?>
-            <a href="<?= autoUrl("payments/direct-debit") ?>" class="btn btn-dark btn-outline-light-d">Manage your bank account</a>
+            <a href="<?= autoUrl("payments/direct-debit") ?>" class="btn btn-dark-l btn-outline-light-d">Manage your bank account</a>
           <?php } else { ?>
-            <a href="<?= autoUrl("payments/direct-debit/set-up") ?>" class="btn btn-dark btn-outline-light-d">Setup a Direct Debit</a>
+            <a href="<?= autoUrl("payments/direct-debit/set-up") ?>" class="btn btn-dark-l btn-outline-light-d">Setup a Direct Debit</a>
           <?php } ?>
           </div>
         </div>
@@ -128,9 +128,9 @@ include BASE_PATH . "views/paymentsMenu.php";
           <p class="mb-0">
           <div class="d-grid gap-2">
             <?php if (userHasMandates($user)) { ?>
-              <a href="<?= autoUrl("payments/mandates") ?>" class="btn btn-dark btn-outline-light-d">Manage your bank account</a>
+              <a href="<?= autoUrl("payments/mandates") ?>" class="btn btn-dark-l btn-outline-light-d">Manage your bank account</a>
             <?php } else { ?>
-              <a href="<?= autoUrl("payments/setup") ?>" class="btn btn-dark btn-outline-light-d">Setup a Direct Debit</a>
+              <a href="<?= autoUrl("payments/setup") ?>" class="btn btn-dark-l btn-outline-light-d">Setup a Direct Debit</a>
             <?php } ?>
           </div>
           </p>

@@ -28,7 +28,7 @@ include BASE_PATH . "views/paymentsMenu.php";
       <?php if (isset($renewal_trap) && $renewal_trap) { ?>
       <a href="<?php echo autoUrl("renewal/go"); ?>" class="mb-3 btn btn-success">Continue registration or renewal</a>
       <?php } else { ?>
-      <a href="<?php echo autoUrl("payments"); ?>" class="mb-3 btn btn-dark btn-outline-light-d">Go to Payments</a>
+      <a href="<?php echo autoUrl("payments"); ?>" class="mb-3 btn btn-dark-l btn-outline-light-d">Go to Payments</a>
       <?php } ?>
 
       <?php } else if ($_SESSION['TENANT-' . app()->tenant->getId()]['GC-Setup-Status'] == 'redirect_flow_incomplete') { ?>

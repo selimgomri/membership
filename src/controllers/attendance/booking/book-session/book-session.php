@@ -128,7 +128,7 @@ include BASE_PATH . 'views/header.php';
               Edit booking settings
             </a>
           <?php } ?>
-          <button class="btn btn-dark btn-outline-light-d" id="share-this" data-share-url="<?= htmlspecialchars($theLink) ?>" data-share-title="<?= htmlspecialchars($theTitle) ?>" data-share-text="<?= htmlspecialchars('Book a space for ' . $session['SessionName'] . ' at ' . $startTime->format('H:i') . ' on ' . $date->format('j F Y') . ' - ' . $tenant->getName()) ?>">
+          <button class="btn btn-dark-l btn-outline-light-d" id="share-this" data-share-url="<?= htmlspecialchars($theLink) ?>" data-share-title="<?= htmlspecialchars($theTitle) ?>" data-share-text="<?= htmlspecialchars('Book a space for ' . $session['SessionName'] . ' at ' . $startTime->format('H:i') . ' on ' . $date->format('j F Y') . ' - ' . $tenant->getName()) ?>">
             Share <i class="fa fa-share" aria-hidden="true"></i>
           </button>
         </div>
@@ -340,7 +340,7 @@ include BASE_PATH . 'views/header.php';
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-dark btn-outline-light-d" data-bs-dismiss="modal">Don't book</button>
+        <button type="button" class="btn btn-dark-l btn-outline-light-d" data-bs-dismiss="modal">Don't book</button>
         <button type="submit" class="btn btn-info" form="member-booking-form" id="accept">Confirm booking</button>
       </div>
     </div>
@@ -380,7 +380,7 @@ include BASE_PATH . 'views/header.php';
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-dark btn-outline-light-d" data-bs-dismiss="modal">Don't cancel</button>
+        <button type="button" class="btn btn-dark-l btn-outline-light-d" data-bs-dismiss="modal">Don't cancel</button>
         <button type="submit" class="btn btn-danger" form="cancel-booking-form" id="accept">Cancel booking</button>
       </div>
     </div>
@@ -401,13 +401,13 @@ include BASE_PATH . 'views/header.php';
         <div class="row gx-0 sharing">
           <div class="col">
             <div class="d-grid gap-2">
-              <a target="_blank" class="btn btn-dark btn-outline-light-d dismiss-share-box" href="mailto:?subject=<?= rawurlencode($theTitle); ?>&body=<?= rawurlencode($theLink); ?>"><i class="fa  fa-envelope" aria-hidden="true"></i><span class="visually-hidden visually-hidden-focusable">Share by Email</span></a>
+              <a target="_blank" class="btn btn-dark-l btn-outline-light-d dismiss-share-box" href="mailto:?subject=<?= rawurlencode($theTitle); ?>&body=<?= rawurlencode($theLink); ?>"><i class="fa  fa-envelope" aria-hidden="true"></i><span class="visually-hidden visually-hidden-focusable">Share by Email</span></a>
             </div>
           </div>
 
           <div class="col">
             <div class="d-grid gap-2">
-              <a target="_self" class="btn btn-dark btn-outline-light-d" id="print-this-page"><i class="fa fa-print" aria-hidden="true"></i><span class="visually-hidden visually-hidden-focusable">Print</span></a>
+              <a target="_self" class="btn btn-dark-l btn-outline-light-d" id="print-this-page"><i class="fa fa-print" aria-hidden="true"></i><span class="visually-hidden visually-hidden-focusable">Print</span></a>
             </div>
           </div>
 
@@ -440,7 +440,7 @@ include BASE_PATH . 'views/header.php';
 
       </div>
       <!-- <div class="modal-footer">
-        <button type="button" class="btn btn-dark btn-outline-light-d" data-bs-dismiss="modal">Don't cancel</button>
+        <button type="button" class="btn btn-dark-l btn-outline-light-d" data-bs-dismiss="modal">Don't cancel</button>
         <button type="submit" class="btn btn-danger" form="cancel-booking-form" id="accept">Cancel booking</button>
       </div> -->
     </div>

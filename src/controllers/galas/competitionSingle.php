@@ -147,7 +147,7 @@ include "galaMenu.php"; ?>
       <div class="cell">
         <h2>Entries</h2>
         <p class="mb-0">
-          <a href="<?= autoUrl("galas/entries?galaID=" . $id . "&sex=all&search=") ?>" class="btn btn-dark btn-outline-light-d">
+          <a href="<?= autoUrl("galas/entries?galaID=" . $id . "&sex=all&search=") ?>" class="btn btn-dark-l btn-outline-light-d">
             View All Entries
           </a>
         </p>

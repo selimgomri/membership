@@ -156,7 +156,7 @@ include BASE_PATH . 'views/header.php';
       <div class="modal-body" id="revokeModalBody">
       </div>
       <div class="modal-footer" id="revokeModalFooter">
-        <button type="button" class="btn btn-dark btn-outline-light-d" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-dark-l btn-outline-light-d" data-bs-dismiss="modal">Cancel</button>
         <button type="button" class="btn btn-warning" id="void-button" data-action="void">Void Form</button>
       </div>
     </div>

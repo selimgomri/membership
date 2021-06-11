@@ -152,7 +152,7 @@ function sessionManagement($squadID, $old = null)
 								$modals .= "Not set";
 							}
 							$modals .= '
-								<a class="btn btn-dark btn-outline-light-d" href="sessions/' . $row['SessionID'] . '">Edit End Date</a></dd>
+								<a class="btn btn-dark-l btn-outline-light-d" href="sessions/' . $row['SessionID'] . '">Edit End Date</a></dd>
 							</dl>
 							<strong>You can\'t edit a session once it has been created</strong>  <br>Sessions are immutable. This is because swimmers may be marked as present at a session in the past, changing the session in any way, such as altering the start or finish time would distort the attendance records. Instead, set a DisplayUntil date for the session, after which it will not appear in the register, but will still be visible in attendance history
 						</div>
@@ -277,7 +277,7 @@ function sessionManagement($squadID, $old = null)
 							$modals .= "Not set";
 						}
 						$modals .= '
-								<a class="btn btn-dark btn-outline-light-d" href="sessions/' . $row['SessionID'] . '">Edit End Date</a></dd>
+								<a class="btn btn-dark-l btn-outline-light-d" href="sessions/' . $row['SessionID'] . '">Edit End Date</a></dd>
 							</dl>
 							<strong>You can\'t edit a session once it has been created</strong>  <br>Sessions are immutable. This is because swimmers may be marked as present at a session in the past, changing the session in any way, such as altering the start or finish time would distort the attendance records. Instead, set a DisplayUntil date for the session, after which it will not appear in the register, but will still be visible in attendance history
 						</div>

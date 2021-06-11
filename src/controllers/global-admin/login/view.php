@@ -91,7 +91,7 @@ include BASE_PATH . "views/root/head.php";
               This is not the login page for club users.
             </p>
             <span>
-              <a href="<?= htmlspecialchars(autoUrl("admin/login/reset-password")) ?>" class="btn btn-dark btn-outline-light-d">
+              <a href="<?= htmlspecialchars(autoUrl("admin/login/reset-password")) ?>" class="btn btn-dark-l btn-outline-light-d">
                 Forgot password?
               </a>
             </span>

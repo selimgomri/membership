@@ -91,7 +91,7 @@ function getView($id)
             </div>
             <div class="col text-sm-end">
               <div class="btn-group">
-                <button class="btn btn-dark btn-outline-light-d" type="button" data-contact-id="<?= htmlspecialchars($contactsArray[$i]->getId()) ?>" data-type="edit-button" data-contact-name="<?= htmlspecialchars($contactsArray[$i]->getName()) ?>" data-contact-relation="<?= htmlspecialchars($contactsArray[$i]->getRelation()) ?>" data-contact-number="<?= htmlspecialchars($contactsArray[$i]->getContactNumber()) ?>">
+                <button class="btn btn-dark-l btn-outline-light-d" type="button" data-contact-id="<?= htmlspecialchars($contactsArray[$i]->getId()) ?>" data-type="edit-button" data-contact-name="<?= htmlspecialchars($contactsArray[$i]->getName()) ?>" data-contact-relation="<?= htmlspecialchars($contactsArray[$i]->getRelation()) ?>" data-contact-number="<?= htmlspecialchars($contactsArray[$i]->getContactNumber()) ?>">
                   Edit
                 </button>
                 <button class="btn btn-danger" type="button" data-contact-id="<?= htmlspecialchars($contactsArray[$i]->getId()) ?>" data-type="delete-button" data-contact-name="<?= htmlspecialchars($contactsArray[$i]->getName()) ?>">
