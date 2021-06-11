@@ -27,19 +27,19 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
     $search = $_REQUEST["search"];
 
     // Search the database for the results
-    if ($galaID == "allGalas") {
+    if ($galaID == "all") {
       $sql = "SELECT * FROM ((galaEntries INNER JOIN members ON
       galaEntries.MemberID = members.MemberID) INNER JOIN galas ON
       galaEntries.GalaID = galas.GalaID) WHERE galas.Tenant = ? AND galas.GalaDate >= CURDATE() " .
       $sex . " AND members.MSurname LIKE ? COLLATE utf8mb4_general_ci ORDER BY galas.ClosingDate
-      ASC, galas.GalaDate DESC";
+      ASC, galas.GalaDate DESC, members.MSurname ASC, members.MForename ASC";
       $sqlArgs[] = '%' . $search . '%';
     }
     else {
       $sql = "SELECT * FROM ((galaEntries INNER JOIN members ON
       galaEntries.MemberID = members.MemberID) INNER JOIN galas ON
       galaEntries.GalaID = galas.GalaID) WHERE galas.Tenant = ? AND galas.GalaID = ? " .
-      $sex . " AND members.MSurname LIKE ? COLLATE utf8mb4_general_ci";
+      $sex . " AND members.MSurname LIKE ? COLLATE utf8mb4_general_ci members.MSurname ASC, members.MForename ASC";
       $sqlArgs[] = $galaID;
       $sqlArgs[] = '%' . $search . '%';
     }

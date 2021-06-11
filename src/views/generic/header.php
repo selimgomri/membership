@@ -194,7 +194,7 @@ if (isset($customBackground) && $customBackground) {
             </div>
             <?php if (app()->tenant->getKey('CLUB_WEBSITE')) { ?>
               <div class="col-auto">
-                <a href="<?= htmlspecialchars(app()->tenant->getKey('CLUB_WEBSITE')) ?>" class="btn <?= $clubLinkColour ?> text-decoration-none">Club website</a>
+                <a href="<?= htmlspecialchars(app()->tenant->getKey('CLUB_WEBSITE')) ?>" class="btn <?= $clubLinkColour ?> btn-light-d text-decoration-none">Club website</a>
               </div>
             <?php } ?>
           </div>

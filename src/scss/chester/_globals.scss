@@ -521,14 +521,16 @@ thead {
 	box-sizing: border-box;
 }
 
-.focus-highlight a:focus,
-.blog-sidebar a:focus,
-.event a:focus,
-.hentry a:focus,
-.blog-main a:focus {
-  background: #ffbf47;
-  outline: 3px solid #ffbf47;
-  outline-offset: 0;
+@media (prefers-color-scheme: light) {
+  .focus-highlight a:focus,
+  .blog-sidebar a:focus,
+  .event a:focus,
+  .hentry a:focus,
+  .blog-main a:focus {
+    background: #ffbf47;
+    outline: 3px solid #ffbf47;
+    outline-offset: 0;
+  }
 }
 
 footer .focus-highlight a:focus,

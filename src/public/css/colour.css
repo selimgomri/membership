@@ -7,7 +7,7 @@ header("Cache-Control: max-age=86400");
 if (app()->tenant->getKey('SYSTEM_COLOUR')) {
 
 ?>
-/* @media (prefers-color-scheme: light) { */
+@media (prefers-color-scheme: light) {
   .membership-header {
     background-color: <?=app()->tenant->getKey('SYSTEM_COLOUR')?>;
   }
@@ -17,5 +17,5 @@ if (app()->tenant->getKey('SYSTEM_COLOUR')) {
   .logo-text-shadow {
     text-shadow: 1px 1px 1px rgba(0, 0, 0, .5);
   }
-/* } */
+}
 <?php } ?>

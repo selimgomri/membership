@@ -38,9 +38,9 @@ $pm = \Stripe\PaymentMethod::retrieve(
 
     <div class="row">
       <div class="col-lg-8">
-        <div class="row align-items-center mb-2 text-dark">
+        <div class="row align-items-center mb-2">
           <div class="col-auto">
-            <img src="<?= autoUrl("img/stripe/" . $card['Brand'] . ".png", false) ?>" srcset="<?= autoUrl("img/stripe/" . $card['Brand'] . "@2x.png", false) ?> 2x, <?= autoUrl("img/stripe/" . $card['Brand'] . "@3x.png", false) ?> 3x" style="width:48px;"> <span class="visually-hidden"><?= htmlspecialchars(getCardBrand($card['Brand'])) ?></span>
+            <img class="dark-mode-mask" src="<?= autoUrl("img/stripe/" . $card['Brand'] . ".png", false) ?>" srcset="<?= autoUrl("img/stripe/" . $card['Brand'] . "@2x.png", false) ?> 2x, <?= autoUrl("img/stripe/" . $card['Brand'] . "@3x.png", false) ?> 3x" style="width:48px;"> <span class="visually-hidden"><?= htmlspecialchars(getCardBrand($card['Brand'])) ?></span>
           </div>
           <div class="col-auto">
             <h1 class="h1 my-0">
