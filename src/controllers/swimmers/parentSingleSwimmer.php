@@ -54,7 +54,7 @@ $title = null;
         <h1>Editing <?= htmlspecialchars($row['MForename'] . ' ' . $row['MSurname']) ?></h1>
       </div>
       <div class="col-sm-4 text-end">
-        <button type="submit" class="btn btn-success">Save</button> <a class="btn btn-dark" href="<?= autoUrl("members/" . $id) ?>">Exit
+        <button type="submit" class="btn btn-success">Save</button> <a class="btn btn-dark btn-outline-light-d" href="<?= autoUrl("members/" . $id) ?>">Exit
           Edit Mode</a>
       </div>
     </div>

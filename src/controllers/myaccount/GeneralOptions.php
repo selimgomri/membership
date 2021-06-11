@@ -145,7 +145,7 @@ include BASE_PATH . "views/header.php";
           </p>
 
           <p>
-            <a href="<?=autoUrl("my-account/googleauthenticator/disable")?>" class="btn btn-dark">
+            <a href="<?=autoUrl("my-account/googleauthenticator/disable")?>" class="btn btn-dark btn-outline-light-d">
               Disable authenticator app
             </a>
           </p>

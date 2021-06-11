@@ -91,7 +91,7 @@ $mandateDetails->execute([$user, true]);
           <div class="row align-items-center">
             <div class="col-12 col-md-4">
               <div class="d-grid gap-2">
-                <a target="_blank" download class="btn btn-dark" href="<?= htmlspecialchars(autoUrl("payments/mandates/" . $row['Mandate'] . '/print')) ?>" title="View details about this mandate which are also visible to the user">
+                <a target="_blank" download class="btn btn-dark btn-outline-light-d" href="<?= htmlspecialchars(autoUrl("payments/mandates/" . $row['Mandate'] . '/print')) ?>" title="View details about this mandate which are also visible to the user">
                   View printable info
                 </a>
               </div>
@@ -99,7 +99,7 @@ $mandateDetails->execute([$user, true]);
             </div>
             <div class="col-12 col-md-4">
               <div class="d-grid gap-2">
-                <a target="_blank" class="btn btn-dark" href="<?= htmlspecialchars(autoUrl("payments/mandates/" . $row['Mandate'])) ?>" title="View full details about this mandate">
+                <a target="_blank" class="btn btn-dark btn-outline-light-d" href="<?= htmlspecialchars(autoUrl("payments/mandates/" . $row['Mandate'])) ?>" title="View full details about this mandate">
                   View full details
                 </a>
               </div>

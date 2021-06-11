@@ -79,11 +79,11 @@ include BASE_PATH . 'views/header.php';
       <div class="col text-end">
         <div class="btn-group" role="group" aria-label="Quick options">
           <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['LogBooks-MemberLoggedIn']) && bool($_SESSION['TENANT-' . app()->tenant->getId()]['LogBooks-MemberLoggedIn'])) { ?>
-          <a href="<?=htmlspecialchars(autoUrl("log-books/settings"))?>" class="btn btn-dark">
+          <a href="<?=htmlspecialchars(autoUrl("log-books/settings"))?>" class="btn btn-dark btn-outline-light-d">
             Settings <i class="fa fa-cog" aria-hidden="true"></i>
           </a>
           <?php } else { ?>
-          <a href="<?=htmlspecialchars(autoUrl("members/" . $member . "/password?return=" . urlencode(autoUrl("log-books/members/" . $member))))?>" class="btn btn-dark">
+          <a href="<?=htmlspecialchars(autoUrl("members/" . $member . "/password?return=" . urlencode(autoUrl("log-books/members/" . $member))))?>" class="btn btn-dark btn-outline-light-d">
             Password settings <i class="fa fa-cog" aria-hidden="true"></i>
           </a>
           <?php } ?>

@@ -658,7 +658,7 @@ include BASE_PATH . 'views/header.php';
       </div>
       <div id="modal-body" class="modal-body"></div>
       <div id="modal-footer" class="modal-footer">
-        <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-dark btn-outline-light-d" data-bs-dismiss="modal">Close</button>
       </div>
     </div>
   </div>

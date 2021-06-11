@@ -85,7 +85,7 @@ include BASE_PATH . 'views/header.php';
             </div>
           </div>
           <p class="mb-0">
-            <button class="btn btn-dark" type="button">Change Email</button>
+            <button class="btn btn-dark btn-outline-light-d" type="button">Change Email</button>
           </p>
         </form>
       </div>

@@ -39,7 +39,7 @@ include BASE_PATH . 'views/header.php';
       </div>
       <div class="col text-end">
         <p class="mb-0">
-          <?php if (isset($_GET['return'])) { ?><a href="<?=htmlspecialchars($_GET['return'])?>" class="btn btn-dark">Back</a><?php } ?>
+          <?php if (isset($_GET['return'])) { ?><a href="<?=htmlspecialchars($_GET['return'])?>" class="btn btn-dark btn-outline-light-d">Back</a><?php } ?>
           <button type="submit" class="btn btn-success">Save <i class="fa fa-floppy-o" aria-hidden="true"></i></button>
         </p>
       </div>

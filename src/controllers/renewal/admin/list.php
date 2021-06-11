@@ -77,7 +77,7 @@ include BASE_PATH . "views/swimmersMenu.php";
 				<div class="mb-3 d-lg-none"></div>
 			</div>
 			<div class="ms-auto col-lg-auto">
-				<a href="<?= htmlspecialchars(autoUrl("renewal/$id/edit")) ?>" class="btn btn-dark">
+				<a href="<?= htmlspecialchars(autoUrl("renewal/$id/edit")) ?>" class="btn btn-dark btn-outline-light-d">
 					Edit renewal period
 				</a>
 			</div>

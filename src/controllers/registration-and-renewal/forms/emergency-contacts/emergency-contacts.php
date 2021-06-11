@@ -98,7 +98,7 @@ include BASE_PATH . 'views/header.php';
       <div class="modal-body" id="edit-delete-modal-body">
       </div>
       <div class="modal-footer" id="edit-delete-modal-footer">
-        <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-dark btn-outline-light-d" data-bs-dismiss="modal">Cancel</button>
       </div>
     </div>
   </div>

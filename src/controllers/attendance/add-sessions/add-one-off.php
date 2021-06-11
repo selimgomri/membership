@@ -201,7 +201,7 @@ include BASE_PATH . 'views/header.php';
           </button>
           <div class="show-if-one-off">
             <div class="mb-3 d-block d-md-none"></div>
-            <button type="submit" class="btn btn-dark" name="go-to-booking-settings" value="1">
+            <button type="submit" class="btn btn-dark btn-outline-light-d" name="go-to-booking-settings" value="1">
               Add Session, Require Booking
             </button>
           </div>

@@ -80,7 +80,7 @@ include BASE_PATH . "views/paymentsMenu.php";
           </div>
 
           <p class="mb-0">
-            <button type="submit" class="btn btn-dark">
+            <button type="submit" class="btn btn-dark btn-outline-light-d">
               Save changes
             </button>
           </p>
