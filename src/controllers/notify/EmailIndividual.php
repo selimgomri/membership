@@ -235,7 +235,7 @@ include BASE_PATH . "views/notifyMenu.php";
 </div>
 
 <?php $footer = new \SCDS\Footer();
-$footer->addJS("js/tinymce/tinymce.min.js");
+$footer->addJS("js/tinymce/5/tinymce.min.js");
 $footer->addJS("js/notify/TinyMCE.js");
 $footer->addJS("js/notify/FileUpload.js");
 $footer->render();

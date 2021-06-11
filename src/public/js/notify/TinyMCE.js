@@ -1,4 +1,5 @@
 tinymce.init({
+  skin: (window.matchMedia("(prefers-color-scheme: dark)").matches ? "oxide-dark" : ""),
   relative_urls: false,
   remove_script_host: false,
   document_base_url: document.getElementById('message').dataset.documentBaseUrl,
@@ -9,14 +10,12 @@ tinymce.init({
     'searchreplace visualblocks code autoresize insertdatetime media table',
     'paste help wordcount'
   ],
+  statusbar: false,
   paste_as_text: true,
   toolbar: 'insert | undo redo |  formatselect | bold italic | bullist numlist outdent indent | removeformat | help',
-  content_css: [
-    'https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i',
-    document.getElementById('message').dataset.tinymceCssLocation
-  ],
+  content_css: (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'default'),
   fontsize_formats: '12pt',
-  font_formats: 'Default="Open Sans", "Source Sans Pro", arial,helvetica,sans-serif;',
+  font_formats: 'Default=system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";',
   style_formats: [
     {
       title: 'Headings', items: [
