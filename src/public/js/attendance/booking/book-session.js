@@ -274,7 +274,6 @@ printButton.addEventListener('click', event => {
   window.print();
 });
 
-let sharingModal = document.getElementById('sharing-modal');
 sharingModal.addEventListener('click', event => {
   if (event.target.classList.contains('dismiss-share-box')) {
     sharingModal.hide();
