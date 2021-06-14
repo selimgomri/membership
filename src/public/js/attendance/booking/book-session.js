@@ -269,10 +269,12 @@ shareButton.addEventListener('click', event => {
 });
 
 let printButton = document.getElementById('print-this-page');
-printButton.addEventListener('click', event => {
-  sharingModal.hide();
-  window.print();
-});
+if (printButton) {
+  printButton.addEventListener('click', event => {
+    sharingModal.hide();
+    window.print();
+  });
+}
 
 sharingModal.addEventListener('click', event => {
   if (event.target.classList.contains('dismiss-share-box')) {
