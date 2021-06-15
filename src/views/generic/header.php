@@ -183,7 +183,7 @@ if (isset($customBackground) && $customBackground) {
           <div class="row justify-content-between align-items-center py-3 mb-0 d-none d-md-flex">
             <div class="col-auto">
               <h1 class="mb-0">
-                <a href="<?= htmlspecialchars(autoUrl("")) ?>" class="<?= $clubLogoColour ?> text-decoration-none fw-bold">
+                <a href="<?= htmlspecialchars(autoUrl("")) ?>" class="<?= $clubLogoColour ?> text-light-d text-decoration-none fw-bold">
                   <?php if ($tenant->getKey('LOGO_DIR') && $tenant->getKey('SHOW_LOGO')) { ?>
                     <img src="<?= htmlspecialchars(getUploadedAssetUrl($logos . 'logo-75.png')) ?>" srcset="<?= htmlspecialchars(getUploadedAssetUrl($logos . 'logo-75@2x.png')) ?> 2x, <?= htmlspecialchars(getUploadedAssetUrl($logos . 'logo-75@3x.png')) ?> 3x" alt="<?= htmlspecialchars($tenant->getName()) ?>" class="img-fluid" style="height: 75px">
                   <?php } else { ?>
@@ -194,7 +194,7 @@ if (isset($customBackground) && $customBackground) {
             </div>
             <?php if (app()->tenant->getKey('CLUB_WEBSITE')) { ?>
               <div class="col-auto">
-                <a href="<?= htmlspecialchars(app()->tenant->getKey('CLUB_WEBSITE')) ?>" class="btn <?= $clubLinkColour ?> text-decoration-none">Club website</a>
+                <a href="<?= htmlspecialchars(app()->tenant->getKey('CLUB_WEBSITE')) ?>" class="btn <?= $clubLinkColour ?> btn-outline-light-d text-decoration-none">Club website <i class="fa fa-external-link" aria-hidden="true"></i></a>
               </div>
             <?php } ?>
           </div>

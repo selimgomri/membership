@@ -59,7 +59,7 @@ include "galaMenu.php"; ?>
           <label class="form-label" for="gala">Select a Gala</label>
           <select class="form-select" placeholder="Select a Gala" id="galaID" name="galaID">
             <option>Select a gala</option>
-            <option value="allGalas" <?php if ($galaIDParam == "allGalas") { ?> selected <?php } ?>>Show All Gala
+            <option value="all" <?php if ($galaIDParam == "all") { ?> selected <?php } ?>>Show All Gala
               Entries</option>
 
             <?php while ($row = $galas->fetch(PDO::FETCH_ASSOC)) { ?>

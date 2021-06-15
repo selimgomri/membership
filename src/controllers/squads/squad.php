@@ -152,7 +152,7 @@ include BASE_PATH . 'views/header.php';
       </div>
       <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') { ?>
         <div class="col text-sm-end">
-          <a href="<?= htmlspecialchars(autoUrl("squads/" . $id . "/edit")) ?>" class="btn btn-dark">Edit squad</a>
+          <a href="<?= htmlspecialchars(autoUrl("squads/" . $id . "/edit")) ?>" class="btn btn-dark-l btn-outline-light-d">Edit squad</a>
         </div>
       <?php } ?>
     </div>

@@ -72,7 +72,7 @@ include BASE_PATH . 'views/header.php';
         </div>
         <div class="col text-end">
           <p class="mb-0">
-            <a href="<?=htmlspecialchars(autoUrl("log-books/logs/" . $id . "/edit"))?>" class="btn btn-dark">Edit <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+            <a href="<?=htmlspecialchars(autoUrl("log-books/logs/" . $id . "/edit"))?>" class="btn btn-dark-l btn-outline-light-d">Edit <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
           </p>
         </div>
       </div>

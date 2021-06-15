@@ -4,7 +4,19 @@ $db = app()->db;
 
 $fluidContainer = true;
 
-$pagetitle = "Club Membership Fee Options (V2)";
+if (!isset($_GET['type']) || !in_array($_GET['type'], ['club', 'national_governing_body', 'other'])) halt(404);
+
+$type = 'Club Membership';
+switch ($_GET['type']) {
+  case 'national_governing_body':
+    $type = htmlspecialchars(app()->tenant->getKey('NGB_NAME')) . ' Membership';
+    break;
+  case 'other':
+    $type = 'Other (Arbitrary) Membership';
+    break;
+}
+
+$pagetitle = "New Membership Category";
 
 include BASE_PATH . 'views/header.php';
 
@@ -24,16 +36,28 @@ include BASE_PATH . 'views/header.php';
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('settings')) ?>">Settings</a></li>
           <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('settings/fees')) ?>">Fees</a></li>
-          <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('settings/fees/membership-fees')) ?>">Club</a></li>
+          <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('settings/fees/membership-fees')) ?>">Memberships</a></li>
           <li class="breadcrumb-item active" aria-current="page">New Class</li>
         </ol>
       </nav>
 
       <main>
-        <h1>New Club Membership Fee Class</h1>
-        <p class="lead">Set amounts for club membership fees</p>
+        <h1>New <?= htmlspecialchars($type) ?> Fee Class</h1>
+        <p class="lead">Set amounts for membership fees</p>
+
+        <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['Update-Error']) && $_SESSION['TENANT-' . app()->tenant->getId()]['Update-Error']) { ?>
+          <div class="alert alert-danger">Your new membership class could not be saved</div>
+        <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['Update-Error']);
+        } ?>
 
         <form method="post" class="needs-validation" novalidate>
+
+          <div class="mb-3">
+            <label class="form-label" for="membership-type-name">Membership Type</label>
+            <input type="text" name="membership-type-name" id="membership-type-name" class="form-control" value="<?= htmlspecialchars($type) ?>" readonly>
+          </div>
+
+          <input type="hidden" name="membership-type" value="<?= htmlspecialchars($_GET['type']) ?>">
 
           <div class="mb-3">
             <label class="form-label" for="class-name">Class Name</label>

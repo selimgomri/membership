@@ -95,14 +95,14 @@ include BASE_PATH . 'views/header.php';
           $date = new DateTime($pm['DateTime'], new DateTimeZone('UTC'));
           $date->setTimezone(new DateTimeZone('Europe/London'));
         ?>
-          <a href="<?= htmlspecialchars(autoUrl("payments/card-transactions/" . $pm['ID'])) ?>" class="list-group-item list-group-item-action text-dark">
+          <a href="<?= htmlspecialchars(autoUrl("payments/card-transactions/" . $pm['ID'])) ?>" class="list-group-item list-group-item-action">
             <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') { ?>
               <p class="h3 mb-3"><?= htmlspecialchars($pm['Forename'] . ' ' . $pm['Surname']) ?></p>
             <?php } ?>
             <?php if (isset($pm['Brand'])) { ?>
               <div class="row align-items-center mb-2">
                 <div class="col-auto">
-                  <img src="<?= autoUrl("img/stripe/" . $pm['Brand'] . ".svg", false) ?>" class="accepted-network-logo"> <span class="visually-hidden"><?= htmlspecialchars(getCardBrand($pm['Brand'])) ?></span>
+                  <img class="accepted-network-logo dark-mode-mask" src="<?= autoUrl("img/stripe/" . $pm['Brand'] . ".svg", false) ?>"> <span class="visually-hidden"><?= htmlspecialchars(getCardBrand($pm['Brand'])) ?></span>
                 </div>
                 <div class="col-auto">
                   <h2 class="my-0">

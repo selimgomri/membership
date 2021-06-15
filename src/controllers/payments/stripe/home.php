@@ -81,9 +81,9 @@ include BASE_PATH . 'views/header.php';
         <div class="list-group mb-3">
           <?php do { ?>
             <a href="<?= autoUrl("payments/cards/" . $card['ID']) ?>" class="list-group-item list-group-item-action">
-              <div class="row align-items-center mb-2 text-dark">
+              <div class="row align-items-center mb-2">
                 <div class="col-auto">
-                  <img src="<?= autoUrl("img/stripe/" . $card['Brand'] . ".png", false) ?>" srcset="<?= autoUrl("img/stripe/" . $card['Brand'] . "@2x.png", false) ?> 2x, <?= autoUrl("img/stripe/" . $card['Brand'] . "@3x.png", false) ?> 3x" style="width:40px;"> <span class="visually-hidden"><?= htmlspecialchars(getCardBrand($card['Brand'])) ?></span>
+                  <img class="dark-mode-mask" src="<?= autoUrl("img/stripe/" . $card['Brand'] . ".png", false) ?>" srcset="<?= autoUrl("img/stripe/" . $card['Brand'] . "@2x.png", false) ?> 2x, <?= autoUrl("img/stripe/" . $card['Brand'] . "@3x.png", false) ?> 3x" style="width:40px;"> <span class="visually-hidden"><?= htmlspecialchars(getCardBrand($card['Brand'])) ?></span>
                 </div>
                 <div class="col-auto">
                   <h2 class="h1 my-0">
@@ -96,7 +96,7 @@ include BASE_PATH . 'views/header.php';
               </p>
 
               <p class="mb-0">
-                <span class="text-primary">
+                <span class="text-link-color">
                   Edit card
                 </span>
               </p>

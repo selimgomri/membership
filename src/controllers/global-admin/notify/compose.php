@@ -176,7 +176,7 @@ include BASE_PATH . "views/root/header.php";
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Don't force send</button>
+        <button type="button" class="btn btn-dark-l btn-outline-light-d" data-bs-dismiss="modal">Don't force send</button>
         <button type="button" class="btn btn-danger" id="accept">I understand</button>
       </div>
     </div>

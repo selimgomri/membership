@@ -21,23 +21,38 @@ $numRenewals = $getNumRenewals->fetchColumn();
 $getNumRenewals->execute([$id, 0]);
 $numMembers = $numRenewals + $getNumRenewals->fetchColumn();
 
-$numRenewalsByCat = $db->prepare("SELECT COUNT(*) FROM (`renewalMembers` LEFT JOIN `members` ON `members`.`MemberID` = `renewalMembers`.`MemberID`) WHERE `RenewalID` = ? AND members.`ASACategory` = ? AND Renewed = ?;");
-$numRenewalsByCat->execute([$id, 1, true]);
-$numC1Renewals = $numRenewalsByCat->fetchColumn();
+$getCategories = $db->prepare("SELECT `Name`, `ID` FROM `clubMembershipClasses` WHERE `Type` = ? AND `Tenant` = ? ORDER BY `Name` ASC");
+$getCategories->execute([
+	'national_governing_body',
+	$tenant->getId()
+]);
+$cats = [];
 
-$numRenewalsByCat->execute([$id, 2, true]);
-$numC2Renewals = $numRenewalsByCat->fetchColumn();
+$numRenewalsByCat = $db->prepare("SELECT COUNT(*) FROM (`renewalMembers` LEFT JOIN `members` ON `members`.`MemberID` = `renewalMembers`.`MemberID`) WHERE `RenewalID` = ? AND members.`NGBCategory` = ? AND Renewed = ?;");
 
-$numRenewalsByCat->execute([$id, 3, true]);
-$numC3Renewals = $numRenewalsByCat->fetchColumn();
+while ($category = $getCategories->fetch(PDO::FETCH_ASSOC)) {
+	$numRenewalsByCat->execute([
+		$id,
+		$category['ID'],
+		true,
+	]);
 
-$sql = $db->prepare("SELECT `MForename`, `MSurname`, `Forename`, `Surname`, members.ASANumber, `payments`.`Status`, `RenewalID`, `Renewed`, stripePayments.ID StripeDBID, stripePayments.Paid StripePaid, stripePayMethods.Last4, stripePayMethods.Brand, stripePayMethods.Funding, ASACategory, members.Active, renewalMembers.MemberID, renewalMembers.ID RMID, renewalMembers.Date FROM ((((((`renewalMembers` RIGHT JOIN `members`
+	$count = $numRenewalsByCat->fetchColumn();
+
+	$cats[] = [
+		'id' => $category['ID'],
+		'name' => $category['Name'],
+		'count' => (int) $count
+	];
+}
+
+$sql = $db->prepare("SELECT `MForename`, `MSurname`, `Forename`, `Surname`, members.ASANumber, `payments`.`Status`, `RenewalID`, `Renewed`, stripePayments.ID StripeDBID, stripePayments.Paid StripePaid, stripePayMethods.Last4, stripePayMethods.Brand, stripePayMethods.Funding, `clubMembershipClasses`.`Name` ASACategory, members.Active, renewalMembers.MemberID, renewalMembers.ID RMID, renewalMembers.Date FROM (((((((`renewalMembers` RIGHT JOIN `members`
 ON members.MemberID = renewalMembers.MemberID) LEFT JOIN `users` ON
 members.UserID = users.UserID) LEFT JOIN `paymentsPending` ON
 renewalMembers.PaymentID = paymentsPending.PaymentID) LEFT JOIN `payments` ON
 payments.PMkey = paymentsPending.PMkey) LEFT JOIN `stripePayments` ON
 stripePayments.ID = renewalMembers.StripePayment) LEFT JOIN `stripePayMethods` ON
-stripePayments.Method = stripePayMethods.ID) WHERE `renewalMembers`.`RenewalID` =
+stripePayments.Method = stripePayMethods.ID) LEFT JOIN clubMembershipClasses ON members.NGBCategory = clubMembershipClasses.ID) WHERE `renewalMembers`.`RenewalID` =
 ? ORDER BY members.Active DESC, renewalMembers.Date DESC, `Surname` ASC, `Forename` ASC, members.UserID ASC, `MSurname` ASC, `MForename` ASC;");
 $sql->execute([$id]);
 
@@ -77,7 +92,7 @@ include BASE_PATH . "views/swimmersMenu.php";
 				<div class="mb-3 d-lg-none"></div>
 			</div>
 			<div class="ms-auto col-lg-auto">
-				<a href="<?= htmlspecialchars(autoUrl("renewal/$id/edit")) ?>" class="btn btn-dark">
+				<a href="<?= htmlspecialchars(autoUrl("renewal/$id/edit")) ?>" class="btn btn-dark-l btn-outline-light-d">
 					Edit renewal period
 				</a>
 			</div>
@@ -88,7 +103,7 @@ include BASE_PATH . "views/swimmersMenu.php";
 <div class="container-fluid">
 	<div class="">
 		<p class="mb-0">
-			<?= htmlspecialchars($numRenewals) ?> Renewals (<?= htmlspecialchars($numC1Renewals) ?> Category 1, <?= htmlspecialchars($numC2Renewals) ?> Category 2, <?= htmlspecialchars($numC3Renewals) ?> Category 3) of <?= $numMembers ?> members*.
+			<?php foreach ($cats as $cat) { ?><?= htmlspecialchars($cat['count']) ?> <?= htmlspecialchars($cat['name']) ?>, <?php } ?> of <?= $numMembers ?> members*.
 		</p>
 		<p class="small text-muted">
 			* Number of members on first day of renewal
@@ -174,7 +189,7 @@ include BASE_PATH . "views/swimmersMenu.php";
 							</td>
 							<td>
 								<span class="font-monospace">
-									<?= htmlspecialchars($renewalItem['ASANumber']) ?><?php if ($renewalItem['ASACategory'] != 0) { ?> (Cat<?= htmlspecialchars($renewalItem['ASACategory']) ?>)<?php } ?>
+									<?= htmlspecialchars($renewalItem['ASANumber']) ?><?php if ($renewalItem['ASACategory']) { ?> (<?= htmlspecialchars($renewalItem['ASACategory']) ?>)<?php } ?>
 								</span>
 							</td>
 							<td>

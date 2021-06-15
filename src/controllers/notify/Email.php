@@ -324,7 +324,7 @@ include BASE_PATH . "views/notifyMenu.php";
 
     <p>
       <button class="btn btn-success" id="submit" value="submitted" type="submit">Send the email</button>
-      <button class="btn btn-dark" id="tinymce-preview" type="button" id="tinymce-preview">Preview message</button>
+      <button class="btn btn-dark-l btn-outline-light-d" id="tinymce-preview" type="button" id="tinymce-preview">Preview message</button>
     </p>
   </form>
 
@@ -360,7 +360,7 @@ include BASE_PATH . "views/notifyMenu.php";
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Don't force send</button>
+        <button type="button" class="btn btn-dark-l btn-outline-light-d" data-bs-dismiss="modal">Don't force send</button>
         <button type="button" class="btn btn-danger" id="accept">I understand</button>
       </div>
     </div>
@@ -368,7 +368,7 @@ include BASE_PATH . "views/notifyMenu.php";
 </div>
 
 <?php $footer = new \SCDS\Footer();
-$footer->addJS("js/tinymce/tinymce.min.js");
+$footer->addJS("js/tinymce/5/tinymce.min.js");
 // $footer->addJS("js/notify/TinyMCE.js?v=1");
 // $footer->addJS("js/notify/FileUpload.js");
 $footer->addJS("js/dropzone/dropzone.js");

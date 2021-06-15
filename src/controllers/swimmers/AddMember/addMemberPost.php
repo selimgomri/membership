@@ -33,10 +33,6 @@ if ((!empty($_POST['forename'])) && (!empty($_POST['surname'])) && (!empty($_POS
 	if ($asaNumber == "" || $asaNumber == null) {
 		$getASA = true;
 	}
-	$cat = (int) $_POST['cat'];
-	if ($cat != 0 && $cat != 1 && $cat != 2 && $cat != 3) {
-		halt(500);
-	}
 
 	if (isset($_POST['clubpays']) && bool($_POST['clubpays'])) {
 		$sep = 1;
@@ -56,25 +52,44 @@ if ((!empty($_POST['forename'])) && (!empty($_POST['surname'])) && (!empty($_POS
 		$transfer = 0;
 	}
 
+	$getClass = $db->prepare("SELECT `ID`, `Name`, `Description`, `Fees` FROM `clubMembershipClasses` WHERE `ID` = ? AND `Tenant` = ? AND `Type` = ?");
+
 	$membershipClass = null;
 	if (isset($_POST['membership-class'])) {
-		$getClass = $db->prepare("SELECT `ID`, `Name`, `Description`, `Fees` FROM `clubMembershipClasses` WHERE `ID` = ? AND `Tenant` = ?");
-    $getClass->execute([
-      $_POST['membership-class'],
-      $tenant->getId(),
-    ]);
-    $class = $getClass->fetch(PDO::FETCH_ASSOC);
+		$getClass->execute([
+			$_POST['membership-class'],
+			$tenant->getId(),
+			'club'
+		]);
+		$class = $getClass->fetch(PDO::FETCH_ASSOC);
 
-    if (!$class) {
-      throw new Exception('Membership class not found at this tenant');
+		if (!$class) {
+			throw new Exception('Membership class not found at this tenant');
 		}
 		$membershipClass = $_POST['membership-class'];
+	}
+
+	$checkCat = $db->prepare("SELECT COUNT(*) FROM `clubMembershipClasses` WHERE `ID` = ? AND `Tenant` = ? AND `Type` = ?");
+	$ngbCat = null;
+
+	if ($_POST['ngb-cat'] != 'none') {
+		$checkCat->execute([
+			$_POST['ngb-cat'],
+			$tenant->getId(),
+			'national_governing_body'
+		]);
+
+		if ($checkCat->fetchColumn() == 0) {
+			throw new Exception('Invalid national governing body membership category');
+		}
+
+		$ngbCat = $_POST['ngb-cat'];
 	}
 
 	$accessKey = generateRandomString(6);
 
 	try {
-		$insert = $db->prepare("INSERT INTO `members` (MForename, MMiddleNames, MSurname, DateOfBirth, ASANumber, Gender, AccessKey, ASACategory, ClubPaid, ASAPaid, OtherNotes, RRTransfer, Tenant, ClubCategory) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+		$insert = $db->prepare("INSERT INTO `members` (MForename, MMiddleNames, MSurname, DateOfBirth, ASANumber, Gender, AccessKey, NGBCategory, ClubPaid, ASAPaid, OtherNotes, RRTransfer, Tenant, ClubCategory) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 		$insert->execute([
 			$forename,
 			$middlenames,
@@ -83,7 +98,7 @@ if ((!empty($_POST['forename'])) && (!empty($_POST['surname'])) && (!empty($_POS
 			$asaNumber,
 			$sex,
 			$accessKey,
-			$cat,
+			$ngbCat,
 			$cp,
 			$sep,
 			"",

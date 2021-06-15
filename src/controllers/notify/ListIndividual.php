@@ -52,7 +52,7 @@ include BASE_PATH . "views/notifyMenu.php";
     </div>
     <div class="col text-sm-end">
       <a href="<?=autoUrl("notify/lists/" . $id . "/edit")?>"
-        class="btn btn-dark">Edit</a>
+        class="btn btn-dark-l btn-outline-light-d">Edit</a>
       <a href="<?=autoUrl("notify/lists/" . $id . "/delete")?>"
         class="btn btn-danger">Delete</a>
     </div>

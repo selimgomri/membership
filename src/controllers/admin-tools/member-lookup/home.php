@@ -12,7 +12,7 @@ if (isset($_GET['member-id'])) {
   } catch (\RankingsDb\exceptions\ConnectionException $e) {
     $error = 'Unable to connect to the rankings.';
   } catch (\RankingsDb\exceptions\MemberNotFound $e) {
-    $error = 'We could not find a member with Swim England number ' . trim($_GET['member-id']) . '.';
+    $error = 'We could not find a member with ' . app()->tenant->getKey('NGB_NAME') ' . number ' . trim($_GET['member-id']) . '.';
   } catch (\RankingsDb\exceptions\InvalidPersonalKey $e) {
     $error = 'The personal key provided is invalid.';
   } catch (Exception $e) {

@@ -47,7 +47,8 @@ module.exports = (env, options) => {
       // 'clse': './scss/clse.scss',
       'generic': './scss/generic.scss',
       'generic-dark-mode': './scss/generic-dark-mode.scss',
-      'scds': './scss/scds.scss'
+      'scds': './scss/scds.scss',
+      'scds-dark-mode': './scss/scds-dark-mode.scss'
     },
     output: {
       path: path.resolve(__dirname, 'public/compiled/'),

@@ -22,6 +22,26 @@ var stripeElementStyle = {
   },
 }
 
+var stripeElementStyleDarkMode = {
+  base: {
+    iconColor: '#ced4da',
+    lineHeight: '1.5',
+    height: '33px',
+    color: '#ffffff',
+    fontWeight: 400,
+    fontFamily: 'system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"',
+    fontSize: '14px',
+    fontSmoothing: 'antialiased',
+    '::placeholder': {
+      color: '#6c757d',
+    },
+    padding: '0.375rem 0.75rem',
+  },
+  invalid: {
+    color: '#ffffff',
+  },
+}
+
 function setCardBrandIcon(brand) {
   root = document.getElementById('app-js-info').dataset.root;
   var content = '<img class="fa fa-fw" src="' + root + '/img/stripe/network-svgs/credit-card.svg" aria-hidden="true">';

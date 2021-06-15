@@ -153,6 +153,7 @@ class Tenant
       'MEMBERSHIP_FEE_PM_CARD' => true,
       'MEMBERSHIP_FEE_PM_DD' => true,
       'ENABLE_BILLING_SYSTEM' => true,
+      'NGB_NAME' => 'Swim England',
     ];
 
     foreach ($keys as $key => $value) {

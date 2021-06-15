@@ -92,7 +92,7 @@ include BASE_PATH . "views/postsMenu.php";
 					<a href="<?= htmlspecialchars(autoUrl("pages/" . $row['ID'] . "/print.pdf")) ?>" class="btn btn-primary">
 						Print document <i class="fa fa-print" aria-hidden="true"></i>
 					</a>
-					<a href="<?= htmlspecialchars(autoUrl("pages/" . $row['ID'] . "/edit")) ?>" class="btn btn-dark">
+					<a href="<?= htmlspecialchars(autoUrl("pages/" . $row['ID'] . "/edit")) ?>" class="btn btn-dark-l btn-outline-light-d">
 						Edit
 					</a>
 				</div>

@@ -86,8 +86,10 @@ $theme-colors: (
   "warning":    $warning,
   "danger":     $danger,
   "light":      $light,
-  "dark":       $dark
-) !default;
+  "dark":       $dark,
+  "light-l":    $light,
+  "dark-l":     $dark
+);
 // scss-docs-end theme-colors-map
 
 // The contrast ratio to reach against white, to determine if color changes from "light" to "dark". Acceptable values for WCAG 2.0 are 3, 4.5 and 7.
@@ -425,7 +427,7 @@ $font-family-code:            var(--#{$variable-prefix}font-monospace) !default;
 // $font-size-root effects the value of `rem`, which is used for as well font sizes, paddings and margins
 // $font-size-base effects the font size of the body text
 $font-size-root:              null !default;
-$font-size-base:              0.875rem !default; // Assumes the browser default, typically `16px`
+$font-size-base:              0.875rem; // Assumes the browser default, typically `16px`
 $font-size-sm:                $font-size-base * .875 !default;
 $font-size-lg:                $font-size-base * 1.25 !default;
 
@@ -1476,3 +1478,6 @@ $front-page-link-color: $body-color;
 
 $front-page-link-bg-hover: $gray-200;
 $front-page-link-color-hover: $body-color;
+
+$footer-legal-bg: $gray-900;
+$footer-main-bg: $gray-800;

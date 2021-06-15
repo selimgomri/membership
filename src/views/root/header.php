@@ -9,7 +9,7 @@ include 'head.php';
 </div>
 
 <?php if (bool(getenv('IS_DEV'))) { ?>
-  <aside class="bg-warning py-3 mb-3">
+  <aside class="bg-warning text-dark py-3 mb-3">
     <div class="container">
       <h1>
         Warning

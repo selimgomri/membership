@@ -125,7 +125,7 @@ include BASE_PATH . 'views/header.php';
                 <div class="col-auto">
                   <div class="btn-group">
                     <?php if ($latest) { ?>
-                      <a href="<?= htmlspecialchars(autoUrl('covid/health-screening/members/' . $member['MemberID'])) ?>" class="btn btn-dark">View all</a>
+                      <a href="<?= htmlspecialchars(autoUrl('covid/health-screening/members/' . $member['MemberID'])) ?>" class="btn  btn-outline-light-d">View all</a>
                     <?php } ?>
                     <a href="<?= htmlspecialchars(autoUrl('covid/health-screening/members/' . $member['MemberID'] . '/new-survey')) ?>" class="btn btn-success">New submission</a>
                   </div>

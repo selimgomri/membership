@@ -247,7 +247,7 @@ $month = new DateTime('now', new DateTimeZone('Europe/London'));
                 </span>
               </a>
 
-              <a href="<?= htmlspecialchars(autoUrl('payments/disputes')) ?>">
+              <a href="<?= htmlspecialchars(autoUrl('payments/card-transactions?users=all')) ?>">
                 <span class="mb-3">
                   <span class="title mb-0">
                     Transactions

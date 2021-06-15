@@ -82,7 +82,7 @@ include BASE_PATH . "views/squadMenu.php"; ?>
           </small>
 		    </div>
 		  </div>
-			<button type="submit" class="btn btn-dark">Save Move</button>
+			<button type="submit" class="btn btn-dark-l btn-outline-light-d">Save Move</button>
 		</form>
 	</div>
 </div>

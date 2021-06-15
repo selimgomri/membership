@@ -424,8 +424,15 @@ if (!function_exists('chesterStandardMenu')) {
                   </a>
                 </li>
               <?php } ?>
-          <?php }
-          } ?>
+            <?php } ?>
+
+            <?php if (app()->tenant->getKey('CLUB_WEBSITE')) { ?>
+              <li class="nav-item d-lg-none">
+                <a class="nav-link" href="<?= htmlspecialchars(app()->tenant->getKey('CLUB_WEBSITE')) ?>" target="_blank">Club Website <i class="fa fa-external-link" aria-hidden="true"></i></a>
+              </li>
+            <?php } ?>
+
+          <?php } ?>
           <?php if (empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) { ?>
             <li class="nav-item">
               <a class="nav-link" href="<?= htmlspecialchars(autoUrl("login")) ?>">Login</a>
@@ -447,6 +454,11 @@ if (!function_exists('chesterStandardMenu')) {
             <li class="nav-item">
               <a class="nav-link" href="<?= htmlspecialchars(autoUrl("log-books")) ?>">Log Books</a>
             </li>
+            <?php if (app()->tenant->getKey('CLUB_WEBSITE')) { ?>
+              <li class="nav-item d-lg-none">
+                <a class="nav-link" href="<?= htmlspecialchars(app()->tenant->getKey('CLUB_WEBSITE')) ?>" target="_blank">Club Website <i class="fa fa-external-link" aria-hidden="true"></i></a>
+              </li>
+            <?php } ?>
           <?php } ?>
         </ul>
         <?php if (!empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) {

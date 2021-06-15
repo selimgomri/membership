@@ -111,7 +111,7 @@ include BASE_PATH . 'views/header.php';
       </div>
       <div class="col text-end">
         <?php if ($user->hasPermission('Admin') || $user->hasPermission('Coach')) { ?>
-          <a href="<?= htmlspecialchars(autoUrl('sessions/booking/book?session=' . urlencode($session['SessionID']) . '&date=' . urlencode($date->format('Y-m-d')))) ?>" class="btn btn-dark" title="Changes won't be saved">
+          <a href="<?= htmlspecialchars(autoUrl('sessions/booking/book?session=' . urlencode($session['SessionID']) . '&date=' . urlencode($date->format('Y-m-d')))) ?>" class="btn btn-dark-l btn-outline-light-d" title="Changes won't be saved">
             Back
           </a>
         <?php } ?>

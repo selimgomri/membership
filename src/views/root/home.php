@@ -18,7 +18,7 @@ include BASE_PATH . "views/root/header.php";
   </div>
 </div>
 
-<div class="bg-primary text-light py-5">
+<div class="front-page-purple-section py-5">
   <div class="container">
     <div class="row">
       <div class="col-md-6">
@@ -35,7 +35,7 @@ include BASE_PATH . "views/root/header.php";
   </div>
 </div>
 
-<div class="bg-light text-dark py-5">
+<div class="front-page-alternate-section py-5">
   <div class="container">
     <div class="row">
       <div class="col-md-6">
@@ -52,7 +52,7 @@ include BASE_PATH . "views/root/header.php";
   </div>
 </div>
 
-<div class="bg-primary text-light py-5">
+<div class="front-page-purple-section py-5">
   <div class="container">
     <div class="row align-items-center">
       <div class="col-md-9">
@@ -81,7 +81,7 @@ include BASE_PATH . "views/root/header.php";
   </div>
 </div>
 
-<div class="bg-light text-dark py-5">
+<div class="front-page-alternate-section py-5">
   <div class="container">
     <div class="row">
       <div class="col-md-6">
@@ -99,7 +99,7 @@ include BASE_PATH . "views/root/header.php";
   </div>
 </div>
 
-<div class="bg-primary text-light py-5">
+<div class="front-page-purple-section py-5">
   <div class="container">
     <div class="row">
       <div class="col-md-6">
@@ -115,7 +115,7 @@ include BASE_PATH . "views/root/header.php";
   </div>
 </div>
 
-<div class="bg-light text-dark py-5">
+<div class="front-page-alternate-section py-5">
   <div class="container">
     <div class="row">
       <div class="col-md-6">
@@ -132,7 +132,7 @@ include BASE_PATH . "views/root/header.php";
   </div>
 </div>
 
-<div class="bg-primary text-light py-5">
+<div class="front-page-purple-section py-5">
   <div class="container">
     <div class="row">
       <div class="col-md-6">
@@ -150,7 +150,7 @@ include BASE_PATH . "views/root/header.php";
   </div>
 </div>
 
-<div class="bg-light text-dark py-5 mb-n3">
+<div class="front-page-alternate-section py-5 mb-n3">
   <div class="container">
     <div class="row">
       <div class="col">
@@ -166,7 +166,7 @@ include BASE_PATH . "views/root/header.php";
           </div>
           <div class="col-md">
             <a href="https://www.newcastleswimteam.co.uk/" target="_blank">
-              <img src="<?= htmlspecialchars(autoUrl("img/customer-clubs/newe.png")) ?>" title="Newcastle Swim Team" alt="Newcastle Swim Team" class="img-fluid mx-auto d-block">
+              <img src="<?= htmlspecialchars(autoUrl("img/customer-clubs/newe.png")) ?>" title="Newcastle Swim Team" alt="Newcastle Swim Team" class="img-fluid mx-auto d-block dark-mode-mask">
             </a>
             <div class="mb-3 d-md-none"></div>
           </div>
@@ -178,13 +178,13 @@ include BASE_PATH . "views/root/header.php";
           </div>
           <div class="col-md">
             <a href="https://main.nasc.co.uk/" target="_blank">
-              <img src="<?= htmlspecialchars(autoUrl("img/customer-clubs/nore.png")) ?>" title="Northallerton ASC" alt="Northallerton ASC" class="img-fluid mx-auto d-block">
+              <img src="<?= htmlspecialchars(autoUrl("img/customer-clubs/nore.png")) ?>" title="Northallerton ASC" alt="Northallerton ASC" class="img-fluid mx-auto d-block dark-mode-mask">
             </a>
             <div class="mb-3 d-md-none"></div>
           </div>
           <div class="col-md">
             <a href="https://www.chesterlestreetasc.co.uk/" target="_blank">
-              <img src="<?= htmlspecialchars(autoUrl("img/chesterLogo.svg")) ?>" title="Chester-le-Street ASC" alt="Chester-le-Street ASC" class="img-fluid mx-auto d-block">
+              <img src="<?= htmlspecialchars(autoUrl("img/chesterLogo.svg")) ?>" title="Chester-le-Street ASC" alt="Chester-le-Street ASC" class="img-fluid mx-auto d-block dark-mode-mask">
             </a>
           </div>
         </div>

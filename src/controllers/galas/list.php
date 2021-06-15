@@ -112,7 +112,7 @@ include BASE_PATH . 'views/header.php';
                 <a href="<?=htmlspecialchars(autoUrl("galas/entries?gala=" . $gala['id']))?>" class="btn btn-primary">
                   Entries
                 </a>
-                <a href="<?=htmlspecialchars(autoUrl("galas/" . $gala['id'] . "/edit"))?>" class="btn btn-dark">
+                <a href="<?=htmlspecialchars(autoUrl("galas/" . $gala['id'] . "/edit"))?>" class="btn btn-dark-l btn-outline-light-d">
                   Edit <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                 </a>
               </div>

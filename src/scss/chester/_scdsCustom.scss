@@ -86,25 +86,6 @@ $cell-generic: true;
 $body-bg: $white;
 $body-color: $gray-900;
 
-$grid-breakpoints: (
-  xs: 0,
-  sm: 576px,
-  md: 768px,
-  lg: 992px,
-  xl: 1320px
-);
-
-// Grid containers
-//
-// Define the maximum width of `.container` for different screen sizes.
-
-$container-max-widths: (
-  sm: 540px,
-  md: 720px,
-  lg: 960px,
-  xl: 1280px
-);
-
 // Grid columns
 //
 // Set the number of columns and specify the width of the gutters.
@@ -122,7 +103,7 @@ $font-family-sans-serif: "Source Sans Pro", -apple-system,BlinkMacSystemFont,"Se
 // $font-family-monospace:  "Roboto Mono", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 $font-family-base:       $font-family-sans-serif;
 
-$font-size-base: 1rem; // Assumes the browser default, typically `16px`
+$font-size-base: 0.875rem; // Assumes the browser default, typically `16px`
 
 $enable-responsive-font-sizes: true;
 
@@ -219,3 +200,6 @@ $front-page-link-color: $body-color;
 
 $front-page-link-bg-hover: $gray-200;
 $front-page-link-color-hover: $body-color;
+
+$footer-legal-bg: $gray-900;
+$footer-main-bg: $gray-800;

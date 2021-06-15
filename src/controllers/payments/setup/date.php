@@ -42,7 +42,7 @@ include BASE_PATH . "views/paymentsMenu.php";
 				<?php } ?>
 			</select>
 		</div>
-		<button class="btn btn-dark" type="submit">Next</button>
+		<button class="btn btn-dark-l btn-outline-light-d" type="submit">Next</button>
 		<p><span class="small">We'll now direct you to our partner GoCardless who handle Direct Debits on our behalf.</span></p>
 	</form>
 </div>
