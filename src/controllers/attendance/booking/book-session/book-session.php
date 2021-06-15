@@ -310,9 +310,9 @@ include BASE_PATH . 'views/header.php';
 <div class="modal" id="booking-modal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="booking-modal-label" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
     <div class="modal-content">
-      <div class="modal-header bg-info text-dark">
+      <div class="modal-header bg-info">
         <h5 class="modal-title" id="booking-modal-title">Confirm booking</h5>
-        <button type="button" class="close text-dark" data-bs-dismiss="modal" aria-label="Close">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
 
         </button>
       </div>
@@ -350,9 +350,9 @@ include BASE_PATH . 'views/header.php';
 <div class="modal" id="cancel-modal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="cancel-modal-label" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
     <div class="modal-content">
-      <div class="modal-header bg-danger text-white">
+      <div class="modal-header bg-danger">
         <h5 class="modal-title" id="cancel-modal-title">Cancel booking?</h5>
-        <button type="button" class="close text-white" data-bs-dismiss="modal" aria-label="Close">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
 
         </button>
       </div>
