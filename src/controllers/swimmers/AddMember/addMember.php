@@ -112,6 +112,15 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 						</div>
 					</div>
 				</div>
+
+				<div class="mb-3">
+					<div class="form-check">
+						<input class="form-check-input" type="checkbox" id="clubpays" name="clubpays" value="1" aria-describedby="cphelp">
+						<label class="form-check-label" for="clubpays">Club pays <?= htmlspecialchars($tenant->getKey('NGB_NAME')) ?> Membership fees?</label>
+					</div>
+					<small id="cphelp" class="form-text text-muted">Tick the box if this swimmer will not pay any <?= htmlspecialchars($tenant->getKey('NGB_NAME')) ?> fees.</small>
+				</div>
+
 				<div class="mb-3">
 					<label class="form-label" for="sex">Sex</label>
 					<select class="form-select" id="sex" name="sex" placeholder="Select" required>
@@ -143,15 +152,7 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 				<?php } ?>
 
 				<div class="mb-3">
-					<div class="form-check">
-						<input class="form-check-input" type="checkbox" id="clubpays" name="clubpays" value="1" aria-describedby="cphelp">
-						<label class="form-check-label" for="clubpays">Club pays NGB Membership fees?</label>
-					</div>
-					<small id="cphelp" class="form-text text-muted">Tick the box if this swimmer will not pay any Swim England fees.</small>
-				</div>
-
-				<div class="mb-3">
-					<label class="form-label" for="membership-class">Select membership class</label>
+					<label class="form-label" for="membership-class">Select club membership class</label>
 					<select class="form-select" id="membership-class" name="membership-class" required>
 						<option value="" selected disabled>Choose a club membership class</option>
 						<?php do { ?>
@@ -173,7 +174,7 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 						<input class="form-check-input" type="checkbox" id="transfer" name="transfer" value="1" aria-describedby="transfer-help">
 						<label class="form-check-label" for="transfer">Transferring from another club?</label>
 					</div>
-					<small id="transfer-help" class="form-text text-muted">Tick the box if this swimmer is transferring from another swimming club - They will not be charged for Swim England membership fees. If it is almost a new Swim England membership year and this swimmer will not be completing membership renewal then leave the box unticked so they pay Swim England membership fees when registering.</small>
+					<small id="transfer-help" class="form-text text-muted">Tick the box if this swimmer is transferring from another swimming club - They will not be charged for <?= htmlspecialchars($tenant->getKey('NGB_NAME')) ?> membership fees. If it is almost a new Swim England membership year and this swimmer will not be completing membership renewal then leave the box unticked so they pay <?= htmlspecialchars($tenant->getKey('NGB_NAME')) ?> membership fees when registering.</small>
 				</div>
 				<?= SCDS\CSRF::write() ?>
 				<button type="submit" class="btn btn-success">Add Member</button>

@@ -28,17 +28,17 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
 
     // Search the database for the results
     if ($galaID == "all") {
-      $sql = "SELECT * FROM ((galaEntries INNER JOIN members ON
+      $sql = "SELECT * FROM (((galaEntries INNER JOIN members ON
       galaEntries.MemberID = members.MemberID) INNER JOIN galas ON
-      galaEntries.GalaID = galas.GalaID) WHERE galas.Tenant = ? AND galas.GalaDate >= CURDATE() " .
+      galaEntries.GalaID = galas.GalaID) LEFT JOIN clubMembershipClasses ON members.NGBCategory = clubMembershipClasses.ID) WHERE galas.Tenant = ? AND galas.GalaDate >= CURDATE() " .
       $sex . " AND members.MSurname LIKE ? COLLATE utf8mb4_general_ci ORDER BY galas.ClosingDate
       ASC, galas.GalaDate DESC, members.MSurname ASC, members.MForename ASC";
       $sqlArgs[] = '%' . $search . '%';
     }
     else {
-      $sql = "SELECT * FROM ((galaEntries INNER JOIN members ON
+      $sql = "SELECT * FROM (((galaEntries INNER JOIN members ON
       galaEntries.MemberID = members.MemberID) INNER JOIN galas ON
-      galaEntries.GalaID = galas.GalaID) WHERE galas.Tenant = ? AND galas.GalaID = ? " .
+      galaEntries.GalaID = galas.GalaID) LEFT JOIN clubMembershipClasses ON members.NGBCategory = clubMembershipClasses.ID) WHERE galas.Tenant = ? AND galas.GalaID = ? " .
       $sex . " AND members.MSurname LIKE ? COLLATE utf8mb4_general_ci members.MSurname ASC, members.MForename ASC";
       $sqlArgs[] = $galaID;
       $sqlArgs[] = '%' . $search . '%';
@@ -123,7 +123,8 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
       htmlspecialchars($row['ASANumber']) . " <i class=\"fa fa-external-link\"
       aria-hidden=\"true\"></i></a><span class=\"d-none d-print-inline\">" . htmlspecialchars(app()->tenant->getKey('NGB_NAME')) . ": " .
       htmlspecialchars($row['ASANumber']) . "</span><br>
-      <span class=\"small\">" . htmlspecialchars($row['GalaName']) . "<br><a class=\"d-print-none\" href=\"" . autoUrl('galas/entries/' . $row['EntryID']) . "\">Edit Entry</a><br><a class=\"d-print-none\" href=\"" . autoUrl('galas/entries/' . $row['EntryID']) . "/manual-time\">Set Manual Times</a></span></td>";
+      <span class=\"small\">" . htmlspecialchars($row['Name']) . "<br>
+      " . htmlspecialchars($row['GalaName']) . "<br><a class=\"d-print-none\" href=\"" . autoUrl('galas/entries/' . $row['EntryID']) . "\">Edit Entry</a><br><a class=\"d-print-none\" href=\"" . autoUrl('galas/entries/' . $row['EntryID']) . "/manual-time\">Set Manual Times</a></span></td>";
 
       // Arrays of swims used to check whever to print the name of the swim entered
       // BEWARE This is in an order to ease inputting data into SportSystems, contrary to these arrays in other files
