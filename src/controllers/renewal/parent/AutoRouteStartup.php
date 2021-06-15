@@ -43,13 +43,17 @@ function latestRenewal()
 	$latestRenewal = $latest->fetch(PDO::FETCH_ASSOC);
 
 	// Validate ready
-	$getNum = $db->prepare("SELECT COUNT(*) FROM renewalMembers WHERE RenewalID = ?");
-	$getNum->execute([
-		$latestRenewal['ID'],
-	]);
+	if (isset($latestRenewal['ID'])) {
+		$getNum = $db->prepare("SELECT COUNT(*) FROM renewalMembers WHERE RenewalID = ?");
+		$getNum->execute([
+			$latestRenewal['ID'],
+		]);
 
-	if ($getNum->fetchColumn() == 0) {
-		// Renewal cannot be completed at this time
+		if ($getNum->fetchColumn() == 0) {
+			// Renewal cannot be completed at this time
+			$latestRenewal = null;
+		}
+	} else {
 		$latestRenewal = null;
 	}
 

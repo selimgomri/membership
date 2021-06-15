@@ -61,19 +61,6 @@ if ($clubDiscount > 0 && $renewal == 0) {
 	$totalFeeDiscounted += $clubFee;
 }
 
-$asaFees = [];
-
-for ($i = 0; $i < $count; $i++) {
-	if ($member[$i]['NGBCategory'] && !$member[$i]['ASAPaid']) {
-		$asaFees[$i] = MembershipClassInfo::getFee($member[$i]['NGBCategory']);
-	} else {
-		$asaFees[$i] = 0;
-	}
-
-	$totalFee += $asaFees[$i];
-	$totalFeeDiscounted += $asaFees[$i];
-}
-
 $clubFeeString = $clubFees->getFormattedTotal();
 $totalFeeString = (string) (\Brick\Math\BigDecimal::of((string) $totalFee))->withPointMovedLeft(2)->toScale(2);
 

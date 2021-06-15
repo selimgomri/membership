@@ -73,7 +73,7 @@ try {
 	$member = $getMembers->fetchAll(PDO::FETCH_ASSOC);
 	$count = sizeof($member);
 
-	foreach ($clubFees->getClasses() as $class) {
+	foreach ($clubFees->getClubClasses() as $class) {
 		foreach ($class->getFeeItems() as $item) {
 			$paymentItems[] = [
 				'description' => $item->getDescription() . ' ' . $class->getName(),
@@ -81,11 +81,24 @@ try {
 				'type' => 'debit',
 				'date' => $clubDate
 			];
+			$totalFee = $item->getAmount();
+		}
+	}
+
+	foreach ($clubFees->getNGBClasses() as $class) {
+		foreach ($class->getFeeItems() as $item) {
+			$paymentItems[] = [
+				'description' => $item->getDescription() . ' ' . $class->getName(),
+				'amount' => $item->getAmount(),
+				'type' => 'debit',
+				'date' => $clubDate
+			];
+			$totalFee = $item->getAmount();
 		}
 	}
 
 	if ($clubDiscount > 0 && $renewal == 0) {
-		$totalFee += $clubFee * (1 - ($clubDiscount / 100));
+		// $totalFee += $clubFee * (1 - ($clubDiscount / 100));
 		// $paymentItems[] = [
 		// 	'description' => 'Club Membership Fee',
 		// 	'amount' => $clubFee * ($clubDiscount / 100),
@@ -93,36 +106,29 @@ try {
 		// 	'date' => $clubDate
 		// ];
 	} else {
-		$totalFee += $clubFee;
+		// $totalFee += $clubFee;
 	}
 
-	$asaFees = [];
-
 	for ($i = 0; $i < $count; $i++) {
-		if ($member[$i]['NGBCategory'] && !$member[$i]['ASAPaid']) {
-			$asaFees[$i] = MembershipClassInfo::getFee($member[$i]['NGBCategory']);
-		} else {
-			$asaFees[$i] = 0;
-		}
 
-		$paymentItems[] = [
-			'description' => $member[$i]['MForename'] . ' ' . $member[$i]['MSurname'] . ' - ' . MembershipClassInfo::getFee($member[$i]['NGBCategory']),
-			'amount' => $asaFees[$i],
-			'type' => 'debit',
-			'member' => $member[$i]['MemberID'],
-			'date' => $asaDate
-		];
+		// $paymentItems[] = [
+		// 	'description' => $member[$i]['MForename'] . ' ' . $member[$i]['MSurname'] . ' - ' . MembershipClassInfo::getFee($member[$i]['NGBCategory']),
+		// 	'amount' => $asaFees[$i],
+		// 	'type' => 'debit',
+		// 	'member' => $member[$i]['MemberID'],
+		// 	'date' => $asaDate
+		// ];
 
 		if ($member[$i]['RRTransfer']) {
 			// $totalFee += $asaFees[$i];
-			$paymentItems[] = [
-				'description' => $member[$i]['MForename'] . ' NGB Club Transfer',
-				'amount' => $asaFees[$i],
-				'type' => 'credit',
-				'date' => $clubDate
-			];
+			// $paymentItems[] = [
+			// 	'description' => $member[$i]['MForename'] . ' NGB Club Transfer',
+			// 	'amount' => $asaFees[$i],
+			// 	'type' => 'credit',
+			// 	'date' => $clubDate
+			// ];
 		} else {
-			$totalFee += $asaFees[$i];
+			// $totalFee += $asaFees[$i];
 		}
 	}
 
@@ -130,8 +136,8 @@ try {
 	// reportError($paymentItems);
 
 	$clubFeeString = $clubFees->getFormattedTotal();
-	$totalFeeString = (string) (\Brick\Math\BigDecimal::of((string) $totalFee))->withPointMovedLeft(2)->toScale(2);
-	$total = $totalFee;
+	$totalFeeString = (string) (\Brick\Math\BigDecimal::of((string) $clubFees->getTotal()))->withPointMovedLeft(2)->toScale(2);
+	$total = $clubFees->getTotal();
 
 	$sql = $db->prepare("SELECT COUNT(*) FROM `paymentPreferredMandate` WHERE `UserID` = ?");
 	$sql->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
