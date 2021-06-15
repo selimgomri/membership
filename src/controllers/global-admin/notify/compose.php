@@ -156,7 +156,7 @@ include BASE_PATH . "views/root/header.php";
     <div class="modal-content">
       <div class="modal-header bg-danger text-white">
         <h5 class="modal-title" id="force-alert-modal">Are you sure?</h5>
-        <button type="button" class="close text-white" data-bs-dismiss="modal" aria-label="Close">
+        <button type="button" class="btn-close text-white" data-bs-dismiss="modal" aria-label="Close">
 
         </button>
       </div>
