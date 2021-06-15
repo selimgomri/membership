@@ -72,6 +72,7 @@
 	margin: 0 0 1rem 0;
 	background: $cell-bg;
 	color: $body-color;
+	@include border-radius($alert-border-radius);
 }
 
 @media print {
@@ -85,9 +86,6 @@
   }
 }
 
-.badge {
-  font-family: "Helvetica", "Helvetica Neue", "Arial", "Roboto", san-serif;
-}
 .table-nomargin {
   margin: 0 -1rem -1rem -1rem;
   width: auto !important;

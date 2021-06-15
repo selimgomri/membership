@@ -326,7 +326,7 @@ include BASE_PATH . "views/swimmersMenu.php";
             <div class="col-lg">
               <div class="mb-3">
                 <p class="mb-2">
-                  Club pays NGB fees?
+                  Club pays <?= htmlspecialchars($tenant->getKey('NGB_NAME')) ?> fees?
                 </p>
                 <div class="form-check">
                   <input type="radio" id="sep-no" name="sep" class="form-check-input" <?php if (!bool($row['ASAPaid'])) { ?>checked<?php } ?> value="0">
