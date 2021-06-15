@@ -39,7 +39,7 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
       $sql = "SELECT * FROM (((galaEntries INNER JOIN members ON
       galaEntries.MemberID = members.MemberID) INNER JOIN galas ON
       galaEntries.GalaID = galas.GalaID) LEFT JOIN clubMembershipClasses ON members.NGBCategory = clubMembershipClasses.ID) WHERE galas.Tenant = ? AND galas.GalaID = ? " .
-      $sex . " AND members.MSurname LIKE ? COLLATE utf8mb4_general_ci members.MSurname ASC, members.MForename ASC";
+      $sex . " AND members.MSurname LIKE ? COLLATE utf8mb4_general_ci ORDER BY members.MSurname ASC, members.MForename ASC";
       $sqlArgs[] = $galaID;
       $sqlArgs[] = '%' . $search . '%';
     }
