@@ -548,6 +548,10 @@ if (empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) {
     include BASE_PATH . 'controllers/registration/router.php';
   });
 
+  $this->group('/memberships', function () {
+    include BASE_PATH . 'controllers/memberships/router.php';
+  });
+
   $this->group(['/attendance', '/registers'], function () {
     include BASE_PATH . 'controllers/attendance/router.php';
   });
