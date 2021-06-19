@@ -43,7 +43,7 @@ try {
 
   // Try to get category
   $category = null;
-  if (isset($_POST['payment-category'])) {
+  if (isset($_POST['payment-category']) && $_POST['payment-category'] != 'none') {
     $getCategory = $db->prepare("SELECT ID FROM paymentCategories WHERE UniqueID = ? AND Tenant = ?");
     $getCategory->execute([
       $_POST['payment-category'],
