@@ -31,6 +31,7 @@ $vars = [
   'ENABLE_BILLING_SYSTEM' => true,
   'GLOBAL_PERSONAL_KEY' => null,
   'GLOBAL_PERSONAL_KEY_ID_NUMBER' => null,
+  'REQUIRE_SQUAD_REP_FOR_APPROVAL' => true,
 ];
 
 $disabled = [];
@@ -292,6 +293,14 @@ include BASE_PATH . 'views/header.php';
             <div class="form-switch mb-2">
               <input class="form-check-input" type="checkbox" id="REQUIRE_FULL_RENEWAL" value="1" name="REQUIRE_FULL_RENEWAL" <?php if (bool($vars['REQUIRE_FULL_RENEWAL'])) { ?>checked<?php } ?> <?= $disabled['REQUIRE_FULL_RENEWAL'] ?>>
               <label class="form-check-label" for="REQUIRE_FULL_RENEWAL">Require users to complete all renewal forms. If off renewal jumps direct to membership fees page.</label>
+            </div>
+          </div>
+
+          <h2>Gala options</h2>
+          <div class="mb-3">
+            <div class="form-switch mb-2">
+              <input class="form-check-input" type="checkbox" id="REQUIRE_SQUAD_REP_FOR_APPROVAL" value="1" name="REQUIRE_SQUAD_REP_FOR_APPROVAL" <?php if (bool($vars['REQUIRE_SQUAD_REP_FOR_APPROVAL'])) { ?>checked<?php } ?> <?= $disabled['REQUIRE_SQUAD_REP_FOR_APPROVAL'] ?>>
+              <label class="form-check-label" for="REQUIRE_SQUAD_REP_FOR_APPROVAL">Only require entry approval for members in squads with squad reps</label>
             </div>
           </div>
 
