@@ -41,6 +41,14 @@ if (isset($customBackground) && $customBackground) {
     </div>
   <?php } ?>
 
+  <?php if (app()->tenant->getBooleanKey('PAYMENT_OVERDUE')) { ?>
+    <div class="bg-danger text-light text-light-d bg-striped py-1 d-print-none">
+      <div class="<?= $container_class ?>">
+        <small><strong>PAYMENT TO SCDS IS OVERDUE</strong> THIS TENANT MAY SOON BE SUSPENDED</small>
+      </div>
+    </div>
+  <?php } ?>
+
   <div class="d-print-none">
 
     <?php if (app()->tenant->getKey('EMERGENCY_MESSAGE_TYPE') != 'NONE' && app()->tenant->getKey('EMERGENCY_MESSAGE')) {
