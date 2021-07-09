@@ -217,12 +217,20 @@ if (isset($customBackground) && $customBackground) {
                 <nav class="navbar navbar-expand-lg <?= $navTextColour ?>
         d-print-none justify-content-between px-0" role="navigation">
 
-                  <a class="navbar-brand d-lg-none" href="<?= htmlspecialchars(autoUrl("")) ?>">
-                    <?php if (app()->tenant->getKey('CLUB_SHORT_NAME')) { ?>
-                      <?= htmlspecialchars(app()->tenant->getKey('CLUB_SHORT_NAME')) ?> Membership
-                    <?php } else { ?>
-                      <?= htmlspecialchars(app()->tenant->getKey('ASA_CLUB_CODE')) ?> Club Membership
+                  <a class="navbar-brand align-items-center d-lg-none" href="<?= htmlspecialchars(autoUrl("")) ?>">
+                    <?php if ($tenant->getKey('LOGO_DIR')) { ?>
+                      <span class="d-md-none">
+                        <img src="<?= htmlspecialchars(getUploadedAssetUrl($logos . 'icon-114x114.png')) ?>" alt="<?= htmlspecialchars($tenant->getName()) ?>" class="img-fluid rounded me-1 bg-white" style="height: 38px">
+                      </span>
                     <?php } ?>
+
+                    <span class="">
+                      <?php if (app()->tenant->getKey('CLUB_SHORT_NAME')) { ?>
+                        <?= htmlspecialchars(app()->tenant->getKey('CLUB_SHORT_NAME')) ?> Membership
+                      <?php } else { ?>
+                        <?= htmlspecialchars(app()->tenant->getKey('ASA_CLUB_CODE')) ?> Club Membership
+                      <?php } ?>
+                    </span>
                   </a>
                   <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#chesterNavbar" aria-controls="chesterNavbar" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
