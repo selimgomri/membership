@@ -17,7 +17,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 
 ?>
 
-<div class="container">
+<div class="container-xl">
 	<div class="">
 		<?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'])) {
 			echo $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'];

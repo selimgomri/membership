@@ -13,7 +13,7 @@ if ($user = $getUser->fetchColumn()) {
 	// Present the reset form
 	include BASE_PATH . 'views/header.php';
 ?>
-	<div class="container">
+	<div class="container-xl">
 		<h1>Reset Your Password</h1>
 		<form method="post" class="needs-validation" novalidate>
 			<div class="row">

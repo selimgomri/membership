@@ -29,7 +29,7 @@ $mandateDetails->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID'
 
 ?>
 
-<div class="container">
+<div class="container-xl">
 
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">

@@ -40,7 +40,7 @@ include BASE_PATH . 'views/header.php';
 
 <!--
 
-<div class="container">
+<div class="container-xl">
   <h1>Request a Trial</h1>
   <div class="row">
     <div class="col-md-10 col-lg-8">
@@ -334,7 +334,7 @@ include BASE_PATH . 'views/header.php';
 
 -->
 
-<div class="container">
+<div class="container-xl">
   <h1>Trial requests are currently paused</h1>
   <p>We will be back with a new trial request system soon.</p>
 </div>

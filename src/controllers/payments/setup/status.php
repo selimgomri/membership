@@ -16,7 +16,7 @@ include BASE_PATH . "views/paymentsMenu.php";
 
 ?>
 
-<div class="container">
+<div class="container-xl">
   <div class="row">
     <div class="col-lg-8">
       <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['GC-Setup-Status'] == 'success' || $_SESSION['TENANT-' . app()->tenant->getId()]['GC-Setup-Status'] == 'redirect_flow_already_completed') { ?>

@@ -49,6 +49,21 @@
 // Close
 // Code
 
+$enable-caret:                true !default;
+$enable-rounded:              true !default;
+$enable-shadows:              false !default;
+$enable-gradients:            false !default;
+$enable-transitions:          true !default;
+$enable-reduced-motion:       true !default;
+$enable-smooth-scroll:        true !default;
+$enable-grid-classes:         true !default;
+$enable-button-pointers:      true !default;
+$enable-rfs:                  true !default;
+$enable-validation-icons:     true !default;
+$enable-negative-margins:     true;
+$enable-deprecation-messages: true !default;
+$enable-important-utilities:  true !default;
+
 $chesterRed: #bd0000;
 $blue:    #007bff;
 $indigo:  #6610f2 !default;

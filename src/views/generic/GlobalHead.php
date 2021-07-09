@@ -17,7 +17,7 @@ $container_class;
 if (isset($fluidContainer) && $fluidContainer == true) {
   $container_class = "container-fluid";
 } else {
-  $container_class = "container";
+  $container_class = "container-xl";
 } ?>
 <!DOCTYPE html>
 <!--

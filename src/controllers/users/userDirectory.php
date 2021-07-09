@@ -13,7 +13,7 @@ include BASE_PATH . "views/header.php";
 ?>
 
 <div class="bg-light mt-n3 py-3 mb-3">
-  <div class="container">
+  <div class="container-xl">
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
         <li class="breadcrumb-item active" aria-current="page">Users</li>
@@ -25,7 +25,7 @@ include BASE_PATH . "views/header.php";
   </div>
 </div>
 
-<div class="container">
+<div class="container-xl">
 
   <div class="mb-3 row">
     <label class="col-sm-4 col-md-3 col-lg-2" for="search">Search by Name</label>

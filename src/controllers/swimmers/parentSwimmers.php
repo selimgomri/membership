@@ -13,7 +13,7 @@ $getSwimmers->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']])
 ?>
 
 <div class="front-page mb-n3">
-	<div class="container">
+	<div class="container-xl">
 		<h1>My members</h1>
 		<?php if ($swimmer = $getSwimmers->fetch(PDO::FETCH_ASSOC)) { ?>
 			<div class="row">

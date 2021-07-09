@@ -254,7 +254,7 @@ if (isset($customBackground) && $customBackground) {
     }
     ?>
 
-    <div class="container">
+    <div class="container-xl">
       <div class="row mb-3">
         <div class="col club-logos">
           <?php if ($logoPath) { ?>

@@ -10,7 +10,7 @@ require BASE_PATH . 'controllers/payments/GoCardlessSetup.php';
 
  ?>
 
-<div class="container">
+<div class="container-xl">
 	<h1>Extras</h1>
   <p class="lead">Extras include CrossFit - Fees paid in addition to Squad Fees</p>
   <div class="ajax" id="response">

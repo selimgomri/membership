@@ -6,7 +6,7 @@ include BASE_PATH . "views/root/header.php";
 
 ?>
 
-<div class="container">
+<div class="container-xl">
   <div class="row">
     <div class="col-lg-8">
       <h1>Membership management software for swimming clubs</h1>
@@ -19,7 +19,7 @@ include BASE_PATH . "views/root/header.php";
 </div>
 
 <div class="front-page-purple-section py-5">
-  <div class="container">
+  <div class="container-xl">
     <div class="row">
       <div class="col-md-6">
         <h2>Members and squads</h2>
@@ -36,7 +36,7 @@ include BASE_PATH . "views/root/header.php";
 </div>
 
 <div class="front-page-alternate-section py-5">
-  <div class="container">
+  <div class="container-xl">
     <div class="row">
       <div class="col-md-6">
         <h2>Member communications</h2>
@@ -53,7 +53,7 @@ include BASE_PATH . "views/root/header.php";
 </div>
 
 <div class="front-page-purple-section py-5">
-  <div class="container">
+  <div class="container-xl">
     <div class="row align-items-center">
       <div class="col-md-9">
         <h2>Automated payments</h2>
@@ -82,7 +82,7 @@ include BASE_PATH . "views/root/header.php";
 </div>
 
 <div class="front-page-alternate-section py-5">
-  <div class="container">
+  <div class="container-xl">
     <div class="row">
       <div class="col-md-6">
         <h2>Online gala entries</h2>
@@ -100,7 +100,7 @@ include BASE_PATH . "views/root/header.php";
 </div>
 
 <div class="front-page-purple-section py-5">
-  <div class="container">
+  <div class="container-xl">
     <div class="row">
       <div class="col-md-6">
         <h2>Online registers</h2>
@@ -116,7 +116,7 @@ include BASE_PATH . "views/root/header.php";
 </div>
 
 <div class="front-page-alternate-section py-5">
-  <div class="container">
+  <div class="container-xl">
     <div class="row">
       <div class="col-md-6">
         <h2>Paperless registration and renewal</h2>
@@ -133,7 +133,7 @@ include BASE_PATH . "views/root/header.php";
 </div>
 
 <div class="front-page-purple-section py-5">
-  <div class="container">
+  <div class="container-xl">
     <div class="row">
       <div class="col-md-6">
         <h2>Much more</h2>
@@ -151,7 +151,7 @@ include BASE_PATH . "views/root/header.php";
 </div>
 
 <div class="front-page-alternate-section py-5 mb-n3">
-  <div class="container">
+  <div class="container-xl">
     <div class="row">
       <div class="col">
         <h2>Used by clubs across the North East</h2>

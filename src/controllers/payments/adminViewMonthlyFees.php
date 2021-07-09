@@ -16,7 +16,7 @@ $getDetails->execute([
 $pagetitle = "Administration";
 include BASE_PATH . 'views/header.php'; ?>
 
-<div class="container">
+<div class="container-xl">
 	<nav aria-label="breadcrumb">
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="<?=autoUrl("payments")?>">Payments</a></li>

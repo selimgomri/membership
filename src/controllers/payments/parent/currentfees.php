@@ -12,7 +12,7 @@ include BASE_PATH . "views/paymentsMenu.php";
 ?>
 
 <div class="bg-light mt-n3 py-3 mb-3">
-  <div class="container">
+  <div class="container-xl">
     <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent') { ?>
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
@@ -27,7 +27,7 @@ include BASE_PATH . "views/paymentsMenu.php";
   </div>
 </div>
 
-<div class="container">
+<div class="container-xl">
   <div class="row">
     <div class="col-md-8">
       <p>You'll be billed for these on the first working day of the next month.</p>

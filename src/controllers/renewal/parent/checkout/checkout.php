@@ -133,7 +133,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 <div id="stripe-data" data-stripe-publishable="<?= htmlspecialchars(getenv('STRIPE_PUBLISHABLE')) ?>" data-stripe-font-css="<?= htmlspecialchars($fontCss) ?>" data-redirect-url-new="<?= htmlspecialchars(autoUrl("renewal/payments/checkout/complete-new")) ?>" data-redirect-url="<?= htmlspecialchars(autoUrl("renewal/payments/checkout/complete")) ?>" data-org-name="<?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?>" data-intent-amount="<?= htmlspecialchars($intent->amount) ?>" data-intent-currency="<?= htmlspecialchars($intent->currency) ?>" data-payment-request-line-items="<?= htmlspecialchars(json_encode($entryRequestDetails)) ?>" data-stripe-account-id="<?= htmlspecialchars($tenant->getStripeAccount()) ?>">
 </div>
 
-<div class="container">
+<div class="container-xl">
 
   <div class="row align-items-center justify-content-between mb-3">
     <div class="col-lg-7">

@@ -16,7 +16,7 @@ include BASE_PATH . 'views/header.php';
 
 ?>
 
-<div class="container">
+<div class="container-xl">
   <h1>Verify your email</h1>
   <div class="row">
     <div class="col-md-8 mb-5">

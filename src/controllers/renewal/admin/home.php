@@ -23,7 +23,7 @@ include BASE_PATH . "views/swimmersMenu.php";
 ?>
 
 <div class="bg-light mt-n3 py-3 mb-3">
-	<div class="container">
+	<div class="container-xl">
 
 		<!-- Page header -->
 		<nav aria-label="breadcrumb">
@@ -45,7 +45,7 @@ include BASE_PATH . "views/swimmersMenu.php";
 	</div>
 </div>
 
-<div class="container">
+<div class="container-xl">
 	<div class="">
 		<?php if ($row != null) { ?>
 			<p>

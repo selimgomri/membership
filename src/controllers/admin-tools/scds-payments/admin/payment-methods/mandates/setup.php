@@ -32,7 +32,7 @@ include BASE_PATH . "views/root/head.php";
 
 ?>
 
-<div class="container">
+<div class="container-xl">
 
 <div id="stripe-data" data-stripe-publishable="<?= htmlspecialchars(getenv('STRIPE_PUBLISHABLE')) ?>" data-session-id="<?= htmlspecialchars($session->id) ?>">
 </div>

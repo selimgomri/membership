@@ -18,7 +18,7 @@ include BASE_PATH . "views/root/head.php";
 
 ?>
 
-<div class="container">
+<div class="container-xl">
 
   <?php include BASE_PATH . 'controllers/admin-tools/scds-payments/admin/nav.php'; ?>
 

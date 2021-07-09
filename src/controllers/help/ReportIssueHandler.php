@@ -10,7 +10,7 @@ if (isset($_GET['url'])) {
 $pagetitle = "Report an Issue";
 include BASE_PATH . 'views/header.php'; ?>
 
-<div class="container">
+<div class="container-xl">
 	<h1>Report a Website Issue</h1>
 	<?php if (app()->tenant && isset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorReportStatus']) && $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorReportStatus'] == true) { ?>
 		<p>We have reported that page to our team.</p>

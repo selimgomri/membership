@@ -9,7 +9,7 @@ if ($currentUser == null) {
 }
 ?>
 
-<div class="container">
+<div class="container-xl">
 	<div class="row">
 		<div class="col-lg-8">
 			<h1>You are not allowed access to the page you requested</h1>

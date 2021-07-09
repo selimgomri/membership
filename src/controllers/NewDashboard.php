@@ -52,7 +52,7 @@ include BASE_PATH . "views/header.php";
 ?>
 
 <div class="front-page mb-n3">
-	<div class="container">
+	<div class="container-xl">
 
 		<h1><?= helloGreeting() ?> <?= $username ?></h1>
 		<p class="lead mb-4">Welcome to your account</p>

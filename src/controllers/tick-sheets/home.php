@@ -39,7 +39,7 @@ include BASE_PATH . 'views/header.php';
 
 <div class="bg-light mt-n3 py-3 mb-3">
 
-  <div class="container">
+  <div class="container-xl">
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
         <li class="breadcrumb-item active" aria-current="page">Tick Sheets</li>
@@ -66,7 +66,7 @@ include BASE_PATH . 'views/header.php';
   </div>
 </div>
 
-<div class="container">
+<div class="container-xl">
 
   <div class="alert alert-warning">
     Under development

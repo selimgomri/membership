@@ -30,7 +30,7 @@ include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/paymentsMenu.php";
  ?>
 
-<div class="container">
+<div class="container-xl">
 	<h1>Setup a Direct Debit to pay Chester-le-Street ASC</h1>
 	<form method="post">
 		<p>On which day of the month should Chester-le-Street ASC make Direct Debit requests?</p>

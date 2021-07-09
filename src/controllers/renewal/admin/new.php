@@ -16,7 +16,7 @@ $val = [
 
 ?>
 
-<div class="container">
+<div class="container-xl">
 	<form method="post" class="needs-validation" novalidate>
 		<h1>Create a new Renewal Period</h1>
 		<div class="row">

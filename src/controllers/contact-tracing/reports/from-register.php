@@ -44,7 +44,7 @@ try {
 ?>
 
   <div class="bg-light mt-n3 py-3 mb-3">
-    <div class="container">
+    <div class="container-xl">
 
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
@@ -67,7 +67,7 @@ try {
     </div>
   </div>
 
-  <div class="container">
+  <div class="container-xl">
     <?php if (sizeof($register) > 0) { ?>
       <div class="row">
         <div class="col">
