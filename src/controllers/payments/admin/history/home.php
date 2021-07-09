@@ -14,7 +14,7 @@ $date = date("Y/m");
 
  ?>
 
-<div class="container">
+<div class="container-xl">
 
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">

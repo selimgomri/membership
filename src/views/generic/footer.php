@@ -27,7 +27,7 @@ $logos = $tenant->getKey('LOGO_DIR')
   ?>
 
   <!-- <div class="mt-3 mb-n3 text-center" style="background: #000000;">
-    <div class="container">
+    <div class="container-xl">
       <video class="d-none d-sm-block mx-auto my-0 p-0 img-fluid" autoplay loop muted playsinline>
         <source src="<?= htmlspecialchars($covidVideos[rand(0, sizeof($covidVideos) - 1)]) ?>" type="video/mp4" />
         A COVID-19 video message appears here but your browser does not support the video element.
@@ -40,7 +40,7 @@ $logos = $tenant->getKey('LOGO_DIR')
   </div> -->
 
   <div class="cls-global-footer cls-global-footer-inverse cls-global-footer-body d-print-none mt-3 pb-0 focus-highlight">
-    <div class="<?php if (isset($this->fluidContainer) && $this->fluidContainer == true) { ?>container-fluid<?php } else { ?>container<?php } ?>">
+    <div class="<?php if (isset($this->fluidContainer) && $this->fluidContainer == true) { ?>container-fluid<?php } else { ?>container-xl<?php } ?>">
       <div class="row">
         <div class="col-lg-6">
           <div class="row">
@@ -114,7 +114,7 @@ $logos = $tenant->getKey('LOGO_DIR')
     </div>
   </div>
   <div class="cls-global-footer-legal">
-    <div class="<?php if (isset($this->fluidContainer) && $this->fluidContainer == true) { ?>container-fluid<?php } else { ?>container<?php } ?>">
+    <div class="<?php if (isset($this->fluidContainer) && $this->fluidContainer == true) { ?>container-fluid<?php } else { ?>container-xl<?php } ?>">
       <div class="row align-items-center">
         <div class="col-sm-auto source-org vcard copyright">
           <div class="row no-gutters">

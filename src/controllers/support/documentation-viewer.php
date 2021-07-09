@@ -77,7 +77,7 @@ include BASE_PATH . "views/root/header.php";
 
 <div class="">
 
-  <div class="container">
+  <div class="container-xl">
     <div class="row align-items-center mb-3">
       <div class="col">
         <nav aria-label="breadcrumb">
@@ -96,7 +96,7 @@ include BASE_PATH . "views/root/header.php";
     </div>
   </div>
 
-  <div class="container">
+  <div class="container-xl">
     <div class="bg-scds rounded p-4 mb-4 text-white">
       <div class="row">
         <div class="col">
@@ -107,7 +107,7 @@ include BASE_PATH . "views/root/header.php";
     </div>
   </div>
 
-  <div class="container">
+  <div class="container-xl">
     <div class="row justify-content-between">
       <div class="col-lg-3 border-end">
       <?php if ($toc && $data = $toc->getYamlData()) { ?>

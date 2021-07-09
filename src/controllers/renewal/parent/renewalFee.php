@@ -88,7 +88,7 @@ include BASE_PATH . 'views/header.php';
 include BASE_PATH . "views/renewalTitleBar.php";
 ?>
 
-<div class="container">
+<div class="container-xl">
 	<form method="post" id="form">
 		<h1>
 			<?= $title ?>

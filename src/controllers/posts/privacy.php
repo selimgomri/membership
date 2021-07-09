@@ -30,7 +30,7 @@ include BASE_PATH . 'views/header.php';
 
 ?>
 
-<div class="container">
+<div class="container-xl">
   <div class="row">
     <div class="col-lg-8">
       <h1>Privacy Policy</h1>

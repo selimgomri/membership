@@ -10,7 +10,7 @@ $time = new DateTime('now', new DateTimeZone('Europe/London'));
 <?php if ($this->chrome) { ?>
   <footer>
     <div class="cls-global-footer cls-global-footer-inverse cls-global-footer-body d-print-none mt-3 pb-0 focus-highlight">
-      <div class="<?php if (isset($this->fluidContainer) && $this->fluidContainer == true) { ?>container-fluid<?php } else { ?>container<?php } ?>">
+      <div class="<?php if (isset($this->fluidContainer) && $this->fluidContainer == true) { ?>container-fluid<?php } else { ?>container-xl<?php } ?>">
         <div class="row">
           <div class="col-lg-6">
             <div class="row">
@@ -74,7 +74,7 @@ $time = new DateTime('now', new DateTimeZone('Europe/London'));
       </div>
     </div>
     <div class="cls-global-footer-legal">
-      <div class="<?php if (isset($this->fluidContainer) && $this->fluidContainer == true) { ?>container-fluid<?php } else { ?>container<?php } ?>">
+      <div class="<?php if (isset($this->fluidContainer) && $this->fluidContainer == true) { ?>container-fluid<?php } else { ?>container-xl<?php } ?>">
         <div class="row align-items-center">
           <div class="col-sm-auto">
             <a href="https://myswimmingclub.uk" target="_blank" title="Swimming Club Data Systems Website">

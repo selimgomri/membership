@@ -9,7 +9,7 @@ include BASE_PATH . "views/postsMenu.php";
 
 ?>
 
-<div class="container">
+<div class="container-xl">
 	<form method="post">
 		<div class="row">
 			<div class="col-md-8">

@@ -104,7 +104,7 @@ $strokeCountsData = array_values($strokeCounts);
 include BASE_PATH . "views/header.php";
 include "galaMenu.php"; ?>
 <div class="front-page" style="margin-bottom: -1rem;">
-  <div class="container">
+  <div class="container-xl">
     <h1>Galas</h1>
     <p class="lead">Gala Entry Management at <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?></p>
 

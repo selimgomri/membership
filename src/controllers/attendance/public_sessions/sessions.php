@@ -128,7 +128,7 @@ include BASE_PATH . 'views/header.php';
 ?>
 
 <div class="bg-light mt-n3 py-3 mb-3">
-  <div class="container">
+  <div class="container-xl">
 
     <nav aria-label="breadcrumb" class="d-print-none">
       <ol class="breadcrumb">
@@ -154,7 +154,7 @@ include BASE_PATH . 'views/header.php';
   </div>
 </div>
 
-<div class="container">
+<div class="container-xl">
 
   <p>Showing sessions for the week beginning <strong><?= htmlspecialchars($startWeek->format('l j F Y')) ?></strong>.</p>
 

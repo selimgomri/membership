@@ -24,7 +24,7 @@ include BASE_PATH . 'views/header.php';
 
 ?>
 
-<div class="container">
+<div class="container-xl">
   <h1>Accepted Swimmers</h1>
   <div class="row">
     <div class="col-md-10 col-lg-8">

@@ -19,7 +19,7 @@ if ($currentUser == null) {
 ?>
 
 <main>
-	<div class="container">
+	<div class="container-xl">
 		<div class="row">
 			<div class="col-lg-8">
 				<h1>Internal Server Error</h1>

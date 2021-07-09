@@ -63,7 +63,7 @@ include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/postsMenu.php"; ?>
 
 <div class="bg-light mt-n3 py-3 mb-3">
-  <div class="container">
+  <div class="container-xl">
     <div class="row align-items-center">
       <div class="col-lg-8">
         <h1>Pages</h1>
@@ -87,7 +87,7 @@ include BASE_PATH . "views/postsMenu.php"; ?>
   </div>
 </div>
 
-<div class="container">
+<div class="container-xl">
   <main class="">
     <?php if ($row) { ?>
       <ul class="list-group">

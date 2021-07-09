@@ -36,7 +36,7 @@ $_SESSION['TENANT-' . app()->tenant->getId()]['RegistrationMode'] = $mode;
 
 ?>
 <div class="pb-3">
-  <div class="container">
+  <div class="container-xl">
       <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['RegistrationGoVerify'])) {
         echo $_SESSION['TENANT-' . app()->tenant->getId()]['RegistrationGoVerify'];
         unset($_SESSION['TENANT-' . app()->tenant->getId()]['RegistrationGoVerify']);

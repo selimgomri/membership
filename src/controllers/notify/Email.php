@@ -86,7 +86,7 @@ include BASE_PATH . "views/notifyMenu.php";
 
 ?>
 
-<div class="container">
+<div class="container-xl">
 
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">

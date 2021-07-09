@@ -10,7 +10,7 @@ include 'head.php';
 
 <?php if (bool(getenv('IS_DEV'))) { ?>
   <aside class="bg-warning text-dark py-3 mb-3">
-    <div class="container">
+    <div class="container-xl">
       <h1>
         Warning
       </h1>
@@ -27,7 +27,7 @@ include 'head.php';
   </aside>
 <?php } ?>
 
-<div class="container">
+<div class="container-xl">
   <div class="row align-items-center py-2">
     <div class="col-auto">
       <img src="<?= htmlspecialchars(autoUrl("img/corporate/scds.png")) ?>" class="img-fluid rounded-top" style="height: 75px;">
@@ -40,7 +40,7 @@ include 'head.php';
   </div>
 
   <nav class="navbar navbar-expand-md navbar-dark rounded-bottom rounded-end bg-primary">
-    <div class="container">
+    <div class="container-xl">
       <a class="navbar-brand d-md-none" href="<?= htmlspecialchars(autoUrl("")) ?>">Membership Software</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>

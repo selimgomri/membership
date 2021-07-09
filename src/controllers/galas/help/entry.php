@@ -6,7 +6,7 @@ include BASE_PATH . 'views/header.php';
 
 ?>
 
-<div class="container">
+<div class="container-xl">
 
   <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent') { ?>
   <nav aria-label="breadcrumb">

@@ -6,7 +6,7 @@ include BASE_PATH . "views/root/header.php";
 
 ?>
 
-<div class="container">
+<div class="container-xl">
   <div class="row justify-content-center py-3">
     <div class="col-lg-8 col-md-10">
     <div class="bg-primary text-white p-4 mb-4 d-inline-block rounded">

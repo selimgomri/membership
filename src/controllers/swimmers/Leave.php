@@ -26,7 +26,7 @@ $_SESSION['TENANT-' . app()->tenant->getId()]['LeaveKey'] = hash('md5', time());
 
 include BASE_PATH . "views/header.php"; ?>
 
-<div class="container">
+<div class="container-xl">
   <div class="row">
     <div class="col-lg-8">
       <?php if ($count == 0 && $_SESSION['TENANT-' . app()->tenant->getId()]['ConfirmLeave'] !== true) { ?>

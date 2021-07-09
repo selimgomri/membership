@@ -9,7 +9,7 @@ if ($currentUser == null) {
 }
 ?>
 
-<div class="container">
+<div class="container-xl">
 	<div class="row">
 		<div class="col-lg-8">
 			<h1>We were unable to process your request</h1>

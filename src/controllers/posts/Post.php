@@ -81,7 +81,7 @@ include BASE_PATH . "views/postsMenu.php";
 </style>-->
 
 <div class="bg-light mt-n3 py-4 mb-3">
-	<div class="container">
+	<div class="container-xl">
 		<div class="row align-items-center">
 			<div class="col-lg-8">
 				<h1><?= htmlentities($row['Title']) ?></h1>

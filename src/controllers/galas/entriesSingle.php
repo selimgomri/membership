@@ -33,13 +33,13 @@ include BASE_PATH . 'views/header.php';
 ?>
 
 <div class="bg-light mt-n3 py-3 mb-3">
-  <div class="container">
+  <div class="container-xl">
     <h1><?= htmlspecialchars($row['MForename'] . " " . $row['MSurname']) ?></h1>
     <p class="lead mb-0">For <?= htmlspecialchars($row['GalaName']) ?>, Closing Date: <?= htmlspecialchars(date('j F Y', strtotime($row['ClosingDate']))) ?></p>
   </div>
 </div>
 
-<div class="container">
+<div class="container-xl">
 
   <?php
 

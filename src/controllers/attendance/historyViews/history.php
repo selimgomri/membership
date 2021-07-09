@@ -8,7 +8,7 @@ include BASE_PATH . "controllers/attendance/attendanceMenu.php";
 ?>
 
 <div class="front-page mb-n3">
-  <div class="container">
+  <div class="container-xl">
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('attendance')) ?>">Attendance</a></li>

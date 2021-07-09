@@ -12,7 +12,7 @@ include BASE_PATH . "views/header.php";
 
 ?>
 
-<div class="container">
+<div class="container-xl">
   <h1 class="mb-5">Sign in using your Swim England Number and Club Password</h1>
   <div class="row justify-content-between">
     <div class="col-md-8 col-lg-5">

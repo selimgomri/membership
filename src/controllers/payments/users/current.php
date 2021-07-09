@@ -12,7 +12,7 @@ include BASE_PATH . "views/paymentsMenu.php";
 
 ?>
 
-<div class="container">
+<div class="container-xl">
 	<div class="">
 		<h1 class="mb-3">
       Current Fees for <?=htmlspecialchars($name)?>

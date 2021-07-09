@@ -2,7 +2,7 @@
   $pagetitle = "Change Your Email Address";
   include BASE_PATH . "views/header.php";
 ?>
-<div class="container">
+<div class="container-xl">
 <div class="mb-3 p-3 bg-white rounded shadow">
 <h1>Change your email address</h1>
 <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'])) {

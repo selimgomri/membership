@@ -54,7 +54,7 @@ include BASE_PATH . 'views/header.php';
 <main class="mt-n3">
 
   <div class="bg-dark py-3 mb-4 text-white">
-    <div class="container">
+    <div class="container-xl">
       <div class="row">
         <div class="col-lg-8 col-md-10">
           <h1><?=htmlspecialchars($pagetitle)?></h1>
@@ -68,7 +68,7 @@ include BASE_PATH . 'views/header.php';
     </div>
   </div>
 
-  <div class="container">
+  <div class="container-xl">
     <div class="row">
       <div class="col-lg-8 col-md-10">
         <main class="mb-5">

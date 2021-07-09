@@ -9,7 +9,7 @@ if ($currentUser == null) {
 }
 ?>
 
-<div class="container">
+<div class="container-xl">
 	<div class="row">
 		<div class="col-lg-8">
 			<h1>Your club has not enabled Direct Debit payments</h1>

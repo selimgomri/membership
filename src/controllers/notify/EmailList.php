@@ -18,7 +18,7 @@ include BASE_PATH . "views/notifyMenu.php";
 
  ?>
 
-<div class="container">
+<div class="container-xl">
 	<h1>Pending Messages</h1>
 	<p class="lead">Messages listed here are queued to be sent in batches.</p>
 	<?php if ($mail != null) { ?>

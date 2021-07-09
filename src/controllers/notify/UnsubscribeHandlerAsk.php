@@ -29,7 +29,7 @@ if ($query->fetchColumn() != 1) {
 $pagetitle = "Notify Unsubscribe";
 include BASE_PATH . "views/header.php";?>
 
-<div class="container">
+<div class="container-xl">
 	<h1>Confirm Unsubscribe</h1>
 	<p>
 		We just need you to press the button below to confirm your unsubscription.

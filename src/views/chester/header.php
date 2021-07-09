@@ -251,7 +251,7 @@ if (isset($customBackground) && $customBackground) {
 
     <div class="collapse" id="mobSearch">
       <div class="text-white py-3 d-lg-none bg-primary-darker">
-        <form class="container" action="https://www.chesterlestreetasc.co.uk" id="head-search" method="get">
+        <form class="container-xl" action="https://www.chesterlestreetasc.co.uk" id="head-search" method="get">
           <label class="form-label" for="s" class="visually-hidden">Search</label>
           <div class="input-group">
             <input class="form-control bg-primary text-white border-primary" id="s" name="s" placeholder="Search the site" type="search">

@@ -5,7 +5,7 @@ include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/renewalTitleBar.php";
 ?>
 
-<div class="container">
+<div class="container-xl">
 	<div class="">
 		<h1>Thank you for renewing your membership</h1>
 		<p class="lead">

@@ -41,7 +41,7 @@ include BASE_PATH . 'views/header.php';
 
 ?>
 
-<div class="container">
+<div class="container-xl">
 
 <?php if ($type == 'DoesNotExist') { ?>
   <h1>Old Conduct Form</h1>
