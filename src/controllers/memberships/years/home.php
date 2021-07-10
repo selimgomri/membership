@@ -1,5 +1,14 @@
 <?php
 
+$db = app()->db;
+$tenant = app()->tenant;
+
+$getYears = $db->prepare("SELECT `ID`, `Name`, `StartDate`, `EndDate` FROM `membershipYear` WHERE `Tenant` = ? ORDER BY `EndDate` DESC, `StartDate` DESC");
+$getYears->execute([
+  $tenant->getId(),
+]);
+$year = $getYears->fetch(PDO::FETCH_ASSOC);
+
 $pagetitle = "Membership Years - Membership Centre";
 include BASE_PATH . "views/header.php";
 
@@ -21,9 +30,12 @@ include BASE_PATH . "views/header.php";
         <h1>
           Membership Years
         </h1>
-        <p class="lead mb-0">
+        <p class="lead mb-3 mb-lg-0">
           Create or view details for a membership year
         </p>
+      </div>
+      <div class="col-auto ms-lg-auto">
+        <a href="<?= htmlspecialchars(autoUrl('memberships/years/new')) ?>" class="btn btn-success">New</a>
       </div>
     </div>
   </div>
@@ -36,6 +48,23 @@ include BASE_PATH . "views/header.php";
       <p>
         The Membership Centre lets clubs track which memberships their members hold in a given year.
       </p>
+
+      <?php if ($year) { ?>
+        <div class="list-group mb-3">
+          <?php do { ?>
+            <a class="list-group-item list-group-item-action" href="<?= htmlspecialchars(autoUrl('memberships/years/' . $year['ID'])) ?>"><?= htmlspecialchars($year['Name']) ?></a>
+          <?php } while ($year = $getYears->fetch(PDO::FETCH_ASSOC)); ?>
+        </div>
+      <?php } else { ?>
+        <div class="alert alert-danger">
+          <p class="mb-0">
+            <strong>There are no years to display</strong>
+          </p>
+          <p class="mb-0">
+            Create a new membership year to get started.
+          </p>
+        </div>
+      <?php } ?>
     </div>
   </div>
 
