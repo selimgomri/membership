@@ -25,8 +25,11 @@ if ($access == "Committee" || $access == "Admin" || $access == "Galas") {
 	});
 
 	$this->get('/{id}:int', function ($id) {
-
 		include 'user.php';
+	});
+
+	$this->get('/{id}:int/new-membership-batch', function ($id) {
+		include 'new-membership-batch.php';
 	});
 
 	if ($access == "Admin") {

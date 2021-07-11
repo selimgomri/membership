@@ -12,6 +12,9 @@ $year = $getYear->fetch(PDO::FETCH_ASSOC);
 
 if (!$year) halt(404);
 
+$start = new DateTime('first day of January next year', new DateTimeZone('Europe/London'));
+$end = new DateTime('last day of December next year', new DateTimeZone('Europe/London'));
+
 $pagetitle = htmlspecialchars($year['Name']) . " - Membership Years - Membership Centre";
 include BASE_PATH . "views/header.php";
 
@@ -47,9 +50,36 @@ include BASE_PATH . "views/header.php";
 
   <div class="row">
     <div class="col-lg-8">
-      <p>
-        The Membership Centre lets clubs track which memberships their members hold in a given year.
-      </p>
+      <main>
+        <form class="needs-validation" novalidate method="post">
+
+          <div class="mb-3">
+            <label for="name" class="form-label">Membership year name</label>
+            <input type="text" class="form-control" id="name" name="name" placeholder="<?= htmlspecialchars($start->format('y')) ?> Membership Year" value="<?= htmlspecialchars($year['Name']) ?>" required>
+          </div>
+
+          <div class="row">
+            <div class="col">
+              <div class="mb-3">
+                <label for="start" class="form-label">Membership year start date</label>
+                <input type="date" class="form-control" id="start" name="start" placeholder="<?= htmlspecialchars($start->format('Y-m-d')) ?>" value="<?= htmlspecialchars($year['StartDate']) ?>" required>
+              </div>
+            </div>
+            <div class="col">
+              <div class="mb-3">
+                <label for="end" class="form-label">Membership year end date</label>
+                <input type="date" class="form-control" id="end" name="end" placeholder="<?= htmlspecialchars($end->format('Y-m-d')) ?>" value="<?= htmlspecialchars($year['EndDate']) ?>" required>
+              </div>
+            </div>
+          </div>
+
+          <p>
+            <button type="submit" class="btn btn-primary">
+              Save
+            </button>
+          </p>
+        </form>
+      </main>
     </div>
   </div>
 
@@ -58,4 +88,5 @@ include BASE_PATH . "views/header.php";
 <?php
 
 $footer = new \SCDS\Footer();
+$footer->addJs('js/NeedsValidation.js');
 $footer->render();
