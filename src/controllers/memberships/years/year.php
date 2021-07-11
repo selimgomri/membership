@@ -64,7 +64,7 @@ include BASE_PATH . "views/header.php";
           <?php do { ?>
             <li class="list-group-item">
               <div>
-                <?php if (!$member->current) { ?><s><?php } ?><?= htmlspecialchars($member->fn . ' ' . $member->sn) ?><?php if (!$member->current) { ?></s> (Member has left club)<?php } ?>
+                <?php if (!$member->current) { ?><s><?php } ?><?= htmlspecialchars($member->fn . ' ' . $member->sn) ?><?php if (!$member->current) { ?></s> (left the club)<?php } ?>
               </div>
 
             </li>

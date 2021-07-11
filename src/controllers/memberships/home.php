@@ -35,6 +35,12 @@ include BASE_PATH . "views/header.php";
       <p>
         The Membership Centre lets clubs track which memberships their members hold in a given year.
       </p>
+
+			<p>
+				<a href="<?= htmlspecialchars(autoUrl('memberships/years')) ?>" class="btn btn-primary">
+					Show years/periods
+				</a>
+			</p>
     </div>
   </div>
 

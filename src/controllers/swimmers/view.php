@@ -606,11 +606,11 @@ include BASE_PATH . 'views/header.php';
         </div>
       </dl>
 
-      <h3>Governing Body Membership</h3>
+      <h3><?= htmlspecialchars($tenant->getKey('NGB_NAME')) ?> Membership</h3>
       <dl class="row">
         <div class="col-6">
           <dt class="text-truncate">
-            NGB Membership Type
+            <?= htmlspecialchars($tenant->getKey('NGB_NAME')) ?> Membership Type
           </dt>
           <dd>
             <?= htmlspecialchars($member->getGoverningBodyCategoryName()) ?>
@@ -619,7 +619,7 @@ include BASE_PATH . 'views/header.php';
 
         <div class="col-6">
           <dt class="text-truncate">
-            Club pays NGB fees
+            Club pays <?= htmlspecialchars($tenant->getKey('NGB_NAME')) ?> fees
           </dt>
           <dd>
             <?php if ($member->swimEnglandFeesPaid()) { ?>Yes<?php } else { ?>No, member pays<?php } ?>

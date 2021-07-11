@@ -37,5 +37,13 @@ $this->group('/years', function() {
     $this->post('/edit', function($id) {
       include 'years/edit-post.php';
     });
+
+    $this->get('/new-batch', function($id) {
+      include 'years/batches/new.php';
+    });
+
+    $this->post('/new-batch', function($id) {
+      include 'years/batches/new-post.php';
+    });
   });
 });
