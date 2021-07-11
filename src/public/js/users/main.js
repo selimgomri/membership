@@ -363,3 +363,28 @@ document.addEventListener('DOMContentLoaded', function (event) {
 
   }
 });
+
+let earlyPayment = document.getElementById('trigger-early-payment');
+if (earlyPayment) {
+  earlyPayment.addEventListener('click', ev => {
+    document.getElementById('main-modal-title').textContent = 'Trigger an early payment';
+    let body = document.getElementById('main-modal-body');
+
+    let httpRequest = new XMLHttpRequest();
+    httpRequest.onreadystatechange = function () {
+      // Process the server response here.
+      if (httpRequest.readyState === XMLHttpRequest.DONE && httpRequest.status === 200) {
+        // Everything is good, the response was received.
+        body.innerHTML = httpRequest.responseText;
+        modal.show();
+      } else if (httpRequest.readyState === XMLHttpRequest.DONE) {
+        alert(httpRequest.status + " Error. Please try again later.")
+      } else {
+        // Not ready yet.
+      }
+    };
+
+    httpRequest.open('POST', ev.target.dataset.infoUrl, true);
+    httpRequest.send();
+  });
+}
