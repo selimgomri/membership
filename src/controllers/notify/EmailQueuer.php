@@ -198,7 +198,7 @@ try {
 
   // reportError($attachments);
 
-  $subject = $_POST['subject'];
+  $subject = trim(str_replace('!', '', str_replace('*', '', $_POST['subject'])));
   $message = str_replace($to_remove, "", $_POST['message']);
   if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != "Admin" && !($replyAddress && isset($_POST['ReplyToMe']) && bool($_POST['ReplyToMe']))) {
     $name = getUserName($_SESSION['TENANT-' . app()->tenant->getId()]['UserID']);

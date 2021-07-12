@@ -426,8 +426,8 @@ include BASE_PATH . "views/header.php";
                     <?php if (stripeSetUpDirectDebit()) { ?>
                       <a href="<?= autoUrl("users/" . $id . "/direct-debit") ?>" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">Stripe direct debit mandates <span class="fa fa-chevron-right"></span></a>
                     <?php } ?>
-                    <?php if (false && ($stripeDD || userHasMandates($id))) { ?>
-                      <a href="<?= autoUrl("users/" . $id . "/trigger-direct-debit-payment") ?>" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">Trigger early payment <span class="fa fa-chevron-right"></span></a>
+                    <?php if ($stripeDD || userHasMandates($id)) { ?>
+                      <button id="trigger-early-payment" data-info-url="<?= htmlspecialchars(autoUrl("users/$id/direct-debit/force-run-info")) ?>" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">Trigger early payment <span class="fa fa-chevron-right"></span></button>
                     <?php } ?>
                   </div>
                 </div>
@@ -664,6 +664,8 @@ include BASE_PATH . "views/header.php";
 </div>
 
 <?php $footer = new \SCDS\Footer();
+$footer->addJS("js/NeedsValidation.js");
+$footer->addJS("js/numerical/bignumber.min.js");
 $footer->addJS("js/users/main.js");
 $footer->useFluidContainer();
 $footer->render();
