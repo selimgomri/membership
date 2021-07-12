@@ -59,6 +59,10 @@ if ($access == "Committee" || $access == "Admin" || $access == "Galas") {
 			$this->post('/force-run-info', function ($id) {
 				include 'direct-debit/trigger-direct-debit-payment.php';
 			});
+
+			$this->post('/force-run-submission', function ($id) {
+				include 'direct-debit/trigger-direct-debit-payment-post.php';
+			});
 		});
 	}
 

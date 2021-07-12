@@ -376,6 +376,26 @@ if (earlyPayment) {
       if (httpRequest.readyState === XMLHttpRequest.DONE && httpRequest.status === 200) {
         // Everything is good, the response was received.
         body.innerHTML = httpRequest.responseText;
+
+        let selectionArea = document.getElementById('payment-selector');
+        if (selectionArea) {
+          selectionArea.addEventListener('change', handleEarlyPaymentSelections);
+        }
+
+        document.getElementById('main-modal-footer').innerHTML = '<button type="button" class="btn btn-dark" data-bs-dismiss="modal">Cancel</button><button disabled type="submit" id="modal-confirm-button" class="btn btn-success" form="trigger-early-payment-form">Confirm charge</button>';
+
+        let form = document.getElementById('trigger-early-payment-form');
+        if (form) {
+          form.addEventListener('submit', handleEarlyPaymentForm);
+          document.getElementById('confirm-charge').addEventListener('change', ev => {
+            if (ev.target.checked) {
+              document.getElementById('modal-confirm-button').disabled = false;
+            } else {
+              document.getElementById('modal-confirm-button').disabled = true;
+            }
+          })
+        }
+
         modal.show();
       } else if (httpRequest.readyState === XMLHttpRequest.DONE) {
         alert(httpRequest.status + " Error. Please try again later.")
@@ -387,4 +407,72 @@ if (earlyPayment) {
     httpRequest.open('POST', ev.target.dataset.infoUrl, true);
     httpRequest.send();
   });
+}
+
+handleEarlyPaymentSelections = (ev) => {
+  console.log(ev);
+
+  let totalSpan = document.getElementById('early-total');
+  if (!totalSpan) return;
+
+  let total = parseInt(totalSpan.dataset.total);
+
+  if (ev.target.nodeName === 'INPUT' && ev.target.type === 'checkbox') {
+    if (ev.target.checked) {
+      total += parseInt(ev.target.dataset.amount);
+    } else {
+      total -= parseInt(ev.target.dataset.amount);
+    }
+
+    if (total < 100) {
+      document.getElementById('confirm-charge').checked = false;
+      document.getElementById('confirm-charge').disabled = true;
+      document.getElementById('modal-confirm-button').disabled = true;
+      document.getElementById('too-low-warning').classList.remove('d-none');
+    } else {
+      document.getElementById('confirm-charge').disabled = false;
+      document.getElementById('too-low-warning').classList.add('d-none');
+    }
+
+    totalSpan.dataset.total = total;
+    // totalSpan.textContent = total;
+    totalSpan.textContent = (new BigNumber(total)).shiftedBy(-2).decimalPlaces(2).toFormat(2);
+  }
+}
+
+handleEarlyPaymentForm = (ev) => {
+  ev.preventDefault();
+
+  let totalSpan = document.getElementById('early-total');
+  if (!totalSpan) return;
+
+  let total = parseInt(totalSpan.dataset.total);
+
+  if (total < 100) {
+    alert('An error occurred');
+    return;
+  }
+
+  let confirmButton = document.getElementById('modal-confirm-button')
+  confirmButton.disabled = true;
+  confirmButton.textContent = 'LOADING';
+
+  let formdata = new FormData(ev.target);
+  let httpRequest = new XMLHttpRequest();
+  httpRequest.onreadystatechange = function () {
+    let body = document.getElementById('main-modal-body');
+    if (httpRequest.readyState === XMLHttpRequest.DONE && httpRequest.status === 200) {
+      // Everything is good, the response was received.
+      
+      
+      modal.show();
+    } else if (httpRequest.readyState === XMLHttpRequest.DONE) {
+      body.innerHTML = '<div class="alert alert-danger mb-0"><p class="mb-0"><strong>Error ' + httpRequest.status + '</strong></p><p class="mb-0">Please try again later</p></alert>';
+      document.getElementById('main-modal-footer').innerHTML = '<button type="button" class="btn btn-dark" data-bs-dismiss="modal">Dismiss</button>';
+    } else {
+      // Not ready yet.
+    }
+  };
+  httpRequest.open('POST', ev.target.dataset.submitUrl, true);
+  httpRequest.send(formdata);
 }

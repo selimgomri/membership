@@ -664,6 +664,8 @@ include BASE_PATH . "views/header.php";
 </div>
 
 <?php $footer = new \SCDS\Footer();
+$footer->addJS("js/NeedsValidation.js");
+$footer->addJS("js/numerical/bignumber.min.js");
 $footer->addJS("js/users/main.js");
 $footer->useFluidContainer();
 $footer->render();
