@@ -87,6 +87,8 @@ $addPaymentForCharge = $db->prepare("INSERT INTO `payments` (`Date`, `Status`, `
 $total = 0;
 $itemIds = [];
 
+header("content-type: application/json");
+
 try {
 
   $db->beginTransaction();
@@ -119,7 +121,7 @@ try {
       $itemIds[] = $paymentID;
 
       $track_info = [
-        $mid,
+        $monthId,
         $squadFee->memberId,
         $user,
         'Squad Fees (' . $squadFee->squad . ')',
@@ -177,7 +179,7 @@ try {
       $itemIds[] = $paymentID;
 
       $track_info = [
-        $mid,
+        $monthId,
         $extraFee->memberId,
         $id,
         'Extra Fees (' . $extraFee->extra . ')',
@@ -231,9 +233,19 @@ try {
   }
 
   $db->commit();
+
+  http_response_code(200);
+  echo json_encode([
+    'status' => 200,
+  ]);
 } catch (Exception $e) {
   $db->rollBack();
-  reportError($e);
-}
+  if ($e->getMessage() != 'Total amount too low') {
+    reportError($e);
+  }
 
-echo 'DONE';
+  http_response_code(500);
+  echo json_encode([
+    'status' => 500,
+  ]);
+}

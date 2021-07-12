@@ -463,11 +463,10 @@ handleEarlyPaymentForm = (ev) => {
     let body = document.getElementById('main-modal-body');
     if (httpRequest.readyState === XMLHttpRequest.DONE && httpRequest.status === 200) {
       // Everything is good, the response was received.
-      
-      
-      modal.show();
+      body.innerHTML = '<p class="mb-0">Early charge successfully applied.</p>';
+      document.getElementById('main-modal-footer').innerHTML = '<button type="button" class="btn btn-dark" data-bs-dismiss="modal">Dismiss</button>';
     } else if (httpRequest.readyState === XMLHttpRequest.DONE) {
-      body.innerHTML = '<div class="alert alert-danger mb-0"><p class="mb-0"><strong>Error ' + httpRequest.status + '</strong></p><p class="mb-0">Please try again later</p></alert>';
+      body.innerHTML = '<div class="alert alert-danger mb-0"><p class="mb-0"><strong>Error ' + httpRequest.status + '</strong></p><p class="mb-0">Please try again later</p></div>';
       document.getElementById('main-modal-footer').innerHTML = '<button type="button" class="btn btn-dark" data-bs-dismiss="modal">Dismiss</button>';
     } else {
       // Not ready yet.
