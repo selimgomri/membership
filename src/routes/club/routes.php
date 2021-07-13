@@ -585,6 +585,10 @@ if (empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) {
   });
 
   $this->group('/payments', function () {
+    $this->group('/checkout', function () {
+      include 'checkout.php';
+    });
+    
     include BASE_PATH . 'controllers/payments/router.php';
   });
 
