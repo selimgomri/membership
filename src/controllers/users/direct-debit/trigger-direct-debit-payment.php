@@ -89,6 +89,9 @@ $extraFee = $getExtraMetadata->fetch(PDO::FETCH_OBJ);
 
     <ul class="list-group rounded-0 mb-3" id="payment-selector">
       <?php if ($squadFee) { ?>
+        <li class="list-group-item bg-light fw-bold">
+          Squad Fees
+        </li>
         <?php do {
 
           $amount = $squadFee->fee;
@@ -114,6 +117,9 @@ $extraFee = $getExtraMetadata->fetch(PDO::FETCH_OBJ);
         <?php } while ($squadFee = $getSquadMetadata->fetch(PDO::FETCH_OBJ)); ?>
       <?php } ?>
       <?php if ($extraFee) { ?>
+        <li class="list-group-item bg-light fw-bold">
+          Extra Fees
+        </li>
         <?php do {
 
           $amount = $extraFee->fee;
@@ -139,6 +145,9 @@ $extraFee = $getExtraMetadata->fetch(PDO::FETCH_OBJ);
         <?php } while ($extraFee = $getExtraMetadata->fetch(PDO::FETCH_OBJ)); ?>
       <?php } ?>
       <?php if ($item) { ?>
+        <li class="list-group-item bg-light fw-bold">
+          Other Fees
+        </li>
         <?php do {
 
           $amount = $item->amount;
