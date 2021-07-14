@@ -61,7 +61,7 @@ class Session
       $data['amount'] ?? 0,
       $data['currency'] ?? 'gbp',
       $data['state'] ?? 'open',
-      json_encode($data['allowed_types'] ?? ['card' => true]),
+      json_encode($data['allowed_types'] ?? ['card']),
       $data['created'] ?? (new DateTime('now', new DateTimeZone('UTC')))->format('Y-m-d H:i:s'),
       'v1',
       json_encode($data['total_details'] ?? []),
@@ -152,6 +152,27 @@ class Session
     return $this->items;
   }
 
+  public function autoCalculateTotal()
+  {
+    $items = $this->getItems();
+
+    $total = 0;
+
+    foreach ($items as $item) {
+      if ($item->type == 'debit') {
+        $total += $item->amount;
+      } else {
+        $total -= $item->amount;
+      }
+    }
+
+    if ($total < 0) {
+      throw new Exception('Invalid amount');
+    }
+
+    $this->amount = $total;
+  }
+
   public function save()
   {
     $db = app()->db;
@@ -162,7 +183,7 @@ class Session
       $this->currency,
       $this->state,
       json_encode($this->allowedTypes),
-      $this->created,
+      $this->created->format('Y-m-d H:i:s'),
       $this->succeeded,
       $this->intent,
       $this->method,
@@ -171,12 +192,96 @@ class Session
       $this->taxId,
       json_encode($this->totalDetails),
       json_encode($this->metadata),
+      $this->id,
     ]);
+
+    if ($this->intent) {
+      \Stripe\Stripe::setApiKey(getenv('STRIPE'));
+
+      $tenant = \Tenant::fromId($this->tenant);
+
+      $customer = null;
+      if ($this->user) {
+        $getCustomer = $db->prepare("SELECT CustomerID FROM stripeCustomers WHERE User = ?");
+        $getCustomer->execute([$this->user]);
+        $customer = $getCustomer->fetchColumn();
+      }
+
+      $intent = \Stripe\PaymentIntent::update(
+        $this->intent,
+        [
+          'amount' => $this->amount,
+          'customer' => $customer,
+          'currency' => $this->currency,
+          'payment_method_types' => (array) $this->allowedTypes,
+          'metadata' => [
+            'payment_category' => 'checkout_v1',
+            'checkout_id' => $this->id,
+          ]
+        ],
+        [
+          'stripe_account' => $tenant->getStripeAccount()
+        ]
+      );
+    }
   }
 
   public function getUrl()
   {
     return autoUrl('payments/checkout/' . $this->version . '/' . $this->id);
+  }
+
+  public function createPaymentIntent()
+  {
+    \Stripe\Stripe::setApiKey(getenv('STRIPE'));
+
+    $tenant = \Tenant::fromId($this->tenant);
+
+    $intent = \Stripe\PaymentIntent::create([
+      'amount' => $this->amount,
+      'customer' => $customer,
+      'currency' => $this->currency,
+      'payment_method_types' => (array) $this->allowedTypes,
+      'confirm' => false,
+      'setup_future_usage' => 'off_session',
+      'metadata' => [
+        'payment_category' => 'checkout_v1',
+        'checkout_id' => $this->id,
+      ]
+    ], [
+      'stripe_account' => $tenant->getStripeAccount()
+    ]);
+
+    $this->intent = $intent->id;
+
+    $this->save();
+
+    return $intent;
+  }
+
+  public function getPaymentIntent()
+  {
+
+    if (!$this->intent) {
+      $intent = $this->createPaymentIntent();
+
+      $this->save();
+
+      return $intent;
+    }
+
+    \Stripe\Stripe::setApiKey(getenv('STRIPE'));
+
+    $tenant = \Tenant::fromId($this->tenant);
+
+    $intent = \Stripe\PaymentIntent::retrieve(
+      $this->intent,
+      [
+        'stripe_account' => $tenant->getStripeAccount()
+      ]
+    );
+
+    return $intent;
   }
 
   private function loadItems()

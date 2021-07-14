@@ -4,6 +4,11 @@ $db = app()->db;
 $tenant = app()->tenant;
 
 $checkoutSession = \SCDS\Checkout\Session::retrieve($id);
+
+if ($checkoutSession->user && $checkoutSession->user != app()->user->getId()) {
+  halt(404);
+}
+
 $items = $checkoutSession->getItems();
 
 $expMonth = date("m");
@@ -23,11 +28,24 @@ $cards = $getCards->fetchAll(PDO::FETCH_ASSOC);
 
 $methodId = $customerID = null;
 
+$paymentIntent = $checkoutSession->getPaymentIntent();
+
 $pagetitle = 'V1 Checkout';
+
+$paymentRequestItems = [];
+$paymentRequestItems[] = [
+  'label' => 'Subtotal',
+  'amount' => $paymentIntent->amount
+];
+
+$countries = getISOAlpha2Countries();
 
 include BASE_PATH . 'views/head.php';
 
 ?>
+
+<div id="stripe-data" data-stripe-publishable="<?= htmlspecialchars(getenv('STRIPE_PUBLISHABLE')) ?>" data-redirect-url-new="<?= htmlspecialchars($checkoutSession->getUrl()) ?>" data-redirect-url="<?= htmlspecialchars($checkoutSession->getUrl()) ?>" data-org-name="<?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?>" data-intent-amount="<?= htmlspecialchars($paymentIntent->amount) ?>" data-intent-currency="<?= htmlspecialchars($paymentIntent->currency) ?>" data-payment-request-line-items="<?= htmlspecialchars(json_encode($paymentRequestItems)) ?>" data-stripe-account-id="<?= htmlspecialchars($tenant->getStripeAccount()) ?>">
+</div>
 
 <div class="bg-light  py-3 mb-3">
   <div class="container-xl">
@@ -50,7 +68,7 @@ include BASE_PATH . 'views/head.php';
         <div class="d-lg-none mt-3"></div>
         <div class="accepted-network-logos">
           <p class="mb-0">
-            <img class="apple-pay-row" src="<?= autoUrl("img/stripe/apple-pay-mark.svg", false) ?>" aria-hidden="true"><img class="google-pay-row" src="<?= autoUrl("img/stripe/google-pay-mark.svg", false) ?>" aria-hidden="true"><img class="visa-row" src="<?= autoUrl("img/stripe/visa.svg", false) ?>" aria-hidden="true"><img class="mastercard-row" src="<?= autoUrl("img/stripe/mastercard.svg", false) ?>" aria-hidden="true"><img class="amex-row" src="<?= autoUrl("img/stripe/amex.svg", false) ?>" aria-hidden="true">
+            <img class="apple-pay-row" src="<?= autoUrl("img/stripe/apple-pay-mark.svg", false) ?>" aria-hidden="true"><img class="google-pay-row" src="<?= autoUrl("img/stripe/google-pay-mark.svg", false) ?>" aria-hidden="true"><img class="visa-row" src="<?= autoUrl("img/stripe/visa.svg", false) ?>" aria-hidden="true"><img class="mastercard-row" src="<?= autoUrl("img/stripe/mastercard.svg", false) ?>" aria-hidden="true"><img class="amex-row" src="<?= autoUrl("img/stripe/amex.svg", false) ?>" aria-hidden="true"><img class="amex-row" src="<?= autoUrl("img/stripe/discover.svg", false) ?>" aria-hidden="true"><img class="amex-row" src="<?= autoUrl("img/stripe/diners.svg", false) ?>" aria-hidden="true">
           </p>
         </div>
       </div>
@@ -156,7 +174,7 @@ include BASE_PATH . 'views/head.php';
 
                 <p>
                 <div class="d-grid">
-                  <button id="saved-card-button" class="btn btn-success pm-can-disable" type="button" data-secret="<?= $intent->client_secret ?>">
+                  <button id="saved-card-button" class="btn btn-success pm-can-disable" type="button" data-secret="<?= $paymentIntent->client_secret ?>">
                     Pay <?= htmlspecialchars(MoneyHelpers::formatCurrency(MoneyHelpers::intToDecimal($checkoutSession->amount), $checkoutSession->currency)) ?> now
                   </button>
                 </div>
@@ -263,13 +281,11 @@ include BASE_PATH . 'views/head.php';
             <!-- Used to display form errors. -->
             <div id="new-card-errors" role="alert"></div>
 
-            <p class="mb-0">
             <div class="d-grid">
-              <button id="new-card-button" class="btn btn-success pm-can-disable" type="submit" data-secret="<?= $intent->client_secret ?>">
+              <button id="new-card-button" class="btn btn-success pm-can-disable" type="submit" data-secret="<?= $paymentIntent->client_secret ?>">
                 Pay <?= htmlspecialchars(MoneyHelpers::formatCurrency(MoneyHelpers::intToDecimal($checkoutSession->amount), $checkoutSession->currency)) ?> now
               </button>
             </div>
-            </p>
           </form>
         </div>
       </div>
@@ -302,4 +318,7 @@ include BASE_PATH . 'views/head.php';
 <?php
 
 $footer = new \SCDS\Footer();
+$footer->addJS("js/payment-helpers.js");
+$footer->addJS("js/gala-checkout.js");
+$footer->addJS("js/NeedsValidation.js");
 $footer->render();
