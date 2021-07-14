@@ -105,8 +105,9 @@ class Session
     $session->method = $sessionInfo->method;
     $session->version = $sessionInfo->version;
     $session->taxId = $sessionInfo->tax_id;
-    $session->totalDetails = json_decode($sessionInfo->total_data);
+    $session->totalDetails = json_decode($sessionInfo->total_details);
     $session->metadata = json_decode($sessionInfo->metadata);
+    $session->tenant = $sessionInfo->Tenant;
 
     return $session;
   }
@@ -120,7 +121,7 @@ class Session
     $add = $db->prepare("INSERT INTO checkoutItems (`id`, `checkout_session`, `name`, `description`, `amount`, `currency`, `tax_amount`, `tax_data`, `sub_items`, `type`, `attributes`, `metadata`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
     $add->execute([
       $id,
-      $this->session,
+      $this->id,
       $data['name'] ?? 'Item',
       $data['description'] ?? null,
       $data['amount'] ?? 0,

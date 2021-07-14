@@ -47,6 +47,11 @@ $notByDirectDebit = $currentUser->getUserBooleanOption('GalaDirectDebitOptOut');
 
 $numFormatter = new NumberFormatter("en", NumberFormatter::SPELLOUT);
 
+$actionUrl = autoUrl('galas/pay-for-entries');
+if (isset($_GET['checkout'])) {
+  if ($_GET['checkout'] == 'v1') $actionUrl = autoUrl('galas/pay-for-entries/checkout-v1');
+}
+
 $pagetitle = "Pay for entries - Galas";
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "controllers/galas/galaMenu.php";
@@ -96,7 +101,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
         </p>
       <?php } ?>
 
-      <form action="" method="post">
+      <form action="<?= htmlspecialchars($actionUrl) ?>" method="post">
         <?php if ($entry != null) { ?>
           <h2>Select entries to pay for</h2>
           <p class="">Select which galas you would like to pay for. <strong>You can pay for all, some or just one of your gala entries in a single payment.</strong></p>

@@ -156,6 +156,10 @@ if ($access == "Parent") {
 				include 'pay/welcome-post.php';
 			});
 
+			$this->post('/checkout-v1', function() {
+				include 'pay/welcome-post-checkout-v1.php';
+			});
+
 			$this->post('/switch-method', function() {
 				include 'pay/switch-method.php';
 			});

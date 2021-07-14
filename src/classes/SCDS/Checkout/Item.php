@@ -59,14 +59,14 @@ class Item
     $item = new Item();
 
     $item->id = $id;
-    $item->session = $itemInfo->session;
+    $item->session = $itemInfo->checkout_session;
     $item->name = $itemInfo->name;
     $item->description = $itemInfo->description;
     $item->amount = $itemInfo->amount;
     $item->currency = $itemInfo->currency;
-    $item->taxAmount = $itemInfo->taxAmount;
-    $item->taxData = json_decode($itemInfo->taxData);
-    $item->subItems = json_decode($itemInfo->subItems);
+    $item->taxAmount = $itemInfo->tax_amount;
+    $item->taxData = json_decode($itemInfo->tax_data);
+    $item->subItems = json_decode($itemInfo->sub_items);
     $item->type = $itemInfo->type;
     $item->attributes = json_decode($itemInfo->attributes);
     $item->metadata = json_decode($itemInfo->metadata);
