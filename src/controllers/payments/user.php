@@ -39,7 +39,7 @@ include BASE_PATH . "views/paymentsMenu.php";
 -->
 
 <div class="bg-light mt-n3 py-3 mb-3">
-  <div class="container">
+  <div class="container-xl">
 
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
@@ -56,7 +56,7 @@ include BASE_PATH . "views/paymentsMenu.php";
   </div>
 </div>
 
-<div class="container">
+<div class="container-xl">
   <div class="row">
     <div class="col-md-8">
       <div class="cell">
@@ -97,9 +97,9 @@ include BASE_PATH . "views/paymentsMenu.php";
 
           <div class="d-grid gap-2">
           <?php if ($mandate) { ?>
-            <a href="<?= autoUrl("payments/direct-debit") ?>" class="btn btn-dark">Manage your bank account</a>
+            <a href="<?= autoUrl("payments/direct-debit") ?>" class="btn btn-dark-l btn-outline-light-d">Manage your bank account</a>
           <?php } else { ?>
-            <a href="<?= autoUrl("payments/direct-debit/set-up") ?>" class="btn btn-dark">Setup a Direct Debit</a>
+            <a href="<?= autoUrl("payments/direct-debit/set-up") ?>" class="btn btn-dark-l btn-outline-light-d">Setup a Direct Debit</a>
           <?php } ?>
           </div>
         </div>
@@ -128,9 +128,9 @@ include BASE_PATH . "views/paymentsMenu.php";
           <p class="mb-0">
           <div class="d-grid gap-2">
             <?php if (userHasMandates($user)) { ?>
-              <a href="<?= autoUrl("payments/mandates") ?>" class="btn btn-dark">Manage your bank account</a>
+              <a href="<?= autoUrl("payments/mandates") ?>" class="btn btn-dark-l btn-outline-light-d">Manage your bank account</a>
             <?php } else { ?>
-              <a href="<?= autoUrl("payments/setup") ?>" class="btn btn-dark">Setup a Direct Debit</a>
+              <a href="<?= autoUrl("payments/setup") ?>" class="btn btn-dark-l btn-outline-light-d">Setup a Direct Debit</a>
             <?php } ?>
           </div>
           </p>

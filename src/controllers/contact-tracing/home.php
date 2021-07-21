@@ -27,7 +27,7 @@ if (!$showSignOut) {
 ?>
 
   <div class="bg-light mt-n3 py-3 mb-3">
-    <div class="container">
+    <div class="container-xl">
 
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
@@ -48,7 +48,7 @@ if (!$showSignOut) {
     </div>
   </div>
 
-  <div class="container">
+  <div class="container-xl">
 
     <div class="row">
       <div class="col-md-6 mb-3">
@@ -65,7 +65,7 @@ if (!$showSignOut) {
             </p>
           </div>
           <p class="mb-0 mt-auto d-flex">
-            <a href="<?= htmlspecialchars(autoUrl('contact-tracing/check-in')) ?>" class="btn btn-outline-light">
+            <a href="<?= htmlspecialchars(autoUrl('contact-tracing/check-in')) ?>" class="btn btn-outline-light btn-outline-light-d">
               Register <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
             </a>
           </p>
@@ -86,7 +86,7 @@ if (!$showSignOut) {
               </p>
             </div>
             <p class="mb-0 mt-auto d-flex">
-              <a href="<?= htmlspecialchars(autoUrl('contact-tracing/sign-out')) ?>" class="btn btn-outline-light">
+              <a href="<?= htmlspecialchars(autoUrl('contact-tracing/sign-out')) ?>" class="btn btn-outline-light btn-outline-light-d">
                 Sign Out <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
               </a>
             </p>
@@ -102,7 +102,7 @@ if (!$showSignOut) {
               </h2>
             </div>
             <p class="mb-0 mt-auto d-flex">
-              <a href="<?= htmlspecialchars(autoUrl('contact-tracing/locations')) ?>" class="btn btn-dark">
+              <a href="<?= htmlspecialchars(autoUrl('contact-tracing/locations')) ?>" class="btn btn-dark btn-light-d">
                 Manage
               </a>
             </p>
@@ -117,7 +117,7 @@ if (!$showSignOut) {
               </h2>
             </div>
             <p class="mb-0 mt-auto d-flex">
-              <a href="<?= htmlspecialchars(autoUrl('contact-tracing/reports')) ?>" class="btn btn-dark">
+              <a href="<?= htmlspecialchars(autoUrl('contact-tracing/reports')) ?>" class="btn btn-dark btn-light-d">
                 Reports
               </a>
             </p>

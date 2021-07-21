@@ -7,7 +7,7 @@ include BASE_PATH . "views/paymentsMenu.php";
 
 ?>
 
-<div class="container">
+<div class="container-xl">
   <h1>New Extra</h1>
   <p class="lead">Add a new extra fee such as CrossFit.</p>
 
@@ -30,7 +30,7 @@ include BASE_PATH . "views/paymentsMenu.php";
         </div>
 
         <p>
-          <button type="submit" class="btn btn-dark">
+          <button type="submit" class="btn btn-dark-l btn-outline-light-d">
             Add
           </button>
         </p>

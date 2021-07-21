@@ -85,7 +85,7 @@ include BASE_PATH . "views/paymentsMenu.php";
 ?>
 
 <div class="bg-light mt-n3 py-3 mb-3">
-  <div class="container">
+  <div class="container-xl">
     <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent') { ?>
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
@@ -107,7 +107,7 @@ include BASE_PATH . "views/paymentsMenu.php";
   </div>
 </div>
 
-<div class="container">
+<div class="container-xl">
   <dl class="row">
     <dt class="col-md-4">Statement Identifier</dt>
     <dd class="col-md-8"><span class="font-monospace"><?= htmlspecialchars($id) ?></span></dd>

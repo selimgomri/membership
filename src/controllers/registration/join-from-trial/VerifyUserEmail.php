@@ -16,7 +16,7 @@ include BASE_PATH . 'views/header.php';
 
 ?>
 
-<div class="container">
+<div class="container-xl">
   <h1>Verify your email</h1>
   <div class="row">
     <div class="col-md-8 mb-5">
@@ -85,7 +85,7 @@ include BASE_PATH . 'views/header.php';
             </div>
           </div>
           <p class="mb-0">
-            <button class="btn btn-dark" type="button">Change Email</button>
+            <button class="btn btn-dark-l btn-outline-light-d" type="button">Change Email</button>
           </p>
         </form>
       </div>

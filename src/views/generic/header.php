@@ -41,6 +41,14 @@ if (isset($customBackground) && $customBackground) {
     </div>
   <?php } ?>
 
+  <?php if (app()->tenant->getBooleanKey('PAYMENT_OVERDUE')) { ?>
+    <div class="bg-danger text-light text-light-d bg-striped py-1 d-print-none">
+      <div class="<?= $container_class ?>">
+        <small><strong>PAYMENT TO SCDS IS OVERDUE</strong> THIS TENANT MAY SOON BE SUSPENDED</small>
+      </div>
+    </div>
+  <?php } ?>
+
   <div class="d-print-none">
 
     <?php if (app()->tenant->getKey('EMERGENCY_MESSAGE_TYPE') != 'NONE' && app()->tenant->getKey('EMERGENCY_MESSAGE')) {
@@ -183,7 +191,7 @@ if (isset($customBackground) && $customBackground) {
           <div class="row justify-content-between align-items-center py-3 mb-0 d-none d-md-flex">
             <div class="col-auto">
               <h1 class="mb-0">
-                <a href="<?= htmlspecialchars(autoUrl("")) ?>" class="<?= $clubLogoColour ?> text-decoration-none fw-bold">
+                <a href="<?= htmlspecialchars(autoUrl("")) ?>" class="<?= $clubLogoColour ?> text-light-d text-decoration-none fw-bold">
                   <?php if ($tenant->getKey('LOGO_DIR') && $tenant->getKey('SHOW_LOGO')) { ?>
                     <img src="<?= htmlspecialchars(getUploadedAssetUrl($logos . 'logo-75.png')) ?>" srcset="<?= htmlspecialchars(getUploadedAssetUrl($logos . 'logo-75@2x.png')) ?> 2x, <?= htmlspecialchars(getUploadedAssetUrl($logos . 'logo-75@3x.png')) ?> 3x" alt="<?= htmlspecialchars($tenant->getName()) ?>" class="img-fluid" style="height: 75px">
                   <?php } else { ?>
@@ -194,7 +202,7 @@ if (isset($customBackground) && $customBackground) {
             </div>
             <?php if (app()->tenant->getKey('CLUB_WEBSITE')) { ?>
               <div class="col-auto">
-                <a href="<?= htmlspecialchars(app()->tenant->getKey('CLUB_WEBSITE')) ?>" class="btn <?= $clubLinkColour ?> text-decoration-none">Club website</a>
+                <a href="<?= htmlspecialchars(app()->tenant->getKey('CLUB_WEBSITE')) ?>" class="btn <?= $clubLinkColour ?> btn-outline-light-d text-decoration-none">Club website <i class="fa fa-external-link" aria-hidden="true"></i></a>
               </div>
             <?php } ?>
           </div>
@@ -209,12 +217,20 @@ if (isset($customBackground) && $customBackground) {
                 <nav class="navbar navbar-expand-lg <?= $navTextColour ?>
         d-print-none justify-content-between px-0" role="navigation">
 
-                  <a class="navbar-brand d-lg-none" href="<?= htmlspecialchars(autoUrl("")) ?>">
-                    <?php if (app()->tenant->getKey('CLUB_SHORT_NAME')) { ?>
-                      <?= htmlspecialchars(app()->tenant->getKey('CLUB_SHORT_NAME')) ?> Membership
-                    <?php } else { ?>
-                      <?= htmlspecialchars(app()->tenant->getKey('ASA_CLUB_CODE')) ?> Club Membership
+                  <a class="navbar-brand align-items-center d-lg-none" href="<?= htmlspecialchars(autoUrl("")) ?>">
+                    <?php if ($tenant->getKey('LOGO_DIR')) { ?>
+                      <span class="d-md-none">
+                        <img src="<?= htmlspecialchars(getUploadedAssetUrl($logos . 'icon-114x114.png')) ?>" alt="<?= htmlspecialchars($tenant->getName()) ?>" class="img-fluid rounded me-1 bg-white" style="height: 38px">
+                      </span>
                     <?php } ?>
+
+                    <span class="">
+                      <?php if (app()->tenant->getKey('CLUB_SHORT_NAME')) { ?>
+                        <?= htmlspecialchars(app()->tenant->getKey('CLUB_SHORT_NAME')) ?> Membership
+                      <?php } else { ?>
+                        <?= htmlspecialchars(app()->tenant->getKey('ASA_CLUB_CODE')) ?> Club Membership
+                      <?php } ?>
+                    </span>
                   </a>
                   <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#chesterNavbar" aria-controls="chesterNavbar" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -246,7 +262,7 @@ if (isset($customBackground) && $customBackground) {
     }
     ?>
 
-    <div class="container">
+    <div class="container-xl">
       <div class="row mb-3">
         <div class="col club-logos">
           <?php if ($logoPath) { ?>

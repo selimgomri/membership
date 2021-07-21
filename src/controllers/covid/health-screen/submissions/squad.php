@@ -43,7 +43,7 @@ include BASE_PATH . 'views/header.php';
 ?>
 
 <div class="bg-light mt-n3 py-3 mb-3">
-  <div class="container">
+  <div class="container-xl">
 
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
@@ -67,7 +67,7 @@ include BASE_PATH . 'views/header.php';
   </div>
 </div>
 
-<div class="container">
+<div class="container-xl">
 
   <div class="row">
 
@@ -128,7 +128,7 @@ include BASE_PATH . 'views/header.php';
                           Void survey
                         </button>
                       <?php } ?>
-                      <a href="<?= htmlspecialchars(autoUrl('covid/health-screening/members/' . $member['MemberID'])) ?>" class="btn btn-dark">View all</a>
+                      <a href="<?= htmlspecialchars(autoUrl('covid/health-screening/members/' . $member['MemberID'])) ?>" class="btn btn-dark-l btn-outline-light-d">View all</a>
                     <?php } ?>
                     <a href="<?= htmlspecialchars(autoUrl('covid/health-screening/members/' . $member['MemberID'] . '/new-survey')) ?>" class="btn btn-success">New submission</a>
                   </div>
@@ -182,7 +182,7 @@ include BASE_PATH . 'views/header.php';
           <div class="row">
             <div class="col">
               <p class="mb-0">
-                <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-dark-l btn-outline-light-d" data-bs-dismiss="modal">Close</button>
               </p>
             </div>
             <div class="col-auto">
@@ -210,7 +210,7 @@ include BASE_PATH . 'views/header.php';
       <div class="modal-body" id="revokeModalBody">
       </div>
       <div class="modal-footer" id="revokeModalFooter">
-        <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-dark-l btn-outline-light-d" data-bs-dismiss="modal">Cancel</button>
         <button type="button" class="btn btn-warning" id="void-button" data-action="void">Void Form</button>
       </div>
     </div>

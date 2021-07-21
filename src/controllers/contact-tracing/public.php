@@ -14,7 +14,7 @@ include BASE_PATH . 'views/header.php';
 ?>
 
 <div class="bg-light mt-n3 py-3 mb-3">
-  <div class="container">
+  <div class="container-xl">
 
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
@@ -35,7 +35,7 @@ include BASE_PATH . 'views/header.php';
   </div>
 </div>
 
-<div class="container">
+<div class="container-xl">
 
   <?php if ($location = $getLocations->fetch(PDO::FETCH_ASSOC)) { ?>
     <div class="card mb-5">
@@ -74,7 +74,7 @@ include BASE_PATH . 'views/header.php';
           </p>
         </div>
         <p class="mb-0 mt-auto d-flex">
-          <a href="https://www.nhs.uk/conditions/coronavirus-covid-19/" class="btn btn-light" target="_blanks">
+          <a href="https://www.nhs.uk/conditions/coronavirus-covid-19/" class="btn btn-light btn-light-d" target="_blanks">
             <i class="fa fa-arrow-circle-right" aria-hidden="true"></i> NHS.UK
           </a>
         </p>
@@ -92,7 +92,7 @@ include BASE_PATH . 'views/header.php';
           </p>
         </div>
         <p class="mb-0 mt-auto d-flex">
-          <a href="https://www.gov.uk/coronavirus" class="btn btn-dark" target="_blanks">
+          <a href="https://www.gov.uk/coronavirus" class="btn btn-dark btn-light-d" target="_blanks">
             <i class="fa fa-arrow-circle-right" aria-hidden="true"></i> GOV.UK
           </a>
         </p>
@@ -110,7 +110,7 @@ include BASE_PATH . 'views/header.php';
           </p>
         </div>
         <p class="mb-0 mt-auto d-flex">
-          <a href="https://www.swimming.org/swimengland/pool-return-guidance-documents/" class="btn btn-dark" target="_blanks">
+          <a href="https://www.swimming.org/swimengland/pool-return-guidance-documents/" class="btn btn-dark btn-light-d" target="_blanks">
             <i class="fa fa-arrow-circle-right" aria-hidden="true"></i> Guidance
           </a>
         </p>

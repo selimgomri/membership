@@ -73,7 +73,7 @@ try {
 	$member = $getMembers->fetchAll(PDO::FETCH_ASSOC);
 	$count = sizeof($member);
 
-	foreach ($clubFees->getClasses() as $class) {
+	foreach ($clubFees->getClubClasses() as $class) {
 		foreach ($class->getFeeItems() as $item) {
 			$paymentItems[] = [
 				'description' => $item->getDescription() . ' ' . $class->getName(),
@@ -81,11 +81,24 @@ try {
 				'type' => 'debit',
 				'date' => $clubDate
 			];
+			$totalFee = $item->getAmount();
+		}
+	}
+
+	foreach ($clubFees->getNGBClasses() as $class) {
+		foreach ($class->getFeeItems() as $item) {
+			$paymentItems[] = [
+				'description' => $item->getDescription() . ' ' . $class->getName(),
+				'amount' => $item->getAmount(),
+				'type' => 'debit',
+				'date' => $clubDate
+			];
+			$totalFee = $item->getAmount();
 		}
 	}
 
 	if ($clubDiscount > 0 && $renewal == 0) {
-		$totalFee += $clubFee * (1 - ($clubDiscount / 100));
+		// $totalFee += $clubFee * (1 - ($clubDiscount / 100));
 		// $paymentItems[] = [
 		// 	'description' => 'Club Membership Fee',
 		// 	'amount' => $clubFee * ($clubDiscount / 100),
@@ -93,52 +106,29 @@ try {
 		// 	'date' => $clubDate
 		// ];
 	} else {
-		$totalFee += $clubFee;
+		// $totalFee += $clubFee;
 	}
 
-	$asaFees = [];
-
-	$asa1 = app()->tenant->getKey('ASA-County-Fee-L1') + app()->tenant->getKey('ASA-Regional-Fee-L1') + app()->tenant->getKey('ASA-National-Fee-L1');
-	$asa2 = app()->tenant->getKey('ASA-County-Fee-L2') + app()->tenant->getKey('ASA-Regional-Fee-L2') + app()->tenant->getKey('ASA-National-Fee-L2');
-	$asa3 = app()->tenant->getKey('ASA-County-Fee-L3') + app()->tenant->getKey('ASA-Regional-Fee-L3') + app()->tenant->getKey('ASA-National-Fee-L3');
-
 	for ($i = 0; $i < $count; $i++) {
-		if ($member[$i]['ASACategory'] == 1 && !$member[$i]['ASAPaid']) {
-			$asaFees[$i] = $asa1;
-		} else if ($member[$i]['ASACategory'] == 2  && !$member[$i]['ASAPaid']) {
-			$asaFees[$i] = $asa2;
-		} else if ($member[$i]['ASACategory'] == 3  && !$member[$i]['ASAPaid']) {
-			$asaFees[$i] = $asa3;
-		} else {
-			$asaFees[$i] = 0;
-		}
 
-		$paymentItems[] = [
-			'description' => $member[$i]['MForename'] . ' Cat ' . $member[$i]['ASACategory'] . ' SE Membership',
-			'amount' => $asaFees[$i],
-			'type' => 'debit',
-			'member' => $member[$i]['MemberID'],
-			'date' => $asaDate
-		];
+		// $paymentItems[] = [
+		// 	'description' => $member[$i]['MForename'] . ' ' . $member[$i]['MSurname'] . ' - ' . MembershipClassInfo::getFee($member[$i]['NGBCategory']),
+		// 	'amount' => $asaFees[$i],
+		// 	'type' => 'debit',
+		// 	'member' => $member[$i]['MemberID'],
+		// 	'date' => $asaDate
+		// ];
 
 		if ($member[$i]['RRTransfer']) {
 			// $totalFee += $asaFees[$i];
-			$paymentItems[] = [
-				'description' => $member[$i]['MForename'] . ' SE Transfer',
-				'amount' => $asaFees[$i],
-				'type' => 'credit',
-				'date' => $clubDate
-			];
-		} else if ($swimEnglandDiscount > 0 && $renewal == 0) {
-			$totalFee += $asaFees[$i] * (1 - ($swimEnglandDiscount / 100));
-			$paymentItems[] = [
-				'description' => $member[$i]['MForename'] . ' SE Transfer',
-				'amount' => $asaFees[$i] * ($swimEnglandDiscount / 100),
-				'type' => 'credit',
-				'date' => $clubDate
-			];
+			// $paymentItems[] = [
+			// 	'description' => $member[$i]['MForename'] . ' NGB Club Transfer',
+			// 	'amount' => $asaFees[$i],
+			// 	'type' => 'credit',
+			// 	'date' => $clubDate
+			// ];
 		} else {
-			$totalFee += $asaFees[$i];
+			// $totalFee += $asaFees[$i];
 		}
 	}
 
@@ -146,8 +136,8 @@ try {
 	// reportError($paymentItems);
 
 	$clubFeeString = $clubFees->getFormattedTotal();
-	$totalFeeString = (string) (\Brick\Math\BigDecimal::of((string) $totalFee))->withPointMovedLeft(2)->toScale(2);
-	$total = $totalFee;
+	$totalFeeString = (string) (\Brick\Math\BigDecimal::of((string) $clubFees->getTotal()))->withPointMovedLeft(2)->toScale(2);
+	$total = $clubFees->getTotal();
 
 	$sql = $db->prepare("SELECT COUNT(*) FROM `paymentPreferredMandate` WHERE `UserID` = ?");
 	$sql->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);

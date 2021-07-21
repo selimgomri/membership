@@ -25,8 +25,11 @@ if ($access == "Committee" || $access == "Admin" || $access == "Galas") {
 	});
 
 	$this->get('/{id}:int', function ($id) {
-
 		include 'user.php';
+	});
+
+	$this->get('/{id}:int/new-membership-batch', function ($id) {
+		include 'new-membership-batch.php';
 	});
 
 	if ($access == "Admin") {
@@ -48,8 +51,18 @@ if ($access == "Committee" || $access == "Admin" || $access == "Galas") {
 			include BASE_PATH . 'controllers/payments/admin/user-mandates/user-mandates.php';
 		});
 
-		$this->get('/{user}:int/direct-debit', function ($user) {
-			include BASE_PATH . 'controllers/payments/admin/user-mandates/stripe-user-mandates.php';
+		$this->group('/{user}:int/direct-debit', function ($user) {
+			$this->get('/', function ($user) {
+				include BASE_PATH . 'controllers/payments/admin/user-mandates/stripe-user-mandates.php';
+			});
+
+			$this->post('/force-run-info', function ($id) {
+				include 'direct-debit/trigger-direct-debit-payment.php';
+			});
+
+			$this->post('/force-run-submission', function ($id) {
+				include 'direct-debit/trigger-direct-debit-payment-post.php';
+			});
 		});
 	}
 

@@ -37,7 +37,7 @@ if ($noTimeSheet) {
 	$pagetitle = "Galas";
 	include BASE_PATH . "views/header.php";
 	include "galaMenu.php"; ?>
-	<div class="container">
+	<div class="container-xl">
 		<h1>There is no Time Sheet available for the gala you requested</h1>
 		<?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Parent") {
 		?><p class="lead">This may be because your swimmers have not entered this gala.</p>

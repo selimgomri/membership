@@ -22,7 +22,7 @@ include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/renewalTitleBar.php";
 ?>
 
-<div class="container">
+<div class="container-xl">
 	<div class="">
 		<form method="post" name="med" id="med">
 			<h1>Medical Form for <?=htmlspecialchars($row['MForename'])?></h1>

@@ -20,7 +20,7 @@ class MembershipFees
   {
     $db = app()->db;
 
-    // Get classes
+    // Get classes (Club Memberships)
     $getClasses = $db->prepare("SELECT DISTINCT `ID` FROM clubMembershipClasses INNER JOIN members ON members.ClubCategory = clubMembershipClasses.ID WHERE members.UserID = ? AND members.Active");
     if ($partial) {
       $getClasses = $db->prepare("SELECT DISTINCT `ID` FROM clubMembershipClasses INNER JOIN members ON members.ClubCategory = clubMembershipClasses.ID WHERE members.UserID = ? AND members.RR AND members.Active");
@@ -35,14 +35,29 @@ class MembershipFees
       $objects[] = MembershipFeeClass::get($class, $user, $partial);
     }
 
-    $object = new MembershipFees($user, $objects, $partial);
+    // Get classes (NGB Memberships)
+    $getClasses = $db->prepare("SELECT DISTINCT `ID` FROM clubMembershipClasses INNER JOIN members ON members.NGBCategory = clubMembershipClasses.ID WHERE members.NGBCategory IS NOT NULL AND members.UserID = ? AND members.Active");
+    if ($partial) {
+      $getClasses = $db->prepare("SELECT DISTINCT `ID` FROM clubMembershipClasses INNER JOIN members ON members.NGBCategory = clubMembershipClasses.ID WHERE members.NGBCategory IS NOT NULL AND members.UserID = ? AND members.RR AND members.Active");
+    }
+    $getClasses->execute([
+      $user,
+    ]);
+    $classes = $getClasses->fetchAll(\PDO::FETCH_COLUMN);
+
+    $ngbObjects = [];
+    foreach ($classes as $class) {
+      $ngbObjects[] = MembershipFeeClass::get($class, $user, $partial);
+    }
+
+    $object = new MembershipFees($user, ['club' => $objects, 'national_governing_body' => $ngbObjects], $partial);
     return $object;
   }
 
   public function getTotal()
   {
     $total = 0;
-    foreach ($this->classes as $class) {
+    foreach ($this->getClasses() as $class) {
       $total += $class->getTotal();
     }
 
@@ -56,6 +71,14 @@ class MembershipFees
 
   public function getClasses()
   {
-    return $this->classes;
+    return array_merge($this->getClubClasses(), $this->getNGBClasses());
+  }
+
+  public function getClubClasses() {
+    return $this->classes['club'];
+  }
+
+  public function getNGBClasses() {
+    return $this->classes['national_governing_body'];
   }
 }

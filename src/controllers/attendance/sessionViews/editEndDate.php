@@ -51,7 +51,7 @@ include BASE_PATH . "controllers/attendance/attendanceMenu.php";
 ?>
 
 
-<div class="container">
+<div class="container-xl">
 	<h1><?= htmlspecialchars($row['SessionName']) ?></h1>
 	<p class="lead"><?= $dayText ?> at <?= $row['StartTime'] ?></p>
 	<form>

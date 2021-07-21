@@ -7,7 +7,7 @@ include BASE_PATH . 'views/header.php';
 ?>
 
 <div class="bg-light mt-n3 py-3 mb-3">
-  <div class="container">
+  <div class="container-xl">
     <div class="row">
       <div class="col-lg-8">
         <h1>My monthly fees</h1>
@@ -17,7 +17,7 @@ include BASE_PATH . 'views/header.php';
   </div>
 </div>
 
-<div class="container">
+<div class="container-xl">
   <div class="row">
     <div class="col-lg-8">
       <p>In some months, additional charges may be added to your account to cover the cost of gala entries and club membership.</p>

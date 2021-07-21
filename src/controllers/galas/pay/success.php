@@ -77,7 +77,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
 ?>
 
 <div class="bg-light mt-n3 py-3 mb-3">
-  <div class="container">
+  <div class="container-xl">
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="<?= autoUrl("galas") ?>">Galas</a></li>
@@ -94,7 +94,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
   </div>
 </div>
 
-<div class="container">
+<div class="container-xl">
   <div class="row">
     <div class="col-lg-8">
       <p>A confirmation email is on the way to you.</p>

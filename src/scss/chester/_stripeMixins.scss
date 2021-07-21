@@ -210,3 +210,9 @@
     border-bottom-right-radius: $border-radius !important;
   }
 }
+
+@media (prefers-color-scheme: dark) {
+  #card-brand-element img, .dark-mode-mask {
+    filter: grayscale(100%) brightness(0%) invert(100%);
+  }
+}

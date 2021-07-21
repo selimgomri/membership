@@ -123,3 +123,30 @@ form.addEventListener('submit', function(event) {
     document.getElementById('card-errors-message').textContent = 'You must provide all details required, including the cardholder\'s name and address';
   }
 });
+
+function setDark() {
+  cardNumberElement.update({style: stripeElementStyleDarkMode});
+  cardExpiryElement.update({style: stripeElementStyleDarkMode});
+  cardCvcElement.update({style: stripeElementStyleDarkMode});
+}
+
+function setLight() {
+  cardNumberElement.update({style: stripeElementStyle});
+  cardExpiryElement.update({style: stripeElementStyle});
+  cardCvcElement.update({style: stripeElementStyle});
+}
+
+if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+  // dark mode
+  setDark();
+}
+
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+  const newColorScheme = e.matches ? "dark" : "light";
+  console.log(newColorScheme);
+  if (newColorScheme == 'light') {
+    setLight();
+  } else {
+    setDark();
+  }
+});

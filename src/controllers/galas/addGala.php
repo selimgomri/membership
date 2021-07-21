@@ -91,7 +91,7 @@ $content .= "<div class=\"row\"><div class=\"col-md-10 col-lg-8\"><form method=\
 $use_white_background = true;
 include BASE_PATH . "views/header.php";
 include "galaMenu.php"; ?>
-<div class="container">
+<div class="container-xl">
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="<?=autoUrl("galas")?>">Galas</a></li>

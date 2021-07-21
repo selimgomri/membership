@@ -10,7 +10,7 @@ include BASE_PATH . "views/renewalTitleBar.php";
 
 ?>
 
-<div class="container">
+<div class="container-xl">
   <div>
     <form method="post">
       <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorState'])) {

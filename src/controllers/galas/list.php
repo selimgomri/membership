@@ -36,7 +36,7 @@ include BASE_PATH . 'views/header.php';
 ?>
 
 <div class="bg-light mt-n3 py-3 mb-3">
-  <div class="container">
+  <div class="container-xl">
 
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
@@ -69,7 +69,7 @@ include BASE_PATH . 'views/header.php';
   </div>
 </div>
 
-<div class="container">
+<div class="container-xl">
 
   <div class="row">
     <div class="col-lg-10 col-xl-8 mb-3">
@@ -112,7 +112,7 @@ include BASE_PATH . 'views/header.php';
                 <a href="<?=htmlspecialchars(autoUrl("galas/entries?gala=" . $gala['id']))?>" class="btn btn-primary">
                   Entries
                 </a>
-                <a href="<?=htmlspecialchars(autoUrl("galas/" . $gala['id'] . "/edit"))?>" class="btn btn-dark">
+                <a href="<?=htmlspecialchars(autoUrl("galas/" . $gala['id'] . "/edit"))?>" class="btn btn-dark-l btn-outline-light-d">
                   Edit <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                 </a>
               </div>

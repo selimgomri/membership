@@ -35,11 +35,8 @@ include BASE_PATH . 'views/header.php';
           <a href="<?=autoUrl("settings/fees/multiple-squads")?>" class="list-group-item list-group-item-action">
             Fees for members in multiple squads
           </a>
-          <a href="<?=autoUrl("settings/fees/swim-england-fees")?>" class="list-group-item list-group-item-action">
-            Swim England County, Regional and National Fees
-          </a>
           <a href="<?=autoUrl("settings/fees/membership-fees")?>" class="list-group-item list-group-item-action">
-            <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?> membership fees
+            Club and <?= htmlspecialchars($tenant->getKey('NGB_NAME')) ?> membership fees
           </a>
           <a href="<?=autoUrl("settings/fees/membership-discounts")?>" class="list-group-item list-group-item-action">
             Membership discounts by month
@@ -48,7 +45,7 @@ include BASE_PATH . 'views/header.php';
             Months without squad fees
           </a>
           <a href="<?=autoUrl("settings/fees/membership-fee-payment-methods")?>" class="list-group-item list-group-item-action">
-            Payment methods for club and Swim England fees
+            Payment methods for club and <?= htmlspecialchars($tenant->getKey('NGB_NAME')) ?> fees
           </a>
         </div>
       </main>

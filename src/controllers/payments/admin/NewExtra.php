@@ -7,7 +7,7 @@ include BASE_PATH . "views/paymentsMenu.php";
 
 ?>
 
-<div class="container">
+<div class="container-xl">
 
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
@@ -62,7 +62,7 @@ include BASE_PATH . "views/paymentsMenu.php";
           </div>
 
           <p class="mb-0">
-            <button type="submit" class="btn btn-dark">
+            <button type="submit" class="btn btn-dark-l btn-outline-light-d">
               Add extra
             </button>
           </p>

@@ -34,7 +34,7 @@ include BASE_PATH . 'views/header.php';
 ?>
 
 <div class="bg-light mt-n3 py-3 mb-3">
-  <div class="container">
+  <div class="container-xl">
 
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
@@ -57,7 +57,7 @@ include BASE_PATH . 'views/header.php';
   </div>
 </div>
 
-<div class="container">
+<div class="container-xl">
 
   <div class="row justify-content-between">
     <div class="col-lg-8">
@@ -91,14 +91,14 @@ include BASE_PATH . 'views/header.php';
     <div class="modal-content">
       <div id="edit-delete-modal-header" class="modal-header bg-danger text-white">
         <h5 class="modal-title" id="edit-delete-modal-title"></h5>
-        <button type="button" class="close text-white" data-bs-dismiss="modal" aria-label="Close">
+        <button type="button" class="btn-close text-white" data-bs-dismiss="modal" aria-label="Close">
           
         </button>
       </div>
       <div class="modal-body" id="edit-delete-modal-body">
       </div>
       <div class="modal-footer" id="edit-delete-modal-footer">
-        <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-dark-l btn-outline-light-d" data-bs-dismiss="modal">Cancel</button>
       </div>
     </div>
   </div>

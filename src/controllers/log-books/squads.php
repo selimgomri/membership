@@ -15,7 +15,7 @@ include BASE_PATH . 'views/header.php';
 
 ?>
 
-<div class="container">
+<div class="container-xl">
 
   <h1>Log books <span class="badge bg-info">BETA</span></h1>
   <p class="lead">

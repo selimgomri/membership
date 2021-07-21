@@ -16,7 +16,7 @@ $toDate->setTimezone(new DateTimeZone('Europe/London'));
 ?>
 
 <div class="bg-light mt-n3 py-3 mb-3">
-  <div class="container">
+  <div class="container-xl">
 
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
@@ -40,7 +40,7 @@ $toDate->setTimezone(new DateTimeZone('Europe/London'));
   </div>
 </div>
 
-<div class="container">
+<div class="container-xl">
 
   <div class="row">
     <div class="col">
@@ -82,7 +82,7 @@ $toDate->setTimezone(new DateTimeZone('Europe/London'));
                     $number = \Brick\PhoneNumber\PhoneNumber::parse((string) $json->visitors[$i]->phone);
                   ?>
                     <div class="d-grid gap-2">
-                      <a href="<?= htmlspecialchars($number->format(\Brick\PhoneNumber\PhoneNumberFormat::RFC3966)) ?>" class="btn btn-dark">
+                      <a href="<?= htmlspecialchars($number->format(\Brick\PhoneNumber\PhoneNumberFormat::RFC3966)) ?>" class="btn btn-dark-l btn-outline-light-d">
                         <i class="fa fa-phone" aria-hidden="true"></i> <?= htmlspecialchars($number->formatForCallingFrom('GB')) ?>
                       </a>
                     </div>

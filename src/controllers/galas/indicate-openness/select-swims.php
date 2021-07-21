@@ -27,12 +27,36 @@ $getSessions = $db->prepare("SELECT `Name`, `ID` FROM galaSessions WHERE Gala = 
 $getSessions->execute([$id]);
 $sessions = $getSessions->fetchAll(PDO::FETCH_ASSOC);
 
+$selectedSquad = null;
+if (isset($_GET['squad']) && $_GET['squad'] != 'all') {
+  $getSquad = $db->prepare("SELECT DISTINCT SquadID FROM (((squads INNER JOIN squadMembers ON squads.SquadID = squadMembers.Squad) INNER JOIN galaSessionsCanEnter ON squadMembers.Member = galaSessionsCanEnter.Member) INNER JOIN galaSessions ON galaSessions.ID = galaSessionsCanEnter.Session) WHERE galaSessions.Gala = ? AND SquadID = ? ORDER BY SquadFee DESC, SquadName ASC");
+  $getSquad->execute([
+    $id,
+    $_GET['squad']
+  ]);
+  $selectedSquad = $getSquad->fetchColumn();
+}
+
+$getSquads = $db->prepare("SELECT DISTINCT SquadID, SquadName FROM (((squads INNER JOIN squadMembers ON squads.SquadID = squadMembers.Squad) INNER JOIN galaSessionsCanEnter ON squadMembers.Member = galaSessionsCanEnter.Member) INNER JOIN galaSessions ON galaSessions.ID = galaSessionsCanEnter.Session) WHERE galaSessions.Gala = ? ORDER BY SquadFee DESC, SquadName ASC");
+$getSquads->execute([
+  $id,
+]);
+
+$swimmers = null;
+
 try {
-  $getAvailableSwimmers = $db->prepare("SELECT Member, MForename fn, MSurname sn, DateOfBirth dob, gs.`Name` gsname, members.ASANumber `se` FROM (((galaSessionsCanEnter ca INNER JOIN galaSessions gs ON gs.ID = ca.Session) INNER JOIN members ON ca.Member = members.MemberID) LEFT JOIN galaEntries ge ON ge.GalaID = gs.Gala AND ge.MemberID = members.MemberID) WHERE gs.Gala = ? AND ca.CanEnter = ? AND ge.EntryID IS NULL ORDER BY sn ASC, fn ASC");
-  $getAvailableSwimmers->execute([$id, true]);
+  $getAvailableSwimmers = null;
+  if ($selectedSquad) {
+    $getAvailableSwimmers = $db->prepare("SELECT ca.Member, MForename fn, MSurname sn, DateOfBirth dob, gs.`Name` gsname, members.ASANumber `se` FROM ((((galaSessionsCanEnter ca INNER JOIN galaSessions gs ON gs.ID = ca.Session) INNER JOIN members ON ca.Member = members.MemberID) INNER JOIN squadMembers ON ca.Member = squadMembers.Member) LEFT JOIN galaEntries ge ON ge.GalaID = gs.Gala AND ge.MemberID = members.MemberID) WHERE gs.Gala = ? AND ca.CanEnter = ? AND squadMembers.Squad = ? AND ge.EntryID IS NULL ORDER BY sn ASC, fn ASC");
+    $getAvailableSwimmers->execute([$id, true, $selectedSquad]);
+  } else {
+    $getAvailableSwimmers = $db->prepare("SELECT Member, MForename fn, MSurname sn, DateOfBirth dob, gs.`Name` gsname, members.ASANumber `se` FROM (((galaSessionsCanEnter ca INNER JOIN galaSessions gs ON gs.ID = ca.Session) INNER JOIN members ON ca.Member = members.MemberID) LEFT JOIN galaEntries ge ON ge.GalaID = gs.Gala AND ge.MemberID = members.MemberID) WHERE gs.Gala = ? AND ca.CanEnter = ? AND ge.EntryID IS NULL ORDER BY sn ASC, fn ASC");
+    $getAvailableSwimmers->execute([$id, true]);
+  }
   $swimmers = $getAvailableSwimmers->fetchAll(PDO::FETCH_GROUP | PDO::FETCH_ASSOC);
 } catch (Exception $e) {
-  pre($e);
+  // reportError($e);
+  // halt(500);
 }
 
 $now = new DateTime('now', new DateTimeZone('Europe/London'));
@@ -90,6 +114,19 @@ include BASE_PATH . 'views/header.php';
       <p>When you submit this form, parents will be sent an email detailing their entries.</p>
     </div>
   </div>
+
+  <form method="get" class="">
+    <div class="input-group mb-3">
+      <select class="form-select" aria-label="Select squad" name="squad">
+        <option disabled>Select a squad</option>
+        <option <?php if ($selectedSquad == 'all') { ?>selected<?php } ?> value="all">All</option>
+        <?php while ($squad = $getSquads->fetch(PDO::FETCH_ASSOC)) { ?>
+          <option <?php if ($selectedSquad == $squad['SquadID']) { ?>selected<?php } ?> value="<?= htmlspecialchars($squad['SquadID']) ?>"><?= htmlspecialchars($squad['SquadName']) ?></option>
+        <?php } ?>
+      </select>
+      <button class="btn btn-primary" type="submit" id="squad-select-button">Show squad</button>
+    </div>
+  </form>
 
   <form method="post">
 

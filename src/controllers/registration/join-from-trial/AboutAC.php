@@ -16,7 +16,7 @@ include BASE_PATH . 'views/header.php';
 
 ?>
 
-<div class="container">
+<div class="container-xl">
   <h1>About AC</h1>
   <div class="row">
     <div class="col-sm-10 col-md-8">

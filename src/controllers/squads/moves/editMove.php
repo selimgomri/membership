@@ -44,7 +44,7 @@ $getSquads->execute([
 $pagetitle = "Squad Move for " . htmlspecialchars($name);
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/squadMenu.php"; ?>
-<div class="container">
+<div class="container-xl">
 	<nav aria-label="breadcrumb">
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="<?=autoUrl("squads/moves")?>">Squad Moves</a></li>
@@ -87,7 +87,7 @@ include BASE_PATH . "views/squadMenu.php"; ?>
 		      <input type="date" class="form-control" id="movingDate" name="movingDate" min="<?=htmlspecialchars($date->format("Y-m-d"))?>" value="<?=htmlspecialchars($movingDate)?>">
 		    </div>
 		  </div>
-			<button type="submit" class="btn btn-dark">Save Move</button> <a class="btn btn-danger" href="<?=autoUrl("swimmers/" . $id . "/cancel-move")?>">Cancel Move</a>
+			<button type="submit" class="btn btn-dark-l btn-outline-light-d">Save Move</button> <a class="btn btn-danger" href="<?=autoUrl("swimmers/" . $id . "/cancel-move")?>">Cancel Move</a>
 		</form>
 	</div>
 </div>

@@ -6,7 +6,7 @@ include BASE_PATH . "views/root/header.php";
 
 ?>
 
-<div class="container">
+<div class="container-xl">
   <div class="row">
     <div class="col-lg-8">
       <h1>Membership management software for swimming clubs</h1>
@@ -18,8 +18,8 @@ include BASE_PATH . "views/root/header.php";
   </div>
 </div>
 
-<div class="bg-primary text-light py-5">
-  <div class="container">
+<div class="front-page-purple-section py-5">
+  <div class="container-xl">
     <div class="row">
       <div class="col-md-6">
         <h2>Members and squads</h2>
@@ -35,8 +35,8 @@ include BASE_PATH . "views/root/header.php";
   </div>
 </div>
 
-<div class="bg-light text-dark py-5">
-  <div class="container">
+<div class="front-page-alternate-section py-5">
+  <div class="container-xl">
     <div class="row">
       <div class="col-md-6">
         <h2>Member communications</h2>
@@ -52,8 +52,8 @@ include BASE_PATH . "views/root/header.php";
   </div>
 </div>
 
-<div class="bg-primary text-light py-5">
-  <div class="container">
+<div class="front-page-purple-section py-5">
+  <div class="container-xl">
     <div class="row align-items-center">
       <div class="col-md-9">
         <h2>Automated payments</h2>
@@ -81,8 +81,8 @@ include BASE_PATH . "views/root/header.php";
   </div>
 </div>
 
-<div class="bg-light text-dark py-5">
-  <div class="container">
+<div class="front-page-alternate-section py-5">
+  <div class="container-xl">
     <div class="row">
       <div class="col-md-6">
         <h2>Online gala entries</h2>
@@ -99,8 +99,8 @@ include BASE_PATH . "views/root/header.php";
   </div>
 </div>
 
-<div class="bg-primary text-light py-5">
-  <div class="container">
+<div class="front-page-purple-section py-5">
+  <div class="container-xl">
     <div class="row">
       <div class="col-md-6">
         <h2>Online registers</h2>
@@ -115,8 +115,8 @@ include BASE_PATH . "views/root/header.php";
   </div>
 </div>
 
-<div class="bg-light text-dark py-5">
-  <div class="container">
+<div class="front-page-alternate-section py-5">
+  <div class="container-xl">
     <div class="row">
       <div class="col-md-6">
         <h2>Paperless registration and renewal</h2>
@@ -132,8 +132,8 @@ include BASE_PATH . "views/root/header.php";
   </div>
 </div>
 
-<div class="bg-primary text-light py-5">
-  <div class="container">
+<div class="front-page-purple-section py-5">
+  <div class="container-xl">
     <div class="row">
       <div class="col-md-6">
         <h2>Much more</h2>
@@ -150,8 +150,8 @@ include BASE_PATH . "views/root/header.php";
   </div>
 </div>
 
-<div class="bg-light text-dark py-5 mb-n3">
-  <div class="container">
+<div class="front-page-alternate-section py-5 mb-n3">
+  <div class="container-xl">
     <div class="row">
       <div class="col">
         <h2>Used by clubs across the North East</h2>
@@ -166,7 +166,7 @@ include BASE_PATH . "views/root/header.php";
           </div>
           <div class="col-md">
             <a href="https://www.newcastleswimteam.co.uk/" target="_blank">
-              <img src="<?= htmlspecialchars(autoUrl("img/customer-clubs/newe.png")) ?>" title="Newcastle Swim Team" alt="Newcastle Swim Team" class="img-fluid mx-auto d-block">
+              <img src="<?= htmlspecialchars(autoUrl("img/customer-clubs/newe.png")) ?>" title="Newcastle Swim Team" alt="Newcastle Swim Team" class="img-fluid mx-auto d-block dark-mode-mask">
             </a>
             <div class="mb-3 d-md-none"></div>
           </div>
@@ -178,13 +178,13 @@ include BASE_PATH . "views/root/header.php";
           </div>
           <div class="col-md">
             <a href="https://main.nasc.co.uk/" target="_blank">
-              <img src="<?= htmlspecialchars(autoUrl("img/customer-clubs/nore.png")) ?>" title="Northallerton ASC" alt="Northallerton ASC" class="img-fluid mx-auto d-block">
+              <img src="<?= htmlspecialchars(autoUrl("img/customer-clubs/nore.png")) ?>" title="Northallerton ASC" alt="Northallerton ASC" class="img-fluid mx-auto d-block dark-mode-mask">
             </a>
             <div class="mb-3 d-md-none"></div>
           </div>
           <div class="col-md">
             <a href="https://www.chesterlestreetasc.co.uk/" target="_blank">
-              <img src="<?= htmlspecialchars(autoUrl("img/chesterLogo.svg")) ?>" title="Chester-le-Street ASC" alt="Chester-le-Street ASC" class="img-fluid mx-auto d-block">
+              <img src="<?= htmlspecialchars(autoUrl("img/chesterLogo.svg")) ?>" title="Chester-le-Street ASC" alt="Chester-le-Street ASC" class="img-fluid mx-auto d-block dark-mode-mask">
             </a>
           </div>
         </div>

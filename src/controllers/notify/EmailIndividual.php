@@ -74,7 +74,7 @@ include BASE_PATH . "views/notifyMenu.php";
 ?>
 
 <div class="bg-light py-3 mt-n3 mb-3">
-  <div class="container">
+  <div class="container-xl">
 
     <?php if (isset($userOnly) && $userOnly) { ?>
       <nav aria-label="breadcrumb">
@@ -100,7 +100,7 @@ include BASE_PATH . "views/notifyMenu.php";
   </div>
 </div>
 
-<div class="container">
+<div class="container-xl">
 
   <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['UploadSuccess']) && $_SESSION['TENANT-' . app()->tenant->getId()]['UploadSuccess']) { ?>
     <div class="alert alert-success">
@@ -235,7 +235,7 @@ include BASE_PATH . "views/notifyMenu.php";
 </div>
 
 <?php $footer = new \SCDS\Footer();
-$footer->addJS("js/tinymce/tinymce.min.js");
+$footer->addJS("js/tinymce/5/tinymce.min.js");
 $footer->addJS("js/notify/TinyMCE.js");
 $footer->addJS("js/notify/FileUpload.js");
 $footer->render();

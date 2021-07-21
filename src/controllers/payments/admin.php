@@ -64,7 +64,7 @@ $month = new DateTime('now', new DateTimeZone('Europe/London'));
 ?>
 
 <div class="front-page mb-n3">
-  <div class="container">
+  <div class="container-xl">
 
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
@@ -74,6 +74,17 @@ $month = new DateTime('now', new DateTimeZone('Europe/London'));
 
     <h1>Payment Administration</h1>
     <p class="lead">Control Direct Debit Payments</p>
+
+    <?php if ($tenant->getKey('GOCARDLESS_ACCESS_TOKEN') && !$tenant->getBooleanKey('USE_STRIPE_DIRECT_DEBIT')) { ?>
+    <div class="alert alert-info">
+      <p class="mb-0">
+        <strong>Plan your migration to Stripe for your Direct Debit payments</strong>
+      </p>
+      <p class="mb-0">
+        The GoCardless service is deprecated and will eventually be turned off. To start planning your migration to the Stripe powered service, please talk to SCDS for help and support.
+      </p>
+    </div>
+    <?php } ?>
 
     <div class="mb-4">
       <h2 class="mb-4">View Fee Status</h2>
@@ -247,7 +258,7 @@ $month = new DateTime('now', new DateTimeZone('Europe/London'));
                 </span>
               </a>
 
-              <a href="<?= htmlspecialchars(autoUrl('payments/disputes')) ?>">
+              <a href="<?= htmlspecialchars(autoUrl('payments/card-transactions?users=all')) ?>">
                 <span class="mb-3">
                   <span class="title mb-0">
                     Transactions

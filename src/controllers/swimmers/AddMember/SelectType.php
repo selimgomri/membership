@@ -9,7 +9,7 @@ $pagetitle = "Select an Option - Add Member";
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/swimmersMenu.php"; ?>
 
-<div class="container">
+<div class="container-xl">
 	<div class="">
 		<h1>What type of member are you adding?</h1>
     <p class="lead">Choose a method to add a member.</p>

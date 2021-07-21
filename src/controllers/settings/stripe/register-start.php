@@ -26,7 +26,7 @@ include BASE_PATH . "views/root/head.php";
 
 ?>
 
-<div class="container">
+<div class="container-xl">
   <div class="row justify-content-center py-3">
     <div class="col-lg-8 col-md-10">
       <img src="<?= htmlspecialchars(autoUrl("img/corporate/scds.png")) ?>" class="img-fluid d-block mb-5" style="height: 75px;">

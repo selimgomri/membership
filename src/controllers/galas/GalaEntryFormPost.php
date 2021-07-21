@@ -127,7 +127,7 @@ if (isset($_POST['is-select-sessions']) && bool($_POST['is-select-sessions'])) {
 
       $hyTek = bool($row['HyTek']);
       $approved = 1;
-      if (bool($row['RequiresApproval']) && $numReps > 0) {
+      if (bool($row['RequiresApproval']) && $numReps > 0 || !$tenant->getBooleanKey('REQUIRE_SQUAD_REP_FOR_APPROVAL')) {
         $approved = 0;
       }
 

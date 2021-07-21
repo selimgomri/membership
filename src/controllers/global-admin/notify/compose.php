@@ -28,7 +28,7 @@ include BASE_PATH . "views/root/header.php";
 
 ?>
 
-<div class="container">
+<div class="container-xl">
 
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
@@ -156,7 +156,7 @@ include BASE_PATH . "views/root/header.php";
     <div class="modal-content">
       <div class="modal-header bg-danger text-white">
         <h5 class="modal-title" id="force-alert-modal">Are you sure?</h5>
-        <button type="button" class="close text-white" data-bs-dismiss="modal" aria-label="Close">
+        <button type="button" class="btn-close text-white" data-bs-dismiss="modal" aria-label="Close">
 
         </button>
       </div>
@@ -176,7 +176,7 @@ include BASE_PATH . "views/root/header.php";
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Don't force send</button>
+        <button type="button" class="btn btn-dark-l btn-outline-light-d" data-bs-dismiss="modal">Don't force send</button>
         <button type="button" class="btn btn-danger" id="accept">I understand</button>
       </div>
     </div>

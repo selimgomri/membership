@@ -3,7 +3,7 @@
 $db = app()->db;
 $tenant = app()->tenant;
 
-$getClass = $db->prepare("SELECT `ID`, `Name`, `Description`, `Fees` FROM `clubMembershipClasses` WHERE `ID` = ? AND `Tenant` = ?");
+$getClass = $db->prepare("SELECT `ID`, `Name`, `Description`, `Fees`, `Type` FROM `clubMembershipClasses` WHERE `ID` = ? AND `Tenant` = ?");
 $getClass->execute([
   $id,
   $tenant->getId(),
@@ -35,6 +35,11 @@ try {
     throw new Exception('Invalid type or type not provided');
   }
 
+  if ($class['Type'] == 'national_governing_body' && $_POST['class-fee-type'] != 'PerPerson') {
+    // They've messed about with it - throw an error
+    throw new Exception('Invalid type for NGB class');
+  }
+
   $upgrade = 'TopUp';
 
   $fees = [];
@@ -60,9 +65,7 @@ try {
     $json,
     $id,
   ]);
-
 } catch (Exception $e) {
-
 }
 
 http_response_code(302);

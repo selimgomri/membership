@@ -11,7 +11,8 @@ $db = app()->db;
 $tenant = app()->tenant->getId();
 
 $findSquadId = $db->prepare("SELECT SquadID FROM squads WHERE SquadName = ? AND Tenant = ?");
-$insertIntoSwimmers = $db->prepare("INSERT INTO members (MForename, Msurname, DateOfBirth, Gender, ASANumber, ASACategory, RR, AccessKey, OtherNotes, Tenant) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+$findNGBCategory = $db->prepare("SELECT `ID` FROM `clubMembershipClasses` WHERE `Name` LIKE ? AND `Tenant` = ?");
+$insertIntoSwimmers = $db->prepare("INSERT INTO members (MForename, Msurname, DateOfBirth, Gender, ASANumber, NGBCategory, RR, AccessKey, OtherNotes, Tenant) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 $insertIntoSquads = $db->prepare("INSERT INTO `squadMembers` (`Member`, `Squad`, `Paying`) VALUES (?, ?, ?)");
 $setTempASA = $db->prepare("UPDATE members SET ASANumber = ? WHERE MemberID = ?");
 
@@ -45,7 +46,14 @@ if (is_uploaded_file($_FILES['file-upload']['tmp_name'])) {
         if ($row[4] == 'Female' || $row[4] == 'F') {
           $sex = 'Female';
         }
-        $cat = (int) $row[5];
+        
+        $cat = null;
+        $findNGBCategory->execute([
+          '%' . $row[5] .  '%',
+          $tenant->getId(),
+        ]);
+        $cat = $findNGBCategory->fetchColumn();
+
         $asa = (int) $row[6];
 
         if ($squadId = $findSquadId->fetchColumn()) {

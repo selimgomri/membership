@@ -35,7 +35,7 @@ $squad = $getSquads->fetch(PDO::FETCH_ASSOC);
 $pagetitle = "Squad Move for " . htmlspecialchars($name);
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/squadMenu.php"; ?>
-<div class="container">
+<div class="container-xl">
 	<nav aria-label="breadcrumb">
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="<?=autoUrl("squads/moves")?>">Squad Moves</a></li>
@@ -82,7 +82,7 @@ include BASE_PATH . "views/squadMenu.php"; ?>
           </small>
 		    </div>
 		  </div>
-			<button type="submit" class="btn btn-dark">Save Move</button>
+			<button type="submit" class="btn btn-dark-l btn-outline-light-d">Save Move</button>
 		</form>
 	</div>
 </div>

@@ -23,7 +23,7 @@ if ($currentUser == null && false) {
 
 ?>
   <div class="py-3 mb-3 text-white membership-header <?= $clubLogoColour ?>">
-    <div class="container">
+    <div class="container-xl">
       <h1 class="mb-0">
         <a href="<?= autoUrl("") ?>" class="<?= $clubLogoColour ?>">
           <strong>
@@ -39,7 +39,7 @@ if ($currentUser == null && false) {
 }
 ?>
 
-<div class="container">
+<div class="container-xl">
   <div class="row">
     <div class="col-lg-8">
       <h1>The page you requested cannot be found</h1>

@@ -39,7 +39,7 @@ if ($galaIDParam == 0) {
 include BASE_PATH . "views/header.php";
 include "galaMenu.php"; ?>
 <div class="bg-light mt-n3 py-3 mb-3">
-  <div class="container">
+  <div class="container-xl">
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="<?= autoUrl("galas") ?>">Galas</a></li>
@@ -51,7 +51,7 @@ include "galaMenu.php"; ?>
   </div>
 </div>
 
-<div class="container">
+<div class="container-xl">
   <form id="entry-details" data-page-url="<?= htmlspecialchars(autoUrl("galas/entries")) ?>" data-ajax-url="<?= htmlspecialchars(autoUrl("galas/ajax/entries")) ?>" data-processed-url="<?= htmlspecialchars(autoUrl("galas/ajax/entryProcessed")) ?>" class="">
     <div class="row d-print-none">
       <div class="col-md-4">
@@ -59,7 +59,7 @@ include "galaMenu.php"; ?>
           <label class="form-label" for="gala">Select a Gala</label>
           <select class="form-select" placeholder="Select a Gala" id="galaID" name="galaID">
             <option>Select a gala</option>
-            <option value="allGalas" <?php if ($galaIDParam == "allGalas") { ?> selected <?php } ?>>Show All Gala
+            <option value="all" <?php if ($galaIDParam == "all") { ?> selected <?php } ?>>Show All Gala
               Entries</option>
 
             <?php while ($row = $galas->fetch(PDO::FETCH_ASSOC)) { ?>

@@ -30,7 +30,7 @@ include BASE_PATH . "views/paymentsMenu.php";
 
 ?>
 
-<div class="container">
+<div class="container-xl">
 
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
@@ -45,7 +45,7 @@ include BASE_PATH . "views/paymentsMenu.php";
       <h1><?= htmlspecialchars($row['ExtraName']) ?> <small>&pound;<?= htmlspecialchars(number_format($row['ExtraFee'], 2)) ?>/month (<?php if ($row['Type'] == 'Payment') { ?>payment<?php } else { ?>credit/refund<?php } ?>)</small></h1>
     </div>
     <div class="col text-sm-end">
-      <a href="<?= htmlspecialchars(autoUrl("payments/extrafees/$id/edit")) ?>" class="btn btn-dark">Edit</a>
+      <a href="<?= htmlspecialchars(autoUrl("payments/extrafees/$id/edit")) ?>" class="btn btn-dark-l btn-outline-light-d">Edit</a>
       <a href="<?= htmlspecialchars(autoUrl("payments/extrafees/$id/delete")) ?>" class="btn btn-danger">Delete</a>
     </div>
   </div>

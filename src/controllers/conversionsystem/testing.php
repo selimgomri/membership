@@ -13,7 +13,7 @@ include BASE_PATH . "views/header.php";
   <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['Time'])) { ?>
     <div class="container-fluid">
     <?php } else { ?>
-      <div class="container">
+      <div class="container-xl">
       <?php } ?>
 
       <nav aria-label="breadcrumb">
@@ -49,7 +49,7 @@ include BASE_PATH . "views/header.php";
     <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['Time'])) { ?>
       <div class="container-fluid">
       <?php } else { ?>
-        <div class="container">
+        <div class="container-xl">
         <?php } ?>
         <div class="row">
           <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['Time'])) { ?>

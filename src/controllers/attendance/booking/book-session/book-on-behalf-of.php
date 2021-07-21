@@ -103,7 +103,7 @@ include BASE_PATH . 'views/header.php';
 ?>
 
 <div class="bg-light mt-n3 py-3 mb-3">
-  <div class="container">
+  <div class="container-xl">
 
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
@@ -126,7 +126,7 @@ include BASE_PATH . 'views/header.php';
       </div>
       <div class="col text-lg-end">
         <?php if ($user->hasPermission('Admin') || $user->hasPermission('Coach')) { ?>
-          <a href="<?= htmlspecialchars(autoUrl('sessions/booking/book?session=' . urlencode($session['SessionID']) . '&date=' . urlencode($date->format('Y-m-d')))) ?>" class="btn btn-dark" title="Changes won't be saved">
+          <a href="<?= htmlspecialchars(autoUrl('sessions/booking/book?session=' . urlencode($session['SessionID']) . '&date=' . urlencode($date->format('Y-m-d')))) ?>" class="btn btn-dark-l btn-outline-light-d" title="Changes won't be saved">
             Back
           </a>
         <?php } ?>
@@ -136,7 +136,7 @@ include BASE_PATH . 'views/header.php';
   </div>
 </div>
 
-<div class="container">
+<div class="container-xl">
 
   <div class="row">
     <div class="col-lg-8 order-2 order-lg-1 mb-3">

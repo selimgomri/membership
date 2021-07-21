@@ -199,6 +199,9 @@ include BASE_PATH . "views/header.php";
             <a href="#members" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
               Members
             </a>
+            <a href="#memberships" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+              Current Memberships
+            </a>
             <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin' && (app()->tenant->getGoCardlessAccessToken()) && !userHasMandates($id)) { ?>
               <a href="#direct-debit-mandate-opt-out" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
                 Direct debit opt-out
@@ -282,19 +285,19 @@ include BASE_PATH . "views/header.php";
           </h2>
           <address>
             <?php if (isset($address->streetAndNumber)) { ?>
-            <?= htmlspecialchars($address->streetAndNumber) ?><br>
+              <?= htmlspecialchars($address->streetAndNumber) ?><br>
             <?php } ?>
             <?php if (isset($address->flatOrBuilding)) { ?>
               <?= htmlspecialchars($address->flatOrBuilding) ?><br>
             <?php } ?>
             <?php if (isset($address->city)) { ?>
-            <?= htmlspecialchars(mb_strtoupper($address->city)) ?><br>
+              <?= htmlspecialchars(mb_strtoupper($address->city)) ?><br>
             <?php } ?>
             <?php if (isset($address->county)) { ?>
               <?= htmlspecialchars($address->county) ?><br>
             <?php } ?>
             <?php if (isset($address->postCode)) { ?>
-            <?= htmlspecialchars(mb_strtoupper($address->postCode)) ?>
+              <?= htmlspecialchars(mb_strtoupper($address->postCode)) ?>
             <?php } ?>
           </address>
         </div>
@@ -358,6 +361,17 @@ include BASE_PATH . "views/header.php";
                 </div>
               </div>
 
+              <?php if ($tenant->getKey('GOCARDLESS_ACCESS_TOKEN') && !$tenant->getBooleanKey('USE_STRIPE_DIRECT_DEBIT')) { ?>
+              <div class="alert alert-info">
+                <p class="mb-0">
+                  <strong>Plan your migration to Stripe for your Direct Debit payments</strong>
+                </p>
+                <p class="mb-0">
+                  The GoCardless service is deprecated and will eventually be turned off. To start planning your migration to the Stripe powered service, please talk to SCDS for help and support.
+                </p>
+              </div>
+              <?php } ?>
+
               <div class="card card-body">
                 <h3 class="mb-3">
                   Current Direct Debit Mandates
@@ -412,6 +426,9 @@ include BASE_PATH . "views/header.php";
                     <?php if (stripeSetUpDirectDebit()) { ?>
                       <a href="<?= autoUrl("users/" . $id . "/direct-debit") ?>" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">Stripe direct debit mandates <span class="fa fa-chevron-right"></span></a>
                     <?php } ?>
+                    <?php if ($stripeDD || userHasMandates($id)) { ?>
+                      <button id="trigger-early-payment" data-info-url="<?= htmlspecialchars(autoUrl("users/$id/direct-debit/force-run-info")) ?>" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">Trigger early payment <span class="fa fa-chevron-right"></span></button>
+                    <?php } ?>
                   </div>
                 </div>
               <?php } ?>
@@ -464,6 +481,26 @@ include BASE_PATH . "views/header.php";
               </p>
             </div>
           <?php } ?>
+        </div>
+
+        <hr>
+
+        <div class="mb-4">
+
+          <h2 id="memberships">Current Memberships <span class="badge bg-secondary">BETA</span></h2>
+
+          <p class="lead">
+            We're adding new features which will change the way the membership system tracks which memberships a member has.
+          </p>
+
+          <p>
+            Once fully ready, you'll see a list of current memberships for this user's linked members. In the meantime, please <strong>only use the features in this section if you're taking part in our beta trials</strong>.
+          </p>
+
+          <p class="d-none">
+            <a href="<?= htmlspecialchars(autoUrl("users/$id/new-membership-batch")) ?>" class="btn btn-primary">New Payment Batch</a>
+          </p>
+
         </div>
 
         <hr>
@@ -612,14 +649,14 @@ include BASE_PATH . "views/header.php";
       <div class="modal-header">
         <h5 class="modal-title" id="main-modal-title">Modal title</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-          
+
         </button>
       </div>
       <div class="modal-body" id="main-modal-body">
         ...
       </div>
       <div class="modal-footer" id="main-modal-footer">
-        <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-dark-l btn-outline-light-d" data-bs-dismiss="modal">Cancel</button>
         <button type="button" id="modal-confirm-button" class="btn btn-success">Confirm</button>
       </div>
     </div>
@@ -627,6 +664,8 @@ include BASE_PATH . "views/header.php";
 </div>
 
 <?php $footer = new \SCDS\Footer();
+$footer->addJS("js/NeedsValidation.js");
+$footer->addJS("js/numerical/bignumber.min.js");
 $footer->addJS("js/users/main.js");
 $footer->useFluidContainer();
 $footer->render();

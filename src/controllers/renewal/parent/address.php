@@ -14,7 +14,7 @@ include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/renewalTitleBar.php";
 $userID = $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'];
 ?>
-<div class="container">
+<div class="container-xl">
   <div class="row">
     <div class="col-md-8">
       <h1>My Address</h1>

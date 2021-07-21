@@ -3,7 +3,7 @@
 $db = app()->db;
 $tenant = app()->tenant;
 
-$getInfo = $db->prepare("SELECT members.UserID `uid`, Forename ufn, Surname usn, members.MemberID mid, MForename mfn, MSurname msn, members.ASANumber asa, members.ASACategory cat, DateOfBirth dob, Mandate, BankName, AccountHolderName, AccountNumEnd FROM (((members LEFT JOIN users ON members.UserID = users.UserID) LEFT JOIN paymentPreferredMandate ON users.UserID = paymentPreferredMandate.UserID) LEFT JOIN paymentMandates ON paymentPreferredMandate.MandateID = paymentMandates.MandateID) WHERE members.Tenant = ? ORDER BY usn ASC, ufn ASC, users.UserID ASC, msn ASC, mfn ASC");
+$getInfo = $db->prepare("SELECT members.UserID `uid`, Forename ufn, Surname usn, members.MemberID mid, MForename mfn, MSurname msn, members.ASANumber asa, `clubMembershipClasses`.`Name` cat, DateOfBirth dob, Mandate, BankName, AccountHolderName, AccountNumEnd FROM ((((members LEFT JOIN users ON members.UserID = users.UserID) LEFT JOIN paymentPreferredMandate ON users.UserID = paymentPreferredMandate.UserID) LEFT JOIN paymentMandates ON paymentPreferredMandate.MandateID = paymentMandates.MandateID) LEFT JOIN clubMembershipClasses ON members.NGBCategory = clubMembershipClasses.ID) WHERE members.Tenant = ? ORDER BY usn ASC, ufn ASC, users.UserID ASC, msn ASC, mfn ASC");
 $getInfo->execute([
   $tenant->getId()
 ]);
@@ -25,8 +25,8 @@ fputcsv($output, [
   'User surname',
   'Member forename',
   'Member surname',
-  'ASA number',
-  'ASA cat.',
+  $tenant->getKey('NGB_NAME') . ' number',
+  $tenant->getKey('NGB_NAME') . ' category',
   'Date of birth',
   'Squad',
   'Squad fee',

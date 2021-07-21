@@ -33,7 +33,7 @@ updateSubscription(false, $list, $user_id);
 $pagetitle = "Notify Unsubscribe";
 include BASE_PATH . "views/header.php";?>
 
-<div class="container">
+<div class="container-xl">
 	<h1>Successfully Unsubscribed</h1>
 	<p>You will no longer receive emails from the <span class="font-monospace"><?=htmlspecialchars($list)?></span> list.</p>
 	<p>

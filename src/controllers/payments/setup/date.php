@@ -30,7 +30,7 @@ include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/paymentsMenu.php";
  ?>
 
-<div class="container">
+<div class="container-xl">
 	<h1>Setup a Direct Debit to pay Chester-le-Street ASC</h1>
 	<form method="post">
 		<p>On which day of the month should Chester-le-Street ASC make Direct Debit requests?</p>
@@ -42,7 +42,7 @@ include BASE_PATH . "views/paymentsMenu.php";
 				<?php } ?>
 			</select>
 		</div>
-		<button class="btn btn-dark" type="submit">Next</button>
+		<button class="btn btn-dark-l btn-outline-light-d" type="submit">Next</button>
 		<p><span class="small">We'll now direct you to our partner GoCardless who handle Direct Debits on our behalf.</span></p>
 	</form>
 </div>

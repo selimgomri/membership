@@ -6,7 +6,7 @@ use function GuzzleHttp\json_encode;
 $db = app()->db;
 $tenant = app()->tenant;
 
-$getClass = $db->prepare("SELECT `ID`, `Name`, `Description`, `Fees` FROM `clubMembershipClasses` WHERE `ID` = ? AND `Tenant` = ?");
+$getClass = $db->prepare("SELECT `ID`, `Name`, `Description`, `Fees`, `Type` FROM `clubMembershipClasses` WHERE `ID` = ? AND `Tenant` = ?");
 $getClass->execute([
   $id,
   $tenant->getId(),
@@ -15,6 +15,16 @@ $class = $getClass->fetch(PDO::FETCH_ASSOC);
 
 if (!$class) {
   halt(404);
+}
+
+$type = 'Club Membership';
+switch ($class['Type']) {
+  case 'national_governing_body':
+    $type = htmlspecialchars(app()->tenant->getKey('NGB_NAME')) . ' Membership';
+    break;
+  case 'other':
+    $type = 'Other (Arbitrary) Membership';
+    break;
 }
 
 $json = json_decode($class['Fees']);
@@ -26,7 +36,7 @@ foreach ($json->fees as $value) {
 
 $fluidContainer = true;
 
-$pagetitle = "Club Membership Fee Options (V2)";
+$pagetitle = "Edit " . htmlspecialchars($class['Name']);
 
 include BASE_PATH . 'views/header.php';
 
@@ -46,16 +56,21 @@ include BASE_PATH . 'views/header.php';
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('settings')) ?>">Settings</a></li>
           <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('settings/fees')) ?>">Fees</a></li>
-          <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('settings/fees/membership-fees')) ?>">Club</a></li>
+          <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('settings/fees/membership-fees')) ?>">Memberships</a></li>
           <li class="breadcrumb-item active" aria-current="page">Edit Class</li>
         </ol>
       </nav>
 
       <main>
         <h1><?= htmlspecialchars($class['Name']) ?></h1>
-        <p class="lead">Set amounts for club membership fees</p>
+        <p class="lead">Set amounts for membership fees</p>
 
         <form method="post" class="needs-validation" novalidate>
+
+          <div class="mb-3">
+            <label class="form-label" for="membership-type-name">Membership Type</label>
+            <input type="text" name="membership-type-name" id="membership-type-name" class="form-control" value="<?= htmlspecialchars($type) ?>" readonly>
+          </div>
 
           <div class="mb-3">
             <label class="form-label" for="class-name">Class Name</label>
@@ -73,7 +88,7 @@ include BASE_PATH . 'views/header.php';
           <div class="mb-3" id="fee-type">
             <p class="mb-2">Fee type</p>
             <div class="form-check">
-              <input type="radio" id="fee-n" name="class-fee-type" class="form-check-input" <?php if ($json->type == 'NSwimmers') { ?>checked<?php } ?> value="NSwimmers" required>
+              <input type="radio" id="fee-n" name="class-fee-type" class="form-check-input" <?php if ($json->type == 'NSwimmers') { ?>checked<?php } ?> value="NSwimmers" required <?php if ($class['Type'] == 'national_governing_body') { ?>disabled<?php } ?>>
               <label class="form-check-label" for="fee-n">N Members</label>
             </div>
             <div class="form-check">
@@ -92,7 +107,7 @@ include BASE_PATH . 'views/header.php';
             </div>
           </div>
 
-          <div id="n-swimmers" class="<?php if ($json->type != 'NSwimmers') { ?>d-none<?php } ?>">
+          <div id="n-swimmers" class="<?php if ($json->type != 'NSwimmers' || $class['Type'] == 'national_governing_body') { ?>d-none<?php } ?>">
             <div id="fees-box" data-init="true" data-fees="<?= htmlspecialchars(json_encode($fees)) ?>"></div>
 
             <p>

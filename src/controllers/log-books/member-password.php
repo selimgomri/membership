@@ -21,7 +21,7 @@ include BASE_PATH . 'views/header.php';
 ?>
 
 <div class="bg-light mt-n3 py-3 mb-3">
-  <div class="container">
+  <div class="container-xl">
 
     <div class="row align-items-center">
       <div class="col-lg-8">
@@ -35,7 +35,7 @@ include BASE_PATH . 'views/header.php';
       </div>
       <div class="col text-end">
         <p class="mb-0">
-          <a href="<?=htmlspecialchars(autoUrl("log-books"))?>" class="btn btn-dark">Log books</a>
+          <a href="<?=htmlspecialchars(autoUrl("log-books"))?>" class="btn btn-dark-l btn-outline-light-d">Log books</a>
           <button type="submit" class="btn btn-success">Save <i class="fa fa-floppy-o" aria-hidden="true"></i></button>
         </p>
       </div>
@@ -44,7 +44,7 @@ include BASE_PATH . 'views/header.php';
   </div>
 </div>
 
-<div class="container">
+<div class="container-xl">
 
   <div class="row">
     <div class="col-lg-8">

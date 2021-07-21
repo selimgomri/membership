@@ -23,7 +23,7 @@ if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['POST_DATA'])) {
 ?>
 
 <div class="bg-light mt-n3 py-3 mb-3">
-  <div class="container">
+  <div class="container-xl">
 
     <?php if (!isset($renewal_trap) || !$renewal_trap) { ?>
       <nav aria-label="breadcrumb">
@@ -40,7 +40,7 @@ if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['POST_DATA'])) {
   </div>
 </div>
 
-<div class="container">
+<div class="container-xl">
   <div class="row">
     <div class="col-lg-8">
 

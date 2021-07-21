@@ -8,10 +8,6 @@ $this->group('/help-and-support', function() {
   include BASE_PATH . 'routes/support/routes.php';
 });
 
-$this->group('/login', function() {
-  include BASE_PATH . 'routes/login/routes.php';
-});
-
 $this->group('/admin', function() {
   include BASE_PATH . 'routes/admin/routes.php';
 });

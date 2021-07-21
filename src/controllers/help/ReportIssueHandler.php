@@ -10,7 +10,7 @@ if (isset($_GET['url'])) {
 $pagetitle = "Report an Issue";
 include BASE_PATH . 'views/header.php'; ?>
 
-<div class="container">
+<div class="container-xl">
 	<h1>Report a Website Issue</h1>
 	<?php if (app()->tenant && isset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorReportStatus']) && $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorReportStatus'] == true) { ?>
 		<p>We have reported that page to our team.</p>
@@ -55,7 +55,7 @@ include BASE_PATH . 'views/header.php'; ?>
 				<small id="MHelp" class="form-text text-muted">You don't need to fill out this box if you don't want to</small>
 			</div>
 			<p>
-				<button class="btn btn-dark" type="submit">
+				<button class="btn btn-dark-l btn-outline-light-d" type="submit">
 					Report Error
 				</button>
 				<a href="<?= htmlspecialchars($target) ?>" class="btn btn-danger">

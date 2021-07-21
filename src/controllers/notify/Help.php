@@ -7,7 +7,7 @@ $use_white_background = true;
 include BASE_PATH . "views/header.php";
 ?>
 
-<div class="container">
+<div class="container-xl">
 	<div class="row">
 		<div class="col-lg-8 mb-5">
 			<h1>Notify from <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?></h1>

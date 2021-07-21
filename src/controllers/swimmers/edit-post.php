@@ -166,16 +166,28 @@ try {
 
   // ADMIN STUFF
   if ($adminMode) {
-    $update = $db->prepare("UPDATE `members` SET `ASANumber` = ?, `ASACategory` = ?, `ClubCategory` = ?, `Country` = ?, `ASAPaid` = ?, `ClubPaid` = ? WHERE MemberID = ?");
+    $update = $db->prepare("UPDATE `members` SET `ASANumber` = ?, `NGBCategory` = ?, `ClubCategory` = ?, `Country` = ?, `ASAPaid` = ?, `ClubPaid` = ? WHERE MemberID = ?");
 
     $asaNumber = mb_strtoupper(app()->tenant->getKey('ASA_CLUB_CODE')) . $id;
     if (isset($_POST['asa']) && mb_strlen(trim($_POST['asa']))) {
       $asaNumber = mb_strtoupper(trim($_POST['asa']));
     }
 
-    $asaCats = [0, 1, 2, 3];
-    if (!isset($_POST['cat']) || !in_array((int) $_POST['cat'], $asaCats)) {
-      throw new Exception('Invalid Swim England category');
+    $checkCat = $db->prepare("SELECT COUNT(*) FROM `clubMembershipClasses` WHERE `ID` = ? AND `Tenant` = ? AND `Type` = ?");
+    $ngbCat = null;
+
+    if ($_POST['ngb-cat'] != 'none') {
+      $checkCat->execute([
+        $_POST['ngb-cat'],
+        $tenant->getId(),
+        'national_governing_body'
+      ]);
+
+      if ($checkCat->fetchColumn() == 0) {
+        throw new Exception('Invalid national governing body membership category');
+      }
+
+      $ngbCat = $_POST['ngb-cat'];
     }
 
     if (!isset($_POST['club-cat'])) {
@@ -183,10 +195,10 @@ try {
     }
 
     // Check club cat
-    $checkCat = $db->prepare("SELECT COUNT(*) FROM `clubMembershipClasses` WHERE `ID` = ? AND `Tenant` = ?");
     $checkCat->execute([
       $_POST['club-cat'],
       $tenant->getId(),
+      'club'
     ]);
 
     if ($checkCat->fetchColumn() == 0) {
@@ -210,7 +222,7 @@ try {
 
     $update->execute([
       $asaNumber,
-      (int) $_POST['cat'],
+      $ngbCat,
       $_POST['club-cat'],
       $country,
       (int) $asaPaid,

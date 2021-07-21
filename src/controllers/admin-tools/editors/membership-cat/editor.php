@@ -28,7 +28,7 @@ include BASE_PATH . 'views/header.php';
 
 <div class="container-fluid">
   <h1>Membership category editor</h1>
-  <p class="lead">Quickly modify Swim England categories for members.</p>
+  <p class="lead">Quickly modify <?= htmlspecialchars($tenant->getKey('NGB_NAME')) ?> categories for members.</p>
 
   <form method="post" id="cat-form">
     <div class="cell">

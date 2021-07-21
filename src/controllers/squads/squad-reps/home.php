@@ -30,7 +30,7 @@ include BASE_PATH . 'views/header.php';
 ?>
 
 <div class="front-page mb-n3">
-  <div class="container">
+  <div class="container-xl">
     <div class="row">
       <div class="col-lg-12">
         <h1>Welcome to Squad Rep Services</h1>

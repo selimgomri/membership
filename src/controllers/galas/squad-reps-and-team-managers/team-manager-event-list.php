@@ -28,7 +28,7 @@ include BASE_PATH . 'views/header.php';
 ?>
 
 <div class="front-page mb-n3">
-  <div class="container">
+  <div class="container-xl">
     <div class="row">
       <div class="col-md-8">
         <h1>Team manager dashboard</h1>

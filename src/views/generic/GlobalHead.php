@@ -17,7 +17,7 @@ $container_class;
 if (isset($fluidContainer) && $fluidContainer == true) {
   $container_class = "container-fluid";
 } else {
-  $container_class = "container";
+  $container_class = "container-xl";
 } ?>
 <!DOCTYPE html>
 <!--
@@ -60,10 +60,8 @@ Chester-le-Street ASC is a non profit unincorporated association.
   <meta name="X-SCDS-Membership-Tracking" content="no">
   <script src="https://js.stripe.com/v3/"></script>
   <link rel="stylesheet preload" href="<?= htmlspecialchars($stylesheet) ?>">
-  <?php if (isset(app()->user) && app()->user->getUserBooleanOption('EnableBeta')) { ?>
-    <meta name="color-scheme" content="dark light">
-    <link rel="stylesheet preload" href="<?= htmlspecialchars($stylesheetDarkMode) ?>" media="(prefers-color-scheme: dark)">
-  <?php } ?>
+  <meta name="color-scheme" content="dark light">
+  <link rel="stylesheet preload" href="<?= htmlspecialchars($stylesheetDarkMode) ?>" media="(prefers-color-scheme: dark)">
   <link rel="stylesheet preload" href="<?= htmlspecialchars(autoUrl("public/css/colour.css")) ?>">
 
   <meta property="og:title" content="<?= $pagetitle ?>" />

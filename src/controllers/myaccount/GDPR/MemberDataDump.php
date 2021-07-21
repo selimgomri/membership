@@ -1,6 +1,7 @@
 <?php
 
 $db = app()->db;
+$tenant = app()->tenant;
 
 $verify_user = $db->prepare("SELECT UserID FROM members WHERE MemberID = ?");
 $verify_user->execute([$id]);
@@ -18,7 +19,7 @@ $swimmer_name = getSwimmerName($id);
 $acc_details = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile, EmailComms, MobileComms FROM users WHERE UserID = ?");
 $acc_details->execute([$parent]);
 
-$swimmers = $db->prepare("SELECT MForename, MMiddleNames, MSurname, DateOfBirth, Gender, members.ASANumber, members.ASACategory FROM members INNER JOIN squadMembers ON squadMembers.Member = members.MemberID INNER JOIN squads ON squadMembers.Squad = squads.SquadID WHERE members.MemberID = ? ORDER BY MForename ASC, MSurname ASC");
+$swimmers = $db->prepare("SELECT MForename, MMiddleNames, MSurname, DateOfBirth, Gender, members.ASANumber, members.NGBCategory FROM members INNER JOIN squadMembers ON squadMembers.Member = members.MemberID INNER JOIN squads ON squadMembers.Squad = squads.SquadID WHERE members.MemberID = ? ORDER BY MForename ASC, MSurname ASC");
 $swimmers->execute([$id]);
 
 $med = $db->prepare("SELECT Conditions, Allergies, Medication FROM memberMedical WHERE MemberID = ?");
@@ -64,7 +65,7 @@ fputcsv($output, $row);
 fputcsv($output, ['-----']);
 
 fputcsv($output, array('Swimmer Details'));
-fputcsv($output, array('First', 'Middle', 'Last', 'DOB', 'Squad', 'Sex', 'Swim England Number', 'ASA Category'));
+fputcsv($output, array('First', 'Middle', 'Last', 'DOB', 'Squad', 'Sex', $tenant->getKey('NGB_NAME') . ' ID', $tenant->getKey('NGB_NAME') . ' Category (Internal Code)'));
 $row = $swimmers->fetch(PDO::FETCH_NUM);
 do {
   fputcsv($output, $row);
@@ -113,7 +114,7 @@ fputcsv($output, ['Swimmer Attendance']);
 fputcsv($output, ['']);
 $row = $sessionData->fetch(PDO::FETCH_NUM);
 do {
-  fputcsv($output, [$row[0], date("H:i", strtotime($row[4])), date ('j F Y', strtotime($row[2]. ' + ' . $row[1] . ' days')), $row[3]]);
+  fputcsv($output, [$row[0], date("H:i", strtotime($row[4])), date('j F Y', strtotime($row[2] . ' + ' . $row[1] . ' days')), $row[3]]);
   $row = $sessionData->fetch(PDO::FETCH_NUM);
 } while ($row != null);
 fputcsv($output, ['Accuracy for attendance data is not guaranteed']);

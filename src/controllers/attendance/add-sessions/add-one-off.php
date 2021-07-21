@@ -32,7 +32,7 @@ include BASE_PATH . 'views/header.php';
 ?>
 
 <div class="bg-light mt-n3 py-3 mb-3">
-  <div class="container">
+  <div class="container-xl">
 
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
@@ -55,7 +55,7 @@ include BASE_PATH . 'views/header.php';
   </div>
 </div>
 
-<div class="container">
+<div class="container-xl">
 
   <div class="row">
     <div class="col-lg-8">
@@ -201,7 +201,7 @@ include BASE_PATH . 'views/header.php';
           </button>
           <div class="show-if-one-off">
             <div class="mb-3 d-block d-md-none"></div>
-            <button type="submit" class="btn btn-dark" name="go-to-booking-settings" value="1">
+            <button type="submit" class="btn btn-dark-l btn-outline-light-d" name="go-to-booking-settings" value="1">
               Add Session, Require Booking
             </button>
           </div>

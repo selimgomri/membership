@@ -19,7 +19,7 @@ include BASE_PATH . "views/paymentsMenu.php";
 
  ?>
 
-<div class="container">
+<div class="container-xl">
 
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
@@ -62,7 +62,7 @@ include BASE_PATH . "views/paymentsMenu.php";
     <?php } ?>
     <p class="mb-0">
       <a href="<?=autoUrl("payments/extrafees/new")?>"
-        class="btn btn-dark">
+        class="btn btn-dark-l btn-outline-light-d">
         Add New Extra
       </a>
     </p>

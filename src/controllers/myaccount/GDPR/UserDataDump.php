@@ -7,7 +7,7 @@ $db = app()->db;
 $acc_details = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile, EmailComms, MobileComms FROM users WHERE UserID = ?");
 $acc_details->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 
-$swimmers = $db->prepare("SELECT MForename, MMiddleNames, MSurname, DateOfBirth, SquadName, Gender, members.ASANumber, members.ASACategory FROM members INNER JOIN squadMembers ON members.MemberID = squadMembers.Member INNER JOIN squads ON squadMembers.Squad = squads.SquadID WHERE members.UserID = ? ORDER BY MForename ASC, MSurname ASC");
+$swimmers = $db->prepare("SELECT MForename, MMiddleNames, MSurname, DateOfBirth, SquadName, Gender, members.ASANumber, members.NGBCategory FROM members INNER JOIN squadMembers ON members.MemberID = squadMembers.Member INNER JOIN squads ON squadMembers.Squad = squads.SquadID WHERE members.UserID = ? ORDER BY MForename ASC, MSurname ASC");
 $swimmers->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 
 $emergency_contacts = $db->prepare("SELECT Name, ContactNumber FROM emergencyContacts WHERE UserID = ?");
@@ -38,7 +38,7 @@ fputcsv($output, $row);
 fputcsv($output, ['-----']);
 
 fputcsv($output, array('Swimmers'));
-fputcsv($output, array('First', 'Middle', 'Last', 'DOB', 'Squad', 'Sex', 'Swim England Number', 'ASA Category'));
+fputcsv($output, array('First', 'Middle', 'Last', 'DOB', 'Squad', 'Sex', $tenant->getKey('NGB_NAME') . ' ID', $tenant->getKey('NGB_NAME') . ' Category (Internal ID)'));
 $row = $swimmers->fetch(PDO::FETCH_NUM);
 do {
   fputcsv($output, $row);

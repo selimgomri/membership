@@ -29,7 +29,7 @@ if (isset($e)) {
 
 <body style="min-height:100vh;">
   <div class="bg-light mb-3">
-    <div class="container">
+    <div class="container-xl">
       <div class="row">
         <div class="col-lg-8">
           <a href="https://www.myswimmingclub.uk"><img src="/img/corporate/scds.png" alt="SCDS Logo" style="max-width: 100px;"></a>
@@ -37,7 +37,7 @@ if (isset($e)) {
       </div>
     </div>
   </div>
-  <div class="container">
+  <div class="container-xl">
     <div class="row">
       <div class="col-lg-8">
         <h1 class="mb-5">This service is currently unavailable</h1>

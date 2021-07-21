@@ -57,7 +57,7 @@ function markProcessed(clickedItem, clickedItemChecked) {
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
-      document.getElementById(clickedItem).innerHTML = 'WORKED' /*this.responseText*/;
+      // document.getElementById(clickedItem).innerHTML = 'WORKED' /*this.responseText*/;
     }
   };
   xhttp.open('POST', data.dataset.processedUrl, true);
@@ -73,7 +73,7 @@ function markPaid(clickedItem, clickedItemChecked) {
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
-      document.getElementById(clickedItem).innerHTML = 'WORKED' /*this.responseText*/;
+      // document.getElementById(clickedItem).innerHTML = 'WORKED' /*this.responseText*/;
     }
   };
   xhttp.open('POST', data.dataset.processedUrl, true);

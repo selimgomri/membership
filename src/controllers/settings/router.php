@@ -97,16 +97,6 @@ $this->group('/fees', function() {
     });
   });
 
-  $this->group('/swim-england-fees', function() {
-    $this->get('/', function() {
-      include 'fees/asa-fees.php';
-    });
-
-    $this->post('/', function() {
-      include 'fees/asa-fees-post.php';
-    });
-  });
-
   $this->group('/charge-months', function() {
     $this->get('/', function() {
       include 'fees/charge-months.php';

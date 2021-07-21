@@ -18,7 +18,7 @@ include BASE_PATH . "views/root/head.php";
 
 ?>
 
-<div class="container">
+<div class="container-xl">
 
   <?php include BASE_PATH . 'controllers/admin-tools/scds-payments/admin/nav.php'; ?>
 
@@ -51,7 +51,7 @@ include BASE_PATH . "views/root/head.php";
             $typeData = json_decode($paymentMethod['TypeData']);
           ?>
             <a href="<?= htmlspecialchars(autoUrl('payments-admin/payment-methods/' . $paymentMethod['ID'])) ?>" class="list-group-item list-group-item-action">
-              <div class="row align-items-center mb-2 text-dark">
+              <div class="row align-items-center mb-2">
                 <div class="col-auto">
                   <img src="<?= htmlspecialchars(autoUrl("img/stripe/" . $typeData->brand . ".png", false)) ?>" srcset="<?= htmlspecialchars(autoUrl("img/stripe/" . $typeData->brand . "@2x.png", false)) ?> 2x, <?= htmlspecialchars(autoUrl("img/stripe/" . $typeData->brand . "@3x.png", false)) ?> 3x" style="width:40px;"> <span class="visually-hidden"><?= htmlspecialchars(getCardBrand($typeData->brand)) ?></span>
                 </div>
@@ -66,7 +66,7 @@ include BASE_PATH . "views/root/head.php";
               </p>
 
               <p class="mb-0">
-                <span class="text-primary">
+                <span class="text-link-color">
                   Edit card
                 </span>
               </p>

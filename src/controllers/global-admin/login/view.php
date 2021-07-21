@@ -22,7 +22,7 @@ include BASE_PATH . "views/root/head.php";
     <div class="col-lg-8 col-md-10">
       <div class="">
         <p class="mb-5">
-          <a href="<?= htmlspecialchars(autoUrl('')) ?>" class="btn btn-outline-primary">Quit</a>
+          <a href="<?= htmlspecialchars(autoUrl('')) ?>" class="btn btn-outline-primary btn-outline-light-d">Quit</a>
         </p>
 
         <h1 class="">Login</h1>
@@ -91,7 +91,7 @@ include BASE_PATH . "views/root/head.php";
               This is not the login page for club users.
             </p>
             <span>
-              <a href="<?= htmlspecialchars(autoUrl("admin/login/reset-password")) ?>" class="btn btn-dark">
+              <a href="<?= htmlspecialchars(autoUrl("admin/login/reset-password")) ?>" class="btn btn-dark-l btn-outline-light-d">
                 Forgot password?
               </a>
             </span>

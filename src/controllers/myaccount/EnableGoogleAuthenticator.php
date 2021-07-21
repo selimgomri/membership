@@ -18,7 +18,7 @@ include BASE_PATH . 'views/header.php';
 
 ?>
 
-<div class="container">
+<div class="container-xl">
   <div class="row">
     <div class="col-lg-8">
       <?php if (!$setup) { ?>
@@ -44,7 +44,7 @@ include BASE_PATH . 'views/header.php';
         previous devices that you have set up from working.
       </p>
       <p>
-        <a href="<?=autoUrl("my-account/googleauthenticator/setup")?>" class="btn btn-dark">
+        <a href="<?=autoUrl("my-account/googleauthenticator/setup")?>" class="btn btn-dark-l btn-outline-light-d">
           Setup Again
         </a>
       </p>
@@ -55,10 +55,10 @@ include BASE_PATH . 'views/header.php';
         time. To disable 2FA entirely, head to Account Options.
       </p>
       <p>
-        <a href="<?=autoUrl("my-account/googleauthenticator/disable")?>" class="btn btn-dark">
+        <a href="<?=autoUrl("my-account/googleauthenticator/disable")?>" class="btn btn-dark-l btn-outline-light-d">
           Disable Google Authenticator 2FA
         </a>
-        <a href="<?=autoUrl("my-account/general")?>" class="btn btn-dark">
+        <a href="<?=autoUrl("my-account/general")?>" class="btn btn-dark-l btn-outline-light-d">
           Disable All 2FA
         </a>
       </p>

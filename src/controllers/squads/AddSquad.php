@@ -13,7 +13,7 @@ include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/squadMenu.php"; ?>
 
 <div class="bg-light mt-n3 py-3 mb-3">
-  <div class="container">
+  <div class="container-xl">
 
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
@@ -35,7 +35,7 @@ include BASE_PATH . "views/squadMenu.php"; ?>
   </div>
 </div>
 
-<div class="container">
+<div class="container-xl">
 
   <div class="row">
     <div class="col-lg-8">

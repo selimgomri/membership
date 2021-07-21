@@ -25,7 +25,7 @@ include BASE_PATH . 'views/header.php';
 ?>
 
 <div class="bg-light mt-n3 py-3 mb-3">
-  <div class="container">
+  <div class="container-xl">
 
     <div class="row align-items-center">
       <div class="col-lg-8">
@@ -39,7 +39,7 @@ include BASE_PATH . 'views/header.php';
       </div>
       <div class="col text-end">
         <p class="mb-0">
-          <?php if (isset($_GET['return'])) { ?><a href="<?=htmlspecialchars($_GET['return'])?>" class="btn btn-dark">Back</a><?php } ?>
+          <?php if (isset($_GET['return'])) { ?><a href="<?=htmlspecialchars($_GET['return'])?>" class="btn btn-dark-l btn-outline-light-d">Back</a><?php } ?>
           <button type="submit" class="btn btn-success">Save <i class="fa fa-floppy-o" aria-hidden="true"></i></button>
         </p>
       </div>
@@ -48,7 +48,7 @@ include BASE_PATH . 'views/header.php';
   </div>
 </div>
 
-<div class="container">
+<div class="container-xl">
 
   <div class="row">
     <div class="col-lg-8">

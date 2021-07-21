@@ -43,48 +43,11 @@ if ($discounts != null && isset($discounts['ASA'][$month])) {
 $sql = $db->prepare("SELECT COUNT(*) FROM `members` WHERE `members`.`UserID` = ?");
 $sql->execute([$user]);
 
-$clubFee = $totalFeeDiscounted = $totalFee = 0;
-
 $payingSwimmerCount = $sql->fetchColumn();
 
 $clubFees = MembershipFees\MembershipFees::getByUser($user);
 
-$clubFee = $clubFees->getTotal();
-
-$getMembers = $db->prepare("SELECT * FROM `members` WHERE `members`.`UserID` = ?");
-$getMembers->execute([
-  $user
-]);
-
-$member = $getMembers->fetchAll(PDO::FETCH_ASSOC);
-$count = sizeof($member);
-
-$totalFee += $clubFee;
-$totalFeeDiscounted += $clubFee;
-
-$asaFees = [];
-
-$asa1 = app()->tenant->getKey('ASA-County-Fee-L1') + app()->tenant->getKey('ASA-Regional-Fee-L1') + app()->tenant->getKey('ASA-National-Fee-L1');
-$asa2 = app()->tenant->getKey('ASA-County-Fee-L2') + app()->tenant->getKey('ASA-Regional-Fee-L2') + app()->tenant->getKey('ASA-National-Fee-L2');
-$asa3 = app()->tenant->getKey('ASA-County-Fee-L3') + app()->tenant->getKey('ASA-Regional-Fee-L3') + app()->tenant->getKey('ASA-National-Fee-L3');
-
-for ($i = 0; $i < $count; $i++) {
-  if ($member[$i]['ASACategory'] == 1 && !$member[$i]['ASAPaid']) {
-    $asaFees[$i] = $asa1;
-  } else if ($member[$i]['ASACategory'] == 2  && !$member[$i]['ASAPaid']) {
-    $asaFees[$i] = $asa2;
-  } else if ($member[$i]['ASACategory'] == 3  && !$member[$i]['ASAPaid']) {
-    $asaFees[$i] = $asa3;
-  }
-
-  if (isset($asaFees[$i])) {
-    $totalFee += $asaFees[$i];
-    $totalFeeDiscounted += $asaFees[$i];
-  }
-}
-
-$clubFeeString = $clubFees->getFormattedTotal();
-$totalFeeString = (string) (\Brick\Math\BigDecimal::of((string) $totalFee))->withPointMovedLeft(2)->toScale(2);
+$totalFeeString = $clubFees->getFormattedTotal();
 
 $pagetitle = "Membership Fees";
 
@@ -93,7 +56,7 @@ include BASE_PATH . 'views/header.php';
 ?>
 
 <div class="bg-light mt-n3 py-3 mb-3">
-  <div class="container">
+  <div class="container-xl">
 
     <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Parent') { ?>
       <nav aria-label="breadcrumb">
@@ -121,7 +84,7 @@ include BASE_PATH . 'views/header.php';
   </div>
 </div>
 
-<div class="container">
+<div class="container-xl">
   <div class="row">
     <div class="col-lg-8">
 
@@ -131,7 +94,7 @@ include BASE_PATH . 'views/header.php';
       <div class="table-responsive-md">
         <table class="table table-light">
           <thead>
-            <tr class="bg-primary text-light">
+            <tr class="">
               <th>
                 Club Membership
               </th>
@@ -139,9 +102,9 @@ include BASE_PATH . 'views/header.php';
               </th>
             </tr>
           </thead>
-          <?php foreach ($clubFees->getClasses() as $class) { ?>
+          <?php foreach ($clubFees->getClubClasses() as $class) { ?>
             <thead class="">
-              <tr class="bg-dark text-light">
+              <tr class="">
                 <th>
                   <?= htmlspecialchars($class->getName()) ?>
                 </th>
@@ -173,48 +136,47 @@ include BASE_PATH . 'views/header.php';
             </tbody>
           <?php } ?>
           <thead class="">
-            <tr class="bg-primary text-light">
+            <tr class="">
               <th>
-                Swim England Membership
+                <?= htmlspecialchars($tenant->getKey('NGB_NAME')) ?> Membership
               </th>
               <th>
               </th>
             </tr>
           </thead>
-          <thead>
-            <tr>
-              <th>
-                Member
-              </th>
-              <th>
-                Fee
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php
-            for ($i = 0; $i < $count; $i++) {
-              $asaFeesString = "";
-              if ($member[$i]['ASAPaid']) {
-                $asaFeesString = "0.00 (Paid by club)";
-              } else if (isset($asaFees[$i])) {
-                if ((string) $asaFees[$i] != "") {
-                  $asaFeesString = (string) (\Brick\Math\BigDecimal::of((string) $asaFees[$i]))->withPointMovedLeft(2)->toScale(2);
-                }
-              } else {
-                $asaFeesString = '0.00';
-              }
-            ?>
-              <tr>
-                <td>
-                  <?= htmlspecialchars($member[$i]['MForename'] . " " . $member[$i]['MSurname']) ?><?php if ($member[$i]['ASACategory'] > 0) { ?> (Category <?= htmlspecialchars($member[$i]['ASACategory']) ?>)<?php } ?>
-                </td>
-                <td>
-                  &pound;<?php echo $asaFeesString; ?>
-                </td>
+          <?php foreach ($clubFees->getNGBClasses() as $class) { ?>
+            <thead class="">
+              <tr class="">
+                <th>
+                  <?= htmlspecialchars($class->getName()) ?>
+                </th>
+                <th>
+                </th>
               </tr>
-            <?php } ?>
-          </tbody>
+            </thead>
+            <thead>
+              <tr>
+                <th>
+                  Member
+                </th>
+                <th>
+                  Fee
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php foreach ($class->getFeeItems() as $item) { ?>
+                <tr>
+                  <td>
+                    <?= htmlspecialchars($item->getDescription()) ?>
+                  </td>
+                  <td>
+                    &pound;<?= htmlspecialchars($item->getFormattedAmount()) ?>
+                  </td>
+                </tr>
+              <?php } ?>
+            </tbody>
+          <?php } ?>
           <tbody>
             <tr class="table-active">
               <td>

@@ -357,10 +357,6 @@ if (empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) {
     include BASE_PATH . 'views/Login.php';
   });
 
-  $this->group('/register/university-of-sheffield', function () {
-    include BASE_PATH . 'controllers/register/sheffield/router.php';
-  });
-
   // // Register
   // $this->get(['/register', '/register/family', '/register/family/{fam}:int/{acs}:key'], function ($fam = null, $acs = null) {
   //   include BASE_PATH . 'controllers/registration/register.php';
@@ -550,6 +546,10 @@ if (empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) {
 
   $this->group('/registration', function () {
     include BASE_PATH . 'controllers/registration/router.php';
+  });
+
+  $this->group('/memberships', function () {
+    include BASE_PATH . 'controllers/memberships/router.php';
   });
 
   $this->group(['/attendance', '/registers'], function () {

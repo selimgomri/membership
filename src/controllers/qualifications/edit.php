@@ -29,7 +29,7 @@ include BASE_PATH . 'views/header.php';
 
 <div class="bg-light mt-n3 py-3 mb-3">
 
-  <div class="container">
+  <div class="container-xl">
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('qualifications')) ?>">Qualifications</a></li>
@@ -45,7 +45,7 @@ include BASE_PATH . 'views/header.php';
 
 </div>
 
-<div class="container">
+<div class="container-xl">
 
   <div class="row">
     <div class="col-lg-8">

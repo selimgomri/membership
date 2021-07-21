@@ -39,6 +39,7 @@ $vars = [
   'LOGO_DIR' => null,
   'GLOBAL_PERSONAL_KEY' => null,
   'GLOBAL_PERSONAL_KEY_ID_NUMBER' => null,
+  'REQUIRE_SQUAD_REP_FOR_APPROVAL' => true,
 ];
 
 try {
@@ -107,6 +108,13 @@ try {
     $hide = 0;
   }
   app()->tenant->setKey('REQUIRE_FULL_RENEWAL', $hide);
+
+  // 'REQUIRE_SQUAD_REP_FOR_APPROVAL' => true,
+  $hide = 1;
+  if (!isset($_POST['REQUIRE_SQUAD_REP_FOR_APPROVAL']) || !bool($_POST['REQUIRE_SQUAD_REP_FOR_APPROVAL'])) {
+    $hide = 0;
+  }
+  app()->tenant->setKey('REQUIRE_SQUAD_REP_FOR_APPROVAL', $hide);
 
   // 'ENABLE_BILLING_SYSTEM' => true,
   $hide = 1;

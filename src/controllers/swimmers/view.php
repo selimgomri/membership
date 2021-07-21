@@ -189,7 +189,7 @@ include BASE_PATH . 'views/header.php';
 
         <div class="col-6">
           <dt class="text-truncate">
-            Swim England #
+            <?= htmlspecialchars($tenant->getKey('NGB_NAME')) ?> Membership #
           </dt>
           <dd>
             <a href="<?= htmlspecialchars('https://www.swimmingresults.org/biogs/biogs_details.php?tiref=' . $member->getSwimEnglandNumber()) ?>">
@@ -200,10 +200,10 @@ include BASE_PATH . 'views/header.php';
 
         <div class="col-6">
           <dt class="text-truncate">
-            Membership category
+            <?= htmlspecialchars($tenant->getKey('NGB_NAME')) ?> Membership
           </dt>
           <dd>
-            <?= htmlspecialchars($member->getSwimEnglandCategory()) ?>
+            <?= htmlspecialchars($member->getGoverningBodyCategoryName()) ?>
           </dd>
         </div>
 
@@ -606,20 +606,20 @@ include BASE_PATH . 'views/header.php';
         </div>
       </dl>
 
-      <h3>Swim England Membership</h3>
+      <h3><?= htmlspecialchars($tenant->getKey('NGB_NAME')) ?> Membership</h3>
       <dl class="row">
         <div class="col-6">
           <dt class="text-truncate">
-            Swim England membership category
+            <?= htmlspecialchars($tenant->getKey('NGB_NAME')) ?> Membership Type
           </dt>
           <dd>
-            <?= htmlspecialchars($member->getSwimEnglandCategory()) ?>
+            <?= htmlspecialchars($member->getGoverningBodyCategoryName()) ?>
           </dd>
         </div>
 
         <div class="col-6">
           <dt class="text-truncate">
-            Club pays Swim England fees
+            Club pays <?= htmlspecialchars($tenant->getKey('NGB_NAME')) ?> fees
           </dt>
           <dd>
             <?php if ($member->swimEnglandFeesPaid()) { ?>Yes<?php } else { ?>No, member pays<?php } ?>
@@ -658,7 +658,7 @@ include BASE_PATH . 'views/header.php';
       </div>
       <div id="modal-body" class="modal-body"></div>
       <div id="modal-footer" class="modal-footer">
-        <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-dark-l btn-outline-light-d" data-bs-dismiss="modal">Close</button>
       </div>
     </div>
   </div>

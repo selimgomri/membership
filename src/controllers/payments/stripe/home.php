@@ -20,7 +20,7 @@ include BASE_PATH . 'views/header.php';
 ?>
 
 <div class="bg-light mt-n3 py-3 mb-3">
-  <div class="container">
+  <div class="container-xl">
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="<?= autoUrl("payments") ?>">Payments</a></li>
@@ -37,7 +37,7 @@ include BASE_PATH . 'views/header.php';
   </div>
 </div>
 
-<div class="container">
+<div class="container-xl">
   <div class="row">
     <div class="col-lg-8">
 
@@ -73,7 +73,7 @@ include BASE_PATH . 'views/header.php';
           We proudly accept all major credit and debit cards!
         </p>
         <p>
-          <img class="apple-pay-row" src="<?= autoUrl("img/stripe/apple-pay-mark.svg", false) ?>" aria-hidden="true"><img class="google-pay-row" src="<?= autoUrl("img/stripe/google-pay-mark.svg", false) ?>" aria-hidden="true"><img class="visa-row" src="<?= autoUrl("img/stripe/visa.svg", false) ?>" aria-hidden="true"><img class="mastercard-row" src="<?= autoUrl("img/stripe/mastercard.svg", false) ?>" aria-hidden="true"><img class="amex-row" src="<?= autoUrl("img/stripe/amex.svg", false) ?>" aria-hidden="true">
+          <img class="apple-pay-row" src="<?= autoUrl("img/stripe/apple-pay-mark.svg", false) ?>" aria-hidden="true"><img class="google-pay-row" src="<?= autoUrl("img/stripe/google-pay-mark.svg", false) ?>" aria-hidden="true"><img class="visa-row" src="<?= autoUrl("img/stripe/visa.svg", false) ?>" aria-hidden="true"><img class="mastercard-row" src="<?= autoUrl("img/stripe/mastercard.svg", false) ?>" aria-hidden="true"><img class="amex-row" src="<?= autoUrl("img/stripe/amex.svg", false) ?>" aria-hidden="true"><img class="amex-row" src="<?= autoUrl("img/stripe/discover.svg", false) ?>" aria-hidden="true"><img class="amex-row" src="<?= autoUrl("img/stripe/diners.svg", false) ?>" aria-hidden="true">
         </p>
       </div>
 
@@ -81,9 +81,9 @@ include BASE_PATH . 'views/header.php';
         <div class="list-group mb-3">
           <?php do { ?>
             <a href="<?= autoUrl("payments/cards/" . $card['ID']) ?>" class="list-group-item list-group-item-action">
-              <div class="row align-items-center mb-2 text-dark">
+              <div class="row align-items-center mb-2">
                 <div class="col-auto">
-                  <img src="<?= autoUrl("img/stripe/" . $card['Brand'] . ".png", false) ?>" srcset="<?= autoUrl("img/stripe/" . $card['Brand'] . "@2x.png", false) ?> 2x, <?= autoUrl("img/stripe/" . $card['Brand'] . "@3x.png", false) ?> 3x" style="width:40px;"> <span class="visually-hidden"><?= htmlspecialchars(getCardBrand($card['Brand'])) ?></span>
+                  <img class="dark-mode-mask" src="<?= autoUrl("img/stripe/" . $card['Brand'] . ".png", false) ?>" srcset="<?= autoUrl("img/stripe/" . $card['Brand'] . "@2x.png", false) ?> 2x, <?= autoUrl("img/stripe/" . $card['Brand'] . "@3x.png", false) ?> 3x" style="width:40px;"> <span class="visually-hidden"><?= htmlspecialchars(getCardBrand($card['Brand'])) ?></span>
                 </div>
                 <div class="col-auto">
                   <h2 class="h1 my-0">
@@ -96,7 +96,7 @@ include BASE_PATH . 'views/header.php';
               </p>
 
               <p class="mb-0">
-                <span class="text-primary">
+                <span class="text-link-color">
                   Edit card
                 </span>
               </p>
