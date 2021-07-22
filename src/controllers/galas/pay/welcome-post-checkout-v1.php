@@ -15,29 +15,29 @@ $updateTime = $db->prepare("UPDATE galaEntries SET FeeToPay = ? WHERE EntryID = 
 $date = new DateTime('now', new DateTimeZone('Europe/London'));
 
 $swimsArray = [
-  '25Free' => '25&nbsp;Free',
-  '50Free' => '50&nbsp;Free',
-  '100Free' => '100&nbsp;Free',
-  '200Free' => '200&nbsp;Free',
-  '400Free' => '400&nbsp;Free',
-  '800Free' => '800&nbsp;Free',
-  '1500Free' => '1500&nbsp;Free',
-  '25Back' => '25&nbsp;Back',
-  '50Back' => '50&nbsp;Back',
-  '100Back' => '100&nbsp;Back',
-  '200Back' => '200&nbsp;Back',
-  '25Breast' => '25&nbsp;Breast',
-  '50Breast' => '50&nbsp;Breast',
-  '100Breast' => '100&nbsp;Breast',
-  '200Breast' => '200&nbsp;Breast',
-  '25Fly' => '25&nbsp;Fly',
-  '50Fly' => '50&nbsp;Fly',
-  '100Fly' => '100&nbsp;Fly',
-  '200Fly' => '200&nbsp;Fly',
-  '100IM' => '100&nbsp;IM',
-  '150IM' => '150&nbsp;IM',
-  '200IM' => '200&nbsp;IM',
-  '400IM' => '400&nbsp;IM'
+  '25Free' => '25 Free',
+  '50Free' => '50 Free',
+  '100Free' => '100 Free',
+  '200Free' => '200 Free',
+  '400Free' => '400 Free',
+  '800Free' => '800 Free',
+  '1500Free' => '1500 Free',
+  '25Back' => '25 Back',
+  '50Back' => '50 Back',
+  '100Back' => '100 Back',
+  '200Back' => '200 Back',
+  '25Breast' => '25 Breast',
+  '50Breast' => '50 Breast',
+  '100Breast' => '100 Breast',
+  '200Breast' => '200 Breast',
+  '25Fly' => '25 Fly',
+  '50Fly' => '50 Fly',
+  '100Fly' => '100 Fly',
+  '200Fly' => '200 Fly',
+  '100IM' => '100 IM',
+  '150IM' => '150 IM',
+  '200IM' => '200 IM',
+  '400IM' => '400 IM'
 ];
 
 $rowArray = [1, null, null, null, null, null, 2, 1,  null, null, 2, 1, null, null, 2, 1, null, null, 2, 1, null, null, 2];
@@ -86,10 +86,23 @@ if ($entry != null) {
         }
       }
 
+      $itemEntries = [];
+      foreach ($swimsArray as $key => $name) {
+        if ($entry[$key]) {
+          $itemEntries[] = [
+            'name' => $name,
+            'amount' => 0,
+            'currency' => 'gbp',
+            'attributes' => []
+          ];
+        }
+      }
+
       $checkoutSession->addItem([
-        'name' => 'Gala Entry',
-        'description' => 'Entry Blah',
+        'name' => $entry['GalaName'],
+        'description' => $entry['MForename'] . ' ' . $entry['MSurname'],
         'amount' => $fee,
+        'sub_items' => $itemEntries,
       ]);
 
       $payingEntries += [$entry['EntryID'] => [
@@ -188,3 +201,5 @@ if (false) {
     header("Location: " . autoUrl("galas/pay-for-entries"));
   }
 }
+
+header("Location: " . $checkoutSession->getUrl());

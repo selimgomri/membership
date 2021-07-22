@@ -1,5 +1,7 @@
 <?php
 
+use Ramsey\Uuid\Uuid;
+
 $db = app()->db;
 $tenant = app()->tenant;
 
@@ -40,6 +42,11 @@ $paymentRequestItems[] = [
 
 $countries = getISOAlpha2Countries();
 
+$numFormatter = new NumberFormatter("en", NumberFormatter::SPELLOUT);
+
+$markdown = new \ParsedownExtra();
+$markdown->setSafeMode(true);
+
 include BASE_PATH . 'views/head.php';
 
 ?>
@@ -60,11 +67,11 @@ include BASE_PATH . 'views/head.php';
     <div class="row align-items-center">
       <div class="col-lg-8">
         <h1>Checkout</h1>
-        <p class="lead mb-0">
+        <p class="lead mb-0 d-none">
           SCDS Checkout is the new single checkout service for on-session customer payments.
         </p>
       </div>
-      <div class="col text-lg-end">
+      <div class="col text-lg-end d-none">
         <div class="d-lg-none mt-3"></div>
         <div class="accepted-network-logos">
           <p class="mb-0">
@@ -72,7 +79,7 @@ include BASE_PATH . 'views/head.php';
           </p>
         </div>
       </div>
-      <div class="col d-none">
+      <div class="col">
         <img src="<?= htmlspecialchars(autoUrl('img/corporate/scds.png')) ?>" class="img-fluid ms-auto d-none d-lg-flex rounded" alt="SCDS Logo" width="75" height="75">
       </div>
     </div>
@@ -95,11 +102,23 @@ include BASE_PATH . 'views/head.php';
                 <div class="col-8 col-sm-5 col-md-4 col-lg-6">
                   <h3><?= htmlspecialchars($item->name) ?></h3>
 
+                  <?php if ($item->description) { ?>
+                    <?= $markdown->text($item->description) ?>
+                  <?php } ?>
+
+                  <p class="mb-0">
+                    <a data-bs-toggle="collapse" href="#<?= htmlspecialchars('item-' . $item->id) ?>" role="button" aria-expanded="false" aria-controls="<?= htmlspecialchars('item-' . $item->id) ?>">
+                      View sub-items <i class="fa fa-caret-down" aria-hidden="true"></i>
+                    </a>
+                  </p>
+
                 </div>
                 <div class="col text-end">
+                  <?php if (sizeof($item->subItems) > 0) { ?>
                   <p>
-                    n event(s)
+                  <?= mb_convert_case($numFormatter->format(sizeof($item->subItems)), MB_CASE_TITLE_SIMPLE) ?> sub-item<?php if (sizeof($item->subItems) != 1) { ?>s<?php } ?>
                   </p>
+                  <?php } ?>
 
                   <!--<?php if ($notReady) { ?>
               <p>
@@ -112,6 +131,24 @@ include BASE_PATH . 'views/head.php';
                   </p>
                 </div>
               </div>
+
+              <div class="collapse" id="<?= htmlspecialchars('item-' . $item->id) ?>" data-parent="#entry-list-group">
+                    <div class="mt-3"></div>
+                    <ul class="list-unstyled">
+                      <?php foreach ($item->subItems as $item) { ?>
+                        <li>
+                          <div class="row">
+                            <div class="col-auto">
+                              <?= htmlspecialchars($item->name) ?>
+                            </div>
+                            <div class="col-auto ms-auto">
+                              <?= htmlspecialchars(MoneyHelpers::formatCurrency(MoneyHelpers::intToDecimal($item->amount), $item->currency)) ?>
+                            </div>
+                          </div>
+                        </li>
+                      <?php } ?>
+                    </ul>
+                  </div>
             </li>
           <?php } ?>
           <li class="list-group-item">

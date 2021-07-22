@@ -198,6 +198,8 @@ class Session
     if ($this->intent) {
       \Stripe\Stripe::setApiKey(getenv('STRIPE'));
 
+      $db = app()->db;
+
       $tenant = \Tenant::fromId($this->tenant);
 
       $customer = null;
@@ -236,6 +238,13 @@ class Session
     \Stripe\Stripe::setApiKey(getenv('STRIPE'));
 
     $tenant = \Tenant::fromId($this->tenant);
+
+    $customer = null;
+    if ($this->user) {
+      $getCustomer = $db->prepare("SELECT CustomerID FROM stripeCustomers WHERE User = ?");
+      $getCustomer->execute([$this->user]);
+      $customer = $getCustomer->fetchColumn();
+    }
 
     $intent = \Stripe\PaymentIntent::create([
       'amount' => $this->amount,
