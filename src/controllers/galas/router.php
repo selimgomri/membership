@@ -221,7 +221,6 @@ if ($access == "Parent") {
 
 	// View Competitions
 	$this->get(['/{id}:int/edit', '/competitions/{id}:int/edit'], function($id) {
-		
 		include "competitionSingle.php";
 	});
 
@@ -319,6 +318,16 @@ if ($access == "Galas" || $access == "Admin") {
 
 	$this->post('/{id}:int/sessions', function($id) {
 		include 'indicate-openness/gala-sessions-post.php';
+	});
+}
+
+if ($access == "Galas" || $access == "Admin" || $access == "Coach") {
+	$this->get('/{id}:int/create-registers', function($id) {
+		include 'create-registers.php';
+	});
+
+	$this->post('/{id}:int/create-registers', function($id) {
+		include 'create-registers-post.php';
 	});
 }
 

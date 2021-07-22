@@ -122,19 +122,20 @@ include "galaMenu.php";
               Gala options
             </button>
             <div class="dropdown-menu dropdown-menu-end">
-              <a class="dropdown-item" href="<?= autoUrl("galas/" . $id . "/edit") ?>">Edit</a>
-              <a class="dropdown-item" href="<?= autoUrl("galas/" . $id . "/pricing-and-events") ?>">Events and prices</a>
-              <a class="dropdown-item" href="<?= autoUrl("galas/" . $id . "/sessions") ?>">Sessions</a>
+              <a class="dropdown-item" href="<?= autoUrl("galas/$id/edit") ?>">Edit</a>
+              <a class="dropdown-item" href="<?= autoUrl("galas/$id/pricing-and-events") ?>">Events and prices</a>
+              <a class="dropdown-item" href="<?= autoUrl("galas/$id/sessions") ?>">Sessions</a>
               <?php if (bool($gala['CoachEnters'])) { ?>
-                <a class="dropdown-item" href="<?= autoUrl("galas/" . $id . "/select-entries") ?>">Manage entries</a>
+                <a class="dropdown-item" href="<?= autoUrl("galas/$id/select-entries") ?>">Manage entries</a>
               <?php } ?>
-              <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("galas/" . $id . "/team-manager-view.pdf")) ?>">Entry report</a>
+              <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("galas/$id/team-manager-view.pdf")) ?>">Entry report</a>
               <!--<div class="dropdown-divider"></div>-->
               <?php if ($numEntries > 0 && false) { ?>
-                <a class="dropdown-item" href="<?= autoUrl("galas/" . $id . "/timesheet") ?>">Timesheet</a>
+                <a class="dropdown-item" href="<?= autoUrl("galas/$id/timesheet") ?>">Timesheet</a>
               <?php } ?>
               <?php if ($numEntries > 0) { ?>
-                <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("galas/" . $id . "/photography-permissions.pdf")) ?>">Photography permissions</a>
+                <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("galas/$id/photography-permissions.pdf")) ?>">Photography permissions</a>
+                <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("galas/$id/create-registers")) ?>">Create Registers</a>
               <?php } ?>
             </div>
           </div>
@@ -149,6 +150,11 @@ include "galaMenu.php";
   <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['GalaAddedSuccess']) && $_SESSION['TENANT-' . app()->tenant->getId()]['GalaAddedSuccess']) { ?>
     <div class="alert alert-success">We've successfully added this gala</div>
   <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['GalaAddedSuccess']);
+  } ?>
+
+  <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['CreateRegisterSuccessStatus']) && $_SESSION['TENANT-' . app()->tenant->getId()]['CreateRegisterSuccessStatus']) { ?>
+    <div class="alert alert-success">We've successfully created registers for this gala</div>
+  <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['CreateRegisterSuccessStatus']);
   } ?>
 
   <h2>About this gala</h2>
@@ -360,16 +366,16 @@ include "galaMenu.php";
                   foreach ($countEntries as $key => $event) {
                     if ($event['Count'] > 0) {
                   ?> <?= json_encode(html_entity_decode($event['Name'])) ?>, <?php
-                                                                    }
-                                                                  } ?>],
+                                                                            }
+                                                                          } ?>],
         datasets: [{
           label: <?= json_encode(html_entity_decode($gala['GalaName'])) ?>,
           data: [<?php
                   foreach ($countEntries as $key => $event) {
                     if ($event['Count'] > 0) {
                   ?><?= $event['Count'] ?>, <?php
-                                  }
-                                } ?>],
+                                          }
+                                        } ?>],
           backgroundColor: [<?php
                             foreach ($countEntries as $key => $event) {
                               if ($event['Count'] > 0) {
@@ -420,8 +426,8 @@ include "galaMenu.php";
                   foreach ($strokeCounts as $stroke => $count) {
                     if ($count > 0) {
                   ?> <?= json_encode($stroke) ?>, <?php
-                                        }
-                                      } ?>],
+                                                }
+                                              } ?>],
         datasets: [{
           label: <?= json_encode(html_entity_decode($gala['GalaName'])) ?>,
           data: [<?php
