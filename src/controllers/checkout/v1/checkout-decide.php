@@ -10,9 +10,9 @@ if ($checkoutSession->user && $checkoutSession->user != app()->user->getId()) {
 }
 
 // If not complete
-if ($checkoutSession->state == 'open') {
-  include 'checkout.php';
-} else if ($checkoutSession->state == 'succeeded') {
+if ($checkoutSession->state == 'succeeded' || $checkoutSession->getPaymentIntent()->status == 'succeeded') {
   // Else
   include 'success.php';
+} else if ($checkoutSession->state == 'open') {
+  include 'checkout.php';
 }

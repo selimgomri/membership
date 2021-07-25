@@ -235,6 +235,7 @@ class Session
 
   public function createPaymentIntent()
   {
+    $db = app()->db;
     \Stripe\Stripe::setApiKey(getenv('STRIPE'));
 
     $tenant = \Tenant::fromId($this->tenant);

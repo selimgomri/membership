@@ -103,6 +103,10 @@ if ($entry != null) {
         'description' => $entry['MForename'] . ' ' . $entry['MSurname'],
         'amount' => $fee,
         'sub_items' => $itemEntries,
+        'attributes' => [
+          'type' => 'gala_entry',
+          'id' => $entry['EntryID'],
+        ],
       ]);
 
       $payingEntries += [$entry['EntryID'] => [
@@ -113,6 +117,9 @@ if ($entry != null) {
       ]];
     }
   } while ($entry = $entries->fetch(PDO::FETCH_ASSOC));
+
+  $checkoutSession->autoCalculateTotal();
+  $checkoutSession->save();
 }
 
 if (false) {

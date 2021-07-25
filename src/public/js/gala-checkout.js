@@ -122,13 +122,17 @@ var paymentRequest = stripe.paymentRequest({
   requestPayerEmail: true,
 });
 
+let style = 'dark';
+if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+  style = 'light';
+}
 var prButton = elements.create('paymentRequestButton', {
   paymentRequest: paymentRequest,
   style: {
     paymentRequestButton: {
       type: 'default', // default: 'default'
-      theme: 'dark',// | 'light' | 'light-outline', // default: 'dark'
-      height: '38px', // default: '40px', the width is always '100%'
+      theme: style,// | 'light' | 'light-outline', // default: 'dark'
+       // default: '40px', the width is always '100%'
     },
   },
 });
