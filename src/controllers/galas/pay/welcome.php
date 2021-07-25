@@ -87,11 +87,11 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
         </p>
       </div>
 
-      <?php if (bool($notByDirectDebit) || !app()->tenant->getBooleanKey('USE_DIRECT_DEBIT')) { ?>
+      <?php if (bool($notByDirectDebit) || !app()->tenant->getBooleanKey('ENABLE_BILLING_SYSTEM')) { ?>
         <p>
           You must pay for your entries by card or any other accepted method.
         </p>
-      <?php } else if (!app()->tenant->getBooleanKey('USE_DIRECT_DEBIT')) { ?>
+      <?php } else if (!app()->tenant->getBooleanKey('ENABLE_BILLING_SYSTEM')) { ?>
         <p>
           You must pay for your entries by card or any other accepted method.
         </p>
