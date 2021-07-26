@@ -86,12 +86,17 @@ if ($entry != null) {
         }
       }
 
+      $galaData = new GalaPrices($db, $entry["GalaID"]);
+
       $itemEntries = [];
       foreach ($swimsArray as $key => $name) {
         if ($entry[$key]) {
+
+          $swimAmount = (int) $galaData->getEvent($key)->getPrice();
+
           $itemEntries[] = [
             'name' => $name,
-            'amount' => 0,
+            'amount' => $swimAmount,
             'currency' => 'gbp',
             'attributes' => []
           ];
@@ -119,6 +124,13 @@ if ($entry != null) {
   } while ($entry = $entries->fetch(PDO::FETCH_ASSOC));
 
   $checkoutSession->autoCalculateTotal();
+
+  $checkoutSession->metadata['return']['url'] = autoUrl('galas');
+  $checkoutSession->metadata['return']['instant'] = false;
+  $checkoutSession->metadata['return']['buttonString'] = 'Return to gala page';
+
+  $checkoutSession->metadata['cancel']['url'] = autoUrl('galas/pay-for-entries');
+
   $checkoutSession->save();
 }
 

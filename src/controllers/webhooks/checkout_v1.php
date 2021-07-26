@@ -115,11 +115,22 @@ try {
 
   if (!$method) throw new Exception('Method missing');
 
+  $now = new DateTime('now', new DateTimeZone('UTC'));
+
+  // Update checkoutSession
+  $updateSession = $db->prepare("UPDATE `checkoutSessions` SET `state` = ?, `succeeded` = ?, `method` = ? WHERE `id` = ?");
+  $updateSession->execute([
+    'succeeded',
+    $now->format('Y-m-d H:i:s'),
+    $intent->payment_method->id,
+    $session->id,
+  ]);
+
   // Add to stripePayments
   $insertPayment = $db->prepare("INSERT INTO `stripePayments` (`User`, `DateTime`, `Method`, `Intent`, `Amount`, `Currency`, `ServedBy`, `Paid`, `AmountRefunded`, `Fees`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
   $insertPayment->execute([
     $session->user,
-    (new DateTime('now', new DateTimeZone('UTC')))->format('Y-m-d H:i:s'),
+    $now->format('Y-m-d H:i:s'),
     $method,
     $intent->id,
     $intent->amount,
@@ -179,24 +190,26 @@ try {
 
   $html .= '</tbody></table>';
 
-  $html .= '<p><strong>Payment ID</strong> SPM' . htmlspecialchars($paymentId) . '</p>';
+  $html .= '<p><strong>Payment ID</strong> <br>SPM' . htmlspecialchars($paymentId) . '</p>';
 
   if ($intent->charges->data[0]->payment_method_details->card) {
-    $html .= '<p><strong>Card</strong> <br>' . getCardBrand($intent->charges->data[0]->payment_method_details->card->brand) . ' ' . htmlspecialchars($intent->charges->data[0]->payment_method_details->card->funding) . ' card <br>&middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; ' . htmlspecialchars($intent->charges->data[0]->payment_method_details->card->last4) . '</p>';
+    $html .= '<p><strong>Card</strong> <br>' . getCardBrand($intent->charges->data[0]->payment_method_details->card->brand) . ' ' . htmlspecialchars($intent->charges->data[0]->payment_method_details->card->funding) . ' card <br>&middot;&middot;&middot;&middot; ' . htmlspecialchars($intent->charges->data[0]->payment_method_details->card->last4) . '</p>';
 
     if ($intent->charges->data[0]->payment_method_details->card->wallet) {
       $html .= '<p><strong>Mobile wallet</strong> <br>' . getWalletName($intent->charges->data[0]->payment_method_details->card->wallet->type) . '</p>';
 
       if ($intent->charges->data[0]->payment_method_details->card->wallet->dynamic_last4) {
-        $html .= '<p><strong>Device account number</strong> <br>&middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; ' . htmlspecialchars($intent->charges->data[0]->payment_method_details->card->wallet->dynamic_last4) . '</p>';
+        $html .= '<p><strong>Device account number</strong> <br>&middot;&middot;&middot;&middot; ' . htmlspecialchars($intent->charges->data[0]->payment_method_details->card->wallet->dynamic_last4) . '</p>';
       }
     }
   }
 
+  $html .= '<p><strong>SCDS Checkout reference</strong> <br>' . htmlspecialchars($session->id) . '</p>';
+
   if ($intent->charges->data[0]->billing_details->address) {
     $billingAddress = $intent->charges->data[0]->billing_details->address;
 
-    $html .= '<p><strong>Billing address</strong></p>';
+    $html .= '<p style="margin-bottom:0px;"><strong>Billing address</strong></p>';
     $html .= '<address>';
 
     if ($billingAddress->name) {
@@ -226,17 +239,15 @@ try {
     $html .= '</address>';
   }
 
-  $html .= '<p><strong>General notes for payments</strong></p>';
-  $html .= '<p>You can find more information about our payment terms and returns policy on our website. All payments are subject to scheme or network rules.</p>';
+  $html .= '<p><strong>General notes for payments</strong> <br>You can find more information about our payment terms and returns policy on our website. All payments are subject to scheme or network rules.</p>';
   $html .= '<p>Payment services are provided to ' . htmlspecialchars($tenant->getName()) . ' by SCDS and their payment processing partners. PCI DSS compliance is primarily handled by our payment processors.</p>';
   $html .= '<p>' . htmlspecialchars($tenant->getName()) . ' may sometimes place a temporary hold of 0GBP to 1GBP or 1USD on your card when you first add it to your account. This is part of the card authorisation process that allows us to determine that your card is valid. This charge will drop off your statement within a few days.</p>';
 
-  if (isset($intent->charges->data[0]->payment_method_details->card->brand) && $intent->charges->data[0]->payment_method_details->card->brand == 'amex') {
-    $html .= '<p>American Express customers may see <strong>Stripe</strong> in online banking and the Amex app while the payment is pending. This will usually update to <strong>' . htmlspecialchars($tenant->getName()) . '</strong> (or your club\'s legal name if it is different) within 48 hours or when the payment settles.</p>';
+  if (isset($intent->charges->data[0]->payment_method_details->card->brand) && $intent->charges->data[0]->calculated_statement_descriptor && $intent->charges->data[0]->payment_method_details->card->brand == 'amex') {
+    $html .= '<p>American Express customers may see <strong>Stripe</strong> in online banking and the Amex app while the payment is pending. This will usually update to <strong>' . htmlspecialchars($intent->charges->data[0]->calculated_statement_descriptor) . '</strong> within 48 hours or when the payment settles.</p>';
   }
 
-  $html .= '<p><strong>Notes for gala entry payments</strong></p>';
-  $html .= '<p>In accordance with card network rules, refunds for gala rejections will only be made to the payment card which was used.</p>';
+  $html .= '<p><strong>Notes for gala entry payments</strong> <br>In accordance with card network rules, refunds for gala rejections will only be made to the payment card which was used.</p>';
   $html .= '<p>Should you wish to withdraw your swimmers you will need to contact the gala coordinator. Depending on the gala and host club, you may not be eligible for a refund unless you can provide evidence to back up the reason for withdrawal, such as a doctors note.</p>';
 
   $email = null;

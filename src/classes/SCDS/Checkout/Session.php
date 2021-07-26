@@ -285,7 +285,10 @@ class Session
     $tenant = \Tenant::fromId($this->tenant);
 
     $intent = \Stripe\PaymentIntent::retrieve(
-      $this->intent,
+      [
+        'id' => $this->intent,
+        'expand' => ['customer', 'payment_method', 'charges.data.balance_transaction'],
+      ],
       [
         'stripe_account' => $tenant->getStripeAccount()
       ]

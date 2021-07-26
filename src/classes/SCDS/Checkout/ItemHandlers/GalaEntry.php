@@ -19,7 +19,7 @@ class GalaEntry {
     $addPaymentItems->execute([
       $stripePayment,
       'Gala entry',
-      'Gala entry number ' . $item->metadata->id,
+      'Gala entry number ' . $item->attributes->id,
       $item->amount,
       $item->currency,
       0,

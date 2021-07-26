@@ -47,27 +47,42 @@ $numFormatter = new NumberFormatter("en", NumberFormatter::SPELLOUT);
 $markdown = new \ParsedownExtra();
 $markdown->setSafeMode(true);
 
+$redirect = $checkoutSession->getUrl();
+if (isset($checkoutSession->metadata->return) && $checkoutSession->metadata->return->instant) {
+  $redirect = $checkoutSession->metadata->return->url;
+  // $checkoutSession->metadata->return->instant?
+}
+
+$cancelUrl = autoUrl('');
+if (isset($checkoutSession->metadata->cancel)) {
+  $cancelUrl = $checkoutSession->metadata->cancel->url;
+}
+
 include BASE_PATH . 'views/head.php';
 
 ?>
 
-<div id="stripe-data" data-stripe-publishable="<?= htmlspecialchars(getenv('STRIPE_PUBLISHABLE')) ?>" data-redirect-url-new="<?= htmlspecialchars($checkoutSession->getUrl()) ?>" data-redirect-url="<?= htmlspecialchars($checkoutSession->getUrl()) ?>" data-org-name="<?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?>" data-intent-amount="<?= htmlspecialchars($paymentIntent->amount) ?>" data-intent-currency="<?= htmlspecialchars($paymentIntent->currency) ?>" data-payment-request-line-items="<?= htmlspecialchars(json_encode($paymentRequestItems)) ?>" data-stripe-account-id="<?= htmlspecialchars($tenant->getStripeAccount()) ?>">
+<div id="stripe-data" data-stripe-publishable="<?= htmlspecialchars(getenv('STRIPE_PUBLISHABLE')) ?>" data-redirect-url-new="<?= htmlspecialchars($checkoutSession->getUrl()) ?>" data-redirect-url="<?= htmlspecialchars($redirect) ?>" data-org-name="<?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?>" data-intent-amount="<?= htmlspecialchars($paymentIntent->amount) ?>" data-intent-currency="<?= htmlspecialchars($paymentIntent->currency) ?>" data-payment-request-line-items="<?= htmlspecialchars(json_encode($paymentRequestItems)) ?>" data-stripe-account-id="<?= htmlspecialchars($tenant->getStripeAccount()) ?>">
 </div>
 
 <div class="bg-light  py-3 mb-3">
   <div class="container-xl">
 
-    <nav aria-label="breadcrumb">
+    <nav aria-label="breadcrumb" class="d-none">
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('payments')) ?>">Payments</a></li>
         <li class="breadcrumb-item active" aria-current="page">Checkout</li>
       </ol>
     </nav>
 
+    <p>
+      <a href="<?= htmlspecialchars($cancelUrl) ?>" class="btn btn-outline-dark btn btn-outline-light-d"><span class="fa fa-close"></span> Cancel payment</a>
+    </p>
+
     <div class="row align-items-center">
       <div class="col-lg-8">
         <h1>Checkout</h1>
-        <p class="lead mb-0 d-none">
+        <p class="lead mb-0">
           SCDS Checkout is the new single checkout service for on-session customer payments.
         </p>
       </div>
@@ -356,6 +371,6 @@ include BASE_PATH . 'views/head.php';
 
 $footer = new \SCDS\Footer();
 $footer->addJS("js/payment-helpers.js");
-$footer->addJS("js/gala-checkout.js");
+$footer->addJS("js/checkout/v1/checkout.js");
 $footer->addJS("js/NeedsValidation.js");
 $footer->render();
