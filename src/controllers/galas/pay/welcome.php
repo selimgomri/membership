@@ -47,7 +47,7 @@ $notByDirectDebit = $currentUser->getUserBooleanOption('GalaDirectDebitOptOut');
 
 $numFormatter = new NumberFormatter("en", NumberFormatter::SPELLOUT);
 
-$actionUrl = autoUrl('galas/pay-for-entries');
+$actionUrl = autoUrl('galas/pay-for-entries/checkout-v1');
 if (isset($_GET['checkout'])) {
   if ($_GET['checkout'] == 'v1') $actionUrl = autoUrl('galas/pay-for-entries/checkout-v1');
 }
