@@ -90,7 +90,7 @@ include BASE_PATH . 'views/head.php';
         <div class="d-lg-none mt-3"></div>
         <div class="accepted-network-logos">
           <p class="mb-0">
-            <img class="apple-pay-row" src="<?= autoUrl("img/stripe/apple-pay-mark.svg", false) ?>" aria-hidden="true"><img class="google-pay-row" src="<?= autoUrl("img/stripe/google-pay-mark.svg", false) ?>" aria-hidden="true"><img class="visa-row" src="<?= autoUrl("img/stripe/visa.svg", false) ?>" aria-hidden="true"><img class="mastercard-row" src="<?= autoUrl("img/stripe/mastercard.svg", false) ?>" aria-hidden="true"><img class="amex-row" src="<?= autoUrl("img/stripe/amex.svg", false) ?>" aria-hidden="true"><img class="amex-row" src="<?= autoUrl("img/stripe/discover.svg", false) ?>" aria-hidden="true"><img class="amex-row" src="<?= autoUrl("img/stripe/diners.svg", false) ?>" aria-hidden="true">
+            <?= \SCDS\Checkout\Assets::cardLogos() ?>
           </p>
         </div>
       </div>
@@ -130,9 +130,9 @@ include BASE_PATH . 'views/head.php';
                 </div>
                 <div class="col text-end">
                   <?php if (sizeof($item->subItems) > 0) { ?>
-                  <p>
-                  <?= mb_convert_case($numFormatter->format(sizeof($item->subItems)), MB_CASE_TITLE_SIMPLE) ?> sub-item<?php if (sizeof($item->subItems) != 1) { ?>s<?php } ?>
-                  </p>
+                    <p>
+                      <?= mb_convert_case($numFormatter->format(sizeof($item->subItems)), MB_CASE_TITLE_SIMPLE) ?> sub-item<?php if (sizeof($item->subItems) != 1) { ?>s<?php } ?>
+                    </p>
                   <?php } ?>
 
                   <!--<?php if ($notReady) { ?>
@@ -148,22 +148,22 @@ include BASE_PATH . 'views/head.php';
               </div>
 
               <div class="collapse" id="<?= htmlspecialchars('item-' . $item->id) ?>" data-parent="#entry-list-group">
-                    <div class="mt-3"></div>
-                    <ul class="list-unstyled">
-                      <?php foreach ($item->subItems as $item) { ?>
-                        <li>
-                          <div class="row">
-                            <div class="col-auto">
-                              <?= htmlspecialchars($item->name) ?>
-                            </div>
-                            <div class="col-auto ms-auto">
-                              <?= htmlspecialchars(MoneyHelpers::formatCurrency(MoneyHelpers::intToDecimal($item->amount), $item->currency)) ?>
-                            </div>
-                          </div>
-                        </li>
-                      <?php } ?>
-                    </ul>
-                  </div>
+                <div class="mt-3"></div>
+                <ul class="list-unstyled">
+                  <?php foreach ($item->subItems as $item) { ?>
+                    <li>
+                      <div class="row">
+                        <div class="col-auto">
+                          <?= htmlspecialchars($item->name) ?>
+                        </div>
+                        <div class="col-auto ms-auto">
+                          <?= htmlspecialchars(MoneyHelpers::formatCurrency(MoneyHelpers::intToDecimal($item->amount), $item->currency)) ?>
+                        </div>
+                      </div>
+                    </li>
+                  <?php } ?>
+                </ul>
+              </div>
             </li>
           <?php } ?>
           <li class="list-group-item">

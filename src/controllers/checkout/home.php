@@ -56,6 +56,10 @@ include BASE_PATH . 'views/header.php';
         We will accept Visa, MasterCard, American Express, Maestro, Discover, and Diner's Club payment cards. This covers all types of card - credit, debit, charge, prepaid, business or personal.
       </p>
 
+      <p class="accepted-network-logos">
+        <?= \SCDS\Checkout\Assets::cardLogos() ?>
+      </p>
+
       <h2>Will SCDS Checkout support in-person card payments?</h2>
 
       <p>

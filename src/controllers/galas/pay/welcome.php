@@ -83,7 +83,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
           We proudly accept all major credit and debit cards!
         </p>
         <p>
-          <img class="apple-pay-row" src="<?= autoUrl("img/stripe/apple-pay-mark.svg", false) ?>" aria-hidden="true"><img class="google-pay-row" src="<?= autoUrl("img/stripe/google-pay-mark.svg", false) ?>" aria-hidden="true"><img class="visa-row" src="<?= autoUrl("img/stripe/visa.svg", false) ?>" aria-hidden="true"><img class="mastercard-row" src="<?= autoUrl("img/stripe/mastercard.svg", false) ?>" aria-hidden="true"><img class="amex-row" src="<?= autoUrl("img/stripe/amex.svg", false) ?>" aria-hidden="true">
+          <?= \SCDS\Checkout\Assets::cardLogos() ?>
         </p>
       </div>
 

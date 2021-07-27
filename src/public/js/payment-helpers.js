@@ -48,13 +48,13 @@ function setCardBrandIcon(brand) {
   if (brand === 'visa') {
     content = '<img class="fa fa-fw d-dark-none" src="' + root + '/img/stripe/brand-checkout/visa_light.svg" aria-hidden="true"><img class="fa fa-fw d-light-none" src="' + root + '/img/stripe/brand-checkout/visa_dark.svg" aria-hidden="true">';
   } else if (brand === 'mastercard') {
-    content = '<img class="fa fa-fw" src="' + root + '/img/stripe/brand-checkout/mastercard.svg" aria-hidden="true">';
+    content = '<img class="fa fa-fw d-dark-none" src="' + root + '/img/stripe/brand-checkout/mastercard_light.svg" aria-hidden="true"><img class="fa fa-fw d-light-none" src="' + root + '/img/stripe/brand-checkout/mastercard_dark.svg" aria-hidden="true">';
   } else if (brand === 'amex') {
-    content = '<img class="fa fa-fw" src="' + root + '/img/stripe/brand-checkout/amex.svg" aria-hidden="true">';
+    content = '<img class="fa fa-fw d-dark-none" src="' + root + '/img/stripe/brand-checkout/amex_light.svg" aria-hidden="true"><img class="fa fa-fw d-light-none" src="' + root + '/img/stripe/brand-checkout/amex_dark.svg" aria-hidden="true">';
   } else if (brand === 'discover') {
-    content = '<img class="fa fa-fw" src="' + root + '/img/stripe/brand-checkout/discover.svg" aria-hidden="true">';
+    content = '<img class="fa fa-fw d-dark-none" src="' + root + '/img/stripe/brand-checkout/discover_light.svg" aria-hidden="true"><img class="fa fa-fw d-light-none" src="' + root + '/img/stripe/brand-checkout/discover_dark.svg" aria-hidden="true">';
   } else if (brand === 'diners') {
-    content = '<img class="fa fa-fw" src="' + root + '/img/stripe/brand-checkout/diners.svg" aria-hidden="true">';
+    content = '<img class="fa fa-fw d-dark-none" src="' + root + '/img/stripe/brand-checkout/diners_light.svg" aria-hidden="true"><img class="fa fa-fw d-light-none" src="' + root + '/img/stripe/brand-checkout/diners_dark.svg" aria-hidden="true">';
   } else if (brand === 'jcb') {
     content = '<img class="fa fa-fw" src="' + root + '/img/stripe/network-svgs/jcb.svg" aria-hidden="true">';
   }

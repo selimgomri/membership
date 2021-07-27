@@ -73,7 +73,7 @@ include BASE_PATH . 'views/header.php';
           We proudly accept all major credit and debit cards!
         </p>
         <p>
-          <img class="apple-pay-row" src="<?= autoUrl("img/stripe/apple-pay-mark.svg", false) ?>" aria-hidden="true"><img class="google-pay-row" src="<?= autoUrl("img/stripe/google-pay-mark.svg", false) ?>" aria-hidden="true"><img class="visa-row d-dark-none" src="<?= autoUrl("img/stripe/brand-checkout/visa_light.svg", false) ?>" aria-hidden="true"><img class="visa-row d-light-none" src="<?= autoUrl("img/stripe/brand-checkout/visa_dark.svg", false) ?>" aria-hidden="true"><img class="mastercard-row" src="<?= autoUrl("img/stripe/brand-checkout/mastercard.svg", false) ?>" aria-hidden="true"><img class="mastercard-row d-dark-none" src="<?= autoUrl("img/stripe/brand-checkout/maestro_light.svg", false) ?>" aria-hidden="true"><img class="mastercard-row d-light-none" src="<?= autoUrl("img/stripe/brand-checkout/maestro_dark.svg", false) ?>" aria-hidden="true"><img class="amex-row" src="<?= autoUrl("img/stripe/brand-checkout/amex.svg", false) ?>" aria-hidden="true"><img class="amex-row" src="<?= autoUrl("img/stripe/brand-checkout/discover.svg", false) ?>" aria-hidden="true"><img class="amex-row" src="<?= autoUrl("img/stripe/brand-checkout/diners.svg", false) ?>" aria-hidden="true">
+          <?= \SCDS\Checkout\Assets::cardLogos() ?>
         </p>
       </div>
 
@@ -83,7 +83,7 @@ include BASE_PATH . 'views/header.php';
             <a href="<?= autoUrl("payments/cards/" . $card['ID']) ?>" class="list-group-item list-group-item-action">
               <div class="row align-items-center mb-2">
                 <div class="col-auto">
-                  <img class="dark-mode-mask" src="<?= autoUrl("img/stripe/" . $card['Brand'] . ".png", false) ?>" srcset="<?= autoUrl("img/stripe/" . $card['Brand'] . "@2x.png", false) ?> 2x, <?= autoUrl("img/stripe/" . $card['Brand'] . "@3x.png", false) ?> 3x" style="width:40px;"> <span class="visually-hidden"><?= htmlspecialchars(getCardBrand($card['Brand'])) ?></span>
+                  <img class="d-dark-none" src="<?= autoUrl("img/stripe/brand-stored-credentials/" . $card['Brand'] . "_light.svg") ?>" style="width:40px;"><img class="d-light-none" src="<?= autoUrl("img/stripe/brand-stored-credentials/" . $card['Brand'] . "_dark.svg") ?>" style="width:40px;"> <span class="visually-hidden"><?= htmlspecialchars(getCardBrand($card['Brand'])) ?></span>
                 </div>
                 <div class="col-auto">
                   <h2 class="h1 my-0">
