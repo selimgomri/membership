@@ -33,7 +33,7 @@ if ($gala == null) {
 
 $galaData = new GalaPrices($db, $id);
 
-$getEntries = $db->prepare("SELECT members.UserID `user`, 25Free, 50Free, 100Free, 200Free, 400Free, 800Free, 1500Free, 25Back, 50Back, 100Back, 200Back, 25Breast, 50Breast, 100Breast, 200Breast, 25Fly, 50Fly, 100Fly, 200Fly, 100IM, 150IM, 200IM, 400IM, MForename, MSurname, EntryID, Charged, FeeToPay, MandateID, members.UserID FROM ((((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) LEFT JOIN users ON members.UserID = users.UserID) LEFT JOIN paymentPreferredMandate ON users.UserID = paymentPreferredMandate.UserID) WHERE galaEntries.GalaID = ? AND Charged = ? AND EntryProcessed = ? AND MandateID IS NOT NULL ORDER BY MForename ASC, MSurname ASC");
+$getEntries = $db->prepare("SELECT members.UserID `user`, 25Free, 50Free, 100Free, 200Free, 400Free, 800Free, 1500Free, 25Back, 50Back, 100Back, 200Back, 25Breast, 50Breast, 100Breast, 200Breast, 25Fly, 50Fly, 100Fly, 200Fly, 100IM, 150IM, 200IM, 400IM, MForename, MSurname, EntryID, Charged, FeeToPay, MandateID, members.UserID FROM ((((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) LEFT JOIN users ON members.UserID = users.UserID) LEFT JOIN paymentPreferredMandate ON users.UserID = paymentPreferredMandate.UserID) WHERE galaEntries.GalaID = ? AND Charged = ? AND EntryProcessed = ? ORDER BY MForename ASC, MSurname ASC");
 $getEntries->execute([$id, '0', '1']);
 
 $swimsArray = [
@@ -67,8 +67,6 @@ $rowArrayText = ["Freestyle", null, null, null, null, null, 2, "Backstroke",  nu
 
 while ($entry = $getEntries->fetch(PDO::FETCH_ASSOC)) {
 
-	reportError($entry);
-
 	if ((string) $_POST[$entry['EntryID'] . '-amount'] != "") {
 		$amountDec = \Brick\Math\BigDecimal::of((string) $_POST[$entry['EntryID'] . '-amount']);
 		$amount = $amountDec->withPointMovedRight(2)->toInt();
@@ -85,15 +83,6 @@ while ($entry = $getEntries->fetch(PDO::FETCH_ASSOC)) {
 		$hasNoSDD = !$mandate || (getUserOption($entry['user'], 'GalaDirectDebitOptOut'));
 
 		$hasNoDD = ($hasNoSDD && $tenant->getBooleanKey('USE_STRIPE_DIRECT_DEBIT')) || ($hasNoGCDD && !$tenant->getBooleanKey('USE_STRIPE_DIRECT_DEBIT'));
-
-		reportError(([
-			$entry['user'],
-			$stripeCusomer,
-			$hasNoSDD,
-			$tenant->getBooleanKey('USE_STRIPE_DIRECT_DEBIT'),
-			$hasNoGCDD,
-			!$tenant->getBooleanKey('USE_STRIPE_DIRECT_DEBIT')
-		]));
 
 		if ($amount > 0 && $amount <= 15000 && !$hasNoDD) {
 			$count = 0;
