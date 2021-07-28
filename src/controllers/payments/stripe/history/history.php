@@ -102,7 +102,7 @@ include BASE_PATH . 'views/header.php';
             <?php if (isset($pm['Brand'])) { ?>
               <div class="row align-items-center mb-2">
                 <div class="col-auto">
-                  <img class="accepted-network-logo dark-mode-mask" src="<?= autoUrl("img/stripe/" . $pm['Brand'] . ".svg", false) ?>"> <span class="visually-hidden"><?= htmlspecialchars(getCardBrand($pm['Brand'])) ?></span>
+                <img class="accepted-network-logo d-dark-none" src="<?= autoUrl("img/stripe/brand-stored-credentials/" . $pm['Brand'] . "_light.svg") ?>"><img class="accepted-network-logo  d-light-none" src="<?= autoUrl("img/stripe/brand-stored-credentials/" . $pm['Brand'] . "_dark.svg") ?>"> <span class="visually-hidden"><?= htmlspecialchars(getCardBrand($pm['Brand'])) ?></span>
                 </div>
                 <div class="col-auto">
                   <h2 class="my-0">
