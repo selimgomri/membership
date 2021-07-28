@@ -66,6 +66,9 @@ $rowArray = [1, null, null, null, null, null, 2, 1,  null, null, 2, 1, null, nul
 $rowArrayText = ["Freestyle", null, null, null, null, null, 2, "Backstroke",  null, null, 2, "Breaststroke", null, null, 2, "Butterfly", null, null, 2, "Individual Medley", null, null, 2];
 
 while ($entry = $getEntries->fetch(PDO::FETCH_ASSOC)) {
+
+	reportError($entry);
+
 	if ((string) $_POST[$entry['EntryID'] . '-amount'] != "") {
 		$amountDec = \Brick\Math\BigDecimal::of((string) $_POST[$entry['EntryID'] . '-amount']);
 		$amount = $amountDec->withPointMovedRight(2)->toInt();
