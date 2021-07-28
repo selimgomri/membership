@@ -18,6 +18,8 @@ $requestData = [
   'refundAmount' => $refundAmount
 ];
 
+$getMandates = $db->prepare("SELECT ID, Mandate, Last4, SortCode, `Address`, Reference, `URL`, `Status` FROM stripeMandates WHERE Customer = ? AND (`Status` = 'accepted' OR `Status` = 'pending') ORDER BY CreationTime DESC LIMIT 1");
+
 $swimsArray = [
   '25Free' => '25&nbsp;Free',
   '50Free' => '50&nbsp;Free',
@@ -86,7 +88,18 @@ try {
     throw new Exception('The amount you\'re attempting to refund is not allowed');
   }
 
-  $hasNoDD = ($entryData['MandateID'] == null) || (getUserOption($entryData['user'], 'GalaDirectDebitOptOut'));
+  $hasNoGCDD = ($entryData['MandateID'] == null) || (getUserOption($entryData['user'], 'GalaDirectDebitOptOut'));
+  $stripeCusomer = (new User($entry['user']))->getStripeCustomer();
+  if ($stripeCusomer) {
+    $getMandates->execute([
+      $stripeCusomer->id,
+    ]);
+  }
+  $mandate = $getMandates->fetch(PDO::FETCH_ASSOC);
+
+  $hasNoSDD = !$mandate || (getUserOption($entry['user'], 'GalaDirectDebitOptOut'));
+
+  $hasNoDD = ($hasNoSDD && $tenant->getBooleanKey('USE_STRIPE_DIRECT_DEBIT')) || ($hasNoGCDD && !$tenant->getBooleanKey('USE_STRIPE_DIRECT_DEBIT'));
 
   $swimsList = '<ul>';
   foreach ($swimsArray as $colTitle => $text) {

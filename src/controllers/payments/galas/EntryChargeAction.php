@@ -18,6 +18,8 @@ $insertPayment = $db->prepare("INSERT INTO paymentsPending (`Date`, `Status`, Us
 $markAsCharged = $db->prepare("UPDATE galaEntries SET Charged = ?, PaymentID = ?, FeeToPay = ? WHERE EntryID = ?");
 $notify = $db->prepare("INSERT INTO notify (UserID, `Status`, `Subject`, `Message`, EmailType) VALUES (?, ?, ?, ?, ?)");
 
+$getMandates = $db->prepare("SELECT ID, Mandate, Last4, SortCode, `Address`, Reference, `URL`, `Status` FROM stripeMandates WHERE Customer = ? AND (`Status` = 'accepted' OR `Status` = 'pending') ORDER BY CreationTime DESC LIMIT 1");
+
 $getGala = $db->prepare("SELECT GalaName `name`, GalaFee fee, GalaVenue venue, GalaFeeConstant fixed FROM galas WHERE GalaID = ? AND Tenant = ?");
 $getGala->execute([
 	$id,
@@ -67,13 +69,25 @@ while ($entry = $getEntries->fetch(PDO::FETCH_ASSOC)) {
 	if ((string) $_POST[$entry['EntryID'] . '-amount'] != "") {
 		$amountDec = \Brick\Math\BigDecimal::of((string) $_POST[$entry['EntryID'] . '-amount']);
 		$amount = $amountDec->withPointMovedRight(2)->toInt();
-		$hasNoDD = ($entry['MandateID'] == null) || bool(getUserOption($entry['user'], 'GalaDirectDebitOptOut'));
+
+		$hasNoGCDD = ($entry['MandateID'] == null) || (getUserOption($entry['user'], 'GalaDirectDebitOptOut'));
+		$stripeCusomer = (new User($entry['user']))->getStripeCustomer();
+		if ($stripeCusomer) {
+			$getMandates->execute([
+				$stripeCusomer->id,
+			]);
+		}
+		$mandate = $getMandates->fetch(PDO::FETCH_ASSOC);
+
+		$hasNoSDD = !$mandate || (getUserOption($entry['user'], 'GalaDirectDebitOptOut'));
+
+		$hasNoDD = ($hasNoSDD && $tenant->getBooleanKey('USE_STRIPE_DIRECT_DEBIT')) || ($hasNoGCDD && !$tenant->getBooleanKey('USE_STRIPE_DIRECT_DEBIT'));
 
 		if ($amount > 0 && $amount <= 15000 && !$hasNoDD) {
 			$count = 0;
 
 			$swimsList = '<ul>';
-			foreach($swimsArray as $colTitle => $text) {
+			foreach ($swimsArray as $colTitle => $text) {
 				if ($entry[$colTitle]) {
 					$price = "";
 					if ($galaData->getEvent($colTitle)->isEnabled()) {
