@@ -265,6 +265,21 @@ class User extends Person
     return $ec->getContacts();
   }
 
+  public function getStripeCustomerID()
+  {
+    if (!app()->tenant->getStripeAccount() || !getenv('STRIPE')) {
+      return null;
+    }
+
+    \Stripe\Stripe::setApiKey(getenv('STRIPE'));
+
+    $db = app()->db;
+    $getCustomer = $db->prepare("SELECT `CustomerID` FROM `stripeCustomers` WHERE `User` = ?");
+    $getCustomer->execute([$this->id]);
+
+    return $getCustomer->fetchColumn();
+  }
+
   public function getStripeCustomer()
   {
     if (!app()->tenant->getStripeAccount() || !getenv('STRIPE')) {

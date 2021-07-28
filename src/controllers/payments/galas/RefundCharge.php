@@ -126,10 +126,10 @@ include BASE_PATH . 'views/header.php';
 					<?php do { ?>
 						<?php $hasNoGCDD = ($entry['MandateID'] == null) || (getUserOption($entry['user'], 'GalaDirectDebitOptOut')); ?>
 						<?php
-						$stripeCusomer = (new User($entry['user']))->getStripeCustomer();
+						$stripeCusomer = (new User($entry['user']))->getStripeCustomerID();
 						if ($stripeCusomer) {
 							$getMandates->execute([
-								$stripeCusomer->id,
+								$stripeCusomer,
 							]);
 						}
 						$mandate = $getMandates->fetch(PDO::FETCH_ASSOC);

@@ -72,10 +72,10 @@ while ($entry = $getEntries->fetch(PDO::FETCH_ASSOC)) {
 		$amount = $amountDec->withPointMovedRight(2)->toInt();
 
 		$hasNoGCDD = ($entry['MandateID'] == null) || (getUserOption($entry['user'], 'GalaDirectDebitOptOut'));
-		$stripeCusomer = (new User($entry['user']))->getStripeCustomer();
+		$stripeCusomer = (new User($entry['user']))->getStripeCustomerID();
 		if ($stripeCusomer) {
 			$getMandates->execute([
-				$stripeCusomer->id,
+				$stripeCusomer,
 			]);
 		}
 		$mandate = $getMandates->fetch(PDO::FETCH_ASSOC);
