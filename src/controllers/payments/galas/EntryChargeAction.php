@@ -83,6 +83,15 @@ while ($entry = $getEntries->fetch(PDO::FETCH_ASSOC)) {
 
 		$hasNoDD = ($hasNoSDD && $tenant->getBooleanKey('USE_STRIPE_DIRECT_DEBIT')) || ($hasNoGCDD && !$tenant->getBooleanKey('USE_STRIPE_DIRECT_DEBIT'));
 
+		reportError(([
+			$entry['user'],
+			$stripeCusomer,
+			$hasNoSDD,
+			$tenant->getBooleanKey('USE_STRIPE_DIRECT_DEBIT'),
+			$hasNoGCDD,
+			!$tenant->getBooleanKey('USE_STRIPE_DIRECT_DEBIT')
+		]));
+
 		if ($amount > 0 && $amount <= 15000 && !$hasNoDD) {
 			$count = 0;
 
