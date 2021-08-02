@@ -106,7 +106,7 @@ try {
       ];
       $metadata = json_encode($metadata);
 
-      $fee = BigDecimal::of((string) $squadFee->squadId->fee)->withPointMovedRight(2)->toInt();
+      $fee = BigDecimal::of((string) $squadFee->fee)->withPointMovedRight(2)->toInt();
 
       $addToPaymentsPending->execute([
         $date,
