@@ -110,7 +110,7 @@ try {
 
       $addToPaymentsPending->execute([
         $date,
-        $user,
+        $id,
         $squadFee->forename . " " . $squadFee->surname . ' - ' . $squadFee->squad . ' Squad Fees',
         $fee,
         $metadata
@@ -123,7 +123,7 @@ try {
       $track_info = [
         $monthId,
         $squadFee->memberId,
-        $user,
+        $id,
         'Squad Fees (' . $squadFee->squad . ')',
         $fee,
         'SquadFee',
