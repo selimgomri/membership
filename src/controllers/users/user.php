@@ -497,7 +497,7 @@ include BASE_PATH . "views/header.php";
             Once fully ready, you'll see a list of current memberships for this user's linked members. In the meantime, please <strong>only use the features in this section if you're taking part in our beta trials</strong>.
           </p>
 
-          <p class="d-none">
+          <p class="">
             <a href="<?= htmlspecialchars(autoUrl("users/$id/new-membership-batch")) ?>" class="btn btn-primary">New Payment Batch</a>
           </p>
 
