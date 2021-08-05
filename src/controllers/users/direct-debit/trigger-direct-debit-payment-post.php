@@ -106,11 +106,11 @@ try {
       ];
       $metadata = json_encode($metadata);
 
-      $fee = BigDecimal::of((string) $squadFee->squadId->fee)->withPointMovedRight(2)->toInt();
+      $fee = BigDecimal::of((string) $squadFee->fee)->withPointMovedRight(2)->toInt();
 
       $addToPaymentsPending->execute([
         $date,
-        $user,
+        $id,
         $squadFee->forename . " " . $squadFee->surname . ' - ' . $squadFee->squad . ' Squad Fees',
         $fee,
         $metadata
@@ -123,7 +123,7 @@ try {
       $track_info = [
         $monthId,
         $squadFee->memberId,
-        $user,
+        $id,
         'Squad Fees (' . $squadFee->squad . ')',
         $fee,
         'SquadFee',

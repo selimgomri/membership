@@ -22,6 +22,8 @@ $getEntries = $db->prepare("SELECT members.UserID `user`, 25Free, 50Free, 100Fre
 $getEntries->execute([$id]);
 $entry = $getEntries->fetch(PDO::FETCH_ASSOC);
 
+$getMandates = $db->prepare("SELECT ID, Mandate, Last4, SortCode, `Address`, Reference, `URL`, `Status` FROM stripeMandates WHERE Customer = ? AND (`Status` = 'accepted' OR `Status` = 'pending') ORDER BY CreationTime DESC LIMIT 1");
+
 $swimsArray = [
 	'25Free' => '25&nbsp;Free',
 	'50Free' => '50&nbsp;Free',
@@ -134,7 +136,21 @@ include BASE_PATH . 'views/header.php';
 				<?php if ($entry != null) { ?>
 					<ul class="list-group mb-3">
 						<?php do { ?>
-							<?php $hasNoDD = ($entry['MandateID'] == null) || (getUserOption($entry['user'], 'GalaDirectDebitOptOut')); ?>
+							<?php $hasNoGCDD = ($entry['MandateID'] == null) || (getUserOption($entry['user'], 'GalaDirectDebitOptOut')); ?>
+							<?php
+							$stripeCusomer = (new User($entry['user']))->getStripeCustomerID();
+							if ($stripeCusomer) {
+								$getMandates->execute([
+									$stripeCusomer,
+								]);
+							}
+							$mandate = $getMandates->fetch(PDO::FETCH_ASSOC);
+
+							$hasNoSDD = !$mandate || (getUserOption($entry['user'], 'GalaDirectDebitOptOut'));
+
+							$hasNoDD = ($hasNoSDD && $tenant->getBooleanKey('USE_STRIPE_DIRECT_DEBIT')) || ($hasNoGCDD && !$tenant->getBooleanKey('USE_STRIPE_DIRECT_DEBIT'));
+
+							?>
 							<?php $notReady = !$entry['Processed']; ?>
 							<?php if (!$hasNoDD && $entry['Processed'] && !$entry['Charged']) {
 								$countChargeable++;

@@ -18,6 +18,8 @@ $insertPayment = $db->prepare("INSERT INTO paymentsPending (`Date`, `Status`, Us
 $markAsCharged = $db->prepare("UPDATE galaEntries SET Charged = ?, PaymentID = ?, FeeToPay = ? WHERE EntryID = ?");
 $notify = $db->prepare("INSERT INTO notify (UserID, `Status`, `Subject`, `Message`, EmailType) VALUES (?, ?, ?, ?, ?)");
 
+$getMandates = $db->prepare("SELECT ID, Mandate, Last4, SortCode, `Address`, Reference, `URL`, `Status` FROM stripeMandates WHERE Customer = ? AND (`Status` = 'accepted' OR `Status` = 'pending') ORDER BY CreationTime DESC LIMIT 1");
+
 $getGala = $db->prepare("SELECT GalaName `name`, GalaFee fee, GalaVenue venue, GalaFeeConstant fixed FROM galas WHERE GalaID = ? AND Tenant = ?");
 $getGala->execute([
 	$id,
@@ -31,7 +33,7 @@ if ($gala == null) {
 
 $galaData = new GalaPrices($db, $id);
 
-$getEntries = $db->prepare("SELECT members.UserID `user`, 25Free, 50Free, 100Free, 200Free, 400Free, 800Free, 1500Free, 25Back, 50Back, 100Back, 200Back, 25Breast, 50Breast, 100Breast, 200Breast, 25Fly, 50Fly, 100Fly, 200Fly, 100IM, 150IM, 200IM, 400IM, MForename, MSurname, EntryID, Charged, FeeToPay, MandateID, members.UserID FROM ((((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) LEFT JOIN users ON members.UserID = users.UserID) LEFT JOIN paymentPreferredMandate ON users.UserID = paymentPreferredMandate.UserID) WHERE galaEntries.GalaID = ? AND Charged = ? AND EntryProcessed = ? AND MandateID IS NOT NULL ORDER BY MForename ASC, MSurname ASC");
+$getEntries = $db->prepare("SELECT members.UserID `user`, 25Free, 50Free, 100Free, 200Free, 400Free, 800Free, 1500Free, 25Back, 50Back, 100Back, 200Back, 25Breast, 50Breast, 100Breast, 200Breast, 25Fly, 50Fly, 100Fly, 200Fly, 100IM, 150IM, 200IM, 400IM, MForename, MSurname, EntryID, Charged, FeeToPay, MandateID, members.UserID FROM ((((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) LEFT JOIN users ON members.UserID = users.UserID) LEFT JOIN paymentPreferredMandate ON users.UserID = paymentPreferredMandate.UserID) WHERE galaEntries.GalaID = ? AND Charged = ? AND EntryProcessed = ? ORDER BY MForename ASC, MSurname ASC");
 $getEntries->execute([$id, '0', '1']);
 
 $swimsArray = [
@@ -64,16 +66,29 @@ $rowArray = [1, null, null, null, null, null, 2, 1,  null, null, 2, 1, null, nul
 $rowArrayText = ["Freestyle", null, null, null, null, null, 2, "Backstroke",  null, null, 2, "Breaststroke", null, null, 2, "Butterfly", null, null, 2, "Individual Medley", null, null, 2];
 
 while ($entry = $getEntries->fetch(PDO::FETCH_ASSOC)) {
+
 	if ((string) $_POST[$entry['EntryID'] . '-amount'] != "") {
 		$amountDec = \Brick\Math\BigDecimal::of((string) $_POST[$entry['EntryID'] . '-amount']);
 		$amount = $amountDec->withPointMovedRight(2)->toInt();
-		$hasNoDD = ($entry['MandateID'] == null) || bool(getUserOption($entry['user'], 'GalaDirectDebitOptOut'));
+
+		$hasNoGCDD = ($entry['MandateID'] == null) || (getUserOption($entry['user'], 'GalaDirectDebitOptOut'));
+		$stripeCusomer = (new User($entry['user']))->getStripeCustomerID();
+		if ($stripeCusomer) {
+			$getMandates->execute([
+				$stripeCusomer,
+			]);
+		}
+		$mandate = $getMandates->fetch(PDO::FETCH_ASSOC);
+
+		$hasNoSDD = !$mandate || (getUserOption($entry['user'], 'GalaDirectDebitOptOut'));
+
+		$hasNoDD = ($hasNoSDD && $tenant->getBooleanKey('USE_STRIPE_DIRECT_DEBIT')) || ($hasNoGCDD && !$tenant->getBooleanKey('USE_STRIPE_DIRECT_DEBIT'));
 
 		if ($amount > 0 && $amount <= 15000 && !$hasNoDD) {
 			$count = 0;
 
 			$swimsList = '<ul>';
-			foreach($swimsArray as $colTitle => $text) {
+			foreach ($swimsArray as $colTitle => $text) {
 				if ($entry[$colTitle]) {
 					$price = "";
 					if ($galaData->getEvent($colTitle)->isEnabled()) {
