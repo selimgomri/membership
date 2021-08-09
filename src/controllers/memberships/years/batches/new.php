@@ -86,7 +86,7 @@ include BASE_PATH . "views/header.php";
         </p>
 
         <p>
-          You can make adjustments to the normal fee by editing the prices shown. <strong>When you create a batch manually, we won't automatically apply discounts for families. You'll need to make appropriate adjustments yourself.</strong>
+          You can make adjustments to the normal fee by editing the prices shown. <strong>When you create a batch manually, we won't automatically apply discounts for families. You'll need to make appropriate adjustments yourself to ensure the total is correct.</strong>
         </p>
 
         <p>
@@ -240,7 +240,7 @@ include BASE_PATH . "views/header.php";
           </div>
 
           <div class="form-check mb-3">
-            <input class="form-check-input" type="checkbox" value="" id="automatic-reminders" name="automatic-reminders" checked>
+            <input class="form-check-input" type="checkbox" value="" id="automatic-reminders" name="automatic-reminders" disabled>
             <label class="form-check-label" for="automatic-reminders">
               Send automatic email reminders until the user pays or the due date has passed (coming soon)
             </label>
@@ -249,31 +249,31 @@ include BASE_PATH . "views/header.php";
           <div class="mb-3">
             <p class="mb-2">Payment Options</p>
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="payment-card" name="payment-card" checked>
+              <input class="form-check-input" type="checkbox" id="payment-card" name="payment-card" value="1" checked>
               <label class="form-check-label" for="payment-card">
                 Credit/Debit card
               </label>
             </div>
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="payment-direct-debit" name="payment-direct-debit" checked>
+              <input class="form-check-input" type="checkbox" id="payment-direct-debit" name="payment-direct-debit" value="1" checked>
               <label class="form-check-label" for="payment-direct-debit">
                 Direct Debit
               </label>
             </div>
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="payment-cash" name="payment-cash" disabled>
+              <input class="form-check-input" type="checkbox" id="payment-cash" name="payment-cash" value="1" disabled>
               <label class="form-check-label" for="payment-cash">
                 Cash
               </label>
             </div>
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="payment-cheque" name="payment-cheque" disabled>
+              <input class="form-check-input" type="checkbox" id="payment-cheque" name="payment-cheque" value="1" disabled>
               <label class="form-check-label" for="payment-cheque">
                 Cheque
               </label>
             </div>
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="payment-wire" name="payment-wire" disabled>
+              <input class="form-check-input" type="checkbox" id="payment-wire" name="payment-wire" value="1" disabled>
               <label class="form-check-label" for="payment-wire">
                 Bank Transfer
               </label>
