@@ -78,7 +78,7 @@ include BASE_PATH . "views/header.php";
 								</dt>
 								<dd class="col-9">
 									<?php if (sizeof($payMethods) > 0) { ?>
-										<ul>
+										<ul class="mb-0">
 											<?php if (in_array('card', $payMethods)) { ?>
 												<li>Credit/debit card</li>
 											<?php } ?>
