@@ -202,12 +202,7 @@ class Session
 
       $tenant = \Tenant::fromId($this->tenant);
 
-      $customer = null;
-      if ($this->user) {
-        $getCustomer = $db->prepare("SELECT CustomerID FROM stripeCustomers WHERE User = ?");
-        $getCustomer->execute([$this->user]);
-        $customer = $getCustomer->fetchColumn();
-      }
+      $customer = (new \User($this->user))->getStripeCustomer();
 
       $intent = \Stripe\PaymentIntent::update(
         $this->intent,
@@ -240,12 +235,7 @@ class Session
 
     $tenant = \Tenant::fromId($this->tenant);
 
-    $customer = null;
-    if ($this->user) {
-      $getCustomer = $db->prepare("SELECT CustomerID FROM stripeCustomers WHERE User = ?");
-      $getCustomer->execute([$this->user]);
-      $customer = $getCustomer->fetchColumn();
-    }
+    $customer = (new \User($this->user))->getStripeCustomer();
 
     $intent = \Stripe\PaymentIntent::create([
       'amount' => $this->amount,
