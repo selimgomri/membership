@@ -202,7 +202,7 @@ class Session
 
       $tenant = \Tenant::fromId($this->tenant);
 
-      $customer = (new \User($this->user))->getStripeCustomer();
+      $customer = (new \User($this->user))->getStripeCustomerID();
 
       $intent = \Stripe\PaymentIntent::update(
         $this->intent,
@@ -235,7 +235,7 @@ class Session
 
     $tenant = \Tenant::fromId($this->tenant);
 
-    $customer = (new \User($this->user))->getStripeCustomer();
+    $customer = (new \User($this->user))->getStripeCustomerID();
 
     $intent = \Stripe\PaymentIntent::create([
       'amount' => $this->amount,

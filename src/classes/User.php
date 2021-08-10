@@ -277,7 +277,13 @@ class User extends Person
     $getCustomer = $db->prepare("SELECT `CustomerID` FROM `stripeCustomers` WHERE `User` = ?");
     $getCustomer->execute([$this->id]);
 
-    return $getCustomer->fetchColumn();
+    $customerId = $getCustomer->fetchColumn();
+
+    if (!$customerId) {
+      $customerId = $this->getStripeCustomer()->id;
+    }
+
+    return $customerId;
   }
 
   public function getStripeCustomer()

@@ -152,6 +152,9 @@ try {
       case 'gala_entry':
         \SCDS\Checkout\ItemHandlers\GalaEntry::paid($item, $paymentId);
         break;
+      case 'membership_batch_item':
+        \SCDS\Checkout\ItemHandlers\MembershipFeeBatch::paid($item, $paymentId, $intent->id);
+        break;
     }
   }
 

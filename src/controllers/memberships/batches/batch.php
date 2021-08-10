@@ -3,7 +3,7 @@
 $user = app()->user;
 $db = app()->db;
 
-$getBatch = $db->prepare("SELECT membershipBatch.ID id, membershipYear.ID yearId, DueDate due, Total total, membershipYear.Name yearName, membershipYear.StartDate yearStart, membershipYear.EndDate yearEnd, PaymentTypes payMethods FROM membershipBatch INNER JOIN membershipYear ON membershipBatch.Year = membershipYear.ID INNER JOIN users ON users.UserID = membershipBatch.User WHERE membershipBatch.ID = ? AND users.Tenant = ?");
+$getBatch = $db->prepare("SELECT membershipBatch.ID id, membershipYear.ID yearId, membershipBatch.Completed completed, DueDate due, Total total, membershipYear.Name yearName, membershipYear.StartDate yearStart, membershipYear.EndDate yearEnd, PaymentTypes payMethods, PaymentDetails payDetails FROM membershipBatch INNER JOIN membershipYear ON membershipBatch.Year = membershipYear.ID INNER JOIN users ON users.UserID = membershipBatch.User WHERE membershipBatch.ID = ? AND users.Tenant = ?");
 $getBatch->execute([
   $id,
   app()->tenant->getId(),
@@ -84,6 +84,7 @@ include BASE_PATH . "views/header.php";
           <?= htmlspecialchars(MoneyHelpers::formatCurrency(MoneyHelpers::intToDecimal($batch->total), 'GBP')) ?>
         </dd>
 
+        <?php if (!$batch->completed) { ?>
         <dt class="col-3">
           Pay by
         </dt>
@@ -100,9 +101,10 @@ include BASE_PATH . "views/header.php";
               No payment methods - speak to club staff
             <?php } ?>
         </dd>
+        <?php } ?>
       </dl>
 
-      <?php if ($batch->total > 0 && sizeof($payMethods) > 0) { ?>
+      <?php if (!$batch->completed && $batch->total > 0 && sizeof($payMethods) > 0) { ?>
         <form method="post">
           <h2>Pay</h2>
           <?php if (sizeof($payMethods) > 1) { ?>
@@ -111,42 +113,42 @@ include BASE_PATH . "views/header.php";
 
             <div class="mb-3">
               <div class="form-check">
-                <input class="form-check-input" type="radio" name="pay-method" id="pay-card" value="1" <?php if (!in_array('card', $payMethods)) { ?>disabled<?php } ?>>
+                <input class="form-check-input" type="radio" name="pay-method" id="pay-card" value="card" <?php if (!in_array('card', $payMethods)) { ?>disabled<?php } ?>>
                 <label class="form-check-label" for="pay-card">
                   Credit/debit card
                 </label>
               </div>
               <div class="form-check">
-                <input class="form-check-input" type="radio" name="pay-method" id="pay-dd" value="1" <?php if (!in_array('card', $payMethods)) { ?>disabled<?php } ?>>
+                <input class="form-check-input" type="radio" name="pay-method" id="pay-dd" value="dd" <?php if (!in_array('card', $payMethods)) { ?>disabled<?php } ?>>
                 <label class="form-check-label" for="pay-dd">
                   Next Direct Debit payment
                 </label>
               </div>
 
               <div class="form-check">
-                <input class="form-check-input" type="radio" name="pay-method" id="pay-dd" value="1" <?php if (!in_array('cash', $payMethods)) { ?>disabled<?php } ?>>
-                <label class="form-check-label" for="pay-dd">
+                <input class="form-check-input" type="radio" name="pay-method" id="pay-cash" value="cash" <?php if (!in_array('cash', $payMethods)) { ?>disabled<?php } ?>>
+                <label class="form-check-label" for="pay-cash">
                   Cash
                 </label>
               </div>
 
               <div class="form-check">
-                <input class="form-check-input" type="radio" name="pay-method" id="pay-dd" value="1" <?php if (!in_array('cheque', $payMethods)) { ?>disabled<?php } ?>>
-                <label class="form-check-label" for="pay-dd">
+                <input class="form-check-input" type="radio" name="pay-method" id="pay-cheque" value="cheque" <?php if (!in_array('cheque', $payMethods)) { ?>disabled<?php } ?>>
+                <label class="form-check-label" for="pay-cheque">
                   Cheque
                 </label>
               </div>
 
               <div class="form-check mb-0">
-                <input class="form-check-input" type="radio" name="pay-method" id="pay-dd" value="1" <?php if (!in_array('bacs', $payMethods)) { ?>disabled<?php } ?>>
-                <label class="form-check-label" for="pay-dd">
+                <input class="form-check-input" type="radio" name="pay-method" id="pay-bacs" value="bacs" <?php if (!in_array('bacs', $payMethods)) { ?>disabled<?php } ?>>
+                <label class="form-check-label" for="pay-bacs">
                   Bank transfer
                 </label>
               </div>
             </div>
           <?php } else if (sizeof($payMethods) > 0) { ?>
             <!-- Just go straight to payment -->
-            <p>You can only pay for this batch with PAY_METHOD</p>
+            <p>You can only pay for this batch with {{PAY_METHOD}}</p>
           <?php } ?>
           <p class="d-grid mb-1">
             <button type="submit" class="btn btn-success">Pay for memberships <i class="fa fa-chevron-right" aria-hidden="true"></i></button>
