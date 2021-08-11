@@ -41,7 +41,7 @@ if (isset($_POST['pay-method'])) {
       }
 
       $checkoutSession->addItem([
-        'name' => $item->membershipName,
+        'name' => $item->firstName . ' ' . $item->lastName . ', ' . $item->membershipName,
         'description' => $description,
         'amount' => $item->amount,
         'sub_items' => [],

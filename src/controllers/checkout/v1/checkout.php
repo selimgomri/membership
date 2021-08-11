@@ -32,7 +32,7 @@ $methodId = $customerID = null;
 
 $paymentIntent = $checkoutSession->getPaymentIntent();
 
-$pagetitle = 'V1 Checkout';
+$pagetitle = 'Checkout';
 
 $paymentRequestItems = [];
 $paymentRequestItems[] = [
@@ -65,82 +65,65 @@ include BASE_PATH . 'views/head.php';
 <div id="stripe-data" data-stripe-publishable="<?= htmlspecialchars(getenv('STRIPE_PUBLISHABLE')) ?>" data-redirect-url-new="<?= htmlspecialchars($checkoutSession->getUrl()) ?>" data-redirect-url="<?= htmlspecialchars($redirect) ?>" data-org-name="<?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?>" data-intent-amount="<?= htmlspecialchars($paymentIntent->amount) ?>" data-intent-currency="<?= htmlspecialchars($paymentIntent->currency) ?>" data-payment-request-line-items="<?= htmlspecialchars(json_encode($paymentRequestItems)) ?>" data-stripe-account-id="<?= htmlspecialchars($tenant->getStripeAccount()) ?>">
 </div>
 
-<div class="bg-light  py-3 mb-3">
-  <div class="container-xl">
+<div class="bg-light py-3 mb-3">
+  <div class="container">
 
-    <nav aria-label="breadcrumb" class="d-none">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('payments')) ?>">Payments</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Checkout</li>
-      </ol>
-    </nav>
-
-    <p>
-      <a href="<?= htmlspecialchars($cancelUrl) ?>" class="btn btn-outline-dark btn btn-outline-light-d"><span class="fa fa-close"></span> Cancel payment</a>
-    </p>
-
-    <div class="row align-items-center">
-      <div class="col-lg-8">
-        <h1>Checkout</h1>
-        <p class="lead mb-0">
-          SCDS Checkout is the new single checkout service for on-session customer payments.
-        </p>
-      </div>
-      <div class="col text-lg-end d-none">
-        <div class="d-lg-none mt-3"></div>
-        <div class="accepted-network-logos">
-          <p class="mb-0">
-            <?= \SCDS\Checkout\Assets::cardLogos() ?>
-          </p>
+    <div class="row mb-4 align-items-center">
+      <div class="col-auto">
+        <div class="h1 mb-0">
+          <a href="<?= htmlspecialchars($cancelUrl) ?>" class="text-decoration-none">
+            <?php if ($tenant->getKey('LOGO_DIR')) { ?>
+              <img src="<?= htmlspecialchars(getUploadedAssetUrl($logos . 'logo-75.png')) ?>" srcset="<?= htmlspecialchars(getUploadedAssetUrl($logos . 'logo-75@2x.png')) ?> 2x, <?= htmlspecialchars(getUploadedAssetUrl($logos . 'logo-75@3x.png')) ?> 3x" alt="<?= htmlspecialchars($tenant->getName()) ?>" class="img-fluid" style="height: 75px">
+            <?php } else { ?>
+              <?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?>
+            <?php } ?>
+          </a>
         </div>
       </div>
-      <div class="col">
-        <img src="<?= htmlspecialchars(autoUrl('img/corporate/scds.png')) ?>" class="img-fluid ms-auto d-none d-lg-flex rounded" alt="SCDS Logo" width="75" height="75">
+      <div class="col-auto ms-auto">
+        <a href="<?= htmlspecialchars($cancelUrl) ?>" class="btn btn-outline-dark rounded-pill"><span class="d-none d-lg-inline">Cancel </span><span class="fa fa-close"></span></a>
       </div>
+
     </div>
+
+    <h1 class="mb-0">
+      <span class="text-muted small">Pay <?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?></span> <br><?= htmlspecialchars(MoneyHelpers::formatCurrency(MoneyHelpers::intToDecimal($checkoutSession->amount), $checkoutSession->currency)) ?>
+    </h1>
+
+    <p class="mb-0 mt-3 d-block d-lg-none">You'll pay for <?= htmlspecialchars($numFormatter->format(sizeof($items))) ?> item<?php if (sizeof($items) != 1) { ?>s<?php } ?>. <a data-bs-toggle="collapse" href="#entry-list-group" role="button" aria-expanded="false" aria-controls="entry-list-group">Show details <i class="fa fa-caret-down" aria-hidden="true"></i></a></p>
   </div>
 </div>
 
-<div class="container-xl">
+<div class="container">
   <div class="row justify-content-between">
     <div class="col-lg-4 order-lg-2">
 
       <div class="position-sticky top-3">
 
-        <h2>Items</h2>
-        <p>You'll pay for the following items</p>
+        <p class="d-none d-lg-block">You'll pay for the following item<?php if (sizeof($items) != 1) { ?>s<?php } ?></p>
 
-        <ul class="list-group mb-3 accordion" id="entry-list-group">
+        <ul class="collapse d-lg-flex list-group mb-3 accordion" id="entry-list-group">
           <?php foreach ($items as $item) { ?>
             <li class="list-group-item">
-              <div class="row">
-                <div class="col-8 col-sm-5 col-md-4 col-lg-6">
-                  <h3><?= htmlspecialchars($item->name) ?></h3>
+              <h3><?= htmlspecialchars($item->name) ?></h3>
 
-                  <?php if ($item->description) { ?>
-                    <?= $markdown->text($item->description) ?>
-                  <?php } ?>
+              <?php if (sizeof($item->subItems) > 0) { ?>
+                <p>
+                  <?= mb_convert_case($numFormatter->format(sizeof($item->subItems)), MB_CASE_TITLE_SIMPLE) ?> sub-item<?php if (sizeof($item->subItems) != 1) { ?>s<?php } ?>
+                </p>
+              <?php } ?>
 
-                  <p class="mb-0">
-                    <a data-bs-toggle="collapse" href="#<?= htmlspecialchars('item-' . $item->id) ?>" role="button" aria-expanded="false" aria-controls="<?= htmlspecialchars('item-' . $item->id) ?>">
-                      View sub-items <i class="fa fa-caret-down" aria-hidden="true"></i>
-                    </a>
-                  </p>
-
-                </div>
-                <div class="col text-end">
-                  <?php if (sizeof($item->subItems) > 0) { ?>
-                    <p>
-                      <?= mb_convert_case($numFormatter->format(sizeof($item->subItems)), MB_CASE_TITLE_SIMPLE) ?> sub-item<?php if (sizeof($item->subItems) != 1) { ?>s<?php } ?>
+              <div class="row align-items-center">
+                <?php if (sizeof($item->subItems) > 0 || $item->description) { ?>
+                  <div class="col-auto">
+                    <p class="mb-0">
+                      <a data-bs-toggle="collapse" href="#<?= htmlspecialchars('item-' . $item->id) ?>" role="button" aria-expanded="false" aria-controls="<?= htmlspecialchars('item-' . $item->id) ?>" class="">
+                        Show details <i class="fa fa-caret-down" aria-hidden="true"></i>
+                      </a>
                     </p>
-                  <?php } ?>
-
-                  <!--<?php if ($notReady) { ?>
-              <p>
-                Once you pay for this entry, you won't be able to edit it.
-              </p>
-              <?php } ?>-->
-
+                  </div>
+                <?php } ?>
+                <div class="col-auto ms-auto">
                   <p class="mb-0">
                     <strong>Fee <?= htmlspecialchars(MoneyHelpers::formatCurrency(MoneyHelpers::intToDecimal($item->amount), $item->currency)) ?></strong>
                   </p>
@@ -149,20 +132,26 @@ include BASE_PATH . 'views/head.php';
 
               <div class="collapse" id="<?= htmlspecialchars('item-' . $item->id) ?>" data-parent="#entry-list-group">
                 <div class="mt-3"></div>
-                <ul class="list-unstyled">
-                  <?php foreach ($item->subItems as $item) { ?>
-                    <li>
-                      <div class="row">
-                        <div class="col-auto">
-                          <?= htmlspecialchars($item->name) ?>
+                <?php if ($item->description) { ?>
+                  <?= $markdown->text($item->description) ?>
+                <?php } ?>
+
+                <?php if (sizeof($item->subItems) > 0) { ?>
+                  <ul class="list-unstyled">
+                    <?php foreach ($item->subItems as $item) { ?>
+                      <li>
+                        <div class="row">
+                          <div class="col-auto">
+                            <?= htmlspecialchars($item->name) ?>
+                          </div>
+                          <div class="col-auto ms-auto">
+                            <?= htmlspecialchars(MoneyHelpers::formatCurrency(MoneyHelpers::intToDecimal($item->amount), $item->currency)) ?>
+                          </div>
                         </div>
-                        <div class="col-auto ms-auto">
-                          <?= htmlspecialchars(MoneyHelpers::formatCurrency(MoneyHelpers::intToDecimal($item->amount), $item->currency)) ?>
-                        </div>
-                      </div>
-                    </li>
-                  <?php } ?>
-                </ul>
+                      </li>
+                    <?php } ?>
+                  </ul>
+                <?php } ?>
               </div>
             </li>
           <?php } ?>
@@ -185,7 +174,6 @@ include BASE_PATH . 'views/head.php';
       </div>
     </div>
     <div class="col-lg-7 order-lg-1">
-      <h2 class="mb-3">Payment details</h2>
 
       <div id="payment-request-card">
         <div class="mb-3">
@@ -298,7 +286,7 @@ include BASE_PATH . 'views/head.php';
               </div>
             </div>
 
-            <div class="row">
+            <div class="row gx-3">
               <div class="col">
                 <div class="mb-3">
                   <label class="form-label" for="card-expiry-element">
@@ -346,10 +334,11 @@ include BASE_PATH . 'views/head.php';
   </div>
 
   <div class="row">
-    <div class="col">
+    <div class="col text-center accepted-network-logos py-2">
 
-      <?php // pre($checkoutSession) 
-      ?>
+      <p class="mb-2">We proudly accept</p>
+
+      <?= \SCDS\Checkout\Assets::networkLogos() ?>
 
     </div>
   </div>
