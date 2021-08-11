@@ -117,9 +117,9 @@ include BASE_PATH . "views/header.php";
 
                 <h3>Current Memberships for <?= htmlspecialchars($year['Name']) ?></h3>
                 <?php if ($membership) { ?>
-                  <ul>
+                  <ul class="mb-3">
                     <?php do { ?>
-                      <li><?= htmlspecialchars($membership->name) ?>, Paid &pound;<?= htmlspecialchars($membership->paid) ?></li>
+                      <li><?= htmlspecialchars($membership->name) ?>, Paid <?= htmlspecialchars(MoneyHelpers::formatCurrency(MoneyHelpers::intToDecimal($membership->paid), 'GBP')) ?></li>
                     <?php } while ($membership = $getCurrentMemberships->fetch(PDO::FETCH_OBJ)); ?>
                   </ul>
                 <?php } else { ?>
@@ -137,9 +137,25 @@ include BASE_PATH . "views/header.php";
                   $id,
                   $member->ngb,
                 ]);
-                $has = $hasMembership->fetchColumn() > 0;
+                $hasNgb = $hasMembership->fetchColumn() > 0;
+
+                $hasMembership->execute([
+                  $member->id,
+                  $id,
+                  $member->club,
+                ]);
+                $hasClub = $hasMembership->fetchColumn() > 0;
                 ?>
-                <?php if (!$has) { ?>
+
+                <?php if ($hasClub && $hasNgb) { ?>
+                  <div class="alert alert-info mb-0">
+                    <p class="mb-0">
+                      <strong>There are no additional memberships available for <?= htmlspecialchars($member->fn) ?></strong>
+                    </p>
+                  </div>
+                <?php } ?>
+
+                <?php if (!$hasNgb) { ?>
 
                   <div class="card card-body mb-2">
 
@@ -178,15 +194,7 @@ include BASE_PATH . "views/header.php";
 
                 <?php } ?>
 
-                <?php
-                $hasMembership->execute([
-                  $member->id,
-                  $id,
-                  $member->club,
-                ]);
-                $has = $hasMembership->fetchColumn() > 0;
-                ?>
-                <?php if (!$has) { ?>
+                <?php if (!$hasClub) { ?>
 
                   <div class="card card-body mb-2">
 

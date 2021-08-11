@@ -42,7 +42,7 @@ if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin' && i
   $payments->bindValue(':num', 10, PDO::PARAM_INT);
   $payments->execute();
 } else {
-  $payments = $db->prepare("SELECT stripePayments.ID, stripePayments.DateTime, stripePayMethods.Brand, stripePayMethods.Last4, stripePayments.Amount FROM stripePayments LEFT JOIN stripePayMethods ON stripePayments.Method = stripePayMethods.ID WHERE User = :user AND Paid ORDER BY `DateTime` DESC LIMIT :offset, :num;");
+  $payments = $db->prepare("SELECT stripePayments.ID, stripePayments.DateTime, stripePayMethods.Brand, stripePayMethods.Last4, stripePayments.Amount, users.Forename, users.Surname FROM ((stripePayments LEFT JOIN stripePayMethods ON stripePayments.Method = stripePayMethods.ID) LEFT JOIN users ON stripePayments.User = users.UserID) WHERE User = :user AND Paid ORDER BY `DateTime` DESC LIMIT :offset, :num;");
   $payments->bindValue(':user', $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], PDO::PARAM_INT);
   $payments->bindValue(':offset', $start, PDO::PARAM_INT);
   $payments->bindValue(':num', 10, PDO::PARAM_INT);

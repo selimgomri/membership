@@ -13,7 +13,7 @@ class MembershipFeeBatch
     \Stripe\Stripe::setApiKey(getenv('STRIPE'));
 
     // Get batch item
-    $getBatchItem = $db->prepare("SELECT membershipBatchItems.ID, membershipBatchItems.Batch, membershipBatchItems.Membership, membershipBatchItems.Member, membershipBatchItems.Amount, membershipBatchItems.Notes, members.MForename, members.MSurname, clubMembershipClasses.Name FROM membershipBatchItems INNER JOIN members ON members.MemberID = membershipBatchItems.Member INNER JOIN clubMembershipClasses ON clubMembershipClasses.ID = membershipBatchItems.Membership WHERE membershipBatchItems.ID = ?");
+    $getBatchItem = $db->prepare("SELECT membershipBatchItems.ID, membershipBatchItems.Batch, membershipBatchItems.Membership, membershipBatchItems.Member, membershipBatchItems.Amount, membershipBatchItems.Notes, members.MForename, members.MSurname, clubMembershipClasses.Name, membershipBatch.Year, membershipYear.StartDate, membershipYear.EndDate FROM ((((membershipBatchItems INNER JOIN members ON members.MemberID = membershipBatchItems.Member) INNER JOIN clubMembershipClasses ON clubMembershipClasses.ID = membershipBatchItems.Membership) INNER JOIN membershipBatch ON membershipBatch.ID = membershipBatchItems.Batch) INNER JOIN membershipYear ON membershipYear.ID = membershipBatch.Year) WHERE membershipBatchItems.ID = ?");
     $getBatchItem->execute([
       $item->attributes->id,
     ]);
@@ -30,19 +30,21 @@ class MembershipFeeBatch
       ]
     );
 
+    $paymentInfo = json_encode([
+      'type' => 'stripe',
+      'data' =>
+      [
+        'intent_id' => $stripePayment,
+        'method_id' => $intent->payment_method->id,
+        'payment_intent' => $intent,
+      ]
+    ]);
+
     // Update the batch to say it is paid
     $updateBatch = $db->prepare("UPDATE membershipBatch SET Completed = ?, PaymentDetails = ? WHERE ID = ?");
     $updateBatch->execute([
       (int) true,
-      json_encode([
-        'type' => 'stripe',
-        'data' =>
-        [
-          'intent_id' => $stripePayment,
-          'method_id' => $intent->payment_method->id,
-          'payment_intent' => $intent,
-        ]
-      ]),
+      $paymentInfo,
       $batchItem->Batch,
     ]);
 
@@ -54,6 +56,22 @@ class MembershipFeeBatch
       $item->amount,
       $item->currency,
       0,
+    ]);
+
+    $time = new \DateTime('now', new \DateTimeZone('UTC'));
+
+    // Add membership record!
+    $addMembership = $db->prepare("INSERT INTO `memberships` (`Member`, `Year`, `Membership`, `Amount`, `StartDate`, `EndDate`, `Purchased`, `PaymentInfo`, `Notes`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);");
+    $addMembership->execute([
+      $batchItem->Member,
+      $batchItem->Year,
+      $batchItem->Membership,
+      $batchItem->Amount,
+      $batchItem->StartDate,
+      $batchItem->EndDate,
+      $time->format('Y-m-d H:i:s'),
+      $paymentInfo,
+      $batchItem->Notes,
     ]);
   }
 }
