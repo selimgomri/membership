@@ -83,7 +83,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
           We proudly accept all major credit and debit cards!
         </p>
         <p>
-          <?= \SCDS\Checkout\Assets::cardLogos() ?>
+          <?= \SCDS\Checkout\Assets::networkLogos() ?>
         </p>
       </div>
 
