@@ -6,12 +6,9 @@ $start = 0;
 
 $perPage = 20;
 
-if (isset($_GET['page']) && ((int) $_GET['page']) != 0) {
-  $page = (int) $_GET['page'];
-  $start = ($page - 1) * $perPage;
-} else {
-  $page = 1;
-}
+$pagination = new \SCDS\Pagination();
+
+$page = $pagination->get_page();
 
 if ($page == 1) {
   // Clear old logs
@@ -67,6 +64,9 @@ BY `Time` DESC LIMIT :offset, :num");
   $sql->bindValue(':num', $perPage, PDO::PARAM_INT);
   $sql->execute();
 }
+
+$pagination->records($numLogs);
+$pagination->records_per_page($perPage);
 
 $row = $sql->fetch(PDO::FETCH_ASSOC);
 
@@ -129,45 +129,7 @@ include BASE_PATH . "views/root/header.php";
           <?php } while ($row = $sql->fetch(PDO::FETCH_ASSOC)); ?>
         </ul>
 
-
-        <nav aria-label="Page navigation">
-          <ul class="pagination">
-            <?php if ($numLogs <= $perPage) { ?>
-              <li class="page-item active"><a class="page-link" href="<?php echo autoUrl("admin/audit/requests?page="); ?><?php echo $page ?><?php if ($user) { ?>&user=<?= htmlspecialchars($user->getId()) ?><?php } ?>"><?php echo $page ?></a></li>
-            <?php } else if ($numLogs <= 20) { ?>
-              <?php if ($page == 1) { ?>
-                <li class="page-item active"><a class="page-link" href="<?php echo autoUrl("admin/audit/requests?page="); ?><?php echo $page ?><?php if ($user) { ?>&user=<?= htmlspecialchars($user->getId()) ?><?php } ?>"><?php echo $page ?></a></li>
-                <li class="page-item"><a class="page-link" href="<?php echo autoUrl("admin/audit/requests?page="); ?><?php echo $page + 1 ?><?php if ($user) { ?>&user=<?= htmlspecialchars($user->getId()) ?><?php } ?>"><?php echo $page + 1 ?></a></li>
-                <li class="page-item"><a class="page-link" href="<?php echo autoUrl("admin/audit/requests?page="); ?><?php echo $page + 1 ?><?php if ($user) { ?>&user=<?= htmlspecialchars($user->getId()) ?><?php } ?>">Next</a></li>
-              <?php } else { ?>
-                <li class="page-item"><a class="page-link" href="<?php echo autoUrl("admin/audit/requests?page="); ?><?php echo $page - 1 ?><?php if ($user) { ?>&user=<?= htmlspecialchars($user->getId()) ?><?php } ?>">Previous</a></li>
-                <li class="page-item"><a class="page-link" href="<?php echo autoUrl("admin/audit/requests?page="); ?><?php echo $page - 1 ?><?php if ($user) { ?>&user=<?= htmlspecialchars($user->getId()) ?><?php } ?>"><?php echo $page - 1 ?></a></li>
-                <li class="page-item active"><a class="page-link" href="<?php echo autoUrl("admin/audit/requests?page="); ?><?php echo $page ?><?php if ($user) { ?>&user=<?= htmlspecialchars($user->getId()) ?><?php } ?>"><?php echo $page ?></a></li>
-              <?php } ?>
-            <?php } else { ?>
-              <?php if ($page == 1) { ?>
-                <li class="page-item active"><a class="page-link" href="<?php echo autoUrl("admin/audit/requests?page="); ?><?php echo $page ?><?php if ($user) { ?>&user=<?= htmlspecialchars($user->getId()) ?><?php } ?>"><?php echo $page ?></a></li>
-                <li class="page-item"><a class="page-link" href="<?php echo autoUrl("admin/audit/requests?page="); ?><?php echo $page + 1 ?><?php if ($user) { ?>&user=<?= htmlspecialchars($user->getId()) ?><?php } ?>"><?php echo $page + 1 ?></a></li>
-                <li class="page-item"><a class="page-link" href="<?php echo autoUrl("admin/audit/requests?page="); ?><?php echo $page + 2 ?><?php if ($user) { ?>&user=<?= htmlspecialchars($user->getId()) ?><?php } ?>"><?php echo $page + 2 ?></a></li>
-                <li class="page-item"><a class="page-link" href="<?php echo autoUrl("admin/audit/requests?page="); ?><?php echo $page + 1 ?><?php if ($user) { ?>&user=<?= htmlspecialchars($user->getId()) ?><?php } ?>">Next</a></li>
-              <?php } else { ?>
-                <li class="page-item"><a class="page-link" href="<?php echo autoUrl("admin/audit/requests?page="); ?><?php echo $page - 1 ?><?php if ($user) { ?>&user=<?= htmlspecialchars($user->getId()) ?><?php } ?>">Previous</a></li>
-                <?php if ($page > 2) { ?>
-                  <li class="page-item"><a class="page-link" href="<?php echo autoUrl("admin/audit/requests?page="); ?><?php echo $page - 2 ?><?php if ($user) { ?>&user=<?= htmlspecialchars($user->getId()) ?><?php } ?>"><?php echo $page - 2 ?></a></li>
-                <?php } ?>
-                <li class="page-item"><a class="page-link" href="<?php echo autoUrl("admin/audit/requests?page="); ?><?php echo $page - 1 ?><?php if ($user) { ?>&user=<?= htmlspecialchars($user->getId()) ?><?php } ?>"><?php echo $page - 1 ?></a></li>
-                <li class="page-item active"><a class="page-link" href="<?php echo autoUrl("admin/audit/requests?page="); ?><?php echo $page ?><?php if ($user) { ?>&user=<?= htmlspecialchars($user->getId()) ?><?php } ?>"><?php echo $page ?></a></li>
-                <?php if ($numLogs > $page * $perPage) { ?>
-                  <li class="page-item"><a class="page-link" href="<?php echo autoUrl("admin/audit/requests?page="); ?><?php echo $page + 1 ?><?php if ($user) { ?>&user=<?= htmlspecialchars($user->getId()) ?><?php } ?>"><?php echo $page + 1 ?></a></li>
-                  <?php if ($numLogs > $page * $perPage + $perPage) { ?>
-                    <li class="page-item"><a class="page-link" href="<?php echo autoUrl("admin/audit/requests?page="); ?><?php echo $page + 2 ?><?php if ($user) { ?>&user=<?= htmlspecialchars($user->getId()) ?><?php } ?>"><?php echo $page + 2 ?></a></li>
-                  <?php } ?>
-                  <li class="page-item"><a class="page-link" href="<?php echo autoUrl("admin/audit/requests?page="); ?><?php echo $page + 1 ?><?php if ($user) { ?>&user=<?= htmlspecialchars($user->getId()) ?><?php } ?>">Next</a></li>
-                <?php } ?>
-              <?php } ?>
-            <?php } ?>
-          </ul>
-        </nav>
+        <?= $pagination->render() ?>
 
       <?php } else { ?>
         <div class="alert alert-info">

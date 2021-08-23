@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4d8c3de3d4b80cc4ae0b58d8b6d543c3",
+    "content-hash": "e58cabee159071b11291d92879597950",
     "packages": [
         {
             "name": "adoy/oauth2",
@@ -4294,6 +4294,56 @@
             "time": "2020-05-15T15:46:20+00:00"
         },
         {
+            "name": "stefangabos/zebra_pagination",
+            "version": "2.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/stefangabos/Zebra_Pagination.git",
+                "reference": "40b5a010382da43a21e59507a8800679691c42f9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/stefangabos/Zebra_Pagination/zipball/40b5a010382da43a21e59507a8800679691c42f9",
+                "reference": "40b5a010382da43a21e59507a8800679691c42f9",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "Zebra_Pagination.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Stefan Gabos",
+                    "email": "contact@stefangabos.ro",
+                    "homepage": "https://github.com/stefangabos",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A generic, Twitter Bootsrap compatible, PHP pagination library that automatically generates navigation links",
+            "homepage": "https://github.com/stefangabos/Zebra_Pagination",
+            "keywords": [
+                "paginate",
+                "pagination",
+                "paginator",
+                "paging",
+                "php"
+            ],
+            "support": {
+                "issues": "https://github.com/stefangabos/Zebra_Pagination/issues",
+                "source": "https://github.com/stefangabos/Zebra_Pagination/tree/2.4.0"
+            },
+            "time": "2021-06-13T12:52:56+00:00"
+        },
+        {
             "name": "stripe/stripe-php",
             "version": "v7.80.0",
             "source": {
@@ -6230,5 +6280,5 @@
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
-    "plugin-api-version": "2.1.0"
+    "plugin-api-version": "2.0.0"
 }

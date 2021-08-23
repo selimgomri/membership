@@ -7,12 +7,9 @@ $use_white_background = true;
 
 $start = 0;
 
-if (isset($_GET['page']) && ((int) $_GET['page']) != 0) {
-  $page = (int) $_GET['page'];
-  $start = ($page - 1) * 10;
-} else {
-  $page = 1;
-}
+$pagination = new \SCDS\Pagination();
+
+$page = $pagination->get_page();
 
 $sql = $db->prepare("SELECT COUNT(*) FROM notifyHistory WHERE Tenant = ?");
 $sql->execute([
@@ -35,6 +32,9 @@ $sql->bindValue(':num', 10, PDO::PARAM_INT);
 $sql->execute();
 
 $row = $sql->fetch(PDO::FETCH_ASSOC);
+
+$pagination->records($numMails);
+$pagination->records_per_page(10);
 
 $pagetitle = "Page " . $page . " - Message History - Notify";
 
@@ -226,44 +226,7 @@ include BASE_PATH . "views/notifyMenu.php"; ?>
           </div>
         <?php } while ($row = $sql->fetch(PDO::FETCH_ASSOC)); ?>
 
-        <nav aria-label="Page navigation">
-          <ul class="pagination">
-            <?php if ($numMails <= 10) { ?>
-              <li class="page-item active"><a class="page-link" href="<?php echo autoUrl("notify/history?page="); ?><?php echo $page ?>"><?php echo $page ?></a></li>
-            <?php } else if ($numMails <= 20) { ?>
-              <?php if ($page == 1) { ?>
-                <li class="page-item active"><a class="page-link" href="<?php echo autoUrl("notify/history?page="); ?><?php echo $page ?>"><?php echo $page ?></a></li>
-                <li class="page-item"><a class="page-link" href="<?php echo autoUrl("notify/history?page="); ?><?php echo $page + 1 ?>"><?php echo $page + 1 ?></a></li>
-                <li class="page-item"><a class="page-link" href="<?php echo autoUrl("notify/history?page="); ?><?php echo $page + 1 ?>">Next</a></li>
-              <?php } else { ?>
-                <li class="page-item"><a class="page-link" href="<?php echo autoUrl("notify/history?page="); ?><?php echo $page - 1 ?>">Previous</a></li>
-                <li class="page-item"><a class="page-link" href="<?php echo autoUrl("notify/history?page="); ?><?php echo $page - 1 ?>"><?php echo $page - 1 ?></a></li>
-                <li class="page-item active"><a class="page-link" href="<?php echo autoUrl("notify/history?page="); ?><?php echo $page ?>"><?php echo $page ?></a></li>
-              <?php } ?>
-            <?php } else { ?>
-              <?php if ($page == 1) { ?>
-                <li class="page-item active"><a class="page-link" href="<?php echo autoUrl("notify/history?page="); ?><?php echo $page ?>"><?php echo $page ?></a></li>
-                <li class="page-item"><a class="page-link" href="<?php echo autoUrl("notify/history?page="); ?><?php echo $page + 1 ?>"><?php echo $page + 1 ?></a></li>
-                <li class="page-item"><a class="page-link" href="<?php echo autoUrl("notify/history?page="); ?><?php echo $page + 2 ?>"><?php echo $page + 2 ?></a></li>
-                <li class="page-item"><a class="page-link" href="<?php echo autoUrl("notify/history?page="); ?><?php echo $page + 1 ?>">Next</a></li>
-              <?php } else { ?>
-                <li class="page-item"><a class="page-link" href="<?php echo autoUrl("notify/history?page="); ?><?php echo $page - 1 ?>">Previous</a></li>
-                <?php if ($page > 2) { ?>
-                  <li class="page-item"><a class="page-link" href="<?php echo autoUrl("notify/history?page="); ?><?php echo $page - 2 ?>"><?php echo $page - 2 ?></a></li>
-                <?php } ?>
-                <li class="page-item"><a class="page-link" href="<?php echo autoUrl("notify/history?page="); ?><?php echo $page - 1 ?>"><?php echo $page - 1 ?></a></li>
-                <li class="page-item active"><a class="page-link" href="<?php echo autoUrl("notify/history?page="); ?><?php echo $page ?>"><?php echo $page ?></a></li>
-                <?php if ($numMails > $page * 10) { ?>
-                  <li class="page-item"><a class="page-link" href="<?php echo autoUrl("notify/history?page="); ?><?php echo $page + 1 ?>"><?php echo $page + 1 ?></a></li>
-                  <?php if ($numMails > $page * 10 + 10) { ?>
-                    <li class="page-item"><a class="page-link" href="<?php echo autoUrl("notify/history?page="); ?><?php echo $page + 2 ?>"><?php echo $page + 2 ?></a></li>
-                  <?php } ?>
-                  <li class="page-item"><a class="page-link" href="<?php echo autoUrl("notify/history?page="); ?><?php echo $page + 1 ?>">Next</a></li>
-                <?php } ?>
-              <?php } ?>
-            <?php } ?>
-          </ul>
-        </nav>
+        <?= $pagination->render() ?>
 
       <?php } ?>
 

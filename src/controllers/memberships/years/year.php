@@ -42,6 +42,10 @@ if ($page > 1 && !$member) halt(404);
 // Query to get memberships for a member
 $getMemberships = $db->prepare("SELECT memberships.Membership id, Amount amount, StartDate starts, EndDate ends, Purchased timePurchased, PaymentInfo paymentInfo, Notes notes, clubMembershipClasses.Type membershipType, clubMembershipClasses.Name `name`, clubMembershipClasses.Description `description` FROM memberships INNER JOIN clubMembershipClasses ON memberships.Membership = clubMembershipClasses.ID WHERE `Year` = ? AND `Member` = ?");
 
+$pagination = new Zebra_Pagination();
+$pagination->records($count);
+$pagination->records_per_page(30);
+
 $pagetitle = htmlspecialchars($year['Name']) . " - Membership Years - Membership Centre";
 include BASE_PATH . "views/header.php";
 
@@ -181,6 +185,9 @@ include BASE_PATH . "views/header.php";
             </li>
           <?php } while ($member = $yearMembers->fetch(PDO::FETCH_OBJ)); ?>
         </ul>
+
+        <?= $pagination->render() ?>
+
       <?php } else { ?>
         <div class="alert alert-warning">
           <p class="mb-0">
