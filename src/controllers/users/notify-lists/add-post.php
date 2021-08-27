@@ -40,7 +40,10 @@ try {
   $_SESSION['TENANT-' . app()->tenant->getId()]['AssignListSuccess'] = true;
   header("Location: " . autoUrl("users/" . $id . "/targeted-lists"));
 } catch (Exception $e) {
-  // Success
+  // Error
+  
+  reportError($e);
+  
   $_SESSION['TENANT-' . app()->tenant->getId()]['AssignListError'] = true;
   header("Location: " . autoUrl("users/" . $id . "/targeted-lists/add"));
 }
