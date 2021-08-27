@@ -22,7 +22,7 @@ try {
   // Check list
   $listCount = $db->prepare("SELECT COUNT(*) FROM targetedLists WHERE ID = ? AND Tenant = ?");
   $listCount->execute([
-    $id,
+    $_POST['list-select'],
     $tenant->getId()
   ]);
   if ($listCount->fetchColumn() == 0) {
