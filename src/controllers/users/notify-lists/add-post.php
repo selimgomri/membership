@@ -16,7 +16,7 @@ try {
     $tenant->getId()
   ]);
   if ($userCount->fetchColumn() == 0) {
-    halt(404);
+    throw new Exception();
   }
 
   // Check list
@@ -26,7 +26,7 @@ try {
     $tenant->getId()
   ]);
   if ($listCount->fetchColumn() == 0) {
-    halt(404);
+    throw new Exception();
   }
 
   $insert = $db->prepare("INSERT INTO listSenders (`User`, `List`, `Manager`) VALUES (?, ?, ?)");
