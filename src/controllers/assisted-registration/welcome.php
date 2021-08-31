@@ -22,7 +22,7 @@ include BASE_PATH . 'views/header.php';
       
       <div class="alert alert-danger" role="alert">
         <p class="mb-0"><strong>Assisted registration no longer automatically charges registration fees</strong></p>
-        <p class="mb-0">Ask an administrator to apply an invoice payment to the user's account once they have completed registration. The new onboarding tool will soon restore this functionality</p>
+        <p class="mb-0">Ask an administrator to apply an invoice payment to the user's account once they have completed registration. The new onboarding tool will soon restore this functionality.</p>
       </div>
 
       <p>
