@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "@vue/cli-service": "^4.5.13",
     "bootstrap": "^5.1.0",
     "chart.js": "^2.9.4",
     "file-loader": "^6.2.0",
@@ -14,7 +15,8 @@
     "mini-css-extract-plugin": "^1.6.0",
     "popper.js": "^1.16.1",
     "sortablejs": "^1.13.0",
-    "vue": "^2.6.14"
+    "vue": "^2.6.14",
+    "vue-cli": "^2.9.6"
   },
   "devDependencies": {
     "autoprefixer": "^10.2.6",
@@ -31,6 +33,7 @@
     "webpack-cli": "^4.0.0"
   },
   "scripts": {
+    "vue-build": "vue-cli-service build --dest public/compiled/js scripts/base.js",
     "build": "webpack --mode development",
     "build-production": "webpack --mode production",
     "test": "echo \"Error: no test specified\" && exit 1"

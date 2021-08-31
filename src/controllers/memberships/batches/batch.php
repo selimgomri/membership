@@ -22,6 +22,13 @@ $item = $getBatchItems->fetch(PDO::FETCH_OBJ);
 
 $payMethods = json_decode($batch->payMethods);
 
+$canPay = true;
+$due = new DateTime($batch->due, new DateTimeZone('Europe/London'));
+$due->setTime(0, 0, 0, 0);
+$now = new DateTime('now', new DateTimeZone('Europe/London'));
+$now->setTime(0, 0, 0, 0);
+if ($now > $due) $canPay = false;
+
 $markdown = new \ParsedownExtra();
 $markdown->setSafeMode(true);
 
@@ -59,6 +66,17 @@ include BASE_PATH . "views/header.php";
   <div class="row">
     <div class="col-lg-8">
 
+      <?php if (!$canPay) { ?>
+        <div class="alert alert-danger">
+          <p class="mb-0">
+            <strong>This membership batch is overdue</strong>
+          </p>
+          <p class="mb-0">
+            This means you can not pay and will need to ask your membership secretary to create a new batch for you.
+          </p>
+        </div>
+      <?php } ?>
+
       <h2>Batch Details</h2>
 
       <dl class="row">
@@ -84,27 +102,34 @@ include BASE_PATH . "views/header.php";
           <?= htmlspecialchars(MoneyHelpers::formatCurrency(MoneyHelpers::intToDecimal($batch->total), 'GBP')) ?>
         </dd>
 
-        <?php if (!$batch->completed) { ?>
         <dt class="col-3">
-          Pay by
+          Due by end
         </dt>
         <dd class="col-9">
-          <?php if (sizeof($payMethods) > 0) { ?>
-            <ul class="mb-0">
-              <?php if (in_array('card', $payMethods)) { ?>
-                <li>Credit/debit card</li>
-              <?php } ?>
-              <?php if (in_array('dd', $payMethods)) { ?>
-                <li>Next Direct Debit payment</li>
-              <?php } ?>
-            <?php } else { ?>
-              No payment methods - speak to club staff
-            <?php } ?>
+          <?= htmlspecialchars($due->format('j F Y')) ?>
         </dd>
+
+        <?php if (!$batch->completed) { ?>
+          <dt class="col-3">
+            Pay by
+          </dt>
+          <dd class="col-9">
+            <?php if (sizeof($payMethods) > 0) { ?>
+              <ul class="mb-0">
+                <?php if (in_array('card', $payMethods)) { ?>
+                  <li>Credit/debit card</li>
+                <?php } ?>
+                <?php if (in_array('dd', $payMethods)) { ?>
+                  <li>Next Direct Debit payment</li>
+                <?php } ?>
+              <?php } else { ?>
+                No payment methods - speak to club staff
+              <?php } ?>
+          </dd>
         <?php } ?>
       </dl>
 
-      <?php if (!$batch->completed && $batch->total > 0 && sizeof($payMethods) > 0) { ?>
+      <?php if (!$batch->completed && $batch->total > 0 && sizeof($payMethods) > 0 && $canPay) { ?>
         <form method="post">
           <h2>Pay</h2>
           <?php if (sizeof($payMethods) > 1) { ?>

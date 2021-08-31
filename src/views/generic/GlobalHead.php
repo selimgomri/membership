@@ -11,7 +11,7 @@ if (getenv('CUSTOM_CSS_PATH')) {
 
 header('Link: <' . $stylesheet . '>; rel=preload; as=style', false);
 header('Link: <' . $stylesheetDarkMode . '>; rel=preload; as=style', false);
-header('Link: <' . autoUrl("public/css/colour.css") . '>; rel=preload; as=style', false);
+// header('Link: <' . autoUrl("public/css/colour.css") . '>; rel=preload; as=style', false);
 
 $container_class;
 if (isset($fluidContainer) && $fluidContainer == true) {
@@ -63,6 +63,14 @@ Chester-le-Street ASC is a non profit unincorporated association.
   <meta name="color-scheme" content="dark light">
   <link rel="stylesheet preload" href="<?= htmlspecialchars($stylesheetDarkMode) ?>" media="(prefers-color-scheme: dark)">
   <link rel="stylesheet preload" href="<?= htmlspecialchars(autoUrl("public/css/colour.css")) ?>">
+  <?php if (app()->tenant->getKey('SYSTEM_COLOUR')) { ?>
+    <meta name="theme-color" content="<?= htmlspecialchars(app()->tenant->getKey('SYSTEM_COLOUR')) ?>" media="(prefers-color-scheme: light)">
+  <?php } else { ?>
+    <meta name="theme-color" content="#1d2124" media="(prefers-color-scheme: light)">
+  <?php } ?>
+  <meta name="theme-color" content="#1d2124" media="(prefers-color-scheme: dark)">
+
+  <?php include 'colour.php'; ?>
 
   <meta property="og:title" content="<?= $pagetitle ?>" />
 

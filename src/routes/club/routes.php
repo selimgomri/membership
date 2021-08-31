@@ -530,6 +530,10 @@ if (empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) {
     include BASE_PATH . 'controllers/galas/squad-reps-and-team-managers/team-manager-event-list.php';
   });
 
+  $this->group('/onboarding', function () {
+    include BASE_PATH . 'controllers/onboarding/router.php';
+  });
+
   if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != "Parent") {
     $this->group('/trials', function () {
       include BASE_PATH . 'controllers/trials/router.php';

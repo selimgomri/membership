@@ -1,5 +1,7 @@
 <?php
 
+if (!app()->user->hasPermission('Admin')) halt(404);
+
 use Ramsey\Uuid\Uuid;
 use Respect\Validation\Exceptions\NegativeException;
 
@@ -136,6 +138,11 @@ try {
   foreach ($items as $item) {
     $addBatchItem->execute($item);
   }
+
+  $message = '<p>There are membership fees for you to review in your club account.</p>';
+  $message .= '<p>Please <a href="' . htmlspecialchars(autoUrl("memberships/batches/$batchId")) . '">visit the membership system</a> to review the fees and pay ' . htmlspecialchars(MoneyHelpers::formatCurrency(MoneyHelpers::intToDecimal($total), 'GBP')) . '.</p>';
+  $message .= '<p>' . htmlspecialchars(autoUrl("memberships/batches/$batchId")) . '</p>';
+  notifySend(null, 'New Memberships', $message, $info['Forename'] . ' ' . $info['Surname'], $info['EmailAddress'], ['Name' => app()->tenant->getName() . ' Membership Secretary']);
 
   http_response_code(302);
   header("location: " . autoUrl("users/" . $_GET['user']));

@@ -3,9 +3,12 @@
 $user = app()->user;
 $db = app()->db;
 
-$getPending = $db->prepare("SELECT membershipBatch.ID id, membershipYear.ID yearId, DueDate due, Total total, membershipYear.Name yearName, membershipYear.StartDate yearStart, membershipYear.EndDate yearEnd, PaymentTypes payMethods FROM membershipBatch INNER JOIN membershipYear ON membershipBatch.Year = membershipYear.ID WHERE User = ? AND NOT Completed AND NOT Cancelled");
+$today = new DateTime('now', new DateTimeZone('Europe/London'));
+
+$getPending = $db->prepare("SELECT membershipBatch.ID id, membershipYear.ID yearId, DueDate due, Total total, membershipYear.Name yearName, membershipYear.StartDate yearStart, membershipYear.EndDate yearEnd, PaymentTypes payMethods FROM membershipBatch INNER JOIN membershipYear ON membershipBatch.Year = membershipYear.ID WHERE User = ? AND (DueDate >= ? OR DueDate IS NULL) AND NOT Completed AND NOT Cancelled");
 $getPending->execute([
 	$user->getId(),
+	$today->format('Y-m-d'),
 ]);
 
 $pagetitle = "Membership Centre";
@@ -47,6 +50,11 @@ include BASE_PATH . "views/header.php";
 			<h2>Memberships pending payment</h2>
 
 			<?php if ($pending = $getPending->fetch(PDO::FETCH_OBJ)) { ?>
+
+				<p>
+					Here are your pending membership fee payments. Please view the batch to review and pay.
+				</p>
+
 				<ul class="list-group mb-3">
 					<?php do { 
 						
@@ -107,11 +115,13 @@ include BASE_PATH . "views/header.php";
 
 			<?php } ?>
 
+			<?php if (app()->user->hasPermission('Admin')) { ?>
 			<p>
 				<a href="<?= htmlspecialchars(autoUrl('memberships/years')) ?>" class="btn btn-primary">
 					Show years/periods
 				</a>
 			</p>
+			<?php } ?>
 		</div>
 	</div>
 
