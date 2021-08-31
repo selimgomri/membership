@@ -14,6 +14,16 @@ include BASE_PATH . 'views/header.php';
       <p class="lead">
         Assisted registration allows you to create an account for new parents/members and automatically connect their members to it.
       </p>
+      
+      <div class="alert alert-warning" role="alert">
+        <p class="mb-0"><strong>Assisted registration will soon be removed from the membership system</strong></p>
+        <p class="mb-0">We're replacing it with a new onboarding tool which will deliver a much better experience for members and administrators.</p>
+      </div>
+      
+      <div class="alert alert-danger" role="alert">
+        <p class="mb-0"><strong>Assisted registration no longer automatically charges registration fees</strong></p>
+        <p class="mb-0">Ask an administrator to apply an invoice payment to the user's account once they have completed registration. The new onboarding tool will soon restore this functionality</p>
+      </div>
 
       <p>
         Members will be led through a registration process to check their details and fill out required forms when they first log in.
