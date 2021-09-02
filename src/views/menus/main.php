@@ -173,15 +173,15 @@ if (!function_exists('chesterStandardMenu')) {
                   Registers
                 </a>
                 <div class="dropdown-menu" aria-labelledby="registerDropdown">
-                  <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("attendance")) ?>">Attendance Home</a>
-                  <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("attendance/register")) ?>">Take Register</a>
+                  <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("attendance")) ?>">Attendance home</a>
+                  <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("attendance/register")) ?>">Take register</a>
                   <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl('timetable')) ?>">Timetable</a>
                   <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl('timetable/booking')) ?>">Bookings</a>
-                  <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("attendance/sessions")) ?>">Manage Squad Sessions</a>
+                  <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("attendance/sessions")) ?>">Manage squad sessions</a>
                   <?php if ($user->hasPermissions(['Admin', 'Committee'])) { ?>
-                    <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("attendance/venues")) ?>">Manage Venues</a>
+                    <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("attendance/venues")) ?>">Manage venues</a>
                   <?php } ?>
-                  <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("attendance/history")) ?>">Attendance History</a>
+                  <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("attendance/history")) ?>">Attendance history</a>
                 </div>
               </li>
             <?php } ?>
@@ -205,9 +205,11 @@ if (!function_exists('chesterStandardMenu')) {
                     <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("assisted-registration")) ?>">
                       Assisted account registration
                     </a>
-                    <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("onboarding")) ?>">
-                      User onboarding
-                    </a>
+                    <?php if (bool(getenv('IS_DEV'))) { ?>
+                      <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("onboarding")) ?>">
+                        User onboarding
+                      </a>
+                    <?php } ?>
                     <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') { ?>
                       <a class="dropdown-item" href="<?= autoUrl("payments/user-mandates") ?>">
                         User direct debit mandates
