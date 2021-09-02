@@ -161,6 +161,10 @@ include BASE_PATH . 'views/header.php';
         </div>
       <?php } ?>
 
+      <p>
+        If asked by a member of club staff, you can <a href="<?= htmlspecialchars(autoUrl("covid/competition-health-screening/any")) ?>">complete a Return to Competition form for a competition you haven't entered</a>.
+      </p>
+
       <?php if (false) { ?>
         <h2 id="squads">Other club members</h2>
         <p class="lead">

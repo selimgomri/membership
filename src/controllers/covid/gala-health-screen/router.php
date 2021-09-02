@@ -4,6 +4,10 @@ $this->get('/', function() {
   include 'home.php';
 });
 
+$this->get('/any', function() {
+  include 'any.php';
+});
+
 $this->get('/new-survey', function() {
   include 'screening-survey/survey.php';
 });
