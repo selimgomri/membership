@@ -62,7 +62,7 @@ include BASE_PATH . 'views/header.php';
   <div class="row mb-0">
 
     <?php if ($showCovid) { ?>
-      <div class="col-md-4 pb-3">
+      <div class="col-md-6 pb-3">
         <div class="card card-body h-100" style="display: grid;">
           <div>
             <h2>
@@ -84,7 +84,7 @@ include BASE_PATH . 'views/header.php';
       </div>
     <?php } ?>
 
-    <div class="col-md-4 pb-3">
+    <div class="col-md-6 pb-3">
       <div class="card card-body h-100" style="display: grid;">
         <div>
           <h2>
@@ -105,14 +105,14 @@ include BASE_PATH . 'views/header.php';
       </div>
     </div>
 
-    <div class="col-md-4 pb-3">
+    <div class="col-md-6 pb-3">
       <div class="card card-body h-100" style="display: grid;">
         <div>
           <h2>
             <?php if (mb_strtoupper(app()->tenant->getKey('ASA_CLUB_CODE')) == 'UOSZ') { ?><?= htmlspecialchars(UOS_RETURN_FORM_NAME) ?><?php } else { ?>Risk Awareness Declaration<?php } ?>
           </h2>
           <p class="lead">
-            Declare that you understand the risks of returning to training
+            Declare that you understand the risks of returning to training.
           </p>
           <p>
             You also confirm you are free from any COVID-19 symptoms.
@@ -120,6 +120,27 @@ include BASE_PATH . 'views/header.php';
         </div>
         <p class="mb-0 mt-auto d-flex">
           <a href="<?= htmlspecialchars(autoUrl('covid/risk-awareness')) ?>" class="btn btn-primary">
+            Go
+          </a>
+        </p>
+      </div>
+    </div>
+
+    <div class="col-md-6 pb-3">
+      <div class="card card-body h-100" style="display: grid;">
+        <div>
+          <h2>
+            Return to Competition
+          </h2>
+          <p class="lead">
+            Making sure you're safe to compete.
+          </p>
+          <p>
+            Some gala hosts require that that all clubs carry out a screening survey of all members who are competing at a given gala.
+          </p>
+        </div>
+        <p class="mb-0 mt-auto d-flex">
+          <a href="<?= htmlspecialchars(autoUrl('covid/competition-health-screening')) ?>" class="btn btn-primary">
             Go
           </a>
         </p>
