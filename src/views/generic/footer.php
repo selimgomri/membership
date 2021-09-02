@@ -115,7 +115,7 @@ $logos = $tenant->getKey('LOGO_DIR')
   </div>
   <div class="cls-global-footer-legal">
     <div class="<?php if (isset($this->fluidContainer) && $this->fluidContainer == true) { ?>container-fluid<?php } else { ?>container-xl<?php } ?>">
-      <div class="row align-items-center">
+      <div class="row align-items-center footer-auto-padding-bottom">
         <div class="col-sm-auto source-org vcard copyright">
           <div class="row no-gutters">
             <div class="col-auto">

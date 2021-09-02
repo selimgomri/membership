@@ -1,5 +1,7 @@
 <?php
 
+if (!app()->user->hasPermission('Admin')) halt(404);
+
 $db = app()->db;
 $tenant = app()->tenant;
 
@@ -75,7 +77,7 @@ include BASE_PATH . "views/header.php";
   <div class="row">
     <div class="col-lg-8">
 
-      <form method="post">
+      <form method="post" id="form">
 
         <p class="lead">
           Welcome to the batch creator.
@@ -86,7 +88,7 @@ include BASE_PATH . "views/header.php";
         </p>
 
         <p>
-          You can make adjustments to the normal fee by editing the prices shown. <strong>When you create a batch manually, we won't automatically apply discounts for families. You'll need to make appropriate adjustments yourself.</strong>
+          You can make adjustments to the normal fee by editing the prices shown. <strong>When you create a batch manually, we won't automatically apply discounts for families. You'll need to make appropriate adjustments yourself to ensure the total is correct.</strong>
         </p>
 
         <p>
@@ -94,7 +96,7 @@ include BASE_PATH . "views/header.php";
         </p>
 
         <div class="mb-3">
-          <label for="introduction-text" class="form-label">Introduction text</label>
+          <label for="introduction-text" class="form-label">Introduction text <span class="text-muted">(optional)</span></label>
           <textarea class="form-control" id="introduction-text" name="introduction-text" rows="3"></textarea>
           <div class="small">We'll put any text you write here are the top of the email we send to <?= htmlspecialchars($info['Forename']) ?>. Formatting with Markdown is supported.</div>
         </div>
@@ -117,9 +119,9 @@ include BASE_PATH . "views/header.php";
 
                 <h3>Current Memberships for <?= htmlspecialchars($year['Name']) ?></h3>
                 <?php if ($membership) { ?>
-                  <ul>
+                  <ul class="mb-3">
                     <?php do { ?>
-                      <li><?= htmlspecialchars($membership->name) ?>, Paid &pound;<?= htmlspecialchars($membership->paid) ?></li>
+                      <li><?= htmlspecialchars($membership->name) ?>, Paid <?= htmlspecialchars(MoneyHelpers::formatCurrency(MoneyHelpers::intToDecimal($membership->paid), 'GBP')) ?></li>
                     <?php } while ($membership = $getCurrentMemberships->fetch(PDO::FETCH_OBJ)); ?>
                   </ul>
                 <?php } else { ?>
@@ -137,82 +139,97 @@ include BASE_PATH . "views/header.php";
                   $id,
                   $member->ngb,
                 ]);
-                $has = $hasMembership->fetchColumn() > 0;
+                $hasNgb = $hasMembership->fetchColumn() > 0;
+
+                $hasMembership->execute([
+                  $member->id,
+                  $id,
+                  $member->club,
+                ]);
+                $hasClub = $hasMembership->fetchColumn() > 0;
                 ?>
-                <?php if (!$has) { ?>
 
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="<?= htmlspecialchars($member->id . '-' . $member->ngb . '-yes') ?>" name="<?= htmlspecialchars($member->id . '-' . $member->ngb . '-yes') ?>">
-                    <label class="form-check-label" for="<?= htmlspecialchars($member->id . '-' . $member->ngb . '-yes') ?>">
-                      Add <?= htmlspecialchars($member->ngbName) ?>
-                    </label>
+                <?php if ($hasClub && $hasNgb) { ?>
+                  <div class="alert alert-info mb-0">
+                    <p class="mb-0">
+                      <strong>There are no additional memberships available for <?= htmlspecialchars($member->fn) ?></strong>
+                    </p>
                   </div>
+                <?php } ?>
 
-                  <div class="collapse pt-3">
+                <?php if (!$hasNgb) { ?>
 
-                    <?php
-                    $fee = (json_decode($member->ngbFees))->fees[0];
-                    ?>
+                  <div class="card card-body mb-2">
 
-                    <div class="mb-3">
-                      <div class="mb-3">
-                        <label for="<?= htmlspecialchars($member->id . '-' . $member->ngb . '-amount') ?>" class="form-label">Fee</label>
-                        <div class="input-group mb-3">
-                          <span class="input-group-text">&pound;</span>
-                          <input type="num" class="form-control" id="<?= htmlspecialchars($member->id . '-' . $member->ngb . '-amount') ?>" name="<?= htmlspecialchars($member->id . '-' . $member->ngb . '-amount') ?>" min="0" step="0.01" placeholder="0" value="<?= htmlspecialchars(MoneyHelpers::intToDecimal(($fee))) ?>">
-                        </div>
-                      </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" value="" id="<?= htmlspecialchars($member->id . '-' . $member->ngb . '-yes') ?>" name="<?= htmlspecialchars($member->id . '-' . $member->ngb . '-yes') ?>" data-type="membership-check" data-collapse-target="<?= htmlspecialchars($member->id . '-' . $member->ngb . '-collapse') ?>">
+                      <label class="form-check-label" for="<?= htmlspecialchars($member->id . '-' . $member->ngb . '-yes') ?>">
+                        Add <?= htmlspecialchars($member->ngbName) ?>
+                      </label>
                     </div>
 
-                    <div class="mb-3">
-                      <label for="<?= htmlspecialchars($member->id . '-' . $member->ngb . '-notes') ?>" class="form-label">Notes</label>
-                      <textarea class="form-control" id="<?= htmlspecialchars($member->id . '-' . $member->ngb . '-notes') ?>" name="<?= htmlspecialchars($member->id . '-' . $member->ngb . '-notes') ?>" rows="3"></textarea>
-                      <div class="small">Place explanatory notes here.</div>
+                    <div class="collapse pt-3" id="<?= htmlspecialchars($member->id . '-' . $member->ngb . '-collapse') ?>">
+
+                      <?php
+                      $fee = (json_decode($member->ngbFees))->fees[0];
+                      ?>
+
+                      <div class="mb-3">
+                        <div class="mb-3">
+                          <label for="<?= htmlspecialchars($member->id . '-' . $member->ngb . '-amount') ?>" class="form-label">Fee</label>
+                          <div class="input-group mb-3">
+                            <span class="input-group-text">&pound;</span>
+                            <input type="num" class="form-control" id="<?= htmlspecialchars($member->id . '-' . $member->ngb . '-amount') ?>" name="<?= htmlspecialchars($member->id . '-' . $member->ngb . '-amount') ?>" min="0" step="0.01" placeholder="0" value="<?= htmlspecialchars(MoneyHelpers::intToDecimal(($fee))) ?>">
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="">
+                        <label for="<?= htmlspecialchars($member->id . '-' . $member->ngb . '-notes') ?>" class="form-label">Notes <span class="text-muted">(optional)</span></label>
+                        <textarea class="form-control" id="<?= htmlspecialchars($member->id . '-' . $member->ngb . '-notes') ?>" name="<?= htmlspecialchars($member->id . '-' . $member->ngb . '-notes') ?>" rows="3"></textarea>
+                        <div class="small">Place explanatory notes here.</div>
+                      </div>
+
                     </div>
 
                   </div>
 
                 <?php } ?>
 
-                <?php
-                $hasMembership->execute([
-                  $member->id,
-                  $id,
-                  $member->club,
-                ]);
-                $has = $hasMembership->fetchColumn() > 0;
-                ?>
-                <?php if (!$has) { ?>
+                <?php if (!$hasClub) { ?>
 
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="<?= htmlspecialchars($member->id . '-' . $member->club . '-yes') ?>" name="<?= htmlspecialchars($member->id . '-' . $member->club . '-yes') ?>">
-                    <label class="form-check-label" for="<?= htmlspecialchars($member->id . '-' . $member->club . '-yes') ?>">
-                      Add <?= htmlspecialchars($member->clubName) ?>
-                    </label>
-                  </div>
+                  <div class="card card-body mb-2">
 
-                  <div class="collapse pt-3">
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" value="" id="<?= htmlspecialchars($member->id . '-' . $member->club . '-yes') ?>" name="<?= htmlspecialchars($member->id . '-' . $member->club . '-yes') ?>" data-type="membership-check" data-collapse-target="<?= htmlspecialchars($member->id . '-' . $member->club . '-collapse') ?>">
+                      <label class="form-check-label" for="<?= htmlspecialchars($member->id . '-' . $member->club . '-yes') ?>">
+                        Add <?= htmlspecialchars($member->clubName) ?>
+                      </label>
+                    </div>
 
-                    <?php
-                    $fee = (json_decode($member->clubFees))->fees[0];
-                    ?>
+                    <div class="collapse pt-3" id="<?= htmlspecialchars($member->id . '-' . $member->club . '-collapse') ?>">
 
-                    <div class="mb-3">
+                      <?php
+                      $fee = (json_decode($member->clubFees))->fees[0];
+                      ?>
+
                       <div class="mb-3">
-                        <label for="<?= htmlspecialchars($member->id . '-' . $member->club . '-amount') ?>" class="form-label">Fee</label>
-                        <div class="input-group mb-3">
-                          <span class="input-group-text">&pound;</span>
-                          <input type="num" class="form-control" id="<?= htmlspecialchars($member->id . '-' . $member->club . '-amount') ?>" name="<?= htmlspecialchars($member->id . '-' . $member->club . '-amount') ?>" min="0" step="0.01" placeholder="0" value="<?= htmlspecialchars(MoneyHelpers::intToDecimal(($fee))) ?>">
+                        <div class="mb-3">
+                          <label for="<?= htmlspecialchars($member->id . '-' . $member->club . '-amount') ?>" class="form-label">Fee</label>
+                          <div class="input-group mb-3">
+                            <span class="input-group-text">&pound;</span>
+                            <input type="num" class="form-control" id="<?= htmlspecialchars($member->id . '-' . $member->club . '-amount') ?>" name="<?= htmlspecialchars($member->id . '-' . $member->club . '-amount') ?>" min="0" step="0.01" placeholder="0" value="<?= htmlspecialchars(MoneyHelpers::intToDecimal(($fee))) ?>">
+                          </div>
                         </div>
                       </div>
-                    </div>
 
-                    <div class="mb-3">
-                      <label for="<?= htmlspecialchars($member->id . '-' . $member->club . '-notes') ?>" class="form-label">Notes</label>
-                      <textarea class="form-control" id="<?= htmlspecialchars($member->id . '-' . $member->club . '-notes') ?>" name="<?= htmlspecialchars($member->id . '-' . $member->club . '-notes') ?>" rows="3"></textarea>
-                      <div class="small">Place explanatory notes here.</div>
-                    </div>
+                      <div class="">
+                        <label for="<?= htmlspecialchars($member->id . '-' . $member->club . '-notes') ?>" class="form-label">Notes <span class="text-muted">(optional)</span></label>
+                        <textarea class="form-control" id="<?= htmlspecialchars($member->id . '-' . $member->club . '-notes') ?>" name="<?= htmlspecialchars($member->id . '-' . $member->club . '-notes') ?>" rows="3"></textarea>
+                        <div class="small">Place explanatory notes here.</div>
+                      </div>
 
+                    </div>
                   </div>
 
                 <?php } ?>
@@ -221,7 +238,7 @@ include BASE_PATH . "views/header.php";
           </ul>
 
           <div class="mb-3">
-            <label for="footer-text" class="form-label">Footer text</label>
+            <label for="footer-text" class="form-label">Footer text <span class="text-muted">(optional)</span></label>
             <textarea class="form-control" id="footer-text" name="footer-text" rows="3"></textarea>
             <div class="small">We'll put any text you write here are the end of the email we send to <?= htmlspecialchars($info['Forename']) ?>. Formatting with Markdown is supported.</div>
           </div>
@@ -233,40 +250,40 @@ include BASE_PATH . "views/header.php";
           </div>
 
           <div class="form-check mb-3">
-            <input class="form-check-input" type="checkbox" value="" id="automatic-reminders" name="automatic-reminders" checked>
+            <input class="form-check-input" type="checkbox" value="" id="automatic-reminders" name="automatic-reminders" disabled>
             <label class="form-check-label" for="automatic-reminders">
-              Send automatic email reminders until the user pays or the due date has passed
+              Send automatic email reminders until the user pays or the due date has passed (coming soon)
             </label>
           </div>
 
           <div class="mb-3">
             <p class="mb-2">Payment Options</p>
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="payment-card" name="payment-card" checked>
+              <input class="form-check-input" type="checkbox" id="payment-card" name="payment-card" value="1" checked>
               <label class="form-check-label" for="payment-card">
                 Credit/Debit card
               </label>
             </div>
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="payment-direct-debit" name="payment-direct-debit" checked>
+              <input class="form-check-input" type="checkbox" id="payment-direct-debit" name="payment-direct-debit" value="1" checked>
               <label class="form-check-label" for="payment-direct-debit">
                 Direct Debit
               </label>
             </div>
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="payment-cash" name="payment-cash">
+              <input class="form-check-input" type="checkbox" id="payment-cash" name="payment-cash" value="1" disabled>
               <label class="form-check-label" for="payment-cash">
                 Cash
               </label>
             </div>
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="payment-cheque" name="payment-cheque">
+              <input class="form-check-input" type="checkbox" id="payment-cheque" name="payment-cheque" value="1" disabled>
               <label class="form-check-label" for="payment-cheque">
                 Cheque
               </label>
             </div>
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="payment-wire" name="payment-wire">
+              <input class="form-check-input" type="checkbox" id="payment-wire" name="payment-wire" value="1" disabled>
               <label class="form-check-label" for="payment-wire">
                 Bank Transfer
               </label>
@@ -293,4 +310,5 @@ include BASE_PATH . "views/header.php";
 <?php
 
 $footer = new \SCDS\Footer();
+$footer->addJs('js/memberships/new-batch.js');
 $footer->render();

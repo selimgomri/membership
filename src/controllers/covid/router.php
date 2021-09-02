@@ -8,6 +8,10 @@ $this->group('/health-screening', function () {
   include 'health-screen/router.php';
 });
 
+$this->group('/competition-health-screening', function () {
+  include 'gala-health-screen/router.php';
+});
+
 $this->group('/risk-awareness', function () {
   include 'risk-awareness/router.php';
 });

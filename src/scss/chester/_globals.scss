@@ -328,16 +328,16 @@ input#url {
   max-width: 445px;
   height: 71px;
   display: block;
-  background: url(https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/img/chesterLogo.svg) left center
-    no-repeat;
+  background: url(https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/img/chesterLogo.svg)
+    left center no-repeat;
   background-size: contain;
 }
 
 .logowhite {
   max-width: 330px;
   display: block;
-  background: url(https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/img/chesterLogoAMP.svg) left center
-    no-repeat;
+  background: url(https://www.chesterlestreetasc.co.uk/wp-content/themes/chester/img/chesterLogoAMP.svg)
+    left center no-repeat;
   height: 50px;
 }
 
@@ -603,7 +603,11 @@ footer .focus-highlight a:focus,
 }
 
 .bg-scds {
-  background-image: linear-gradient(135deg, rgb(182, 37, 38), rgb(115, 25, 132));
+  background-image: linear-gradient(
+    135deg,
+    rgb(182, 37, 38),
+    rgb(115, 25, 132)
+  );
 }
 
 .club-logos img {
@@ -673,7 +677,12 @@ footer .focus-highlight a:focus,
     color: $warning;
 
     main {
-      h1, h2, h3, h4, h5, h6 {
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
         background: repeating-linear-gradient(
           45deg,
           $warning,
@@ -685,5 +694,17 @@ footer .focus-highlight a:focus,
         padding: 0.5rem;
       }
     }
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .d-light-none {
+    display: none;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .d-dark-none {
+    display: none;
   }
 }

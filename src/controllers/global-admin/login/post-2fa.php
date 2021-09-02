@@ -103,7 +103,7 @@ try {
     }
     if ($_SESSION['SCDS-SU-Login2FA']['RememberMe']) {
       $cookiePath = '/';
-      setcookie(COOKIE_PREFIX . 'SUPERUSER-AutoLogin', $hash, time() + 60 * 60 * 24 * 120, $cookiePath, app('request')->hostname, $secure, false);
+      setcookie(COOKIE_PREFIX . 'SUPERUSER-AutoLogin', $hash, time() + 60 * 60 * 24 * 120, $cookiePath, getenv('MAIN_DOMAIN'), $secure, false);
     }
 
     $_SESSION['SCDS-SuperUser'] = $_SESSION['SCDS-SU-Login2FA']['User'];

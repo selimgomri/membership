@@ -128,7 +128,7 @@ if (!function_exists('chesterStandardMenu')) {
                   <a class="nav-link" href="<?= htmlspecialchars(autoUrl("log-books")) ?>">Log Books</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="<?php echo autoUrl("emergency-contacts") ?>">Emergency Contacts</a>
+                  <a class="nav-link" href="<?= autoUrl("emergency-contacts") ?>">Emergency Contacts</a>
                 </li>
               <?php } ?>
               <?php if ($renewalOpen) { ?>
@@ -144,24 +144,25 @@ if (!function_exists('chesterStandardMenu')) {
                   Members &amp; Squads
                 </a>
                 <div class="dropdown-menu" aria-labelledby="swimmerDropdown">
-                  <a class="dropdown-item" href="<?php echo autoUrl("members") ?>">Member directory</a>
+                  <a class="dropdown-item" href="<?= autoUrl("members") ?>">Member directory</a>
                   <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Admin") { ?>
-                    <a class="dropdown-item" href="<?php echo autoUrl("members/new") ?>">Add member</a>
+                    <a class="dropdown-item" href="<?= autoUrl("members/new") ?>">Add member</a>
                   <?php } ?>
                   <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != "Galas") { ?>
-                    <a class="dropdown-item" href="<?php echo autoUrl("squads") ?>">Squads</a>
-                    <a class="dropdown-item" href="<?php echo autoUrl("squads/moves") ?>">Squad moves</a>
-                    <a class="dropdown-item" href="<?php echo autoUrl("members/access-keys") ?>">Access keys</a>
+                    <a class="dropdown-item" href="<?= autoUrl("squads") ?>">Squads</a>
+                    <a class="dropdown-item" href="<?= autoUrl("squads/moves") ?>">Squad moves</a>
+                    <a class="dropdown-item" href="<?= autoUrl("members/access-keys") ?>">Access keys</a>
                   <?php } ?>
                   <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Admin") { ?>
-                    <a class="dropdown-item" href="<?php echo autoUrl("renewal") ?>">Membership renewal</a>
-                    <a class="dropdown-item" href="<?php echo autoUrl("members/orphaned") ?>">Orphan swimmers</a>
+                    <a class="dropdown-item" href="<?= autoUrl("renewal") ?>">Membership renewal</a>
+                    <a class="dropdown-item" href="<?= autoUrl("members/orphaned") ?>">Orphan swimmers</a>
                   <?php } ?>
-                  <a class="dropdown-item" href="<?php echo autoUrl("squad-reps") ?>">Squad reps</a>
+                  <a class="dropdown-item" href="<?= autoUrl("squad-reps") ?>">Squad reps</a>
                   <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("log-books")) ?>">Log books</a>
                   <?php if (app()->user->hasPermission('Admin')) { ?>
                     <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("qualifications")) ?>">Qualifications</a>
                   <?php } ?>
+                  <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("memberships")) ?>">Membership Centre</a>
                 </div>
               </li>
             <?php } ?>
@@ -172,15 +173,15 @@ if (!function_exists('chesterStandardMenu')) {
                   Registers
                 </a>
                 <div class="dropdown-menu" aria-labelledby="registerDropdown">
-                  <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("attendance")) ?>">Attendance Home</a>
-                  <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("attendance/register")) ?>">Take Register</a>
+                  <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("attendance")) ?>">Attendance home</a>
+                  <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("attendance/register")) ?>">Take register</a>
                   <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl('timetable')) ?>">Timetable</a>
                   <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl('timetable/booking')) ?>">Bookings</a>
-                  <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("attendance/sessions")) ?>">Manage Squad Sessions</a>
+                  <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("attendance/sessions")) ?>">Manage squad sessions</a>
                   <?php if ($user->hasPermissions(['Admin', 'Committee'])) { ?>
-                    <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("attendance/venues")) ?>">Manage Venues</a>
+                    <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("attendance/venues")) ?>">Manage venues</a>
                   <?php } ?>
-                  <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("attendance/history")) ?>">Attendance History</a>
+                  <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("attendance/history")) ?>">Attendance history</a>
                 </div>
               </li>
             <?php } ?>
@@ -201,9 +202,14 @@ if (!function_exists('chesterStandardMenu')) {
                     <a class="dropdown-item" href="<?= autoUrl("users/add") ?>">
                       Add a user
                     </a>
-                    <a class="dropdown-item" href="<?= autoUrl("assisted-registration") ?>">
-                      Assisted Account Registration
+                    <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("assisted-registration")) ?>">
+                      Assisted account registration
                     </a>
+                    <?php if (bool(getenv('IS_DEV'))) { ?>
+                      <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("onboarding")) ?>">
+                        User onboarding
+                      </a>
+                    <?php } ?>
                     <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') { ?>
                       <a class="dropdown-item" href="<?= autoUrl("payments/user-mandates") ?>">
                         User direct debit mandates
@@ -214,7 +220,7 @@ if (!function_exists('chesterStandardMenu')) {
               <?php } ?>
               <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Galas") { ?>
                 <li class="nav-item">
-                  <a class="nav-link" href="<?php echo autoUrl("payments") ?>">Pay</a>
+                  <a class="nav-link" href="<?= autoUrl("payments") ?>">Pay</a>
                 </li>
               <?php } ?>
               <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Admin") { ?>
@@ -223,11 +229,11 @@ if (!function_exists('chesterStandardMenu')) {
                     Pay
                   </a>
                   <div class="dropdown-menu" aria-labelledby="paymentsAdminDropdown">
-                    <a class="dropdown-item" href="<?php echo autoUrl("payments") ?>">Payments Home</a>
-                    <a class="dropdown-item" href="<?php echo autoUrl("payments/history") ?>">Payment Status</a>
+                    <a class="dropdown-item" href="<?= autoUrl("payments") ?>">Payments Home</a>
+                    <a class="dropdown-item" href="<?= autoUrl("payments/history") ?>">Payment Status</a>
                     <!-- New feature coming soon -->
                     <!-- <a class="dropdown-item" href="<?= autoUrl("payments/confirmation") ?>">Payment Confirmation</a> -->
-                    <a class="dropdown-item" href="<?php echo autoUrl("payments/extrafees") ?>">Extra Fees</a>
+                    <a class="dropdown-item" href="<?= autoUrl("payments/extrafees") ?>">Extra Fees</a>
                     <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin' || $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Galas') { ?>
                       <a class="dropdown-item" href="<?= autoUrl("payments/galas") ?>">
                         Charge or refund gala entries
@@ -272,13 +278,13 @@ if (!function_exists('chesterStandardMenu')) {
                     Notify
                   </a>
                   <div class="dropdown-menu" aria-labelledby="notifyDropdown">
-                    <a class="dropdown-item" href="<?php echo autoUrl("notify") ?>">Notify Home</a>
-                    <a class="dropdown-item" href="<?php echo autoUrl("notify/new") ?>">New Message</a>
-                    <a class="dropdown-item" href="<?php echo autoUrl("notify/lists") ?>">Targeted Lists</a>
+                    <a class="dropdown-item" href="<?= autoUrl("notify") ?>">Notify Home</a>
+                    <a class="dropdown-item" href="<?= autoUrl("notify/new") ?>">New Message</a>
+                    <a class="dropdown-item" href="<?= autoUrl("notify/lists") ?>">Targeted Lists</a>
                     <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Admin") { ?>
-                      <a class="dropdown-item" href="<?php echo autoUrl("notify/sms") ?>">SMS Lists</a>
+                      <a class="dropdown-item" href="<?= autoUrl("notify/sms") ?>">SMS Lists</a>
                     <?php } ?>
-                    <a class="dropdown-item" href="<?php echo autoUrl("notify/history") ?>">Previous Messages</a>
+                    <a class="dropdown-item" href="<?= autoUrl("notify/history") ?>">Previous Messages</a>
                   </div>
                 </li>
               <?php } ?>
@@ -288,35 +294,35 @@ if (!function_exists('chesterStandardMenu')) {
                 Galas
               </a>
               <div class="dropdown-menu" aria-labelledby="galaDropdown">
-                <a class="dropdown-item" href="<?php echo autoUrl("galas") ?>">
+                <a class="dropdown-item" href="<?= autoUrl("galas") ?>">
                   Gala home
                 </a>
                 <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Parent") { ?>
-                  <a class="dropdown-item" href="<?php echo autoUrl("galas/entergala") ?>">
+                  <a class="dropdown-item" href="<?= autoUrl("galas/entergala") ?>">
                     Enter a gala
                   </a>
-                  <a class="dropdown-item" href="<?php echo autoUrl("galas/entries") ?>">
+                  <a class="dropdown-item" href="<?= autoUrl("galas/entries") ?>">
                     My entries
                   </a>
                   <?php if ($canPayByCard) { ?>
-                    <a class="dropdown-item" href="<?php echo autoUrl("galas/pay-for-entries") ?>">
+                    <a class="dropdown-item" href="<?= autoUrl("galas/pay-for-entries") ?>">
                       Pay for entries
                     </a>
                   <?php } ?>
                   <?php if ($isTeamManager) { ?>
-                    <a class="dropdown-item" href="<?php echo autoUrl("team-managers") ?>">
+                    <a class="dropdown-item" href="<?= autoUrl("team-managers") ?>">
                       Team manager dashboard
                     </a>
                   <?php } ?>
                 <?php } else { ?>
-                  <a class="dropdown-item" href="<?php echo autoUrl("galas/addgala") ?>">Add gala</a>
-                  <a class="dropdown-item" href="<?php echo autoUrl("galas/entries") ?>">View entries</a>
+                  <a class="dropdown-item" href="<?= autoUrl("galas/addgala") ?>">Add gala</a>
+                  <a class="dropdown-item" href="<?= autoUrl("galas/entries") ?>">View entries</a>
                   <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin' || $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Galas') { ?>
                     <a class="dropdown-item" href="<?= autoUrl("payments/galas") ?>">
                       Charge or refund entries
                     </a>
                   <?php } ?>
-                  <a class="dropdown-item" href="<?php echo autoUrl("team-managers") ?>">
+                  <a class="dropdown-item" href="<?= autoUrl("team-managers") ?>">
                     Team manager dashboard
                   </a>
                 <?php } ?>

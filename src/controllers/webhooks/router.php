@@ -47,6 +47,10 @@ $this->any('/timeupdate', function () {
 	require 'getTimesNew.php';
 });
 
+$this->post('/checkout_v1', function () {
+	require 'checkout_v1.php';
+});
+
 /*$this->any('/timeupdatenew', function() {
 	$db = app()->db;;
 	require 'getTimesNew.php';

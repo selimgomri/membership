@@ -53,7 +53,8 @@
   }
 
   .category {
-    color: $link-color;
+    // color: $link-color;
+    color: var(--tenant-brand-colour);
     display: flex;
     line-height: normal;
   }

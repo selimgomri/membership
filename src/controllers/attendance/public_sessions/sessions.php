@@ -219,7 +219,7 @@ include BASE_PATH . 'views/header.php';
               $day = clone $startWeek;
               $day->add(new DateInterval('P' . ($currentDay + 6) % 7 . 'D'));
               $days[(int) $day->format('N') % 7] = true; ?>
-              <div class="list-group-item bg-primary text-white" id="day-<?= htmlspecialchars($day->format('N') % 7) ?>">
+              <div class="list-group-item bg-tenant-brand tenant-colour" id="day-<?= htmlspecialchars($day->format('N') % 7) ?>">
                 <h2 class="mb-0"><?= htmlspecialchars($day->format('l')) ?></h2>
                 <p class="lead mb-0"><?= htmlspecialchars($day->format('j F Y')) ?></p>
               </div>

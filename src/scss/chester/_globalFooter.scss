@@ -25,3 +25,7 @@
   background: $footer-legal-bg;
   color: #fff;
 }
+
+.footer-auto-padding-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+}

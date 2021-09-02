@@ -10,6 +10,16 @@ $this->group('/periods', function() {
   });
 });
 
+$this->group('/batches', function() {
+  $this->get('/{id}:uuid', function($id) {
+    include 'batches/batch.php';
+  });
+
+  $this->post('/{id}:uuid', function($id) {
+    include 'batches/pay-post.php';
+  });
+});
+
 $this->group('/years', function() {
   $this->get('/', function() {
     include 'years/home.php';

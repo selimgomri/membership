@@ -151,19 +151,37 @@ if (app('request')->protocol == 'http') {
   $cookieSecure = 0;
 }
 
-session_start([
-  //'cookie_lifetime' => 172800,
-  'gc_maxlifetime'      => 86400,
-  'cookie_httponly'     => 0,
-  'gc_probability'      => 1,
-  'use_only_cookies'    => 1,
-  'cookie_secure'       => $cookieSecure,
-  'use_strict_mode'     => 1,
-  'sid_length'          => 128,
-  'name'                => COOKIE_PREFIX . 'SessionId',
-  'cookie_domain'       => $_SERVER['HTTP_HOST'],
-  'cookie_path'         => COOKIE_PATH,
-]);
+if (getenv('MAIN_DOMAIN') && getenv('DOMAIN_TYPE') == 'SUBDOMAIN') {
+  // DOMAIN SESSION
+  session_start([
+    //'cookie_lifetime' => 172800,
+    'gc_maxlifetime'      => 3600,
+    'cookie_httponly'     => 0,
+    'gc_probability'      => 1,
+    'use_only_cookies'    => 1,
+    'cookie_secure'       => $cookieSecure,
+    'use_strict_mode'     => 1,
+    'sid_length'          => 128,
+    'name'                => COOKIE_PREFIX . 'TenantSessionId',
+    'cookie_domain'       => $_SERVER['HTTP_HOST'],
+    'cookie_path'         => COOKIE_PATH,
+  ]);
+} else {
+  // OTHER
+  session_start([
+    //'cookie_lifetime' => 172800,
+    'gc_maxlifetime'      => 3600,
+    'cookie_httponly'     => 0,
+    'gc_probability'      => 1,
+    'use_only_cookies'    => 1,
+    'cookie_secure'       => $cookieSecure,
+    'use_strict_mode'     => 1,
+    'sid_length'          => 128,
+    'name'                => COOKIE_PREFIX . 'GlobalSessionId',
+    'cookie_domain'       => $_SERVER['HTTP_HOST'],
+    'cookie_path'         => COOKIE_PATH,
+  ]);
+}
 
 function halt(int $statusCode, $throwException = true)
 {
@@ -289,47 +307,49 @@ try {
 
 app()->db = $db;
 
-if (!isset($_SESSION['SCDS-SuperUser']) && isset($_COOKIE[COOKIE_PREFIX . 'SUPERUSER-AutoLogin']) && $_COOKIE[COOKIE_PREFIX . 'SUPERUSER-AutoLogin'] != "") {
+if (getenv('MAIN_DOMAIN') && getenv('DOMAIN_TYPE') == 'SUBDOMAIN') {
+  if (!isset($_SESSION['SCDS-SuperUser']) && isset($_COOKIE[COOKIE_PREFIX . 'SUPERUSER-AutoLogin']) && $_COOKIE[COOKIE_PREFIX . 'SUPERUSER-AutoLogin'] != "") {
 
-  $date = new DateTime('120 days ago', new DateTimeZone('UTC'));
+    $date = new DateTime('120 days ago', new DateTimeZone('UTC'));
 
-  $data = [
-    $_COOKIE[COOKIE_PREFIX . 'SUPERUSER-AutoLogin'],
-    $date->format('Y-m-d H:i:s'),
-    1
-  ];
-
-  try {
-    $query = $db->prepare("SELECT superUsers.ID, `Time` FROM `superUsersLogins` INNER JOIN superUsers ON superUsers.ID = superUsersLogins.User WHERE `Hash` = ? AND `Time` >= ? AND `HashActive` = ?");
-    $query->execute($data);
-  } catch (PDOException $e) {
-    //halt(500);
-  }
-
-  $row = $query->fetch(PDO::FETCH_ASSOC);
-  if ($row) {
-    $user = $row['ID'];
-    $time = new DateTime($row['Time'], new DateTimeZone("UTC"));
-
-    $_SESSION['SCDS-SuperUser'] = $user;
-
-    $hash = hash('sha512', time() . $user . '-' . random_bytes(128));
+    $data = [
+      $_COOKIE[COOKIE_PREFIX . 'SUPERUSER-AutoLogin'],
+      $date->format('Y-m-d H:i:s'),
+      1
+    ];
 
     try {
-      $query = $db->prepare("UPDATE `superUsersLogins` SET `Hash` = ? WHERE `Hash` = ?");
-      $query->execute([$hash, $_COOKIE[COOKIE_PREFIX . 'SUPERUSER-AutoLogin']]);
+      $query = $db->prepare("SELECT superUsers.ID, `Time` FROM `superUsersLogins` INNER JOIN superUsers ON superUsers.ID = superUsersLogins.User WHERE `Hash` = ? AND `Time` >= ? AND `HashActive` = ?");
+      $query->execute($data);
     } catch (PDOException $e) {
-      halt(500);
+      //halt(500);
     }
 
-    $expiry_time = ($time->format('U')) + 60 * 60 * 24 * 120;
+    $row = $query->fetch(PDO::FETCH_ASSOC);
+    if ($row) {
+      $user = $row['ID'];
+      $time = new DateTime($row['Time'], new DateTimeZone("UTC"));
 
-    $secure = true;
-    if (app('request')->protocol == 'http' && bool(getenv('IS_DEV'))) {
-      $secure = false;
+      $_SESSION['SCDS-SuperUser'] = $user;
+
+      $hash = hash('sha512', time() . $user . '-' . random_bytes(128));
+
+      try {
+        $query = $db->prepare("UPDATE `superUsersLogins` SET `Hash` = ? WHERE `Hash` = ?");
+        $query->execute([$hash, $_COOKIE[COOKIE_PREFIX . 'SUPERUSER-AutoLogin']]);
+      } catch (PDOException $e) {
+        halt(500);
+      }
+
+      $expiry_time = ($time->format('U')) + 60 * 60 * 24 * 120;
+
+      $secure = true;
+      if (app('request')->protocol == 'http' && bool(getenv('IS_DEV'))) {
+        $secure = false;
+      }
+      $cookiePath = '/';
+      setcookie(COOKIE_PREFIX . 'SUPERUSER-AutoLogin', $hash, $expiry_time, $cookiePath, getenv('MAIN_DOMAIN'), $secure, false);
     }
-    $cookiePath = '/';
-    setcookie(COOKIE_PREFIX . 'SUPERUSER-AutoLogin', $hash, $expiry_time, $cookiePath, app('request')->hostname, $secure, false);
   }
 }
 

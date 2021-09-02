@@ -1,5 +1,7 @@
 <?php
 
+if (!app()->user->hasPermission('Admin')) halt(404);
+
 $db = app()->db;
 $tenant = app()->tenant;
 

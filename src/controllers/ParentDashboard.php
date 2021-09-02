@@ -83,6 +83,17 @@ include BASE_PATH . "views/header.php";
     <h1><?= helloGreeting() ?> <?= $username ?></h1>
     <p class="lead mb-4">Welcome to your account</p>
 
+    <?php if ($bankHoliday = isBankHoliday()) { ?>
+      <aside class="row mb-4">
+        <div class="col-lg-6">
+          <div class="cell bg-tenant-brand tenant-colour">
+            <h2 class="mb-0"><?php if ($bankHoliday['bunting']) { ?>It's <?= htmlspecialchars($bankHoliday['title']) ?>!<?php if ($bankHoliday['notes']) { ?> <em><?= htmlspecialchars($bankHoliday['notes']) ?></em>.<?php } ?><?php } else { ?>Today is <?= htmlspecialchars($bankHoliday['title']) ?>.<?php if ($bankHoliday['notes']) { ?> <em><?= htmlspecialchars($bankHoliday['notes']) ?></em>.<?php } ?><?php } ?></h2>
+            <p class="lead mb-0">There may be session cancellations or alterations today.</p>
+          </div>
+        </div>
+      </aside>
+    <?php } ?>
+
     <div class="mb-4">
       <h2 class="mb-4">COVID-19 Tools</h2>
       <div class="news-grid">
@@ -137,7 +148,7 @@ include BASE_PATH . "views/header.php";
     <?php if (!isSubscribed($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], 'Notify')) { ?>
       <aside class="row mb-4">
         <div class="col-lg-6">
-          <div class="cell bg-primary text-white">
+          <div class="cell bg-tenant-brand tenant-colour">
             <h2 class="mb-0">
               Emails from us
             </h2>
@@ -151,17 +162,6 @@ include BASE_PATH . "views/header.php";
               Head to <a class="text-white" href="<?= autoUrl("my-account/email") ?>">My Account</a>
               to change your email preferences and stay up to date!
             </p>
-          </div>
-        </div>
-      </aside>
-    <?php } ?>
-
-    <?php if ($bankHoliday = isBankHoliday()) { ?>
-      <aside class="row mb-4">
-        <div class="col-lg-6">
-          <div class="cell bg-primary text-white">
-            <h2 class="mb-0"><?php if ($bankHoliday['bunting']) { ?>It's <?= htmlspecialchars($bankHoliday['title']) ?>!<?php if ($bankHoliday['notes']) { ?> <em><?= htmlspecialchars($bankHoliday['notes']) ?></em>.<?php } ?><?php } else { ?>Today is <?= htmlspecialchars($bankHoliday['title']) ?>.<?php if ($bankHoliday['notes']) { ?> <em><?= htmlspecialchars($bankHoliday['notes']) ?></em>.<?php } ?><?php } ?></h2>
-            <p class="lead mb-0">There may be session cancellations or alterations today.</p>
           </div>
         </div>
       </aside>

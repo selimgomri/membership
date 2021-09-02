@@ -42,7 +42,7 @@ if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin' && i
   $payments->bindValue(':num', 10, PDO::PARAM_INT);
   $payments->execute();
 } else {
-  $payments = $db->prepare("SELECT stripePayments.ID, stripePayments.DateTime, stripePayMethods.Brand, stripePayMethods.Last4, stripePayments.Amount FROM stripePayments LEFT JOIN stripePayMethods ON stripePayments.Method = stripePayMethods.ID WHERE User = :user AND Paid ORDER BY `DateTime` DESC LIMIT :offset, :num;");
+  $payments = $db->prepare("SELECT stripePayments.ID, stripePayments.DateTime, stripePayMethods.Brand, stripePayMethods.Last4, stripePayments.Amount, users.Forename, users.Surname FROM ((stripePayments LEFT JOIN stripePayMethods ON stripePayments.Method = stripePayMethods.ID) LEFT JOIN users ON stripePayments.User = users.UserID) WHERE User = :user AND Paid ORDER BY `DateTime` DESC LIMIT :offset, :num;");
   $payments->bindValue(':user', $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], PDO::PARAM_INT);
   $payments->bindValue(':offset', $start, PDO::PARAM_INT);
   $payments->bindValue(':num', 10, PDO::PARAM_INT);
@@ -102,7 +102,7 @@ include BASE_PATH . 'views/header.php';
             <?php if (isset($pm['Brand'])) { ?>
               <div class="row align-items-center mb-2">
                 <div class="col-auto">
-                  <img class="accepted-network-logo dark-mode-mask" src="<?= autoUrl("img/stripe/" . $pm['Brand'] . ".svg", false) ?>"> <span class="visually-hidden"><?= htmlspecialchars(getCardBrand($pm['Brand'])) ?></span>
+                <img class="accepted-network-logo d-dark-none" src="<?= autoUrl("img/stripe/brand-stored-credentials/" . $pm['Brand'] . "_light.svg") ?>"><img class="accepted-network-logo  d-light-none" src="<?= autoUrl("img/stripe/brand-stored-credentials/" . $pm['Brand'] . "_dark.svg") ?>"> <span class="visually-hidden"><?= htmlspecialchars(getCardBrand($pm['Brand'])) ?></span>
                 </div>
                 <div class="col-auto">
                   <h2 class="my-0">
