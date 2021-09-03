@@ -5,15 +5,12 @@ $tenant = app()->tenant;
 
 \Stripe\Stripe::setApiKey(getenv('STRIPE'));
 
-$start = 0;
-$page = 0;
+$pagination = new \SCDS\Pagination();
+$pagination->records_per_page(10);
 
-if (isset($_GET['page']) && (int) $_GET['page'] != 0) {
-  $start = ($_GET['page'] - 1) * 10;
-  $page = (int) $_GET['page'];
-} else {
-  $page = 1;
-}
+$page = $pagination->get_page();
+
+$start = $pagination->get_limit_start();
 
 $url = 'payments/card-transactions?';
 
@@ -29,7 +26,8 @@ if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin' && i
 }
 $count = $getCount->fetchColumn();
 
-if ($start > $count) {
+$pagination->records($count);
+if ($start >= $count) {
   halt(404);
 }
 
@@ -102,7 +100,7 @@ include BASE_PATH . 'views/header.php';
             <?php if (isset($pm['Brand'])) { ?>
               <div class="row align-items-center mb-2">
                 <div class="col-auto">
-                <img class="accepted-network-logo d-dark-none" src="<?= autoUrl("img/stripe/brand-stored-credentials/" . $pm['Brand'] . "_light.svg") ?>"><img class="accepted-network-logo  d-light-none" src="<?= autoUrl("img/stripe/brand-stored-credentials/" . $pm['Brand'] . "_dark.svg") ?>"> <span class="visually-hidden"><?= htmlspecialchars(getCardBrand($pm['Brand'])) ?></span>
+                  <img class="accepted-network-logo d-dark-none" src="<?= autoUrl("img/stripe/brand-stored-credentials/" . $pm['Brand'] . "_light.svg") ?>"><img class="accepted-network-logo  d-light-none" src="<?= autoUrl("img/stripe/brand-stored-credentials/" . $pm['Brand'] . "_dark.svg") ?>"> <span class="visually-hidden"><?= htmlspecialchars(getCardBrand($pm['Brand'])) ?></span>
                 </div>
                 <div class="col-auto">
                   <h2 class="my-0">
@@ -117,46 +115,7 @@ include BASE_PATH . 'views/header.php';
         <?php } ?>
       </div>
 
-      <nav aria-label="Page navigation">
-        <ul class="pagination mb-0">
-          <?php if ($count <= 10) { ?>
-            <li class="page-item active"><a class="page-link" href="<?php echo autoUrl($url . 'page='); ?><?php echo $page ?>"><?php echo $page ?></a></li>
-          <?php } else if ($count <= 20) { ?>
-            <?php if ($page == 1) { ?>
-              <li class="page-item active"><a class="page-link" href="<?php echo autoUrl($url . 'page='); ?><?php echo $page ?>"><?php echo $page ?></a></li>
-              <li class="page-item"><a class="page-link" href="<?php echo autoUrl($url . 'page='); ?><?php echo $page + 1 ?>"><?php echo $page + 1 ?></a></li>
-              <li class="page-item"><a class="page-link" href="<?php echo autoUrl($url . 'page='); ?><?php echo $page + 1 ?>">Next</a></li>
-            <?php } else { ?>
-              <li class="page-item"><a class="page-link" href="<?php echo autoUrl($url . 'page='); ?><?php echo $page - 1 ?>">Previous</a></li>
-              <li class="page-item"><a class="page-link" href="<?php echo autoUrl($url . 'page='); ?><?php echo $page - 1 ?>"><?php echo $page - 1 ?></a></li>
-              <li class="page-item active"><a class="page-link" href="<?php echo autoUrl($url . 'page='); ?><?php echo $page ?>"><?php echo $page ?></a></li>
-            <?php } ?>
-          <?php } else { ?>
-            <?php if ($page == 1) { ?>
-              <li class="page-item active"><a class="page-link" href="<?php echo autoUrl($url . 'page='); ?><?php echo $page ?>"><?php echo $page ?></a></li>
-              <li class="page-item"><a class="page-link" href="<?php echo autoUrl($url . 'page='); ?><?php echo $page + 1 ?>"><?php echo $page + 1 ?></a></li>
-              <li class="page-item"><a class="page-link" href="<?php echo autoUrl($url . 'page='); ?><?php echo $page + 2 ?>"><?php echo $page + 2 ?></a></li>
-              <li class="page-item"><a class="page-link" href="<?php echo autoUrl($url . 'page='); ?><?php echo $page + 1 ?>">Next</a></li>
-            <?php } else { ?>
-              <li class="page-item"><a class="page-link" href="<?php echo autoUrl($url . 'page='); ?><?php echo $page - 1 ?>">Previous</a></li>
-              <?php if ($page > 2) { ?>
-                <li class="page-item"><a class="page-link" href="<?php echo autoUrl($url . 'page='); ?><?php echo $page - 2 ?>"><?php echo $page - 2 ?></a></li>
-              <?php } ?>
-              <?php if ($page > 1) { ?>
-                <li class="page-item"><a class="page-link" href="<?php echo autoUrl($url . 'page='); ?><?php echo $page - 1 ?>"><?php echo $page - 1 ?></a></li>
-                <li class="page-item active"><a class="page-link" href="<?php echo autoUrl($url . 'page='); ?><?php echo $page ?>"><?php echo $page ?></a></li>
-                <?php if ($count > $page * 10) { ?>
-                  <li class="page-item"><a class="page-link" href="<?php echo autoUrl($url . 'page='); ?><?php echo $page + 1 ?>"><?php echo $page + 1 ?></a></li>
-                  <?php if ($count > $page * 10 + 10) { ?>
-                    <li class="page-item"><a class="page-link" href="<?php echo autoUrl($url . 'page='); ?><?php echo $page + 2 ?>"><?php echo $page + 2 ?></a></li>
-                  <?php } ?>
-                  <li class="page-item"><a class="page-link" href="<?php echo autoUrl($url . 'page='); ?><?php echo $page + 1 ?>">Next</a></li>
-                <?php } ?>
-              <?php } ?>
-          <?php }
-          } ?>
-        </ul>
-      </nav>
+      <?= $pagination->render() ?>
 
     </div>
   </div>

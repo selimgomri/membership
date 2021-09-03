@@ -29,13 +29,13 @@ $sql->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 $numMails  = $sql->fetchColumn();
 $numPages = ((int)($numMails / 10)) + 1;
 
-if ($start > $numMails) {
+if ($pagination->get_limit_start() > $numMails) {
   halt(404);
 }
 
 $sql = $db->prepare("SELECT `notifyHistory`.`Subject`, `notifyHistory`.`Message`, `notify`.`ForceSend`, `Forename`, `Surname`, `JSONData`, `Date` FROM ((`notifyHistory` LEFT JOIN `users` ON notifyHistory.Sender = users.UserID) INNER JOIN `notify` ON notify.MessageID = notifyHistory.ID) WHERE notify.UserID = :user ORDER BY `EmailID` DESC LIMIT :offset, :num;");
 $sql->bindValue(':user', $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], PDO::PARAM_INT);
-$sql->bindValue(':offset', $start, PDO::PARAM_INT);
+$sql->bindValue(':offset', $pagination->get_limit_start(), PDO::PARAM_INT);
 $sql->bindValue(':num', 10, PDO::PARAM_INT);
 $sql->execute();
 $row = $sql->fetch(PDO::FETCH_ASSOC);

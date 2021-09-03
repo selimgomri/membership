@@ -31,7 +31,8 @@ include BASE_PATH . 'views/header.php';
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('covid')) ?>">COVID</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Competition</li>
+        <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('covid/competition-health-screening')) ?>">Competition</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Any Member</li>
       </ol>
     </nav>
 
@@ -41,7 +42,7 @@ include BASE_PATH . 'views/header.php';
           COVID-19 Return to Competition Health Screening
         </h1>
         <p class="lead mb-0">
-          Making sure you're safe to compete
+          Complete a form for any of your members for any competition
         </p>
       </div>
     </div>
@@ -57,6 +58,12 @@ include BASE_PATH . 'views/header.php';
       <?php if ($gala && $member) { ?>
         <ol class="list-unstyled">
           <?php do { ?>
+
+            <?php
+            $getMembers->execute([
+              $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'],
+            ]);
+            ?>
 
             <li>
               <h2><?= htmlspecialchars($gala['GalaName']) ?></h2>
@@ -112,7 +119,12 @@ include BASE_PATH . 'views/header.php';
       <?php } else { ?>
 
         <div class="alert alert-info">
-          <strong>No options are available to you.</strong>
+          <p class="mb-0">
+            <strong>No options are available to you</strong>
+          </p>
+          <p class="mb-0">
+            This is either because there are no upcoming galas or you have no members connected to your account.
+          </p>
         </div>
 
       <?php } ?>
