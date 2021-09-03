@@ -114,7 +114,7 @@ include BASE_PATH . 'views/header.php';
       <?php } else { ?>
         <div class="alert alert-warning">
           <p class="mb-0">
-            <strong>There are no members in <?= htmlspecialchars($squad['SquadName']) ?></strong>
+            <strong>No members have entered <?= htmlspecialchars($gala['GalaName']) ?></strong>
           </p>
         </div>
       <?php } ?>

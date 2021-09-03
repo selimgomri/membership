@@ -14,7 +14,7 @@ $sql = $db->query("SELECT COUNT(*) FROM auditLogging INNER JOIN users ON auditLo
 $numLogs  = $sql->fetchColumn();
 $numPages = ((int)($numLogs / $perPage)) + 1;
 
-if ($start > $numLogs) {
+if ($pagination->get_limit_start() > $numLogs) {
   halt(404);
 }
 
@@ -23,7 +23,7 @@ $pagination->records_per_page($perPage);
 
 $sql = $db->prepare("SELECT `Forename`, `Surname`, `UserID`, `Active`, auditLogging.ID, `Event`, `Description`, `Time`, tenants.ID TID FROM `auditLogging` INNER JOIN `users` ON auditLogging.User = users.UserID INNER JOIN tenants ON users.Tenant = tenants.ID WHERE `Event` != 'HTTP_REQUEST' ORDER
 BY `Time` DESC LIMIT :offset, :num");
-$sql->bindValue(':offset', $start, PDO::PARAM_INT);
+$sql->bindValue(':offset', $pagination->get_limit_start(), PDO::PARAM_INT);
 $sql->bindValue(':num', $perPage, PDO::PARAM_INT);
 $sql->execute();
 

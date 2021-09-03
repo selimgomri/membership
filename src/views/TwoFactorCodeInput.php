@@ -84,7 +84,7 @@ include BASE_PATH . "views/head.php";
       <form method="post" action="<?= autoUrl("2fa") ?>" name="2faform" id="2faform" class="needs-validation" novalidate>
         <div class="mb-3">
           <label class="form-label" for="auth">Authentication Code</label>
-          <input type="number" name="auth" id="auth" class="form-control form-control-lg" required autofocus placeholder="654321" pattern="[0-9]*" inputmode="numeric" min="0" max="999999" step="1">
+          <input type="number" name="auth" id="auth" class="form-control form-control-lg" required autofocus placeholder="654321" pattern="[0-9]*" inputmode="numeric" min="0" max="999999" step="1" autocomplete="one-time-code">
           <div class="invalid-feedback">
             Please enter a numeric authentication code.
           </div>
@@ -107,7 +107,7 @@ include BASE_PATH . "views/head.php";
               <input class="form-check-input" type="checkbox" name="setup-time-based-codes" id="setup-time-based-codes" aria-describedby="setup-time-based-codes-help">
               <label class="form-check-label" for="setup-time-based-codes">Set up an authenticator app</label>
               <small id="setup-time-based-codes-help" class="form-text text-muted">
-                Set up an authenticator app, such as Google Authenticator, so that you can use time-based one-time passwords and don't need to wait for an email from us. You can always still get codes by email if you don't have your phone with you.
+                Set up a time-based one-time password authenticator app, such as iCloud Keychain (Safari 15 onwards), Google Authenticator or Microsoft Authenticator to get your Two-Factor Authentication codes, so that you don't need to wait for an email from us. You can always still get codes by email if you don't have your phone with you.
               </small>
             </div>
           </div>

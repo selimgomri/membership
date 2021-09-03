@@ -18,7 +18,7 @@ $sql->execute([
 $numMails  = $sql->fetchColumn();
 $numPages = ((int)($numMails / 10)) + 1;
 
-if ($start > $numMails) {
+if ($pagination->get_limit_start() > $numMails) {
   halt(404);
 }
 
@@ -27,7 +27,7 @@ $sql = $db->prepare("SELECT `notifyHistory`.`Subject`, `notifyHistory`.`Message`
 (`notifyHistory` LEFT JOIN `users` ON notifyHistory.Sender = users.UserID) WHERE notifyHistory.Tenant = :tenant ORDER
 BY `Date` DESC LIMIT :offset, :num");
 $sql->bindValue(':tenant', $tenant->getId(), PDO::PARAM_INT);
-$sql->bindValue(':offset', $start, PDO::PARAM_INT);
+$sql->bindValue(':offset', $pagination->get_limit_start(), PDO::PARAM_INT);
 $sql->bindValue(':num', 10, PDO::PARAM_INT);
 $sql->execute();
 
