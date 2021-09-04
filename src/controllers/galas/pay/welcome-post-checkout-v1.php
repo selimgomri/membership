@@ -53,6 +53,8 @@ $entry = $entries->fetch(PDO::FETCH_ASSOC);
 
 //pre($entry);
 
+http_response_code(302);
+
 $payingEntries = [];
 
 $checkoutSession = \SCDS\Checkout\Session::new([
@@ -123,6 +125,7 @@ if ($entry != null) {
     }
   } while ($entry = $entries->fetch(PDO::FETCH_ASSOC));
 
+  if (sizeof($payingEntries) > 0) {
   $checkoutSession->autoCalculateTotal();
 
   $checkoutSession->metadata['return']['url'] = autoUrl('galas');
@@ -132,93 +135,12 @@ if ($entry != null) {
   $checkoutSession->metadata['cancel']['url'] = autoUrl('galas/pay-for-entries');
 
   $checkoutSession->save();
-}
-
-if (false) {
-
-  $_SESSION['TENANT-' . app()->tenant->getId()]['PaidEntries'] = $payingEntries;
-
-  if (sizeof($payingEntries) > 0) {
-
-    $total = 0;
-    foreach ($payingEntries as $key => $value) {
-      $total += $value['Amount'];
-    }
-
-    $updateEntryPayment = $db->prepare("UPDATE galaEntries SET StripePayment = ? WHERE EntryID = ?");
-
-    $intent = \Stripe\PaymentIntent::create([
-      'amount' => $total,
-      'currency' => 'gbp',
-      'payment_method_types' => ['card'],
-      'confirm' => false,
-      'setup_future_usage' => 'off_session',
-      'metadata' => [
-        'payment_category' => 'gala_entry',
-        'user_id' => $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'],
-      ]
-    ], [
-      'stripe_account' => $tenant->getStripeAccount()
-    ]);
-    $_SESSION['TENANT-' . app()->tenant->getId()]['GalaPaymentIntent'] = $intent->id;
-
-    $intentCreatedAt = new DateTime('@' . $intent->created, new DateTimeZone('UTC'));
-
-    // Check if intent already exists
-    $checkIntentCount = $db->prepare("SELECT COUNT(*) FROM stripePayments WHERE Intent = ?");
-    $checkIntentCount->execute([
-      $intent->id
-    ]);
-
-    $databaseId = null;
-    if ($checkIntentCount->fetchColumn() == 0) {
-      // Add this payment intent to the database and assign the id to each entry
-      $addIntent = $db->prepare("INSERT INTO stripePayments (`User`, `DateTime`, Method, Intent, Amount, Currency, Paid, AmountRefunded) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-      $addIntent->execute([
-        $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'],
-        $intentCreatedAt->format("Y-m-d H:i:s"),
-        null,
-        $intent->id,
-        $intent->amount,
-        $intent->currency,
-        0,
-        0
-      ]);
-
-      $databaseId = $db->lastInsertId();
-    } else {
-      $getIntentDbId = $db->prepare("SELECT ID FROM stripePayments WHERE Intent = ?");
-      $getIntentDbId->execute([
-        $intent->id
-      ]);
-      $databaseId = $getIntentDbId->fetchColumn();
-    }
-    $paymentDatabaseId = $databaseId;
-
-    // Assign id to each entry
-    foreach ($payingEntries as $entry => $details) {
-      $updateEntryPayment->execute([
-        $databaseId,
-        $entry
-      ]);
-    }
-
-    if ($total != $intent->amount) {
-      $intent = \Stripe\PaymentIntent::update(
-        $_SESSION['TENANT-' . app()->tenant->getId()]['GalaPaymentIntent'],
-        [
-          'amount' => $total,
-        ],
-        [
-          'stripe_account' => $tenant->getStripeAccount()
-        ]
-      );
-    }
-
-    header("Location: " . autoUrl("galas/pay-for-entries/checkout"));
   } else {
     header("Location: " . autoUrl("galas/pay-for-entries"));
   }
+} else {
+  // Error
+  header("Location: " . autoUrl("galas/pay-for-entries"));
 }
 
 header("Location: " . $checkoutSession->getUrl());
