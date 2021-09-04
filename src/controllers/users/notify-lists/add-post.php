@@ -16,17 +16,17 @@ try {
     $tenant->getId()
   ]);
   if ($userCount->fetchColumn() == 0) {
-    halt(404);
+    throw new Exception();
   }
 
   // Check list
   $listCount = $db->prepare("SELECT COUNT(*) FROM targetedLists WHERE ID = ? AND Tenant = ?");
   $listCount->execute([
-    $id,
+    $_POST['list-select'],
     $tenant->getId()
   ]);
   if ($listCount->fetchColumn() == 0) {
-    halt(404);
+    throw new Exception();
   }
 
   $insert = $db->prepare("INSERT INTO listSenders (`User`, `List`, `Manager`) VALUES (?, ?, ?)");
@@ -40,7 +40,10 @@ try {
   $_SESSION['TENANT-' . app()->tenant->getId()]['AssignListSuccess'] = true;
   header("Location: " . autoUrl("users/" . $id . "/targeted-lists"));
 } catch (Exception $e) {
-  // Success
+  // Error
+  
+  reportError($e);
+  
   $_SESSION['TENANT-' . app()->tenant->getId()]['AssignListError'] = true;
   header("Location: " . autoUrl("users/" . $id . "/targeted-lists/add"));
 }
