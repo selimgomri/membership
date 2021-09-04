@@ -27,7 +27,7 @@ if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin' && i
 $count = $getCount->fetchColumn();
 
 $pagination->records($count);
-if ($start >= $count) {
+if ($page > 1 && $start >= $count) {
   halt(404);
 }
 
