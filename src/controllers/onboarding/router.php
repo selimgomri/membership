@@ -37,3 +37,7 @@ $this->group('/sessions', function () {
     include 'user/session.php';
   });
 });
+
+$this->get('/all', function () {
+  include 'admin/list.php';
+});

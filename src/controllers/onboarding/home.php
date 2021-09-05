@@ -51,6 +51,18 @@ include BASE_PATH . "views/header.php";
         <p>
           <a href="<?= htmlspecialchars(autoUrl('onboarding/new')) ?>" class="btn btn-primary">Get started</a>
         </p>
+
+        <h2>
+          View all onboarding sessions
+        </h2>
+
+        <p class="lead">
+          Find unfinished, pending or completed onboarding sessions.
+        </p>
+
+        <p>
+          <a href="<?= htmlspecialchars(autoUrl('onboarding/all')) ?>" class="btn btn-primary">View all</a>
+        </p>
       <?php } ?>
 
       <?php if (true) { ?>
