@@ -20,8 +20,16 @@ $this->group('/sessions', function () {
       include 'admin/session.php';
     });
 
-    $this->post('/{id}:uuid', function () {
+    $this->post('/{id}:uuid', function ($id) {
       include 'admin/session-post.php';
+    });
+
+    $this->get('/{id}:uuid/batch', function ($id) {
+      include 'admin/batch.php';
+    });
+
+    $this->post('/{id}:uuid/batch', function ($id) {
+      include 'admin/batch-post.php';
     });
   });
 

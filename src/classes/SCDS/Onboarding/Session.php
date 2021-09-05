@@ -75,7 +75,8 @@ class Session
     return $session;
   }
 
-  private function loadMembers() {
+  private function loadMembers()
+  {
     $db = app()->db;
     $getMembers = $db->prepare("SELECT MemberID, MForename, MSurname FROM members INNER JOIN onboardingMembers ON members.MemberID = onboardingMembers.member WHERE `session` = ? AND `UserID` = ? ORDER BY MemberID ASC");
     $getMembers->execute([
@@ -98,16 +99,50 @@ class Session
     $this->members = $members;
   }
 
-  public function getMembers() {
+  public function getMembers()
+  {
     $this->loadMembers();
     return $this->members;
   }
 
-  public function getUser() {
+  public function getUser()
+  {
     return new \User($this->user);
   }
 
-  public function getCreator() {
+  public function getCreator()
+  {
     return new \User($this->creator);
+  }
+
+  private function getUrl()
+  {
+    return autoUrl("onboarding/go?session=" . urlencode($this->id) . "&token=" . urlencode($this->token));
+  }
+
+  public function enableToken()
+  {
+    $updateSession = app()->db->prepare("UPDATE `onboardingSessions` SET `token_on` = ? WHERE `id` = ?");
+    $updateSession->execute([
+      (int) true,
+      $this->id,
+    ]);
+  }
+
+  public function sendEmail()
+  {
+    $this->enableToken();
+
+    $user = $this->getUser();
+
+    $subject = 'Complete your registration at ' . app()->tenant->getName();
+    $content = '<p>Dear ' . htmlspecialchars($user->getFullName()) . ',</p>';
+
+    $content .= '<p><a href="' . htmlspecialchars($this->getUrl()) . '">Please complete your registration tasks online</a>.</p>';
+    $content .= '<p><a href="' . htmlspecialchars($this->getUrl()) . '">' . htmlspecialchars($this->getUrl()) . '</a></p>';
+
+    $content .= '<p>Thank you, <br>The ' . htmlspecialchars(app()->tenant->getName()) . ' team.</p>';
+
+    notifySend(null, $subject, $content, $user->getFullName(), $user->getEmail(), ['Name' => app()->tenant->getName() . ' Membership Secretary']);
   }
 }
