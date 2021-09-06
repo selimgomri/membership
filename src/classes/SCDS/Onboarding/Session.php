@@ -30,6 +30,7 @@ class Session
   public $metadata;
   public $batch;
   public $members;
+  private $currentStage;
 
   private function __construct()
   {
@@ -144,5 +145,82 @@ class Session
     $content .= '<p>Thank you, <br>The ' . htmlspecialchars(app()->tenant->getName()) . ' team.</p>';
 
     notifySend(null, $subject, $content, $user->getFullName(), $user->getEmail(), ['Name' => app()->tenant->getName() . ' Membership Secretary']);
+  }
+
+  private function findCurrentTask()
+  {
+    // Loop through stages, Return on first match
+    foreach ($this->stages as $stage => $data) {
+      if ($data->required && !$data->completed) {
+        $this->currentStage = $stage;
+        // Return early
+        return;
+      }
+    }
+
+    $this->currentStage = 'done';
+  }
+
+  public function getCurrentTask() {
+    if (!$this->currentStage) {
+      $this->findCurrentTask();
+    }
+
+    return $this->currentStage;
+  }
+
+  public function isCurrentTask($task)
+  {
+    return $task == $this->getCurrentTask();
+  }
+
+  public static function  getStates()
+  {
+    return [
+      'not_ready' => 'Not ready',
+      'pending' => 'Pending',
+      'in_progress' => 'In progress',
+      'complete' => 'Complete',
+    ];
+  }
+
+  public static function getDefaultStages()
+  {
+    return [
+      'account_details' => [
+        'required' => true,
+        'completed' => false,
+        'required_locked' => true,
+        'metadata' => [],
+      ],
+      'model_forms' => [
+        'required' => true,
+        'completed' => false,
+        'required_locked' => false,
+        'metadata' => [],
+      ],
+      'direct_debit_mandate' => [
+        'required' => bool(app()->tenant->getBooleanKey('USE_DIRECT_DEBIT')),
+        'completed' => false,
+        'required_locked' => !app()->tenant->getBooleanKey('USE_DIRECT_DEBIT'),
+        'metadata' => [],
+      ],
+      'fees' => [
+        'required' => true,
+        'completed' => false,
+        'required_locked' => false,
+        'metadata' => [],
+      ],
+    ];
+  }
+
+  public static function stagesOrder()
+  {
+    return [
+      'account_details' => 'Set your account password',
+      'model_forms' => 'Complete registration forms',
+      'direct_debit_mandate' => 'Set up a Direct Debit Instruction',
+      'fees' => 'Pay your registration fees',
+    ];
   }
 }

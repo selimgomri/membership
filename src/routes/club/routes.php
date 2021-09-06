@@ -243,6 +243,10 @@ $this->group(['/timeconverter', '/time-converter'], function () {
   });
 });
 
+$this->group('/onboarding/go', function () {
+  include BASE_PATH . 'controllers/onboarding/public/router.php';
+});
+
 $this->get('/reportanissue', function () {
   include BASE_PATH . 'controllers/help/ReportIssueHandler.php';
 });

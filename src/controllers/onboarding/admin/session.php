@@ -8,12 +8,7 @@ $tenant = app()->tenant;
 
 $session = \SCDS\Onboarding\Session::retrieve($id);
 
-$states = [
-  'not_ready' => 'Not ready',
-  'pending' => 'Pending',
-  'in_progress' => 'In progress',
-  'complete' => 'Complete',
-];
+$states = \SCDS\Onboarding\Session::getStates();
 
 $getMembershipYears = $db->prepare("SELECT `ID` `id`, `Name` `name` FROM membershipYear WHERE Tenant = ? AND EndDate >= ?");
 $getMembershipYears->execute([
@@ -156,25 +151,36 @@ include BASE_PATH . "views/header.php";
           </p>
 
           <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="1" id="task-account-details" name="task-account-details" <?php if ($session->stages->task_account_details->required) { ?>checked<?php } ?> <?php if ($session->stages->task_account_details->completed) { ?>disabled<?php } ?>>
-            <label class="form-check-label" for="task-account-details">
+            <input class="form-check-input" type="checkbox" value="1" id="task-account_details" name="task-account_details" <?php if ($session->stages->account_details->required) { ?>checked<?php } ?> <?php if ($session->stages->account_details->completed || $session->stages->account_details->required_locked) { ?>disabled<?php } ?>>
+            <label class="form-check-label" for="task-account_details">
               Account details
             </label>
           </div>
 
           <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="1" id="task-model-forms" name="task-model-forms" <?php if ($session->stages->task_model_forms->required) { ?>checked<?php } ?> <?php if ($session->stages->task_model_forms->completed) { ?>disabled<?php } ?>>
-            <label class="form-check-label" for="task-model-forms">
+            <input class="form-check-input" type="checkbox" value="1" id="task-model_forms" name="task-model_forms" <?php if ($session->stages->model_forms->required) { ?>checked<?php } ?> <?php if ($session->stages->model_forms->completed || $session->stages->model_forms->required_locked) { ?>disabled<?php } ?>>
+            <label class="form-check-label" for="task-model_forms">
               Model forms
             </label>
           </div>
 
           <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="1" id="task-fees" name="task-fees" <?php if ($session->stages->task_fees->required) { ?>checked<?php } ?> <?php if ($session->stages->task_fees->completed) { ?>disabled<?php } ?>>
+            <input class="form-check-input" type="checkbox" value="1" id="task-direct_debit_mandate" name="task-direct_debit_mandate" <?php if ($session->stages->direct_debit_mandate->required) { ?>checked<?php } ?> <?php if ($session->stages->direct_debit_mandate->completed || $session->stages->direct_debit_mandate->required_locked) { ?>disabled<?php } ?>>
+            <label class="form-check-label" for="task-direct_debit_mandate">
+              Direct debit mandate
+            </label>
+          </div>
+
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="1" id="task-fees" name="task-fees" <?php if ($session->stages->fees->required) { ?>checked<?php } ?> <?php if ($session->stages->fees->completed || $session->stages->fees->required_locked) { ?>disabled<?php } ?>>
             <label class="form-check-label" for="task-fees">
               Registration fees
             </label>
           </div>
+
+          <p>
+            Some tasks may be locked if the system requires them or you do not have access to a given service. Other tasks may be locked if the user has started onboarding and completed a given task.
+          </p>
         </div>
 
         <?php if ($membershipYear && $session->status == 'not_ready' && !$session->batch) { ?>

@@ -144,7 +144,7 @@ if (!$hasMembers || !$status) {
   $now = new DateTime('now', new DateTimeZone('UTC'));
   $today = new DateTime('now', new DateTimeZone('Europe/London'));
   $welcomeText = null;
-  $stages = [];
+  $stages = \SCDS\Onboarding\Session::getDefaultStages();
   $metadata = [];
 
   // Add to db

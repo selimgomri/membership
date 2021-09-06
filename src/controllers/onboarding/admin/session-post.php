@@ -11,12 +11,7 @@ if (!\SCDS\CSRF::verify()) {
   halt(403);
 }
 
-$states = [
-  'not_ready' => 'Not ready',
-  'pending' => 'Pending',
-  'in_progress' => 'In progress',
-  'complete' => 'Complete',
-];
+$states = \SCDS\Onboarding\Session::getStates();
 
 http_response_code(302);
 
@@ -65,20 +60,12 @@ try {
     $dueDate = $postDueDate->format('Y-m-d');
   }
 
-  $stages = [
-    'task_account_details' => [
-      'required' => isset($_POST['task-account-details']),
-      'completed' => false,
-    ],
-    'task_model_forms' => [
-      'required' => isset($_POST['task-model-forms']),
-      'completed' => false,
-    ],
-    'task_fees' => [
-      'required' => isset($_POST['task-fees']),
-      'completed' => false,
-    ],
-  ];
+  $stages = $session->stages;
+  foreach ($stages as $key => $value) {
+    if (!$stages->$key->completed && !$stages->$key->required_locked) {
+      $stages->$key->required = isset($_POST['task-' . $key]);
+    }
+  }
 
   $updateSession = $db->prepare("UPDATE `onboardingSessions` SET `start` = ?, `charge_outstanding` = ?, `charge_pro_rata` = ?, `welcome_text` = ?, `status` = ?, `due_date` = ?, `completed_at` = ?, `stages` = ? WHERE `id` = ?");
   $updateSession->execute([
@@ -106,6 +93,7 @@ try {
     }
   } else {
     // Just save
+    header('location: ' . autoUrl("onboarding/sessions/a/$id"));
   }
 } catch (Exception $e) {
 
