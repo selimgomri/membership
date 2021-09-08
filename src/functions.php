@@ -1024,20 +1024,7 @@ function getTimes($asa)
 
 function user_needs_registration($user)
 {
-  $db = app()->db;
-  try {
-    $query = $db->prepare("SELECT RR FROM users WHERE UserID = ?");
-    $query->execute([$user]);
-
-    if ($query->fetchColumn()) {
-      return true;
-    } else {
-      return false;
-    }
-  } catch (Exception $e) {
-    return false;
-  }
-  return false;
+  return isset($_SESSION['OnboardingSessionId']);
 }
 
 function getPostContent($id)
