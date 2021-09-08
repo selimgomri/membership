@@ -48,6 +48,22 @@ class MembershipFeeBatch
       $batchItem->Batch,
     ]);
 
+    // Check if the batch relates to am onboarding session
+    try {
+      $get = $db->prepare("SELECT id FROM onboardingSessions WHERE batch = ?");
+      $get->execute([
+        $batchItem->Batch
+      ]);
+      $batch = $get->fetchColumn();
+
+      if ($batch) {
+        $session = \SCDS\Onboarding\Session::retrieve($batch);
+        $session->completeTask('fees');
+      }
+    } catch (\Exception $e) {
+      reportError($e);
+    }
+
     $addPaymentItems = $db->prepare("INSERT INTO stripePaymentItems (Payment, `Name`, `Description`, Amount, Currency, AmountRefunded) VALUES (?, ?, ?, ?, ?, ?)");
     $addPaymentItems->execute([
       $stripePayment,

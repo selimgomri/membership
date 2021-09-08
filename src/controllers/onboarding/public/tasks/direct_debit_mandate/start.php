@@ -1,5 +1,7 @@
 <?php
 
+$db = app()->db;
+
 $session = \SCDS\Onboarding\Session::retrieve($_SESSION['OnboardingSessionId']);
 
 if ($session->status == 'not_ready') halt(404);
@@ -15,6 +17,30 @@ $stages = $session->stages;
 $tasks = \SCDS\Onboarding\Session::stagesOrder();
 
 $pagetitle = 'Direct Debit Instruction - Onboarding';
+
+$good = false;
+
+if (isset($_SESSION['SetupMandateSuccess'])) {
+  $good = true;
+}
+
+$ddi = null;
+if (app()->tenant->getBooleanKey('ALLOW_STRIPE_DIRECT_DEBIT_SET_UP') && app()->tenant->getBooleanKey('USE_STRIPE_DIRECT_DEBIT')) {
+  // Get DD details
+  // Get mandates
+  $getMandates = $db->prepare("SELECT ID, Mandate, Last4, SortCode, `Address`, Reference, `URL`, `Status` FROM stripeMandates WHERE Customer = ? AND (`Status` = 'accepted' OR `Status` = 'pending') ORDER BY CreationTime DESC");
+  $getMandates->execute([
+    $user->getStripeCustomer()->id,
+  ]);
+  $mandate = $getMandates->fetch(PDO::FETCH_ASSOC);
+
+  $ddi = new stdClass();
+  if ($mandate) {
+    $good = true;
+    $ddi->last4 = $mandate['Last4'];
+    $ddi->sortCode = implode("-", str_split($mandate['SortCode'], 2));
+  }
+}
 
 include BASE_PATH . "views/head.php";
 
@@ -57,9 +83,52 @@ include BASE_PATH . "views/head.php";
           <?php unset($_SESSION['FormError']);
           } ?>
 
-          <p>
-            <button type="submit" class="btn btn-success">Confirm</button>
-          </p>
+          <?php if (isset($_SESSION['SetupMandateSuccess'])) { ?>
+            <div class="alert alert-success">
+              <p class="mb-0">
+                <strong>We've started setting up your direct debit instruction</strong>
+              </p>
+              <p class="mb-0">
+                Account <?= htmlspecialchars($_SESSION['SetupMandateSuccess']['SortCode']) ?>, <?= htmlspecialchars($_SESSION['SetupMandateSuccess']['Last4']) ?>
+              </p>
+            </div>
+          <?php } ?>
+
+          <?php if ($ddi) { ?>
+            <div class="card card-body mb-3">
+              <p class="mb-0">
+                <strong>You already have a Direct Debit Instruction set up</strong>
+              </p>
+              <p class="">
+                Account <?= htmlspecialchars($ddi->sortCode) ?>, ****<?= htmlspecialchars($ddi->last4) ?>
+              </p>
+
+              <p class="mb-0">
+                You can make changes to your Direct Debit Instruction later in the <em>Pay</em> section of your account.
+              </p>
+            </div>
+          <?php } ?>
+
+          <?php if (getenv('STRIPE') && app()->tenant->getBooleanKey('ALLOW_STRIPE_DIRECT_DEBIT_SET_UP') && app()->tenant->getBooleanKey('USE_STRIPE_DIRECT_DEBIT') && !$good) { ?>
+            <!-- STRIPE -->
+            <p>
+              <a href="<?= htmlspecialchars(autoUrl('onboarding/go/direct-debit/stripe/set-up')) ?>" class="btn btn-success">Set up now</a>
+            </p>
+
+            <p>
+              We will redirect you to our payment provider, Stripe to securely set up your Direct Debit Instruction.
+            </p>
+          <?php } else if (true && !$good) { ?>
+            <!-- GOCARDLESS -->
+          <?php } else { ?>
+            <!-- NONE -->
+          <?php } ?>
+
+          <?php if ($good) { ?>
+            <p>
+              <button type="submit" class="btn btn-success">Confirm</button>
+            </p>
+          <?php } ?>
 
         </form>
       </div>
@@ -68,6 +137,10 @@ include BASE_PATH . "views/head.php";
 </div>
 
 <?php
+
+if (isset($_SESSION['SetupMandateSuccess'])) {
+  unset($_SESSION['SetupMandateSuccess']);
+}
 
 $footer = new \SCDS\Footer();
 $footer->addJs('js/NeedsValidation.js');

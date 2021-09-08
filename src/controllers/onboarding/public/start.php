@@ -40,6 +40,25 @@ include BASE_PATH . "views/head.php";
   <div class="container">
     <div class="row justify-content-center py-5">
       <div class="col-lg-8 col-md-10">
+        <?php if (isset($_SESSION['SetupMandateSuccess'])) { ?>
+          <div class="alert alert-success">
+            <p class="mb-0">
+              <strong>We've started setting up your direct debit instruction</strong>
+            </p>
+            <p class="mb-0">
+              Account <?= htmlspecialchars($_SESSION['SetupMandateSuccess']['SortCode']) ?>, <?= htmlspecialchars($_SESSION['SetupMandateSuccess']['Last4']) ?>
+            </p>
+          </div>
+        <?php } ?>
+        
+        <?php if (isset($_SESSION['PaymentSuccess'])) { ?>
+          <div class="alert alert-success">
+            <p class="mb-0">
+              <strong>Your payment has been successful</strong>
+            </p>
+          </div>
+        <?php unset($_SESSION['PaymentSuccess']); } ?>
+
         <h1 class="text-center">Hi <?= htmlspecialchars($user->getFirstName()) ?>! Welcome to <?= htmlspecialchars($tenant->getName()) ?></h1>
 
         <h2 class="text-center">We now need you to</h2>

@@ -17,20 +17,44 @@ $this->post('/start-task', function () {
 });
 
 $this->group('/emergency-contacts', function () {
-  $this->get('/list', function() {
+  $this->get('/list', function () {
     include 'tasks/emergency_contacts/list.php';
   });
 
-  $this->post('/new', function() {
+  $this->post('/new', function () {
     include 'tasks/emergency_contacts/new.php';
   });
 
-  $this->post('/edit', function() {
+  $this->post('/edit', function () {
     include 'tasks/emergency_contacts/edit.php';
   });
 
-  $this->post('/delete', function() {
+  $this->post('/delete', function () {
     include 'tasks/emergency_contacts/delete.php';
+  });
+});
+
+$this->group('/direct-debit', function () {
+  $this->group('/stripe', function () {
+    $this->get('/set-up', function () {
+      include 'tasks/direct_debit_mandate/stripe/set-up.php';
+    });
+
+    $this->get('/success', function () {
+      include 'tasks/direct_debit_mandate/stripe/success.php';
+    });
+  });
+
+  $this->group('/go-cardless', function () {
+    $this->get('/set-up', function () {
+      // include 'tasks/direct_debit_mandate/stripe/set-up.php';
+    });
+  });
+});
+
+$this->group('/fees', function () {
+  $this->get('/success', function () {
+    include 'tasks/fees/success.php';
   });
 });
 

@@ -284,6 +284,10 @@ $this->get('/cc/{id}/{hash}/unsubscribe', function ($id, $hash) {
   include BASE_PATH . 'controllers/notify/CCUnsubscribe.php';
 });
 
+$this->group('/payments/checkout', function () {
+  include 'checkout.php';
+});
+
 $this->group('/services', function () {
   $this->get('/barcode-generator', function () {
     include BASE_PATH . 'controllers/barcode-generation-system/gen.php';
@@ -599,14 +603,6 @@ if (empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) {
 
   $this->group('/registration', function () {
     include BASE_PATH . 'controllers/registration/router.php';
-  });
-
-  $this->group('/payments', function () {
-    $this->group('/checkout', function () {
-      include 'checkout.php';
-    });
-
-    include BASE_PATH . 'controllers/payments/router.php';
   });
 
   $this->group('/form-agreement', function () {

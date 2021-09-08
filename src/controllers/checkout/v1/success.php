@@ -5,10 +5,6 @@ $tenant = app()->tenant;
 
 $checkoutSession = \SCDS\Checkout\Session::retrieve($id);
 
-if ($checkoutSession->user && $checkoutSession->user != app()->user->getId()) {
-  halt(404);
-}
-
 $items = $checkoutSession->getItems();
 
 $paymentIntent = $checkoutSession->getPaymentIntent();
