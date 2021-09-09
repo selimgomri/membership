@@ -11,6 +11,14 @@
       "external": false
     },
     {
+      "id": "admin-swimmark",
+      "name": "Swim England Compliance Centre",
+      "title": "Ensure you provide information to ensure SwimMark compliance",
+      "link": "admin/swim-england-compliance",
+      "target": "_self",
+      "external": false
+    },
+    {
       "id": "admin-reports",
       "name": "Reports",
       "title": "Member and system reports",

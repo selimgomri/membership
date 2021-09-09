@@ -52,6 +52,18 @@ $this->group('/direct-debit', function () {
   });
 });
 
+$this->group('/member-forms', function () {
+  $this->group('/{id}:uuid', function ($id) {
+    $this->get('/start-task', function ($id) {
+      include 'tasks/member_forms/task-handler.php';
+    });
+
+    $this->post('/start-task', function ($id) {
+      include 'tasks/member_forms/post-task-handler.php';
+    });
+  });
+});
+
 $this->group('/fees', function () {
   $this->get('/success', function () {
     include 'tasks/fees/success.php';

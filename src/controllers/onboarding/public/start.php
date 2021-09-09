@@ -50,14 +50,15 @@ include BASE_PATH . "views/head.php";
             </p>
           </div>
         <?php } ?>
-        
+
         <?php if (isset($_SESSION['PaymentSuccess'])) { ?>
           <div class="alert alert-success">
             <p class="mb-0">
               <strong>Your payment has been successful</strong>
             </p>
           </div>
-        <?php unset($_SESSION['PaymentSuccess']); } ?>
+        <?php unset($_SESSION['PaymentSuccess']);
+        } ?>
 
         <h1 class="text-center">Hi <?= htmlspecialchars($user->getFirstName()) ?>! Welcome to <?= htmlspecialchars($tenant->getName()) ?></h1>
 
@@ -78,15 +79,23 @@ include BASE_PATH . "views/head.php";
           <?php } ?>
         </ul>
 
-        <?php if ($session->dueDate) { ?>
+        <?php if ($session->isCurrentTask('done')) { ?>
           <p>
-            You must complete all registration tasks by the end of <?= htmlspecialchars($session->dueDate->format('j F Y')) ?>.
+            You're all set. Welcome to <?= htmlspecialchars(app()->tenant->getName()) ?>.
           </p>
-        <?php } ?>
+        <?php } else { ?>
 
-        <p>
-          The <?= htmlspecialchars($tenant->getName()) ?> team.
-        </p>
+          <?php if ($session->dueDate) { ?>
+            <p>
+              You must complete all registration tasks by the end of <?= htmlspecialchars($session->dueDate->format('j F Y')) ?>.
+            </p>
+          <?php } ?>
+
+          <p>
+            The <?= htmlspecialchars($tenant->getName()) ?> team.
+          </p>
+
+        <?php } ?>
       </div>
     </div>
   </div>

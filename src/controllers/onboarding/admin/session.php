@@ -158,9 +158,44 @@ include BASE_PATH . "views/header.php";
           </div>
 
           <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="1" id="task-model_forms" name="task-model_forms" <?php if ($session->stages->model_forms->required) { ?>checked<?php } ?> <?php if ($session->stages->model_forms->completed || $session->stages->model_forms->required_locked) { ?>disabled<?php } ?>>
-            <label class="form-check-label" for="task-model_forms">
-              Model forms
+            <input class="form-check-input" type="checkbox" value="1" id="task-address_details" name="task-address_details" <?php if ($session->stages->address_details->required) { ?>checked<?php } ?> <?php if ($session->stages->address_details->completed || $session->stages->address_details->required_locked) { ?>disabled<?php } ?>>
+            <label class="form-check-label" for="task-address_details">
+              Address details
+            </label>
+          </div>
+
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="1" id="task-communications_options" name="task-communications_options" <?php if ($session->stages->communications_options->required) { ?>checked<?php } ?> <?php if ($session->stages->communications_options->completed || $session->stages->communications_options->required_locked) { ?>disabled<?php } ?>>
+            <label class="form-check-label" for="task-communications_options">
+              Address details
+            </label>
+          </div>
+
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="1" id="task-emergency_contacts" name="task-emergency_contacts" <?php if ($session->stages->emergency_contacts->required) { ?>checked<?php } ?> <?php if ($session->stages->emergency_contacts->completed || $session->stages->emergency_contacts->required_locked) { ?>disabled<?php } ?>>
+            <label class="form-check-label" for="task-emergency_contacts">
+              Emergency contacts
+            </label>
+          </div>
+
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="1" id="task-parent_conduct" name="task-parent_conduct" <?php if ($session->stages->parent_conduct->required) { ?>checked<?php } ?> <?php if ($session->stages->parent_conduct->completed || $session->stages->parent_conduct->required_locked) { ?>disabled<?php } ?>>
+            <label class="form-check-label" for="task-parent_conduct">
+              Parent/guardian code of conduct
+            </label>
+          </div>
+
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="1" id="task-data_privacy_agreement" name="task-data_privacy_agreement" <?php if ($session->stages->data_privacy_agreement->required) { ?>checked<?php } ?> <?php if ($session->stages->data_privacy_agreement->completed || $session->stages->data_privacy_agreement->required_locked) { ?>disabled<?php } ?>>
+            <label class="form-check-label" for="task-data_privacy_agreement">
+              Data privacy agreement
+            </label>
+          </div>
+
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="1" id="task-terms_agreement" name="task-terms_agreement" <?php if ($session->stages->terms_agreement->required) { ?>checked<?php } ?> <?php if ($session->stages->terms_agreement->completed || $session->stages->terms_agreement->required_locked) { ?>disabled<?php } ?>>
+            <label class="form-check-label" for="task-terms_agreement">
+              Terms and conditions of club membership agreement
             </label>
           </div>
 
