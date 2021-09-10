@@ -164,7 +164,7 @@ class Member
     return [
       'medical_form' => 'Medical form',
       'photography_consent' => 'Photography consent',
-      'code_of_conduct' => 'Tell us your communications options',
+      'code_of_conduct' => 'Code of conduct',
     ];
   }
 }

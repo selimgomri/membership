@@ -102,4 +102,4 @@ if ($getCount->fetchColumn() == 0) {
 $onboardingMember->completeTask('medical_form');
 
 http_response_code(302);
-header("Location: " . autoUrl('onboarding/go/member-forms/' . $onboardingMember->id . ''));
+header("Location: " . autoUrl('onboarding/go/start-task'));
