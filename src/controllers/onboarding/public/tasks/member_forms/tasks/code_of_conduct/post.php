@@ -23,6 +23,8 @@ $member = $onboardingMember->getMember();
 
 $good = true;
 
+if (!\SCDS\CSRF::verify()) halt(403);
+
 if (!(isset($_POST['agree']) && bool($_POST['agree']))) {
   $good = false;
 }
@@ -35,8 +37,15 @@ if ($good) {
   $onboardingMember->completeTask('code_of_conduct');
 
   http_response_code(302);
-  header("Location: " . autoUrl('onboarding/go/start-task'));
+  if ($onboardingMember->session->checkMemberTasksComplete()) {
+    header("Location: " . autoUrl('onboarding/go'));
+  } else {
+    header("Location: " . autoUrl('onboarding/go/start-task'));
+  }
 } else {
+
+  $_SESSION['FormError'] = true;
+
   http_response_code(302);
   header("Location: " . autoUrl('onboarding/go/member-forms/' . $onboardingMember->id . '/start-task'));
 }

@@ -21,6 +21,8 @@ $onboardingMember = \SCDS\Onboarding\Member::retrieveById($id);
 
 $member = $onboardingMember->getMember();
 
+if (!\SCDS\CSRF::verify()) halt(403);
+
 $conditions = $allergies = $medication = $withhold = $gpName = $gpAddress = $gpPhone = null;
 
 use Brick\PhoneNumber\PhoneNumber;
@@ -102,4 +104,8 @@ if ($getCount->fetchColumn() == 0) {
 $onboardingMember->completeTask('medical_form');
 
 http_response_code(302);
-header("Location: " . autoUrl('onboarding/go/start-task'));
+if ($onboardingMember->session->checkMemberTasksComplete()) {
+  header("Location: " . autoUrl('onboarding/go'));
+} else {
+  header("Location: " . autoUrl('onboarding/go/start-task'));
+}

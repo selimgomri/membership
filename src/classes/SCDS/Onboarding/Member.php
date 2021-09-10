@@ -43,7 +43,7 @@ class Member
 
     $member->id = $sessionInfo->id;
     $member->member = $sessionInfo->member;
-    $member->session = $sessionInfo->session;
+    $member->session = Session::retrieve($sessionInfo->session);
     $member->stages = json_decode($sessionInfo->stages);
 
     return $member;
@@ -95,7 +95,8 @@ class Member
     return autoUrl("onboarding/go?session=" . urlencode($this->id) . "&token=" . urlencode($this->token));
   }
 
-  public function getMember() {
+  public function getMember()
+  {
     return new \Member($this->member);
   }
 
@@ -145,6 +146,10 @@ class Member
     ]);
 
     $this->stages = $stages;
+
+    if ($this->session->checkMemberTasksComplete()) {
+      $this->session->completeTask('member_forms');
+    }
   }
 
   public static function getDefaultStages()

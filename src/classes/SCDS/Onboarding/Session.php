@@ -147,6 +147,17 @@ class Session
     notifySend(null, $subject, $content, $user->getFullName(), $user->getEmail(), ['Name' => app()->tenant->getName() . ' Membership Secretary']);
   }
 
+  public function checkMemberTasksComplete()
+  {
+    $allDone = true;
+    $members = $this->getMembers();
+    foreach ($members as $member) {
+      $session = Member::retrieve($member->id, $this->id);
+      $allDone = $allDone && $session->getCurrentTask() == 'done';
+    }
+    return $allDone;
+  }
+
   private function findCurrentTask()
   {
     // Loop through stages, Return on first match
@@ -161,7 +172,8 @@ class Session
     $this->currentStage = 'done';
   }
 
-  public function getCurrentTask() {
+  public function getCurrentTask()
+  {
     if (!$this->currentStage) {
       $this->findCurrentTask();
     }
@@ -174,7 +186,8 @@ class Session
     return $task == $this->getCurrentTask();
   }
 
-  public function completeTask($task) {
+  public function completeTask($task)
+  {
     $stages = $this->stages;
 
     if (!isset($this->stages->$task)) {
@@ -191,6 +204,29 @@ class Session
     ]);
 
     $this->stages = $stages;
+
+    // Once first task complete, set as in progress
+    if ($this->status == 'pending') {
+      $this->status = 'in_progress';
+      $update = $db->prepare("UPDATE `onboardingSessions` SET `status` = ? WHERE `id` = ?");
+      $update->execute([
+        $this->status,
+        $this->id,
+      ]);
+    }
+
+    // Are all tasks completed? If so mark session complete
+    if ($this->getCurrentTask() == 'done') {
+      $db = app()->db;
+      $update = $db->prepare("UPDATE `onboardingSessions` SET `status` = ?, `completed_at` = ? WHERE `id` = ?");
+      $this->status = 'complete';
+      $this->completedAt = (new DateTime('now', new DateTimeZone('UTC')));
+      $update->execute([
+        $this->status,
+        $this->completedAt->format('Y-m-d H:i:s'),
+        $this->id,
+      ]);
+    }
   }
 
   public static function  getStates()

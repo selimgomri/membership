@@ -21,6 +21,8 @@ $onboardingMember = \SCDS\Onboarding\Member::retrieveById($id);
 
 $member = $onboardingMember->getMember();
 
+if (!\SCDS\CSRF::verify()) halt(403);
+
 $website = $noticeboard = $social = $proPhoto = $filmTraining = false;
 
 if ($_POST['website'] && $_POST['website']) {
@@ -78,4 +80,8 @@ if ($exists) {
 $onboardingMember->completeTask('photography_consent');
 
 http_response_code(302);
-header("Location: " . autoUrl('onboarding/go/start-task'));
+if ($onboardingMember->session->checkMemberTasksComplete()) {
+  header("Location: " . autoUrl('onboarding/go'));
+} else {
+  header("Location: " . autoUrl('onboarding/go/start-task'));
+}

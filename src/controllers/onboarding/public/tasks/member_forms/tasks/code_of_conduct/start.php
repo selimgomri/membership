@@ -86,6 +86,18 @@ include BASE_PATH . "views/head.php";
 
         <form method="post" class="needs-validation" novalidate>
 
+          <?php if (isset($_SESSION['FormError']) && $_SESSION['FormError']) { ?>
+            <div class="alert alert-danger">
+              <p class="mb-0">
+                <strong>There was a problem there.</strong>
+              </p>
+              <p class="mb-0">
+                Please check you ticked all the boxes.
+              </p>
+            </div>
+          <?php unset($_SESSION['FormError']);
+          } ?>
+
           <?php if ($member->getAge() < 18) { ?>
             <p>
               <strong>
