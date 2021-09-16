@@ -155,10 +155,22 @@ class Member
   public static function getDefaultStages()
   {
     return [
+      'medical_form' => [
+        'required' => true,
+        'completed' => false,
+        'required_locked' => false,
+        'metadata' => [],
+      ],
+      'photography_consent' => [
+        'required' => true,
+        'completed' => false,
+        'required_locked' => false,
+        'metadata' => [],
+      ],
       'code_of_conduct' => [
         'required' => true,
         'completed' => false,
-        'required_locked' => true,
+        'required_locked' => false,
         'metadata' => [],
       ],
     ];

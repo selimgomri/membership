@@ -10,6 +10,36 @@ $this->group('/periods', function() {
   });
 });
 
+$this->group('/renewal', function() {
+  $this->get('/', function() {
+    include 'renewal/home.php';
+  });
+
+  $this->group('/new', function() {
+    $this->get('/', function() {
+      include 'renewal/new.php';
+    });
+
+    $this->post('/', function() {
+      include 'renewal/new-post.php';
+    });
+  });
+
+  $this->group('/{id}:uuid', function($id) {
+    $this->get('/', function($id) {
+      include 'renewal/period.php';
+    });
+
+    $this->get('/edit', function($id) {
+      include 'renewal/edit.php';
+    });
+
+    $this->post('/edit', function($id) {
+      include 'renewal/edit-post.php';
+    });
+  });
+});
+
 $this->group('/batches', function() {
   $this->get('/{id}:uuid', function($id) {
     include 'batches/batch.php';

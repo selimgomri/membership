@@ -2,6 +2,7 @@
 
 $db = app()->db;
 $tenant = app()->tenant;
+$user = app()->user;
 
 $obj = null;
 if (app()->tenant->isCLS()) {
@@ -70,6 +71,14 @@ if ($showCovid && $tenant->getBooleanKey('HIDE_CONTACT_TRACING_FROM_PARENTS')) {
   $showCovid = $getRepCount->fetchColumn() > 0;
 }
 
+// Onboarding sessions
+$getOnboarding = $db->prepare("SELECT `id` FROM `onboardingSessions` WHERE `user` = ? AND `status` = ? ORDER BY `created` ASC");
+$getOnboarding->execute([
+  $user->getId(),
+  'pending',
+]);
+$onboarding = $getOnboarding->fetchColumn();
+
 $username = htmlspecialchars(explode(" ", getUserName($_SESSION['TENANT-' . app()->tenant->getId()]['UserID']))[0]);
 
 $pagetitle = "Home";
@@ -92,6 +101,20 @@ include BASE_PATH . "views/header.php";
           </div>
         </div>
       </aside>
+    <?php } ?>
+
+    <?php if ($onboarding) { ?>
+
+      <aside class="row mb-4">
+        <div class="col-lg-6">
+          <div class="cell bg-tenant-brand tenant-colour">
+
+            <h2 class="mb-0">You have tasks to complete</h2>
+
+          </div>
+        </div>
+      </aside>
+
     <?php } ?>
 
     <div class="mb-4">

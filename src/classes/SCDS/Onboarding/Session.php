@@ -30,6 +30,7 @@ class Session
   public $metadata;
   public $batch;
   public $members;
+  public $renewal;
   private $currentStage;
 
   private function __construct()
@@ -69,6 +70,14 @@ class Session
     $session->stages = json_decode($sessionInfo->stages);
     $session->metadata = json_decode($sessionInfo->metadata);
     $session->batch = $sessionInfo->batch;
+    if ($sessionInfo->renewal) {
+      // Get renewal
+      $session->renewal = Renewal::retrieve($sessionInfo->renewal);
+      
+      // Override start and due date
+      $session->start = $session->renewal->start;
+      $session->dueDate = $session->renewal->end;
+    }
 
     // Get members
     $session->loadMembers();
@@ -136,7 +145,12 @@ class Session
 
     $user = $this->getUser();
 
-    $subject = 'Complete your registration at ' . app()->tenant->getName();
+    $name = "registration";
+    if ($this->renewal) {
+      $name = "renewal";
+    }
+
+    $subject = 'Complete your ' . $name . ' at ' . app()->tenant->getName();
     $content = '<p>Dear ' . htmlspecialchars($user->getFullName()) . ',</p>';
 
     $content .= '<p><a href="' . htmlspecialchars($this->getUrl()) . '">Please complete your registration tasks online</a>.</p>';
@@ -247,26 +261,80 @@ class Session
         'completed' => false,
         'required_locked' => true,
         'metadata' => [],
+        'revisitable' => true,
       ],
-      'model_forms' => [
+      'address_details' => [
         'required' => true,
         'completed' => false,
         'required_locked' => false,
         'metadata' => [],
+        'revisitable' => true,
+      ],
+      'communications_options' => [
+        'required' => true,
+        'completed' => false,
+        'required_locked' => true,
+        'metadata' => [],
+        'revisitable' => true,
+      ],
+      'emergency_contacts' => [
+        'required' => true,
+        'completed' => false,
+        'required_locked' => false,
+        'metadata' => [],
+        'revisitable' => true,
+      ],
+      'member_forms' => [
+        'required' => true,
+        'completed' => false,
+        'required_locked' => false,
+        'metadata' => [],
+        'revisitable' => true,
+      ],
+      'parent_conduct' => [
+        'required' => true,
+        'completed' => false,
+        'required_locked' => false,
+        'metadata' => [],
+        'revisitable' => true,
+      ],
+      'data_privacy_agreement' => [
+        'required' => true,
+        'completed' => false,
+        'required_locked' => false,
+        'metadata' => [],
+        'revisitable' => true,
+      ],
+      'terms_agreement' => [
+        'required' => true,
+        'completed' => false,
+        'required_locked' => false,
+        'metadata' => [],
+        'revisitable' => true,
       ],
       'direct_debit_mandate' => [
         'required' => bool(app()->tenant->getBooleanKey('USE_DIRECT_DEBIT')),
         'completed' => false,
         'required_locked' => !app()->tenant->getBooleanKey('USE_DIRECT_DEBIT'),
         'metadata' => [],
+        'revisitable' => true,
       ],
       'fees' => [
         'required' => true,
         'completed' => false,
         'required_locked' => false,
         'metadata' => [],
+        'revisitable' => true,
       ],
     ];
+  }
+
+  public static function getDefaultRenewalStages()
+  {
+    $stages = Session::getDefaultStages();
+    $stages['account_details']['required'] = false;
+    $stages['account_details']['required_locked'] = true;
+    return $stages;
   }
 
   public static function stagesOrder()
@@ -280,7 +348,6 @@ class Session
       'parent_conduct' => 'Agree to the parent/guardian Code of Conduct',
       'data_privacy_agreement' => 'Data Privacy Agreement',
       'terms_agreement' => 'Agree to the terms and conditions of club membership',
-      'model_forms' => 'Complete registration forms',
       'direct_debit_mandate' => 'Set up a Direct Debit Instruction',
       'fees' => 'Pay your registration fees',
     ];
