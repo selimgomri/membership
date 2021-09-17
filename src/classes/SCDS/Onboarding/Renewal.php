@@ -73,23 +73,33 @@ class Renewal
     $db = app()->db;
     $tenant = app()->tenant;
 
-    $getCount = $db->prepare("SELECT COUNT(*) FROM `onboardingSessions` WHERE `type` = ? AND `renewal` = ?");
-    $getCount->execute([
-      'renewal',
-      $this->id,
-    ]);
+    $db->beginTransaction();
 
-    if ($getCount->fetchColumn() > 0) throw new Exception("Sessions exist");
+    try {
 
-    // Get active users with a connected member!
-    $getUsers = $db->prepare("SELECT `UserID` FROM `users` WHERE `Tenant` = ? AND `Active` AND `UserID` IN (SELECT `UserID` FROM `members` WHERE `Tenant` = ? AND `Active`)");
-    $getUsers->execute([
-      $tenant->getId(),
-      $tenant->getId(),
-    ]);
+      $getCount = $db->prepare("SELECT COUNT(*) FROM `onboardingSessions` WHERE `type` = ? AND `renewal` = ?");
+      $getCount->execute([
+        'renewal',
+        $this->id,
+      ]);
 
-    while ($user = $getUsers->fetchColumn()) {
-      $this->generateSession($user);
+      if ($getCount->fetchColumn() > 0) throw new Exception("Sessions exist");
+
+      // Get active users with a connected member!
+      $getUsers = $db->prepare("SELECT `UserID` FROM `users` WHERE `Tenant` = ? AND `Active` AND `UserID` IN (SELECT `UserID` FROM `members` WHERE `Tenant` = ? AND `Active`)");
+      $getUsers->execute([
+        $tenant->getId(),
+        $tenant->getId(),
+      ]);
+
+      while ($user = $getUsers->fetchColumn()) {
+        $this->generateSession($user);
+      }
+
+      $db->commit();
+    } catch (\Exception $e) {
+      $db->rollBack();
+      throw $e;
     }
   }
 
@@ -98,224 +108,250 @@ class Renewal
     $db = app()->db;
     $tenant = app()->tenant;
 
-    // Validate user
-    $getCount = $db->prepare("SELECT COUNT(*) FROM `users` WHERE `UserID` = ? AND `Tenant` = ?");
-    $getCount->execute([
-      $user,
-      $tenant->getId(),
-    ]);
+    // If we aren't in a DB transaction, USE ONE!
+    $thisControlsTransaction = !bool($db->inTransaction());
 
-    if ($getCount->fetchColumn() == 0) throw new Exception("No user");
-
-    // Check if session exists
-    $getCount = $db->prepare("SELECT COUNT(*) FROM `onboardingSessions` WHERE `type` = ? AND `renewal` = ? AND `user` = ?");
-    $getCount->execute([
-      'renewal',
-      $this->id,
-      $user,
-    ]);
-
-    if ($getCount->fetchColumn() > 0) throw new Exception("Session exists");
-
-    // Sort out making the onboarding session
-
-    // Get members
-    $getMembers = $db->prepare("SELECT `MemberID`, `DateOfBirth` FROM `members` WHERE `UserID` = ? ORDER BY `MForename` ASC, `MSurname` ASC;");
-    $getMembers->execute([
-      $user,
-    ]);
-
-    $members = [];
-    while ($member = $getMembers->fetch(\PDO::FETCH_OBJ)) {
-      $memberObj = new \Member($member->MemberID);
-      $memberStages = clone $this->defaultMemberStages;
-
-      // Don't require photo consent for adults
-      if ($memberObj->getAge() >= 18) {
-        $memberStages->photography_consent->required = false;
-      }
-
-      $members[] = [
-        'id' => $member->MemberID,
-        'stages' => $memberStages,
-      ];
+    if ($thisControlsTransaction) {
+      $db->beginTransaction();
     }
 
-    // Put together membership batch
-    $batch = \Ramsey\Uuid\Uuid::uuid4();
+    try {
 
-    $paymentTypes = [];
-    if (true) {
-      $paymentTypes[] = 'card';
-    }
-    if (true) {
-      $paymentTypes[] = 'dd';
-    }
-
-    $total = 0;
-    $batchItems = [];
-
-    // Do SE fees
-    $getMembers = $db->prepare("SELECT `MemberID`, `NGBCategory`, `ASAPaid`, `Name`, `Description`, `Fees` FROM `members` INNER JOIN `clubMembershipClasses` ON members.NGBCategory = clubMembershipClasses.ID WHERE `UserID` = ? ORDER BY `MForename` ASC, `MSurname` ASC;");
-    $getMembers->execute([
-      $user,
-    ]);
-
-    while ($member = $getMembers->fetch(\PDO::FETCH_OBJ)) {
-      // Parse fee object
-      $fees = json_decode($member->Fees);
-      $amount = $fees->fees[0];
-      if ($member->ASAPaid) $amount = 0;
-      $total += $amount;
-
-      $batchItems[] = [
-        \Ramsey\Uuid\Uuid::uuid4(),
-        $batch,
-        $member->NGBCategory,
-        $member->MemberID,
-        $amount,
-        null,
-      ];
-    }
-
-    // Handle complex CLUB MEMBERSHIP fees
-    // Get membership classes for this user's members
-    $getClasses = $db->prepare("SELECT DISTINCT `ClubCategory` FROM `members` WHERE `UserID` = ?;");
-    $getClasses->execute([
-      $user,
-    ]);
-
-    while ($classId = $getClasses->fetchColumn()) {
-
-      // Get full class details
-      $getClassDetails = $db->prepare("SELECT `Name`, `Description`, `Fees` FROM clubMembershipClasses WHERE ID = ?");
-      $getClassDetails->execute([
-        $classId,
-      ]);
-
-      $classDetails = $getClassDetails->fetch(\PDO::FETCH_OBJ);
-
-      $fees = json_decode($classDetails->Fees);
-
-      // Get members with class
-
-      $getClassMembers = $db->prepare("SELECT MemberID FROM members WHERE UserID = ? AND ClubCategory = ? AND ClubPaid = ?");
-
-      $getCountClassMembers = $db->prepare("SELECT COUNT(*) FROM members WHERE UserID = ? AND ClubCategory = ? AND ClubPaid = ?");
-
-      // Get paying
-      $getCountClassMembers->execute([
+      // Validate user
+      $getCount = $db->prepare("SELECT COUNT(*) FROM `users` WHERE `UserID` = ? AND `Tenant` = ?");
+      $getCount->execute([
         $user,
-        $classId,
-        0,
+        $tenant->getId(),
       ]);
 
-      $amount = $fees->fees[max($getCountClassMembers->fetchColumn(), sizeof($fees->fees)) - 1];
-      $total += $amount;
+      if ($getCount->fetchColumn() == 0) throw new Exception("No user");
 
-      $getClassMembers->execute([
+      // Check if session exists
+      $getCount = $db->prepare("SELECT COUNT(*) FROM `onboardingSessions` WHERE `type` = ? AND `renewal` = ? AND `user` = ?");
+      $getCount->execute([
+        'renewal',
+        $this->id,
         $user,
-        $classId,
-        0,
       ]);
 
-      $done = false;
+      if ($getCount->fetchColumn() > 0) throw new Exception("Session exists");
 
-      while ($member = $getClassMembers->fetchColumn()) {
-        if ($done) {
-          $amount = 0;
+      // Sort out making the onboarding session
+
+      // Get members
+      $getMembers = $db->prepare("SELECT `MemberID`, `DateOfBirth` FROM `members` WHERE `UserID` = ? ORDER BY `MForename` ASC, `MSurname` ASC;");
+      $getMembers->execute([
+        $user,
+      ]);
+
+      $members = [];
+      while ($member = $getMembers->fetch(\PDO::FETCH_OBJ)) {
+        $memberObj = new \Member($member->MemberID);
+        $memberStages = clone $this->defaultMemberStages;
+
+        // Don't require photo consent for adults
+        if ($memberObj->getAge() >= 18) {
+          $memberStages->photography_consent->required = false;
         }
 
-        $batchItems[] = [
-          \Ramsey\Uuid\Uuid::uuid4(),
-          $batch,
-          $classId,
-          $member,
-          $amount,
-          null,
+        $members[] = [
+          'id' => $member->MemberID,
+          'stages' => $memberStages,
         ];
-
-        $done = true;
       }
 
-      // Get non-paying
-      $getClassMembers->execute([
+      // Put together membership batch
+      $batch = \Ramsey\Uuid\Uuid::uuid4();
+
+      $paymentTypes = [];
+      if (true) {
+        $paymentTypes[] = 'card';
+      }
+      if (true) {
+        $paymentTypes[] = 'dd';
+      }
+
+      $total = 0;
+      $batchItems = [];
+
+      // Do SE fees
+      $getMembers = $db->prepare("SELECT `MemberID`, `NGBCategory`, `ASAPaid`, `Name`, `Description`, `Fees` FROM `members` INNER JOIN `clubMembershipClasses` ON members.NGBCategory = clubMembershipClasses.ID WHERE `UserID` = ? ORDER BY `MForename` ASC, `MSurname` ASC;");
+      $getMembers->execute([
         $user,
-        $classId,
-        1,
       ]);
 
-      while ($member = $getClassMembers->fetchColumn()) {
-        $amount = 0;
+      while ($member = $getMembers->fetch(\PDO::FETCH_OBJ)) {
+        // Parse fee object
+        $fees = json_decode($member->Fees);
+        $amount = $fees->fees[0];
+        if ($member->ASAPaid) $amount = 0;
+        $total += $amount;
 
         $batchItems[] = [
           \Ramsey\Uuid\Uuid::uuid4(),
           $batch,
-          $classId,
-          $member,
+          $member->NGBCategory,
+          $member->MemberID,
           $amount,
           null,
         ];
       }
-    }
 
-    // Add batch
-    $add = $db->prepare("INSERT INTO `membershipBatch` (`ID`, `User`, `Total`, `PaymentTypes`, `PaymentDetails`) VALUES (?, ?, ?, ?, ?);");
-    $add->execute([
-      $batch,
-      $user,
-      $total,
-      json_encode($paymentTypes),
-      json_encode([]),
-    ]);
-
-    // Add batch items
-    $addBatchItem = $db->prepare("INSERT INTO `membershipBatchItems` (`ID`, `Batch`, `Membership`, `Member`, `Amount`, `Notes`) VALUES (?, ?, ?, ?, ?, ?)");
-    foreach ($batchItems as $batchItem) {
-      $addBatchItem->execute($batchItem);
-    }
-
-    // Create onboarding session
-    $id = \Ramsey\Uuid\Uuid::uuid4();
-    $now = new DateTime('now', new DateTimeZone('UTC'));
-    $today = new DateTime('now', new DateTimeZone('Europe/London'));
-    $welcomeText = null;
-    $stages = $this->stages;
-    $metadata = [];
-
-    // Add to db
-    $add = $db->prepare("INSERT INTO onboardingSessions (`id`,  `user`, `created`, `creator`, `start`, `charge_outstanding`, `charge_pro_rata`, `welcome_text`, `token`, `token_on`, `status`, `due_date`, `completed_at`, `stages`, `metadata`, `batch`, `type`, `renewal`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-    $add->execute([
-      $id,
-      $user,
-      $now->format('Y-m-d H:i:s'),
-      app()->user->getId(),
-      $today->format('Y-m-d'),
-      (int) false,
-      (int) false,
-      $welcomeText,
-      hash('sha256', random_int(PHP_INT_MIN, PHP_INT_MAX)),
-      (int) false,
-      'pending',
-      null,
-      null,
-      json_encode($stages),
-      json_encode($metadata),
-      null,
-      'renewal',
-      $this->id,
-    ]);
-
-    // Add members
-    $add = $db->prepare("INSERT INTO onboardingMembers (`id`, `session`, `member`, `stages`) VALUES (?, ?, ?, ?)");
-
-    foreach ($members as $member) {
-      $add->execute([
-        \Ramsey\Uuid\Uuid::uuid4(),
-        $id,
-        $member['id'],
-        json_encode($member['stages']),
+      // Handle complex CLUB MEMBERSHIP fees
+      // Get membership classes for this user's members
+      $getClasses = $db->prepare("SELECT DISTINCT `ClubCategory` FROM `members` WHERE `UserID` = ?;");
+      $getClasses->execute([
+        $user,
       ]);
+
+      while ($classId = $getClasses->fetchColumn()) {
+
+        // Get full class details
+        $getClassDetails = $db->prepare("SELECT `Name`, `Description`, `Fees` FROM clubMembershipClasses WHERE ID = ?");
+        $getClassDetails->execute([
+          $classId,
+        ]);
+
+        $classDetails = $getClassDetails->fetch(\PDO::FETCH_OBJ);
+
+        $fees = json_decode($classDetails->Fees);
+
+        // Get members with class
+
+        $getClassMembers = $db->prepare("SELECT MemberID FROM members WHERE UserID = ? AND ClubCategory = ? AND ClubPaid = ?");
+
+        $getCountClassMembers = $db->prepare("SELECT COUNT(*) FROM members WHERE UserID = ? AND ClubCategory = ? AND ClubPaid = ?");
+
+        // Get paying
+        $getCountClassMembers->execute([
+          $user,
+          $classId,
+          0,
+        ]);
+
+        $count = $getCountClassMembers->fetchColumn();
+
+        if ($count > 0) {
+
+          $amount = $fees->fees[max($count, sizeof($fees->fees)) - 1];
+          $total += $amount;
+
+          $getClassMembers->execute([
+            $user,
+            $classId,
+            0,
+          ]);
+
+          $done = false;
+
+          while ($member = $getClassMembers->fetchColumn()) {
+            if ($done) {
+              $amount = 0;
+            }
+
+            $batchItems[] = [
+              \Ramsey\Uuid\Uuid::uuid4(),
+              $batch,
+              $classId,
+              $member,
+              $amount,
+              null,
+            ];
+
+            $done = true;
+          }
+        }
+
+        // Get non-paying
+        $getClassMembers->execute([
+          $user,
+          $classId,
+          1,
+        ]);
+
+        while ($member = $getClassMembers->fetchColumn()) {
+          $amount = 0;
+
+          $batchItems[] = [
+            \Ramsey\Uuid\Uuid::uuid4(),
+            $batch,
+            $classId,
+            $member,
+            $amount,
+            null,
+          ];
+        }
+      }
+
+      // Add batch
+      $add = $db->prepare("INSERT INTO `membershipBatch` (`ID`, `User`, `Year`, `Total`, `PaymentTypes`, `PaymentDetails`) VALUES (?, ?, ?, ?, ?, ?);");
+      $add->execute([
+        $batch,
+        $user,
+        $this->year->id,
+        $total,
+        json_encode($paymentTypes),
+        json_encode([]),
+      ]);
+
+      // Add batch items
+      $addBatchItem = $db->prepare("INSERT INTO `membershipBatchItems` (`ID`, `Batch`, `Membership`, `Member`, `Amount`, `Notes`) VALUES (?, ?, ?, ?, ?, ?)");
+      foreach ($batchItems as $batchItem) {
+        $addBatchItem->execute($batchItem);
+      }
+
+      // Create onboarding session
+      $id = \Ramsey\Uuid\Uuid::uuid4();
+      $now = new DateTime('now', new DateTimeZone('UTC'));
+      $today = new DateTime('now', new DateTimeZone('Europe/London'));
+      $welcomeText = null;
+      $stages = $this->defaultStages;
+      $metadata = [];
+
+      // Add to db
+      $add = $db->prepare("INSERT INTO onboardingSessions (`id`,  `user`, `created`, `creator`, `start`, `charge_outstanding`, `charge_pro_rata`, `welcome_text`, `token`, `token_on`, `status`, `due_date`, `completed_at`, `stages`, `metadata`, `batch`, `type`, `renewal`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+      $add->execute([
+        $id,
+        $user,
+        $now->format('Y-m-d H:i:s'),
+        app()->user->getId(),
+        $today->format('Y-m-d'),
+        (int) false,
+        (int) false,
+        $welcomeText,
+        hash('sha256', random_int(PHP_INT_MIN, PHP_INT_MAX)),
+        (int) false,
+        'pending',
+        null,
+        null,
+        json_encode($stages),
+        json_encode($metadata),
+        $batch,
+        'renewal',
+        $this->id,
+      ]);
+
+      // Add members
+      $add = $db->prepare("INSERT INTO onboardingMembers (`id`, `session`, `member`, `stages`) VALUES (?, ?, ?, ?)");
+
+      foreach ($members as $member) {
+        $add->execute([
+          \Ramsey\Uuid\Uuid::uuid4(),
+          $id,
+          $member['id'],
+          json_encode($member['stages']),
+        ]);
+      }
+
+      if ($thisControlsTransaction) {
+        $db->commit();
+      }
+    } catch (\Exception $e) {
+      if ($thisControlsTransaction) {
+        $db->rollBack();
+      } else {
+        throw $e;
+      }
     }
   }
 }

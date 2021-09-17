@@ -21,41 +21,77 @@ if (!$session->batch) {
 
   $db = app()->db;
 
-  if (!isset($_POST['pay-method'])) {
-    // halt(404);
-    throw new Exception();
-  }
+  $getBatch = $db->prepare("SELECT membershipBatch.ID id, membershipYear.ID yearId, membershipBatch.Completed completed, DueDate due, Total total, membershipYear.Name yearName, membershipYear.StartDate yearStart, membershipYear.EndDate yearEnd, PaymentTypes payMethods, PaymentDetails payDetails FROM membershipBatch INNER JOIN membershipYear ON membershipBatch.Year = membershipYear.ID INNER JOIN users ON users.UserID = membershipBatch.User WHERE membershipBatch.ID = ? AND users.Tenant = ?");
+  $getBatch->execute([
+    $session->batch,
+    app()->tenant->getId(),
+  ]);
 
-  try {
-    $batchPay = \SCDS\Memberships\Batch::goToCheckout($session->batch, $_POST['pay-method']);
+  $batch = $getBatch->fetch(PDO::FETCH_OBJ);
 
-    if ($batchPay->type == 'checkout') {
-      $checkoutSession = $batchPay->checkoutSession;
+  if ($batch->total > 0) {
 
-      $checkoutSession->metadata['return']['url'] = autoUrl('onboarding/go/fees/success?checkout_session=' . urlencode($checkoutSession->id));
-      $checkoutSession->metadata['return']['instant'] = false;
-      $checkoutSession->metadata['return']['buttonString'] = 'Return to fee information page';
-
-      $checkoutSession->metadata['cancel']['url'] = autoUrl('onboarding/go/start-task');
-
-      $checkoutSession->save();
-
-      http_response_code(302);
-      header("Location: " . $checkoutSession->getUrl());
-    } else if ($batchPay->type == 'dd') {
-
-      $session->completeTask('fees');
-
-      $_SESSION['PaymentSuccess'] = true;
-
-      http_response_code(302);
-      header("Location: " . autoUrl('onboarding/go'));
-    } else {
-      http_response_code(302);
-      header("Location: " . autoUrl('onboarding/go/start-task'));
+    if (!isset($_POST['pay-method'])) {
+      // halt(404);
+      throw new Exception();
     }
-  } catch (Exception $e) {
-    // halt(404);
-    throw $e;
+
+    try {
+      $batchPay = \SCDS\Memberships\Batch::goToCheckout($session->batch, $_POST['pay-method']);
+
+      if ($batchPay->type == 'checkout') {
+        $checkoutSession = $batchPay->checkoutSession;
+
+        $checkoutSession->metadata['return']['url'] = autoUrl('onboarding/go/fees/success?checkout_session=' . urlencode($checkoutSession->id));
+        $checkoutSession->metadata['return']['instant'] = false;
+        $checkoutSession->metadata['return']['buttonString'] = 'Return to fee information page';
+
+        $checkoutSession->metadata['cancel']['url'] = autoUrl('onboarding/go/start-task');
+
+        $checkoutSession->save();
+
+        http_response_code(302);
+        header("Location: " . $checkoutSession->getUrl());
+      } else if ($batchPay->type == 'dd') {
+
+        $paymentInfo = json_encode([
+          'type' => 'direct_debit',
+          'data' => []
+        ]);
+
+        // \SCDS\Memberships\Batch::completeBatch($session->batch, $paymentInfo);
+        \SCDS\Memberships\Batch::completeDirectDebitBatch($session->batch);
+
+        $session->completeTask('fees');
+
+        $_SESSION['PaymentSuccess'] = true;
+
+        http_response_code(302);
+        header("Location: " . autoUrl('onboarding/go'));
+      } else {
+        http_response_code(302);
+        header("Location: " . autoUrl('onboarding/go/start-task'));
+      }
+    } catch (Exception $e) {
+      // halt(404);
+      throw $e;
+    }
+  } else {
+    // Nothing to pay
+
+    // Complete the batch
+    $paymentInfo = json_encode([
+      'type' => 'no_payment',
+      'data' => []
+    ]);
+
+    \SCDS\Memberships\Batch::completeBatch($session->batch, $paymentInfo);
+
+    $session->completeTask('fees');
+
+    $_SESSION['PaymentSuccess'] = true;
+
+    http_response_code(302);
+    header("Location: " . autoUrl('onboarding/go'));
   }
 }

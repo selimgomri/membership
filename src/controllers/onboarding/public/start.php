@@ -60,23 +60,29 @@ include BASE_PATH . "views/head.php";
         <?php unset($_SESSION['PaymentSuccess']);
         } ?>
 
-        <h1 class="text-center">Hi <?= htmlspecialchars($user->getFirstName()) ?>! Welcome to <?= htmlspecialchars($tenant->getName()) ?></h1>
+        <?php if ($session->renewal) { ?>
+          <h1 class="text-center">Hi <?= htmlspecialchars($user->getFirstName()) ?>! Welcome to Membership Renewal</h1>
+        <?php } else { ?>
+          <h1 class="text-center">Hi <?= htmlspecialchars($user->getFirstName()) ?>! Welcome to <?= htmlspecialchars($tenant->getName()) ?></h1>
+        <?php } ?>
 
         <h2 class="text-center">We now need you to</h2>
 
         <ul class="list-group my-5">
-          <?php foreach ($stages as $stage => $details) { ?>
-            <li class="list-group-item <?php if ($session->isCurrentTask($stage)) { ?>py-3 fw-bold<?php } else { ?>disabled<?php } ?>">
-              <div class="d-flex justify-content-between align-items-center">
-                <span><?= htmlspecialchars($tasks[$stage]) ?></span><?php if ($details->completed) { ?><span class="badge bg-success rounded-pill"><i class="fa fa-check-circle" aria-hidden="true"></i> Done</span><?php } else { ?><span class="badge bg-warning text-dark rounded-pill"><i class="fa fa-minus-circle" aria-hidden="true"></i> Pending</span><?php } ?>
-              </div>
-              <?php if ($session->isCurrentTask($stage)) { ?>
-                <p class="mb-0 mt-2">
-                  <a href="<?= htmlspecialchars(autoUrl('onboarding/go/start-task')) ?>" class="btn btn-success">Complete task <i class="fa fa-chevron-circle-right" aria-hidden="true"></i></a>
-                </p>
-              <?php } ?>
-            </li>
-          <?php } ?>
+          <?php foreach ($stages as $stage => $details) {
+            if ($details->required) { ?>
+              <li class="list-group-item <?php if ($session->isCurrentTask($stage)) { ?>py-3 fw-bold<?php } else { ?>disabled<?php } ?>">
+                <div class="d-flex justify-content-between align-items-center">
+                  <span><?= htmlspecialchars($tasks[$stage]) ?></span><?php if ($details->completed) { ?><span class="badge bg-success rounded-pill"><i class="fa fa-check-circle" aria-hidden="true"></i> Done</span><?php } else { ?><span class="badge bg-warning text-dark rounded-pill"><i class="fa fa-minus-circle" aria-hidden="true"></i> Pending</span><?php } ?>
+                </div>
+                <?php if ($session->isCurrentTask($stage)) { ?>
+                  <p class="mb-0 mt-2">
+                    <a href="<?= htmlspecialchars(autoUrl('onboarding/go/start-task')) ?>" class="btn btn-success">Complete task <i class="fa fa-chevron-circle-right" aria-hidden="true"></i></a>
+                  </p>
+              <?php }
+              } ?>
+              </li>
+            <?php } ?>
         </ul>
 
         <?php if ($session->isCurrentTask('done')) { ?>

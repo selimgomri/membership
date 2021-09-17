@@ -129,12 +129,31 @@ include BASE_PATH . "views/head.php";
               <button type="submit" class="btn btn-success">Pay now <i class="fa fa-chevron-right" aria-hidden="true"></i></button>
             </p>
             <p class="small text-muted">With SCDS Checkout</p>
+
+            <p>
+              If you think there are any mistakes on this page, please contact your membership secretary before you proceed. They'll be able to adjust your members, memberships or fees.
+            </p>
+          </form>
+        <?php } else if (!$batch->completed && $batch->total == 0) { ?>
+          <form method="post" class="needs-validation" novalidate>
+            <h2>Pay <?= htmlspecialchars(MoneyHelpers::formatCurrency(MoneyHelpers::intToDecimal($batch->total), 'GBP')) ?></h2>
+
+            <p>
+              It appears you have nothing to pay.
+            </p>
+
+            <p>
+              If you think there are any mistakes on this page, please contact your membership secretary before you proceed. They'll be able to adjust your members, memberships or fees. Your membership secretary may contact you if you do not pay for a membership that you should have.
+            </p>
+
+            <p>
+              Otherwise, review the items below and confirm.
+            </p>
           </form>
         <?php } ?>
 
-        <h2>Your paying for the following memberships</h2>
-
         <?php if ($item) { ?>
+          <h2 class="mb-3">You're paying for the following memberships</h2>
           <ul class="list-group mb-3">
             <?php do { ?>
               <li class="list-group-item">
@@ -184,7 +203,22 @@ include BASE_PATH . "views/head.php";
               </li>
             <?php } while ($item = $getBatchItems->fetch(PDO::FETCH_OBJ)); ?>
           </ul>
+
+          <?php if (!$batch->completed && $batch->total == 0) { ?>
+            <form method="post" class="needs-validation" novalidate>
+              <p>
+                <button type="submit" class="btn btn-success">
+                  Confirm memberships
+                </button>
+              </p>
+            </form>
+          <?php } ?>
         <?php } else { ?>
+          <div class="alert alert-info">
+            <p class="mb-0">
+              <strong>There are no memberships to display for the period <?= htmlspecialchars((new DateTime($batch->yearStart))->format('j F Y')) ?> to <?= htmlspecialchars((new DateTime($batch->yearEnd))->format('j F Y')) ?></strong>
+            </p>
+          </div>
         <?php } ?>
 
         <h2>Membership Batch Details</h2>

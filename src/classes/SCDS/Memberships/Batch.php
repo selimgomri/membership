@@ -2,6 +2,7 @@
 
 namespace SCDS\Memberships;
 
+use DateTimeZone;
 use stdClass;
 
 class Batch
@@ -114,5 +115,93 @@ class Batch
 
       $object->type = 'dd';
     }
+  }
+
+  public static function completeBatch($batchId, $paymentInfo)
+  {
+    $db = app()->db;
+
+    // Update the batch to say it is paid
+    $updateBatch = $db->prepare("UPDATE membershipBatch SET Completed = ?, PaymentDetails = ? WHERE ID = ?");
+    $updateBatch->execute([
+      (int) true,
+      $paymentInfo,
+      $batchId,
+    ]);
+
+    // Check if the batch relates to am onboarding session
+    try {
+      $get = $db->prepare("SELECT id FROM onboardingSessions WHERE batch = ?");
+      $get->execute([
+        $batchId
+      ]);
+      $sessionId = $get->fetchColumn();
+
+      if ($sessionId) {
+        $session = \SCDS\Onboarding\Session::retrieve($sessionId);
+        $session->completeTask('fees');
+      }
+    } catch (\Exception $e) {
+      reportError($e);
+    }
+
+    $time = new \DateTime('now', new \DateTimeZone('UTC'));
+
+    // Get batch items
+    $getBatchItems = $db->prepare("SELECT membershipBatchItems.ID, membershipBatchItems.Batch, membershipBatchItems.Membership, membershipBatchItems.Member, membershipBatchItems.Amount, membershipBatchItems.Notes, members.MForename, members.MSurname, clubMembershipClasses.Name, membershipBatch.Year, membershipYear.StartDate, membershipYear.EndDate FROM ((((membershipBatchItems INNER JOIN members ON members.MemberID = membershipBatchItems.Member) INNER JOIN clubMembershipClasses ON clubMembershipClasses.ID = membershipBatchItems.Membership) INNER JOIN membershipBatch ON membershipBatch.ID = membershipBatchItems.Batch) INNER JOIN membershipYear ON membershipYear.ID = membershipBatch.Year) WHERE membershipBatch.ID = ?");
+    $getBatchItems->execute([
+      $batchId,
+    ]);
+
+    while ($batchItem = $getBatchItems->fetch(\PDO::FETCH_OBJ)) {
+      // Add membership record!
+      $addMembership = $db->prepare("INSERT INTO `memberships` (`Member`, `Year`, `Membership`, `Amount`, `StartDate`, `EndDate`, `Purchased`, `PaymentInfo`, `Notes`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);");
+      $addMembership->execute([
+        $batchItem->Member,
+        $batchItem->Year,
+        $batchItem->Membership,
+        $batchItem->Amount,
+        $batchItem->StartDate,
+        $batchItem->EndDate,
+        $time->format('Y-m-d H:i:s'),
+        $paymentInfo,
+        $batchItem->Notes,
+      ]);
+    }
+  }
+
+  public static function completeDirectDebitBatch($batchId)
+  {
+    $db = app()->db;
+    $tenant = app()->tenant;
+
+    // Get batch items
+    $getBatchItems = $db->prepare("SELECT membershipBatchItems.ID, membershipBatchItems.Batch, membershipBatchItems.Membership, membershipBatchItems.Member, membershipBatchItems.Amount, membershipBatchItems.Notes, members.MForename, members.MSurname, clubMembershipClasses.Name, membershipBatch.Year, membershipYear.StartDate, membershipYear.EndDate, membershipBatch.User FROM ((((membershipBatchItems INNER JOIN members ON members.MemberID = membershipBatchItems.Member) INNER JOIN clubMembershipClasses ON clubMembershipClasses.ID = membershipBatchItems.Membership) INNER JOIN membershipBatch ON membershipBatch.ID = membershipBatchItems.Batch) INNER JOIN membershipYear ON membershipYear.ID = membershipBatch.Year) WHERE membershipBatch.ID = ? AND members.Tenant = ?");
+    $getBatchItems->execute([
+      $batchId,
+      $tenant->getId(),
+    ]);
+
+    $now = new \DateTime('now', new \DateTimeZone('Europe/London'));
+
+    // Add items to pending
+    $add = $db->prepare("INSERT INTO `paymentsPending` (`Date`, `Status`, `UserID`, `Name`, `Amount`, `Currency`, `Type`) VALUES (?, ?, ?, ?, ?, ?, ?)");
+
+    while ($item = $getBatchItems->fetch(\PDO::FETCH_OBJ)) {
+      $add->execute([
+        $now->format('Y-m-d'),
+        'Pending',
+        $item->User,
+        $item->Amount,
+        'GBP',
+        'Payment',
+      ]);
+    }
+
+    $paymentInfo = json_encode([
+      'type' => 'direct_debit',
+      'data' => []
+    ]);
+    Batch::completeBatch($batchId, $paymentInfo);
   }
 }

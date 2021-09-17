@@ -4,6 +4,10 @@ $this->get('/', function () {
   include 'home.php';
 });
 
+$this->get('/go-to-session', function () {
+  include 'go-to-session.php';
+});
+
 $this->group('/new', function () {
   $this->get('/', function () {
     include 'new/start.php';

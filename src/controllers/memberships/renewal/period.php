@@ -63,7 +63,7 @@ include BASE_PATH . "views/header.php";
     <div class="col-lg-8">
       <main>
 
-      <?php // $renewal->generateSessions() ?>
+      <?php //$renewal->generateSessions() ?>
 
       </main>
     </div>

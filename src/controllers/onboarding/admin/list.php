@@ -14,7 +14,7 @@ if (isset($_GET['type'])) {
     $tenant->getId(),
     $_GET['type']
   ]);
-  $getSessions = $db->prepare("SELECT users.Forename firstName, users.Surname lastName, onboardingSessions.id, onboardingSessions.start, onboardingSessions.created, onboardingSessions.status, onboardingSessions.due_date dueDate, onboardingSessions.completed_at completedAt FROM onboardingSessions INNER JOIN users ON users.UserID = onboardingSessions.user WHERE users.Active AND users.Tenant = :tenant AND onboardingSessions.status = :statusString ORDER BY created DESC LIMIT :offset, :num");
+  $getSessions = $db->prepare("SELECT users.Forename firstName, users.Surname lastName, onboardingSessions.id FROM onboardingSessions INNER JOIN users ON users.UserID = onboardingSessions.user WHERE users.Active AND users.Tenant = :tenant AND onboardingSessions.status = :statusString ORDER BY created DESC LIMIT :offset, :num");
   $getSessions->bindValue(':tenant', $tenant->getId(), PDO::PARAM_INT);
   $getSessions->bindValue(':statusString', $_GET['type'], PDO::PARAM_STR);
   $getSessions->bindValue(':offset', $pagination->get_limit_start(), PDO::PARAM_INT);
@@ -25,7 +25,7 @@ if (isset($_GET['type'])) {
   $getCount->execute([
     $tenant->getId(),
   ]);
-  $getSessions = $db->prepare("SELECT users.Forename firstName, users.Surname lastName, onboardingSessions.id, onboardingSessions.start, onboardingSessions.created, onboardingSessions.status, onboardingSessions.due_date dueDate, onboardingSessions.completed_at completedAt FROM onboardingSessions INNER JOIN users ON users.UserID = onboardingSessions.user WHERE users.Active AND users.Tenant = :tenant ORDER BY created DESC LIMIT :offset, :num");
+  $getSessions = $db->prepare("SELECT users.Forename firstName, users.Surname lastName, onboardingSessions.id FROM onboardingSessions INNER JOIN users ON users.UserID = onboardingSessions.user WHERE users.Active AND users.Tenant = :tenant ORDER BY created DESC LIMIT :offset, :num");
   $getSessions->bindValue(':tenant', $tenant->getId(), PDO::PARAM_INT);
   $getSessions->bindValue(':offset', $pagination->get_limit_start(), PDO::PARAM_INT);
   $getSessions->bindValue(':num', 10, PDO::PARAM_INT);
@@ -76,43 +76,57 @@ include BASE_PATH . "views/header.php";
       <?php if ($session) { ?>
 
         <div class="list-group">
-          <?php do { ?>
+          <?php do {
+            $onboardingSession = \SCDS\Onboarding\Session::retrieve($session->id);
+          ?>
             <a href="<?= htmlspecialchars(autoUrl('onboarding/sessions/a/' . $session->id)) ?>" class="list-group-item list-group-item-action">
               <h2><?= htmlspecialchars($session->firstName . ' ' . $session->lastName) ?></h2>
+
+              <?php if ($onboardingSession->renewal) { ?>
+                <p>
+                  Renewal Session
+                </p>
+              <?php } else { ?>
+                <p>
+                  Onboarding Session
+                </p>
+              <?php } ?>
 
               <dl class="row">
                 <dt class="col-md-3">
                   Start
                 </dt>
                 <dd class="col-9">
-                  <?= htmlspecialchars($session->start) ?>
+                  <?= htmlspecialchars($onboardingSession->start->format('j F Y')) ?>
                 </dd>
 
                 <dt class="col-md-3">
                   Due by
                 </dt>
                 <dd class="col-9">
-                  <?= htmlspecialchars($session->dueDate) ?>
+                  <?= htmlspecialchars($onboardingSession->start->format('j F Y')) ?>
                 </dd>
 
                 <dt class="col-md-3">
                   Status
                 </dt>
                 <dd class="col-9">
-                  <?= htmlspecialchars($session->status) ?>
+                  <?= htmlspecialchars(\SCDS\Onboarding\Session::getStates()[$onboardingSession->status]) ?>
                 </dd>
 
-                <dt class="col-md-3">
-                  Completed at
-                </dt>
-                <dd class="col-9">
-                  <?= htmlspecialchars($session->completedAt) ?>
-                </dd>
+                <?php if ($onboardingSession->status == 'complete') { ?>
+                  <dt class="col-md-3">
+                    Completed at
+                  </dt>
+                  <dd class="col-9">
+                    <?= htmlspecialchars($onboardingSession->completedAt->format('j F Y')) ?>
+                  </dd>
+                <?php } ?>
               </dl>
 
-              <p class="mb-0 link">
+              <div class="btn btn-primary">
                 View more
-              </p>
+                </div>
             </a>
           <?php } while ($session = $getSessions->fetch(PDO::FETCH_OBJ)); ?>
         </div>

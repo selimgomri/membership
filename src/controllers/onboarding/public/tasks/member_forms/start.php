@@ -63,22 +63,24 @@ include BASE_PATH . "views/head.php";
             <?php $stages = $onboardingMember->stages; ?>
             <h2><?= htmlspecialchars($member->firstName . ' ' . $member->lastName) ?></h2>
             <?php if (true) { ?>
-            <ul class="list-group mb-3">
-              <?php foreach ($stages as $stage => $details) { ?>
-                <?php $showButton = ($onboardingMember->isCurrentTask($stage) && !$displayed); ?>
-                <li class="list-group-item <?php if ($showButton) { ?>py-3 fw-bold<?php } else { ?>disabled<?php } ?>">
-                  <div class="d-flex justify-content-between align-items-center">
-                    <span><?= htmlspecialchars($tasks[$stage]) ?></span><?php if ($details->completed) { ?><span class="badge bg-success rounded-pill"><i class="fa fa-check-circle" aria-hidden="true"></i> Done</span><?php } else { ?><span class="badge bg-warning text-dark rounded-pill"><i class="fa fa-minus-circle" aria-hidden="true"></i> Pending</span><?php } ?>
-                  </div>
-                  <?php if ($showButton) { ?>
-                    <p class="mb-0 mt-2">
-                      <a href="<?= htmlspecialchars(autoUrl('onboarding/go/member-forms/' . $onboardingMember->id . '/start-task')) ?>" class="btn btn-success">Complete task <i class="fa fa-chevron-circle-right" aria-hidden="true"></i></a>
-                    </p>
+              <ul class="list-group mb-3">
+                <?php foreach ($stages as $stage => $details) {
+                  if ($details->required) { ?>
+                    <?php $showButton = ($onboardingMember->isCurrentTask($stage) && !$displayed); ?>
+                    <li class="list-group-item <?php if ($showButton) { ?>py-3 fw-bold<?php } else { ?>disabled<?php } ?>">
+                      <div class="d-flex justify-content-between align-items-center">
+                        <span><?= htmlspecialchars($tasks[$stage]) ?></span><?php if ($details->completed) { ?><span class="badge bg-success rounded-pill"><i class="fa fa-check-circle" aria-hidden="true"></i> Done</span><?php } else { ?><span class="badge bg-warning text-dark rounded-pill"><i class="fa fa-minus-circle" aria-hidden="true"></i> Pending</span><?php } ?>
+                      </div>
+                      <?php if ($showButton) { ?>
+                        <p class="mb-0 mt-2">
+                          <a href="<?= htmlspecialchars(autoUrl('onboarding/go/member-forms/' . $onboardingMember->id . '/start-task')) ?>" class="btn btn-success">Complete task <i class="fa fa-chevron-circle-right" aria-hidden="true"></i></a>
+                        </p>
+                    <?php }
+                    } ?>
+                    </li>
+                    <?php if ($showButton) $displayed = true; ?>
                   <?php } ?>
-                </li>
-                <?php if ($showButton) $displayed = true; ?>
-              <?php } ?>
-            </ul>
+              </ul>
             <?php } else { ?>
               <div class="alert alert-info">
                 <p class="mb-0">
