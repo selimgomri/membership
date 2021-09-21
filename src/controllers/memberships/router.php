@@ -45,6 +45,38 @@ $this->group('/batches', function() {
     include 'batches/batch.php';
   });
 
+  $this->get('/{id}:uuid/edit', function($id) {
+    include 'batches/edit.php';
+  });
+
+  $this->post('/edit-items', function() {
+    include 'batches/edit-items.php';
+  });
+
+  $this->post('/get-members', function() {
+    include 'batches/get-members.php';
+  });
+
+  $this->post('/select-membership', function() {
+    include 'batches/select-membership.php';
+  });
+
+  $this->post('/add-membership', function() {
+    include 'batches/add-membership.php';
+  });
+
+  $this->post('/update', function() {
+    include 'batches/update.php';
+  });
+
+  $this->post('/delete', function() {
+    include 'batches/delete.php';
+  });
+
+  $this->post('/options', function() {
+    include 'batches/options-update.php';
+  });
+  
   $this->post('/{id}:uuid', function($id) {
     include 'batches/pay-post.php';
   });

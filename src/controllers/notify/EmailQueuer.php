@@ -578,8 +578,6 @@ try {
       $email->setReplyTo(app()->tenant->getKey('CLUB_EMAIL'), app()->tenant->getKey('CLUB_NAME') . ' Enquiries');
     }
 
-    $email->addHeader("List-ID", getenv('CLUB NAME') . " Notify <" . mb_strtolower(app()->tenant->getKey('ASA_CLUB_CODE')) . ".notify@" . getenv('EMAIL_DOMAIN') . ">");
-
     $sendgrid = new \SendGrid(getenv('SENDGRID_API_KEY'));
     $response = $sendgrid->send($email);
 

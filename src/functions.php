@@ -88,8 +88,6 @@ function notifySend($to, $subject, $emailMessage, $name = null, $emailaddress = 
   //   $email->addHeader("List-Archive", autoUrl("myaccount/notify/history"));
   // }
 
-  $email->addHeader("List-Help", autoUrl("notify"));
-
   if (isset($from['CC']) && $from['CC'] != null) {
     $email->addCcs($from['CC']);
   }

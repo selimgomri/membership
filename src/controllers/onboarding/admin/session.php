@@ -243,11 +243,11 @@ include BASE_PATH . "views/header.php";
         <p class="mb-2">
           Registration fees
         </p>
-        <?php if ($session->batch) { ?>
+        <?php if ($session->status != 'complete' || $session->batch) { ?>
           <p>
-            <a href="<?= htmlspecialchars(autoUrl("memberships/batches/" . $session->batch)) ?>" class="btn btn-success disabled">Edit fees (coming soon)</a>
+            <a href="<?= htmlspecialchars(autoUrl("memberships/batches/" . $session->batch . "/edit")) ?>" class="btn btn-success">Edit fees</a>
           </p>
-        <?php } else { ?>
+        <?php } else if ($session->status != 'complete') { ?>
           <p>
             <button type="submit" name="action" value="fees" class="btn btn-success">Go to fees</button>
           </p>
