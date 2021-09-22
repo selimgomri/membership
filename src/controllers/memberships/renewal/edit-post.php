@@ -24,6 +24,8 @@ $stageNames = SCDS\Onboarding\Session::stagesOrder();
 $memberStages = $renewal->defaultMemberStages;
 $memberStageNames = SCDS\Onboarding\Member::stagesOrder();
 
+$started = $renewal->isCurrent() || $renewal->isPast() || $renewal->isCreated();
+
 try {
 
   $start = $renewal->start;
@@ -37,7 +39,7 @@ try {
 
   $member = false;
 
-  if (!($renewal->isCurrent() || $renewal->isPast())) {
+  if (!($started)) {
     foreach ($stageNames as $stage => $desc) {
       if (!$stages->$stage->required_locked) {
         $stages->$stage->required = isset($_POST[$stage . '-main-check']) && bool($_POST[$stage . '-main-check']);

@@ -16,7 +16,7 @@ $pagination = new \SCDS\Pagination();
 $pagination->records_per_page(10);
 $pagination->records($count);
 
-$getRenewals = $db->prepare("SELECT `id`, `start`, `end` FROM renewalv2 WHERE Tenant = :tenant ORDER BY `end` DESC, `start` DESC LIMIT :offset, :num");
+$getRenewals = $db->prepare("SELECT `id` FROM renewalv2 WHERE Tenant = :tenant ORDER BY `end` DESC, `start` DESC LIMIT :offset, :num");
 $getRenewals->bindValue(':tenant', $tenant->getId(), PDO::PARAM_INT);
 $getRenewals->bindValue(':offset', $pagination->get_limit_start(), PDO::PARAM_INT);
 $getRenewals->bindValue(':num', 10, PDO::PARAM_INT);
@@ -65,10 +65,14 @@ include BASE_PATH . "views/header.php";
 
       <?php if ($renewal) { ?>
         <div class="list-group mb-3">
-          <?php do { ?>
-            <a class="list-group-item list-group-item-action" href="<?= htmlspecialchars(autoUrl('memberships/renewal/' . $renewal->id)) ?>"><?= htmlspecialchars($renewal->id) ?></a>
+          <?php do { 
+            $renewal = \SCDS\Onboarding\Renewal::retrieve($renewal->id);
+            ?>
+            <a class="list-group-item list-group-item-action" href="<?= htmlspecialchars(autoUrl('memberships/renewal/' . $renewal->id)) ?>" title="<?= htmlspecialchars($renewal->start->format('j M Y')) ?> - <?= htmlspecialchars($renewal->end->format('j M Y')) ?> <?= htmlspecialchars($renewal->id) ?>"><?= htmlspecialchars($renewal->start->format('j M Y')) ?> - <?= htmlspecialchars($renewal->end->format('j M Y')) ?> for <?= htmlspecialchars($renewal->year->name) ?> (<?= htmlspecialchars($renewal->year->start->format('j M Y')) ?> - <?= htmlspecialchars($renewal->year->end->format('j M Y')) ?>)</a>
           <?php } while ($renewal = $getRenewals->fetch(PDO::FETCH_OBJ)); ?>
         </div>
+
+        <?= $pagination->render() ?>
       <?php } else { ?>
         <div class="alert alert-danger">
           <p class="mb-0">
@@ -82,7 +86,7 @@ include BASE_PATH . "views/header.php";
     </div>
 
     <p>
-      Are you looking for information from previous renewals? <a href="<?= htmlspecialchars(autoUrl('')) ?>">Visit the legacy renewal system instead</a>.
+      Are you looking for information from previous renewals? <a href="<?= htmlspecialchars(autoUrl('renewal')) ?>">Visit the legacy renewal system instead</a>.
     </p>
   </div>
 

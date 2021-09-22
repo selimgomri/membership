@@ -104,7 +104,7 @@ include BASE_PATH . "views/header.php";
                   Due by
                 </dt>
                 <dd class="col-9">
-                  <?= htmlspecialchars($onboardingSession->start->format('j F Y')) ?>
+                  <?= htmlspecialchars($onboardingSession->dueDate->format('j F Y')) ?>
                 </dd>
 
                 <dt class="col-md-3">
@@ -113,6 +113,15 @@ include BASE_PATH . "views/header.php";
                 <dd class="col-9">
                   <?= htmlspecialchars(\SCDS\Onboarding\Session::getStates()[$onboardingSession->status]) ?>
                 </dd>
+
+                <?php if ($onboardingSession->status != 'complete') { ?>
+                  <dt class="col-md-3">
+                    Next stage
+                  </dt>
+                  <dd class="col-9">
+                    <?= htmlspecialchars(\SCDS\Onboarding\Session::stagesOrder()[$onboardingSession->getCurrentTask()]) ?>
+                  </dd>
+                <?php } ?>
 
                 <?php if ($onboardingSession->status == 'complete') { ?>
                   <dt class="col-md-3">
@@ -126,7 +135,7 @@ include BASE_PATH . "views/header.php";
 
               <div class="btn btn-primary">
                 View more
-                </div>
+              </div>
             </a>
           <?php } while ($session = $getSessions->fetch(PDO::FETCH_OBJ)); ?>
         </div>

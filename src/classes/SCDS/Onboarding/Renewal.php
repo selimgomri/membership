@@ -77,13 +77,7 @@ class Renewal
 
     try {
 
-      $getCount = $db->prepare("SELECT COUNT(*) FROM `onboardingSessions` WHERE `type` = ? AND `renewal` = ?");
-      $getCount->execute([
-        'renewal',
-        $this->id,
-      ]);
-
-      if ($getCount->fetchColumn() > 0) throw new Exception("Sessions exist");
+      if ($this->isCreated()) throw new Exception("Sessions exist");
 
       // Get active users with a connected member!
       $getUsers = $db->prepare("SELECT `UserID` FROM `users` WHERE `Tenant` = ? AND `Active` AND `UserID` IN (SELECT `UserID` FROM `members` WHERE `Tenant` = ? AND `Active`)");
@@ -353,5 +347,17 @@ class Renewal
         throw $e;
       }
     }
+  }
+
+  public function isCreated()
+  {
+    $db = app()->db;
+    $getCount = $db->prepare("SELECT COUNT(*) FROM `onboardingSessions` WHERE `type` = ? AND `renewal` = ?");
+    $getCount->execute([
+      'renewal',
+      $this->id,
+    ]);
+
+    return $getCount->fetchColumn() > 0;
   }
 }

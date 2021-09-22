@@ -56,18 +56,18 @@ include BASE_PATH . "views/header.php";
 				</p>
 
 				<ul class="list-group mb-3">
-					<?php do { 
-						
+					<?php do {
+
 						$payMethods = json_decode($pending->payMethods);
-						
-						?>
+
+					?>
 						<li class="list-group-item">
 
 							<h3><?= htmlspecialchars($pending->yearName) ?> <small class="text-muted"><?= htmlspecialchars((new DateTime($pending->yearStart))->format('d/m/Y')) ?> to <?= htmlspecialchars((new DateTime($pending->yearEnd))->format('d/m/Y')) ?></small></h3>
 
 							<dl class="row">
 
-							<dt class="col-3">
+								<dt class="col-3">
 									Batch ID
 								</dt>
 								<dd class="col-9">
@@ -116,11 +116,31 @@ include BASE_PATH . "views/header.php";
 			<?php } ?>
 
 			<?php if (app()->user->hasPermission('Admin')) { ?>
-			<p>
-				<a href="<?= htmlspecialchars(autoUrl('memberships/years')) ?>" class="btn btn-primary">
-					Show years/periods
-				</a>
-			</p>
+				<h2>Membership Years</h2>
+				<p>
+					<a href="<?= htmlspecialchars(autoUrl('memberships/years')) ?>" class="btn btn-primary">
+						Show years/periods
+					</a>
+				</p>
+
+				<h2>Membership Renewal</h2>
+				<p>
+					<a href="<?= htmlspecialchars(autoUrl('memberships/renewal')) ?>" class="btn btn-primary">
+						View, add or edit renewal periods
+					</a>
+				</p>
+
+				<h2>Legacy Membership Renewal</h2>
+
+				<p>
+					The legacy membership renewal system is deprecated and eventually will be removed.
+				</p>
+
+				<p>
+					<a href="<?= htmlspecialchars(autoUrl('renewal')) ?>" class="btn btn-primary">
+						View legacy renewal periods
+					</a>
+				</p>
 			<?php } ?>
 		</div>
 	</div>

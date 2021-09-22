@@ -22,6 +22,8 @@ $stageNames = SCDS\Onboarding\Session::stagesOrder();
 $memberStages = $renewal->defaultMemberStages;
 $memberStageNames = SCDS\Onboarding\Member::stagesOrder();
 
+$started = $renewal->isCurrent() || $renewal->isPast() || $renewal->isCreated();
+
 $pagetitle = "Edit - " . htmlspecialchars($renewal->start->format('j M Y') . " - " . $renewal->end->format('j M Y')) . " - Renewal - Membership Centre";
 include BASE_PATH . "views/header.php";
 
@@ -84,8 +86,8 @@ include BASE_PATH . "views/header.php";
             The renewal period start and end dates should define the period in which people can complete membership renewal.
           </p>
 
-          <?php if ($renewal->isCurrent() || $renewal->isPast()) { ?>
-            <div class="alert alaert-warning">
+          <?php if ($started) { ?>
+            <div class="alert alert-warning">
               <p class="mb-0">
                 <strong>This renewal period has started, therefore you can not edit the required stages</strong>
               </p>
@@ -102,7 +104,7 @@ include BASE_PATH . "views/header.php";
           <div class="mb-3">
             <?php foreach ($stageNames as $stage => $desc) { ?>
               <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="1" id="<?= htmlspecialchars($stage . '-main-check') ?>" name="<?= htmlspecialchars($stage . '-main-check') ?>" <?php if ($stages->$stage->required) { ?>checked<?php } ?> <?php if ($stages->$stage->required_locked || $renewal->isCurrent() || $renewal->isPast()) { ?>disabled<?php } ?>>
+                <input class="form-check-input" type="checkbox" value="1" id="<?= htmlspecialchars($stage . '-main-check') ?>" name="<?= htmlspecialchars($stage . '-main-check') ?>" <?php if ($stages->$stage->required) { ?>checked<?php } ?> <?php if ($stages->$stage->required_locked || $started) { ?>disabled<?php } ?>>
                 <label class="form-check-label" for="<?= htmlspecialchars($stage . '-main-check') ?>">
                   <?= htmlspecialchars($desc) ?>
                 </label>
@@ -117,7 +119,7 @@ include BASE_PATH . "views/header.php";
           <div class="mb-3">
             <?php foreach ($memberStageNames as $stage => $desc) { ?>
               <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="1" id="<?= htmlspecialchars($stage . '-member-check') ?>" name="<?= htmlspecialchars($stage . '-member-check') ?>" <?php if ($memberStages->$stage->required) { ?>checked<?php } ?> <?php if ($memberStages->$stage->required_locked || $renewal->isCurrent() || $renewal->isPast()) { ?>disabled<?php } ?>>
+                <input class="form-check-input" type="checkbox" value="1" id="<?= htmlspecialchars($stage . '-member-check') ?>" name="<?= htmlspecialchars($stage . '-member-check') ?>" <?php if ($memberStages->$stage->required) { ?>checked<?php } ?> <?php if ($memberStages->$stage->required_locked || $started) { ?>disabled<?php } ?>>
                 <label class="form-check-label" for="<?= htmlspecialchars($stage . '-member-check') ?>">
                   <?= htmlspecialchars($desc) ?>
                 </label>
