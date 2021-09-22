@@ -47,7 +47,11 @@ $this->group('/direct-debit', function () {
 
   $this->group('/go-cardless', function () {
     $this->get('/set-up', function () {
-      // include 'tasks/direct_debit_mandate/stripe/set-up.php';
+      include 'tasks/direct_debit_mandate/go-cardless/set-up.php';
+    });
+
+    $this->get('/success', function () {
+      include 'tasks/direct_debit_mandate/go-cardless/success.php';
     });
   });
 });

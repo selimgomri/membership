@@ -49,7 +49,8 @@ include BASE_PATH . "views/head.php";
               Account <?= htmlspecialchars($_SESSION['SetupMandateSuccess']['SortCode']) ?>, <?= htmlspecialchars($_SESSION['SetupMandateSuccess']['Last4']) ?>
             </p>
           </div>
-        <?php } ?>
+        <?php unset($_SESSION['SetupMandateSuccess']);
+        } ?>
 
         <?php if (isset($_SESSION['PaymentSuccess'])) { ?>
           <div class="alert alert-success">

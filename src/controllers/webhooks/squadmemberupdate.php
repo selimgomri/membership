@@ -54,3 +54,18 @@ try {
   reportError($e);
   $db->rollBack();
 }
+
+// Get and generate V2 Renewals
+$getRenewals = $db->prepare("SELECT `id` FROM `renewalv2` WHERE `start` <= :today AND `end` >= :today AND `Tenant` = :tenant");
+$getRenewals->execute([
+  'today' => $date->format('Y-m-d'),
+  'tenant' => $tenant->getId(),
+]);
+while ($id = $getRenewals->fetchColumn()) {
+  $renewal = \SCDS\Onboarding\Renewal::retrieve($id);
+  try {
+    $renewal->generateSessions();
+  } catch (Exception $e) {
+    // Ignore
+  }
+}

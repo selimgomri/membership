@@ -1022,7 +1022,7 @@ function getTimes($asa)
 
 function user_needs_registration($user)
 {
-  return isset($_SESSION['OnboardingSessionId']);
+  return false; //isset($_SESSION['OnboardingSessionId']);
 }
 
 function getPostContent($id)

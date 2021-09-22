@@ -33,7 +33,7 @@ if ($intent->status == 'succeeded') {
 
   $_SESSION['SetupMandateSuccess'] = [
     'SortCode' => $intent->payment_method->bacs_debit->sort_code,
-    'Last4' => $intent->payment_method->bacs_debit->last4,
+    'Last4' => '····' . $intent->payment_method->bacs_debit->last4,
   ];
 
   header('location: ' . autoUrl('onboarding/go'));
