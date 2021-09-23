@@ -1022,7 +1022,36 @@ function getTimes($asa)
 
 function user_needs_registration($user)
 {
-  return false; //isset($_SESSION['OnboardingSessionId']);
+  $db = app()->db;
+
+  // Check for legacy system
+  try {
+    $query = $db->prepare("SELECT RR FROM users WHERE UserID = ?");
+    $query->execute([$user]);
+
+    if ($query->fetchColumn()) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (Exception $e) {
+    return false;
+  }
+
+  // Check for pending onboarding sessions
+  try {
+    $query = $db->prepare("SELECT COUNT(*) FROM `onboardingSessions` WHERE `user` = :userId AND `type` = 'onboarding' AND (`status` = 'pending' OR `status` = 'in_progress') AND `start` <= :today AND `due_date` >= :today");
+    $query->execute([
+      'userId' => $user,
+      'today' => (new DateTime('now', new DateTimeZone('Europe/London')))->format('Y-m-d'),
+    ]);
+
+    return $query->fetchColumn() > 0;
+  } catch (Exception $e) {
+    return false;
+  }
+
+  return false;
 }
 
 function getPostContent($id)
