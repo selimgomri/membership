@@ -232,53 +232,58 @@ class Session
     // Are all tasks completed? If so mark session complete
     if ($this->getCurrentTask() == 'done') {
       $db = app()->db;
-      $update = $db->prepare("UPDATE `onboardingSessions` SET `status` = ?, `completed_at` = ? WHERE `id` = ?");
-      $this->status = 'complete';
-      $this->completedAt = (new DateTime('now', new DateTimeZone('UTC')));
-      $update->execute([
-        $this->status,
-        $this->completedAt->format('Y-m-d H:i:s'),
-        $this->id,
-      ]);
 
-      // If onboarding, send an email to the creator
-      if ($this->creator) {
+      // Check if marked as done
+      if ($this->status != 'complete') {
+
+        $update = $db->prepare("UPDATE `onboardingSessions` SET `status` = ?, `completed_at` = ? WHERE `id` = ?");
+        $this->status = 'complete';
+        $this->completedAt = (new DateTime('now', new DateTimeZone('UTC')));
+        $update->execute([
+          $this->status,
+          $this->completedAt->format('Y-m-d H:i:s'),
+          $this->id,
+        ]);
+
+        // If onboarding, send an email to the creator
+        if ($this->creator && !$this->renewal) {
+          try {
+            $creator = new \User($this->creator);
+            $user = new \User($this->user);
+            $subject = $user->getFullName() . ' has completed onboarding';
+            $content = '<p>Dear ' . htmlspecialchars($creator->getFullName()) . ',</p>';
+
+            $content .= '<p>' . htmlspecialchars($user->getFullName()) . ' has completed their onboarding tasks.</p>';
+
+            $content .= '<p>Thank you, <br>The ' . htmlspecialchars(app()->tenant->getName()) . ' team.</p>';
+
+            notifySend(null, $subject, $content, $creator->getFullName(), $creator->getEmail(), ['Name' => app()->tenant->getName()]);
+          } catch (\Exception $e) {
+            // Ignore
+          }
+        }
+
+        // Send an email to the user
         try {
-          $creator = new \User($this->creator);
-          $user = new \User($this->user);
-          $subject = $user->getFullName() . ' has completed onboarding';
-          $content = '<p>Dear ' . htmlspecialchars($creator->getFullName()) . ',</p>';
+          $name = "registration";
+          if ($this->renewal) {
+            $name = "renewal";
+          }
 
-          $content .= '<p>' . htmlspecialchars($user->getFullName()) . ' has completed their onboarding tasks.</p>';
+          $user = $this->getUser();
+          $subject = 'Thank you for completing your ' . $name;
+          $content = '<p>Dear ' . htmlspecialchars($user->getFullName()) . ',</p>';
+
+          $content .= '<p>Thank you for completing your ' . $name . ' tasks.</p>';
+
+          $content .= '<p>In future this email will contain welcome info (if registration onboarding).</p>';
 
           $content .= '<p>Thank you, <br>The ' . htmlspecialchars(app()->tenant->getName()) . ' team.</p>';
 
-          notifySend(null, $subject, $content, $creator->getFullName(), $creator->getEmail(), ['Name' => app()->tenant->getName()]);
+          notifySend(null, $subject, $content, $user->getFullName(), $user->getEmail(), ['Name' => app()->tenant->getName() . ' Membership Secretary']);
         } catch (\Exception $e) {
           // Ignore
         }
-      }
-
-      // Send an email to the user
-      try {
-        $name = "registration";
-        if ($this->renewal) {
-          $name = "renewal";
-        }
-
-        $user = $this->getUser();
-        $subject = 'Thank you for completing your ' . $name;
-        $content = '<p>Dear ' . htmlspecialchars($user->getFullName()) . ',</p>';
-
-        $content .= '<p>Thank you for completing your ' . $name . ' tasks.</p>';
-
-        $content .= '<p>In future this email will contain welcome info (if registration onboarding).</p>';
-
-        $content .= '<p>Thank you, <br>The ' . htmlspecialchars(app()->tenant->getName()) . ' team.</p>';
-
-        notifySend(null, $subject, $content, $user->getFullName(), $user->getEmail(), ['Name' => app()->tenant->getName() . ' Membership Secretary']);
-      } catch (\Exception $e) {
-        // Ignore
       }
     }
   }
