@@ -16,6 +16,10 @@ $this->group('/new', function () {
   $this->post('/', function () {
     include 'new/start-post.php';
   });
+
+  $this->post('/user-lookup', function () {
+    include 'new/user-lookup.php';
+  });
 });
 
 $this->group('/sessions', function () {

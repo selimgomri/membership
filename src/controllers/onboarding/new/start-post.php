@@ -69,7 +69,7 @@ if (!$user) {
   $insert = $db->prepare("INSERT INTO users (EmailAddress, `Password`, Forename, Surname, Mobile, EmailComms, MobileComms, RR, Tenant) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
   $addAccessLevel = $db->prepare("INSERT INTO `permissions` (`Permission`, `User`) VALUES (?, ?)");
 
-  reportError($status);
+  // reportError($status);
 
   if ($status) {
 
@@ -87,7 +87,7 @@ if (!$user) {
 
     $user = $db->lastInsertId();
 
-    reportError($user);
+    // reportError($user);
 
     $addAccessLevel->execute([
       'Parent',
@@ -96,8 +96,8 @@ if (!$user) {
   }
 } else {
   // No check required
-  reportError($user);
-  reportError('EXISTS');
+  // reportError($user);
+  // reportError('EXISTS');
 }
 
 $hasMembers = false;

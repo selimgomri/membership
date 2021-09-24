@@ -18,7 +18,7 @@ $swimmer = $swimmers->fetch(PDO::FETCH_ASSOC);
 $user = null;
 
 if (isset($_GET['user'])) {
-  $getUser = $db->prepare("SELECT Forename firstName, Surname lastName, EmailAddress email, Mobile phone FROM users WHERE UserID = ? AND Tenant  = ?");
+  $getUser = $db->prepare("SELECT Forename firstName, Surname lastName, EmailAddress email, Mobile phone FROM users WHERE UserID = ? AND Tenant = ? AND Active");
   $getUser->execute([
     $_GET['user'],
     $tenant->getId(),
@@ -32,6 +32,8 @@ $pagetitle = "New Onboarding Session";
 include BASE_PATH . "views/header.php";
 
 ?>
+
+<div id="data" data-has-user="<?= json_encode($user != null)  ?>" data-expanded="<?= json_encode($user != null)  ?>" data-check-user-url="<?= htmlspecialchars(autoUrl('onboarding/new/user-lookup'))  ?>"></div>
 
 <div class="bg-light mt-n3 py-3 mb-3">
   <div class="container-xl">
@@ -68,7 +70,7 @@ include BASE_PATH . "views/header.php";
 
       <?php if ($swimmer) { ?>
 
-        <form method="post" class="needs-validation" novalidate id="form">
+        <form method="post" class="" novalidate id="form">
 
           <?= CSRF::write(); ?>
 
@@ -77,11 +79,11 @@ include BASE_PATH . "views/header.php";
           <?php if (!$user) { ?>
 
             <p>
-              Enter the user's email address here to begin creating a new user.
+              Enter the user's email address here to begin creating a new user. We'll check to see if an account already exists.
             </p>
 
             <p>
-              For existing users, please start onboarding from their user page.
+              For existing users, you can also start onboarding from their user page.
             </p>
 
 
@@ -90,13 +92,19 @@ include BASE_PATH . "views/header.php";
               <input type="email" name="user-email" class="form-control" id="user-email" placeholder="name@example.com" required value="<?= htmlspecialchars($email) ?>">
             </div>
 
+            <div id="lookup-button" class="collapse show">
+              <p>
+                <button class="btn btn-primary" type="submit">Lookup</button>
+              </p>
+            </div>
+
             <!-- <p>
               <button type="submit" class="btn btn-primary" id="check-button">
                 Check
               </button>
             </p> -->
 
-            <div class="info ">
+            <div class="collapse" id="user-info">
               <div class="row">
                 <div class="col">
                   <div class="mb-3">
@@ -153,60 +161,65 @@ include BASE_PATH . "views/header.php";
               </dl>
             </div>
 
+            <input type="hidden" name="user" value="<?= htmlspecialchars($_GET['user']) ?>">
+
           <?php } ?>
 
-          <h2>Select members</h2>
+          <div id="select-members" class="<?php if (!$user) { ?>collapse<?php } ?>">
+            <h2>Select members</h2>
 
-          <div class="alert alert-warning">
-            <p class="mb-0">
-              <strong>
-                Only members without a linked user/parent account are shown.
-              </strong>
-            </p>
-          </div>
-
-          <?php do {
-            $getSquads->execute([
-              $swimmer['id']
-            ]);
-          ?>
-            <div class="card card-body mb-3">
-              <div class="form-check mb-0">
-                <input class="form-check-input" type="checkbox" id="member-<?= htmlspecialchars($swimmer['id']) ?>" name="member-<?= htmlspecialchars($swimmer['id']) ?>" data-collapse="member-<?= htmlspecialchars($swimmer['id']) ?>-collapse" value="1" autocomplete="off">
-                <label class="form-check-label" for="member-<?= htmlspecialchars($swimmer['id']) ?>">
-                  <p class="mb-0 fw-bold">
-                    <?= htmlspecialchars($swimmer['first'] . ' ' . $swimmer['last']) ?>
-                  </p>
-                  <ul class="mb-0 list-unstyled">
-                    <?php if ($squad = $getSquads->fetch(PDO::FETCH_ASSOC)) {
-                      do { ?>
-                        <li><?= htmlspecialchars($squad['SquadName']) ?></li>
-                      <?php } while ($squad = $getSquads->fetch(PDO::FETCH_ASSOC));
-                    } else { ?>
-                      <li>No squads</li>
-                    <?php } ?>
-                  </ul>
-                </label>
-              </div>
-
-              <div class="collapse" id="member-<?= htmlspecialchars($swimmer['id']) ?>-collapse">
-                <div class="form-check custom-control-inline mt-2">
-                  <input type="radio" id="member-rr-yes-<?= htmlspecialchars($swimmer['id']) ?>" name="member-rr-<?= htmlspecialchars($swimmer['id']) ?>" class="form-check-input" checked value="yes">
-                  <label class="form-check-label" for="member-rr-yes-<?= htmlspecialchars($swimmer['id']) ?>">Require registration</label>
-                </div>
-                <div class="form-check custom-control-inline mb-0">
-                  <input type="radio" id="member-rr-no-<?= htmlspecialchars($swimmer['id']) ?>" name="member-rr-<?= htmlspecialchars($swimmer['id']) ?>" class="form-check-input" value="no">
-                  <label class="form-check-label" for="member-rr-no-<?= htmlspecialchars($swimmer['id']) ?>">Add to account quietly</label>
-                </div>
-              </div>
+            <div class="alert alert-warning">
+              <p class="mb-0">
+                <strong>
+                  Only members without a linked user/parent account are shown.
+                </strong>
+              </p>
             </div>
-          <?php } while ($swimmer = $swimmers->fetch(PDO::FETCH_ASSOC)); ?>
 
-          <p>
-            <button type="submit" class="btn btn-success">
-              Next
-            </button>
-          </p>
+            <?php do {
+              $getSquads->execute([
+                $swimmer['id']
+              ]);
+            ?>
+              <div class="card card-body mb-3">
+                <div class="form-check mb-0">
+                  <input class="form-check-input" type="checkbox" id="member-<?= htmlspecialchars($swimmer['id']) ?>" name="member-<?= htmlspecialchars($swimmer['id']) ?>" data-collapse="member-<?= htmlspecialchars($swimmer['id']) ?>-collapse" value="1" autocomplete="off">
+                  <label class="form-check-label" for="member-<?= htmlspecialchars($swimmer['id']) ?>">
+                    <p class="mb-0 fw-bold">
+                      <?= htmlspecialchars($swimmer['first'] . ' ' . $swimmer['last']) ?>
+                    </p>
+                    <ul class="mb-0 list-unstyled">
+                      <?php if ($squad = $getSquads->fetch(PDO::FETCH_ASSOC)) {
+                        do { ?>
+                          <li><?= htmlspecialchars($squad['SquadName']) ?></li>
+                        <?php } while ($squad = $getSquads->fetch(PDO::FETCH_ASSOC));
+                      } else { ?>
+                        <li>No squads</li>
+                      <?php } ?>
+                    </ul>
+                  </label>
+                </div>
+
+                <div class="collapse" id="member-<?= htmlspecialchars($swimmer['id']) ?>-collapse">
+                  <div class="form-check custom-control-inline mt-2">
+                    <input type="radio" id="member-rr-yes-<?= htmlspecialchars($swimmer['id']) ?>" name="member-rr-<?= htmlspecialchars($swimmer['id']) ?>" class="form-check-input" checked value="yes">
+                    <label class="form-check-label" for="member-rr-yes-<?= htmlspecialchars($swimmer['id']) ?>">Require registration</label>
+                  </div>
+                  <div class="form-check custom-control-inline mb-0">
+                    <input type="radio" id="member-rr-no-<?= htmlspecialchars($swimmer['id']) ?>" name="member-rr-<?= htmlspecialchars($swimmer['id']) ?>" class="form-check-input" value="no">
+                    <label class="form-check-label" for="member-rr-no-<?= htmlspecialchars($swimmer['id']) ?>">Add to account quietly</label>
+                  </div>
+                </div>
+              </div>
+            <?php } while ($swimmer = $swimmers->fetch(PDO::FETCH_ASSOC)); ?>
+
+            <p>
+              <button type="submit" class="btn btn-success">
+                Next
+              </button>
+            </p>
+
+          </div>
 
         </form>
 
@@ -235,5 +248,5 @@ include BASE_PATH . "views/header.php";
 <?php
 
 $footer = new \SCDS\Footer();
-$footer->addJs('js/NeedsValidation.js');
+$footer->addJs('js/onboarding/admin/new.js');
 $footer->render();
