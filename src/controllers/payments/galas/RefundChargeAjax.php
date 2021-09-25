@@ -18,6 +18,9 @@ $requestData = [
   'refundAmount' => $refundAmount
 ];
 
+$db = app()->db;
+$tenant = app()->tenant;
+
 $getMandates = $db->prepare("SELECT ID, Mandate, Last4, SortCode, `Address`, Reference, `URL`, `Status` FROM stripeMandates WHERE Customer = ? AND (`Status` = 'accepted' OR `Status` = 'pending') ORDER BY CreationTime DESC LIMIT 1");
 
 $swimsArray = [
@@ -45,9 +48,6 @@ $swimsArray = [
   '200IM' => '200&nbsp;IM',
   '400IM' => '400&nbsp;IM'
 ];
-
-$db = app()->db;
-$tenant = app()->tenant;
 
 try {
 
@@ -237,9 +237,10 @@ try {
     $message .= '<p>As you don\'t pay your club fees by direct debit or have opted out of paying for galas by direct debit, you\'ll need to collect this refund from the treasurer or gala coordinator.</p>';
   }
 
-  $message .= '<p>Kind Regards<br> The ' . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . ' Team</p>';
+  $message .= '<p>Kind regards,<br> The ' . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . ' Team</p>';
 
   $notify->execute([
+
     $entryData['UserID'],
     'Queued',
     'Refund for Rejections: ' . $entryData['MForename'] .  '\'s ' . $gala['name'] . ' Entry',
