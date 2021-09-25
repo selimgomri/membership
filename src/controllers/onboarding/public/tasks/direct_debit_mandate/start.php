@@ -18,7 +18,7 @@ $tasks = \SCDS\Onboarding\Session::stagesOrder();
 
 $pagetitle = 'Direct Debit Instruction - Onboarding';
 
-$good = false;
+$good = $hasGoCardless = false;
 
 if (isset($_SESSION['SetupMandateSuccess'])) {
   $good = true;
@@ -40,6 +40,9 @@ if (app()->tenant->getBooleanKey('ALLOW_STRIPE_DIRECT_DEBIT_SET_UP') && app()->t
     $ddi->last4 = $mandate['Last4'];
     $ddi->sortCode = implode("-", str_split($mandate['SortCode'], 2));
   }
+} else if ($tenant->getGoCardlessAccessToken()) {
+  $good = userHasMandates($user->getId());
+  $hasGoCardless = $good;
 }
 
 include BASE_PATH . "views/head.php";
@@ -109,6 +112,21 @@ include BASE_PATH . "views/head.php";
             </div>
           <?php } ?>
 
+          <?php if ($hasGoCardless) { ?>
+            <div class="card card-body mb-3">
+              <p class="mb-0">
+                <strong>You already have a Direct Debit Instruction set up</strong>
+              </p>
+              <p class="">
+                Details are available in your account.
+              </p>
+
+              <p class="mb-0">
+                You can make changes to your Direct Debit Instruction later in the <em>Pay</em> section of your account.
+              </p>
+            </div>
+          <?php } ?>
+
           <?php if (getenv('STRIPE') && app()->tenant->getBooleanKey('ALLOW_STRIPE_DIRECT_DEBIT_SET_UP') && app()->tenant->getBooleanKey('USE_STRIPE_DIRECT_DEBIT') && !$good) { ?>
             <!-- STRIPE -->
             <p>
@@ -118,8 +136,15 @@ include BASE_PATH . "views/head.php";
             <p>
               We will redirect you to our payment provider, Stripe to securely set up your Direct Debit Instruction.
             </p>
-          <?php } else if (true && !$good) { ?>
+          <?php } else if ($tenant->getGoCardlessAccessToken() && !$good) { ?>
             <!-- GOCARDLESS -->
+            <p>
+              <a href="<?= htmlspecialchars(autoUrl('onboarding/go/direct-debit/go-cardless/set-up')) ?>" class="btn btn-success">Set up now</a>
+            </p>
+
+            <p>
+              We will redirect you to our payment provider, GoCardless to securely set up your Direct Debit Instruction.
+            </p>
           <?php } else { ?>
             <!-- NONE -->
           <?php } ?>
@@ -127,6 +152,14 @@ include BASE_PATH . "views/head.php";
           <?php if ($good) { ?>
             <p>
               <button type="submit" class="btn btn-success">Confirm</button>
+            </p>
+          <?php } ?>
+
+          <?php if ($tenant->getBooleanKey('ALLOW_DIRECT_DEBIT_OPT_OUT')) { ?>
+            <p>
+              <button type="submit" class="btn btn-dark">
+                Proceed without setting up a Direct Debit Instruction
+              </button>
             </p>
           <?php } ?>
 

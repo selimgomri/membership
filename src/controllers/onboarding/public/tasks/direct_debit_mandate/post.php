@@ -37,13 +37,15 @@ if (app()->tenant->getBooleanKey('ALLOW_STRIPE_DIRECT_DEBIT_SET_UP') && app()->t
   if ($mandate) {
     $good = true;
   }
+} else if ($tenant->getGoCardlessAccessToken()) {
+  $good = userHasMandates($user->getId());
 }
 
 if (isset($_SESSION['SetupMandateSuccess'])) {
   unset($_SESSION['SetupMandateSuccess']);
 }
 
-if ($good) {
+if ($good || $tenant->getBooleanKey('ALLOW_DIRECT_DEBIT_OPT_OUT')) {
   // If all good,
 
   // Set complete
