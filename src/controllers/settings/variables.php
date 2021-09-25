@@ -32,6 +32,7 @@ $vars = [
   'GLOBAL_PERSONAL_KEY' => null,
   'GLOBAL_PERSONAL_KEY_ID_NUMBER' => null,
   'REQUIRE_SQUAD_REP_FOR_APPROVAL' => true,
+  'HIDE_MOVE_FEE_INFO' => false,
 ];
 
 $disabled = [];
@@ -309,6 +310,13 @@ include BASE_PATH . 'views/header.php';
             <div class="form-switch mb-2">
               <input class="form-check-input" type="checkbox" id="ENABLE_BILLING_SYSTEM" value="1" name="ENABLE_BILLING_SYSTEM" <?php if (bool($vars['ENABLE_BILLING_SYSTEM'])) { ?>checked<?php } ?> <?= $disabled['ENABLE_BILLING_SYSTEM'] ?>>
               <label class="form-check-label" for="ENABLE_BILLING_SYSTEM">Enable the automated billing system (for Direct Debit)</label>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <div class="form-switch mb-2">
+              <input class="form-check-input" type="checkbox" id="HIDE_MOVE_FEE_INFO" value="1" name="HIDE_MOVE_FEE_INFO" <?php if (bool($vars['HIDE_MOVE_FEE_INFO'])) { ?>checked<?php } ?> <?= $disabled['HIDE_MOVE_FEE_INFO'] ?>>
+              <label class="form-check-label" for="HIDE_MOVE_FEE_INFO">Hide squad fee information on squad move emails</label>
             </div>
           </div>
 
