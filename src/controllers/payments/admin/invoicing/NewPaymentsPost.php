@@ -119,7 +119,13 @@ try {
   $_SESSION['TENANT-' . app()->tenant->getId()]['NewPaymentErrorMessage'] = 'A database error occurred. Please try again. If the error occurs again, please try again later.';
 } catch (Exception $e) {
   reportError($e);
-  $db->rollBack();
+  if ($db->inTransaction()) {
+    try {
+      $db->rollBack();
+    } catch (Exception $e) {
+      // Ignore
+    }
+  }
 
   $_SESSION['TENANT-' . app()->tenant->getId()]['NewPaymentErrorMessage'] = $e->getMessage();
 }
