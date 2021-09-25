@@ -40,6 +40,7 @@ $vars = [
   'GLOBAL_PERSONAL_KEY' => null,
   'GLOBAL_PERSONAL_KEY_ID_NUMBER' => null,
   'REQUIRE_SQUAD_REP_FOR_APPROVAL' => true,
+  'HIDE_MOVE_FEE_INFO' => false,
 ];
 
 try {
@@ -122,6 +123,13 @@ try {
     $hide = 0;
   }
   app()->tenant->setKey('ENABLE_BILLING_SYSTEM', $hide);
+  
+  // 'HIDE_MOVE_FEE_INFO' => false,
+  $hide = 1;
+  if (!isset($_POST['HIDE_MOVE_FEE_INFO']) || !bool($_POST['HIDE_MOVE_FEE_INFO'])) {
+    $hide = 0;
+  }
+  app()->tenant->setKey('HIDE_MOVE_FEE_INFO', $hide);
 
   $vars['CLUB_ADDRESS'] = null;
   $addr = $_POST['CLUB_ADDRESS'];

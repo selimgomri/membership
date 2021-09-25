@@ -40,12 +40,14 @@ try {
         if ($user['Old']) {
           try {
             $leave = Squad::get($user['Old']);
-          } catch (Exception $e) {}
+          } catch (Exception $e) {
+          }
         }
         if ($user['New']) {
           try {
             $join = Squad::get($user['New']);
-          } catch (Exception $e) {}
+          } catch (Exception $e) {
+          }
         }
         $subject = $member->getFullName() . '\'s move has been cancelled';
         $message = '<p>Hello ' . htmlspecialchars($user['Forename']) . ',</p><p>We\'re writing to let you know that ' . htmlspecialchars($member->getForename()) . '\'s squad move (';
@@ -57,7 +59,9 @@ try {
           $message .= 'joining ' . $join->getName();
         }
         $message .= ') has been cancelled.</p>';
-        $message .= '<p>The fee for ' . htmlspecialchars($join->getName()) . ' is &pound;' . htmlspecialchars($join->getFee(false)) . '.</p>';
+        if (!$tenant->getBooleanOption('HIDE_MOVE_FEE_INFO')) {
+          $message .= '<p>The fee for ' . htmlspecialchars($join->getName()) . ' is &pound;' . htmlspecialchars($join->getFee(false)) . '.</p>';
+        }
         $message .= '<p>If you have any questions, please contact your coach or a member of club staff.</p>';
         $message .= '<p>Kind Regards,<br>The ' . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . ' Team</p>';
         notifySend(null, $subject, $message, $user['Forename'] . ' ' . $user['Surname'], $user['EmailAddress']);
