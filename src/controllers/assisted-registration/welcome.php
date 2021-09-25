@@ -21,8 +21,8 @@ include BASE_PATH . 'views/header.php';
       </div>
       
       <div class="alert alert-danger" role="alert">
-        <p class="mb-0"><strong>Assisted registration no longer automatically charges registration fees</strong></p>
-        <p class="mb-0">Ask an administrator to apply an invoice payment to the user's account once they have completed registration. The new onboarding tool will soon restore this functionality.</p>
+        <p class="mb-0"><strong>Assisted registration no longer automatically applies discounts to complex registration fees when adding a member to an existing account</strong></p>
+        <p class="mb-0">If you charge a family rate for club membership, the membership system won't apply a discount automatically. Ask an administrator to apply an invoice payment (credit) to the user's account once they have completed registration. The new onboarding tool will soon restore this functionality.</p>
       </div>
 
       <p>
