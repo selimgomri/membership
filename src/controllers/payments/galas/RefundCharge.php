@@ -119,7 +119,9 @@ include BASE_PATH . 'views/header.php';
 						<?php
 						$stripeCusomer = null;
 						try {
-							$stripeCusomer = (new User($entry['user']))->getStripeCustomerID();
+							if ($entry['user']) {
+								$stripeCusomer = (new User($entry['user']))->getStripeCustomerID();
+							}
 						} catch (Exception $e) {
 							reportError([
 								$e,
@@ -148,15 +150,15 @@ include BASE_PATH . 'views/header.php';
 										<h3><?= htmlspecialchars($entry['MForename'] . ' ' . $entry['MSurname']) ?></h3>
 
 										<?php if (!$entry['activeMember']) { ?>
-										<p>
-											<strong>Beware:</strong> This member has been deleted.
-										</p>
+											<p>
+												<strong>Beware:</strong> This member has been deleted.
+											</p>
 										<?php } ?>
 
 										<?php if (!$entry['user']) { ?>
-										<p>
-											<strong>Beware:</strong> This member has no linked user.
-										</p>
+											<p>
+												<strong>Beware:</strong> This member has no linked user.
+											</p>
 										<?php } ?>
 
 										<p class="mb-0">
