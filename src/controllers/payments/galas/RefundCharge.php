@@ -75,16 +75,7 @@ include BASE_PATH . 'views/header.php';
 
 		<div id="data" data-ajax-url="<?= htmlspecialchars(autoUrl('galas/payments/ajax-refund-handler')) ?>"></div>
 
-		<h1>Refund for <?= htmlspecialchars($gala['name']) ?></h1>
-		<?php if ($gala['fixed']) { ?>
-			<p class="lead mb-0">
-				This gala costs &pound;<?= htmlspecialchars($gala['fee']) ?>
-			</p>
-		<?php } else { ?>
-			<p class="lead mb-0">
-				There is no fixed fee for this gala
-			</p>
-		<?php } ?>
+		<h1 class="mb-0">Refund for <?= htmlspecialchars($gala['name']) ?></h1>
 	</div>
 </div>
 
