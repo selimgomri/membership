@@ -97,7 +97,7 @@ try {
   }
   $mandate = $getMandates->fetch(PDO::FETCH_ASSOC);
 
-  $hasNoSDD = !$mandate || (getUserOption($entry['user'], 'GalaDirectDebitOptOut'));
+  $hasNoSDD = !$mandate || (getUserOption($entryData['user'], 'GalaDirectDebitOptOut'));
 
   $hasNoDD = ($hasNoSDD && $tenant->getBooleanKey('USE_STRIPE_DIRECT_DEBIT')) || ($hasNoGCDD && !$tenant->getBooleanKey('USE_STRIPE_DIRECT_DEBIT'));
 
