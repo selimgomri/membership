@@ -18,7 +18,7 @@ if ($gala == null) {
 
 $galaData = new GalaPrices($db, $id);
 
-$getEntries = $db->prepare("SELECT members.UserID `user`, 25Free, 50Free, 100Free, 200Free, 400Free, 800Free, 1500Free, 25Back, 50Back, 100Back, 200Back, 25Breast, 50Breast, 100Breast, 200Breast, 25Fly, 50Fly, 100Fly, 200Fly, 100IM, 150IM, 200IM, 400IM, MForename, MSurname, Forename, Surname, EntryID, Charged, FeeToPay, MandateID, EntryProcessed Processed, Refunded, galaEntries.AmountRefunded, Intent, stripePayMethods.Brand, stripePayMethods.Last4, stripePayMethods.Funding, stripePayments.Paid StripePaid FROM ((((((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) LEFT JOIN users ON members.UserID = users.UserID) LEFT JOIN paymentPreferredMandate ON users.UserID = paymentPreferredMandate.UserID) LEFT JOIN stripePayments ON galaEntries.StripePayment = stripePayments.ID) LEFT JOIN stripePayMethods ON stripePayMethods.ID = stripePayments.Method) WHERE galaEntries.GalaID = ? AND Charged = ? ORDER BY MForename ASC, MSurname ASC");
+$getEntries = $db->prepare("SELECT members.UserID `user`, 25Free, 50Free, 100Free, 200Free, 400Free, 800Free, 1500Free, 25Back, 50Back, 100Back, 200Back, 25Breast, 50Breast, 100Breast, 200Breast, 25Fly, 50Fly, 100Fly, 200Fly, 100IM, 150IM, 200IM, 400IM, MForename, MSurname, Forename, Surname, EntryID, Charged, FeeToPay, MandateID, EntryProcessed Processed, Refunded, galaEntries.AmountRefunded, Intent, stripePayMethods.Brand, stripePayMethods.Last4, stripePayMethods.Funding, stripePayments.Paid StripePaid, members.Active activeMember, users.Active activeUser FROM ((((((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) LEFT JOIN users ON members.UserID = users.UserID) LEFT JOIN paymentPreferredMandate ON users.UserID = paymentPreferredMandate.UserID) LEFT JOIN stripePayments ON galaEntries.StripePayment = stripePayments.ID) LEFT JOIN stripePayMethods ON stripePayMethods.ID = stripePayments.Method) WHERE galaEntries.GalaID = ? AND Charged = ? ORDER BY MForename ASC, MSurname ASC");
 $getEntries->execute([$id, '1']);
 $entry = $getEntries->fetch(PDO::FETCH_ASSOC);
 
@@ -146,6 +146,18 @@ include BASE_PATH . 'views/header.php';
 								<div class="row">
 									<div class="col-sm-5 col-md-4 col-lg-6">
 										<h3><?= htmlspecialchars($entry['MForename'] . ' ' . $entry['MSurname']) ?></h3>
+
+										<?php if (!$entry['activeMember']) { ?>
+										<p>
+											<strong>Beware:</strong> This member has been deleted.
+										</p>
+										<?php } ?>
+
+										<?php if (!$entry['user']) { ?>
+										<p>
+											<strong>Beware:</strong> This member has no linked user.
+										</p>
+										<?php } ?>
 
 										<p class="mb-0">
 											<?= htmlspecialchars($entry['MForename']) ?> was entered in;
