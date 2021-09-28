@@ -89,7 +89,7 @@ try {
   }
 
   $hasNoGCDD = ($entryData['MandateID'] == null) || (getUserOption($entryData['user'], 'GalaDirectDebitOptOut'));
-  $stripeCusomer = (new User($entry['user']))->getStripeCustomer();
+  $stripeCusomer = (new User($entryData['user']))->getStripeCustomer();
   if ($stripeCusomer) {
     $getMandates->execute([
       $stripeCusomer->id,
