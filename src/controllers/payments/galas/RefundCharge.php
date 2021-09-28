@@ -117,7 +117,15 @@ include BASE_PATH . 'views/header.php';
 					<?php do { ?>
 						<?php $hasNoGCDD = ($entry['MandateID'] == null) || (getUserOption($entry['user'], 'GalaDirectDebitOptOut')); ?>
 						<?php
-						$stripeCusomer = (new User($entry['user']))->getStripeCustomerID();
+						$stripeCusomer = null;
+						try {
+							$stripeCusomer = (new User($entry['user']))->getStripeCustomerID();
+						} catch (Exception $e) {
+							reportError([
+								$e,
+								$entry,
+							]);
+						}
 						if ($stripeCusomer) {
 							$getMandates->execute([
 								$stripeCusomer,
