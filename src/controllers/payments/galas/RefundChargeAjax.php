@@ -89,7 +89,10 @@ try {
   }
 
   $hasNoGCDD = ($entryData['MandateID'] == null) || (getUserOption($entryData['user'], 'GalaDirectDebitOptOut'));
-  $stripeCusomer = (new User($entry['user']))->getStripeCustomer();
+  $stripeCusomer = null;
+  if ($entryData['user']) {
+    $stripeCusomer = (new User($entryData['user']))->getStripeCustomer();
+  }
   if ($stripeCusomer) {
     $getMandates->execute([
       $stripeCusomer->id,
@@ -97,7 +100,7 @@ try {
   }
   $mandate = $getMandates->fetch(PDO::FETCH_ASSOC);
 
-  $hasNoSDD = !$mandate || (getUserOption($entry['user'], 'GalaDirectDebitOptOut'));
+  $hasNoSDD = !$mandate || (getUserOption($entryData['user'], 'GalaDirectDebitOptOut'));
 
   $hasNoDD = ($hasNoSDD && $tenant->getBooleanKey('USE_STRIPE_DIRECT_DEBIT')) || ($hasNoGCDD && !$tenant->getBooleanKey('USE_STRIPE_DIRECT_DEBIT'));
 
@@ -220,33 +223,36 @@ try {
     $entryData['EntryID']
   ]);
 
-  $message = '<p>We\'ve issued a refund for ' . htmlspecialchars($entryData['MForename']) .  '\'s entry into ' . htmlspecialchars($gala['name']) . '.</p>';
+  if ($entryData['user']) {
 
-  $message .= '<p>This refund is to the value of <strong>&pound;' . $amountString . '</strong>.</p>';
+    $message = '<p>We\'ve issued a refund for ' . htmlspecialchars($entryData['MForename']) .  '\'s entry into ' . htmlspecialchars($gala['name']) . '.</p>';
 
-  if ($refundAmount + $entryData['AmountRefunded'] > $entryData['AmountRefunded']) {
-    $message .= '<p>Please note that this brings the total amount refunded for this gala to &pound;' . $totalString . '</p>';
+    $message .= '<p>This refund is to the value of <strong>&pound;' . $amountString . '</strong>.</p>';
+
+    if ($refundAmount + $entryData['AmountRefunded'] > $entryData['AmountRefunded']) {
+      $message .= '<p>Please note that this brings the total amount refunded for this gala to &pound;' . $totalString . '</p>';
+    }
+
+    if ($entryData['MandateID'] != null && !getUserOption($entryData['user'], 'GalaDirectDebitOptOut') && ($entryData['Intent'] == null || !bool($entryData['StripePaid']))) {
+      $message .= '<p>This refund has been applied as a credit to your club account. This means you will either;</p>';
+      $message .= '<ul><li>If you have not paid the bill by direct debit for this gala yet, you will automatically be charged the correct amount for ' . htmlspecialchars($gala['name']) . ' on your next bill as refunds will be applied automatically</li><li>If you have already paid the bill by direct debit for this gala, the credit applied to your account will give you a discount on next month\'s bill</li></ul>';
+    } else if ($entryData['Intent'] != null && bool($entryData['StripePaid'])) {
+      $message .= '<p>We\'ve refunded this payment to your original payment card.</p>';
+    } else {
+      $message .= '<p>As you don\'t pay your club fees by direct debit or have opted out of paying for galas by direct debit, you\'ll need to collect this refund from the treasurer or gala coordinator.</p>';
+    }
+
+    $message .= '<p>Kind regards,<br> The ' . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . ' Team</p>';
+
+    $notify->execute([
+
+      $entryData['user'],
+      'Queued',
+      'Refund for Rejections: ' . $entryData['MForename'] .  '\'s ' . $gala['name'] . ' Entry',
+      $message,
+      'Galas'
+    ]);
   }
-
-  if ($entryData['MandateID'] != null && !getUserOption($entryData['user'], 'GalaDirectDebitOptOut') && ($entryData['Intent'] == null || !bool($entryData['StripePaid']))) {
-    $message .= '<p>This refund has been applied as a credit to your club account. This means you will either;</p>';
-    $message .= '<ul><li>If you have not paid the bill by direct debit for this gala yet, you will automatically be charged the correct amount for ' . htmlspecialchars($gala['name']) . ' on your next bill as refunds will be applied automatically</li><li>If you have already paid the bill by direct debit for this gala, the credit applied to your account will give you a discount on next month\'s bill</li></ul>';
-  } else if ($entryData['Intent'] != null && bool($entryData['StripePaid'])) {
-    $message .= '<p>We\'ve refunded this payment to your original payment card.</p>';
-  } else {
-    $message .= '<p>As you don\'t pay your club fees by direct debit or have opted out of paying for galas by direct debit, you\'ll need to collect this refund from the treasurer or gala coordinator.</p>';
-  }
-
-  $message .= '<p>Kind regards,<br> The ' . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . ' Team</p>';
-
-  $notify->execute([
-
-    $entryData['UserID'],
-    'Queued',
-    'Refund for Rejections: ' . $entryData['MForename'] .  '\'s ' . $gala['name'] . ' Entry',
-    $message,
-    'Galas'
-  ]);
 
   $db->commit();
 

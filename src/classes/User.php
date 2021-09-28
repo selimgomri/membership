@@ -29,7 +29,7 @@ class User extends Person
   {
     $db = app()->db;
     // Get the user
-    $query = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile FROM users WHERE UserID = ? AND Active");
+    $query = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile FROM users WHERE UserID = ?");
     $query->execute([$this->id]);
     $row = $query->fetch(PDO::FETCH_ASSOC);
 
