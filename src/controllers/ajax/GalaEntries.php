@@ -1,6 +1,7 @@
 <?php
 
 use CLSASC\EquivalentTime\EquivalentTime;
+
 $db = app()->db;
 $tenant = app()->tenant;
 
@@ -13,6 +14,9 @@ if ($_REQUEST["sex"] == "m") {
 } else {
   //halt(500);
 }
+
+// Get squad list
+$getSquads = $db->prepare("SELECT `SquadName` `name` FROM squads INNER JOIN squadMembers ON squadMembers.Squad = squads.SquadID WHERE squadMembers.Member = ? ORDER BY SquadFee DESC, SquadName ASC;");
 
 $sqlArgs = [];
 $sqlArgs[] = $tenant->getId();
@@ -31,20 +35,18 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
       $sql = "SELECT * FROM (((galaEntries INNER JOIN members ON
       galaEntries.MemberID = members.MemberID) INNER JOIN galas ON
       galaEntries.GalaID = galas.GalaID) LEFT JOIN clubMembershipClasses ON members.NGBCategory = clubMembershipClasses.ID) WHERE galas.Tenant = ? AND galas.GalaDate >= CURDATE() " .
-      $sex . " AND members.MSurname LIKE ? COLLATE utf8mb4_general_ci ORDER BY galas.ClosingDate
+        $sex . " AND members.MSurname LIKE ? COLLATE utf8mb4_general_ci ORDER BY galas.ClosingDate
       ASC, galas.GalaDate DESC, members.MSurname ASC, members.MForename ASC";
       $sqlArgs[] = '%' . $search . '%';
-    }
-    else {
+    } else {
       $sql = "SELECT * FROM (((galaEntries INNER JOIN members ON
       galaEntries.MemberID = members.MemberID) INNER JOIN galas ON
       galaEntries.GalaID = galas.GalaID) LEFT JOIN clubMembershipClasses ON members.NGBCategory = clubMembershipClasses.ID) WHERE galas.Tenant = ? AND galas.GalaID = ? " .
-      $sex . " AND members.MSurname LIKE ? COLLATE utf8mb4_general_ci ORDER BY members.MSurname ASC, members.MForename ASC";
+        $sex . " AND members.MSurname LIKE ? COLLATE utf8mb4_general_ci ORDER BY members.MSurname ASC, members.MForename ASC";
       $sqlArgs[] = $galaID;
       $sqlArgs[] = '%' . $search . '%';
     }
-  }
-  elseif ((!isset($_REQUEST["galaID"])) && (isset($_REQUEST["search"]))) {
+  } elseif ((!isset($_REQUEST["galaID"])) && (isset($_REQUEST["search"]))) {
     // get the search term parameter from request
     $search = $_REQUEST["search"];
 
@@ -52,10 +54,9 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
     $sql = "SELECT * FROM ((galaEntries INNER JOIN members ON
     galaEntries.MemberID = members.MemberID) INNER JOIN galas ON
     galaEntries.GalaID = galas.GalaID) WHERE galas.Tenant = ? AND galas.GalaDate >= CURDATE() " .
-    $sex . " AND members.MSurname LIKE ? COLLATE utf8mb4_general_ci";
+      $sex . " AND members.MSurname LIKE ? COLLATE utf8mb4_general_ci";
     $sqlArgs[] = '%' . $search . '%';
-  }
-  elseif ((isset($_REQUEST["galaID"])) && (!isset($_REQUEST["search"]))) {
+  } elseif ((isset($_REQUEST["galaID"])) && (!isset($_REQUEST["search"]))) {
     // get the search term parameter from request
     $galaID = $_REQUEST["galaID"];
 
@@ -63,18 +64,16 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
     $sql = "SELECT * FROM ((galaEntries INNER JOIN members ON
     galaEntries.MemberID = members.MemberID) INNER JOIN galas ON
     galaEntries.GalaID = galas.GalaID) WHERE galas.Tenant = ? " .
-    $sex . " AND galas.GalaID = ?";
+      $sex . " AND galas.GalaID = ?";
     $sqlArgs[] = $galaID;
-  }
-  else {
+  } else {
     // Error
     halt(404);
   }
 
   if ($galaID == "Select a gala") {
     echo '<div class="ajaxPlaceholder"><strong>Select a Gala</strong> <br>We\'ll be able to load entries if you select a gala</div>';
-  }
-  else {
+  } else {
 
     $results = $db->prepare($sql);
     $results->execute($sqlArgs);
@@ -97,7 +96,8 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
       $hyTekPrintDate = "";
       if ($row['HyTek'] == 1) {
         $hyTekPrintDate = " <br>DoB: " . date('j F Y', strtotime($row['DateOfBirth'])) . "";
-        $type; $typeB;
+        $type;
+        $typeB;
         if ($row['CourseLength'] == "SHORT") {
           $type = "SCPB";
           $typeB = "LCPB";
@@ -115,29 +115,43 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
       }
 
       // First part of the row content
-      $content .= "<tr><td><strong>" . htmlspecialchars($row['MForename'] . " " .
-      $row['MSurname'])  . "</strong>" . $hyTekPrintDate . "<br><a
+      $content .= "<tr><td><strong><a href=\"" . htmlspecialchars(autoUrl('members/' . $row['MemberID'])) . "\">" . htmlspecialchars($row['MForename'] . " " .
+        $row['MSurname'])  . "</a></strong>" . $hyTekPrintDate . "<br><a
       class=\"d-print-none\"
       href=\"https://www.swimmingresults.org/biogs/biogs_details.php?tiref=" .
-      htmlspecialchars($row['ASANumber']) . "\" target=\"_blank\" title=\"Click to see times\">" .
-      htmlspecialchars($row['ASANumber']) . " <i class=\"fa fa-external-link\"
+        htmlspecialchars($row['ASANumber']) . "\" target=\"_blank\" title=\"Click to see times\">" .
+        htmlspecialchars($row['ASANumber']) . " <i class=\"fa fa-external-link\"
       aria-hidden=\"true\"></i></a><span class=\"d-none d-print-inline\">" . htmlspecialchars(app()->tenant->getKey('NGB_NAME')) . ": " .
-      htmlspecialchars($row['ASANumber']) . "</span><br>
+        htmlspecialchars($row['ASANumber']) . "</span><br>
       <span class=\"small\">" . htmlspecialchars($row['Name']) . "<br>
-      " . htmlspecialchars($row['GalaName']) . "<br><a class=\"d-print-none\" href=\"" . autoUrl('galas/entries/' . $row['EntryID']) . "\">Edit Entry</a><br><a class=\"d-print-none\" href=\"" . autoUrl('galas/entries/' . $row['EntryID']) . "/manual-time\">Set Manual Times</a></span></td>";
+      " . htmlspecialchars($row['GalaName']) . "<br><a class=\"d-print-none\" href=\"" . autoUrl('galas/entries/' . $row['EntryID']) . "\">Edit Entry</a><br><a class=\"d-print-none\" href=\"" . autoUrl('galas/entries/' . $row['EntryID']) . "/manual-time\">Set Manual Times</a></span>";
+
+      $getSquads->execute([
+        $row['MemberID']
+      ]);
+      $squad = $getSquads->fetchColumn();
+      if ($squad) {
+        $content .= '<p class="mb-0 mt-3 small"><strong>Member of</strong></p><ul class="list-unstyled small">';
+        do {
+          $content .= '<li>' . htmlspecialchars($squad) . '</li>';
+        } while ($squad = $getSquads->fetchColumn());
+        $content .= '</ul>';
+      }
+
+      $content .= '</td>';
 
       // Arrays of swims used to check whever to print the name of the swim entered
       // BEWARE This is in an order to ease inputting data into SportSystems, contrary to these arrays in other files
-      $swimsArray = ['25Free','50Free','100Free','200Free','400Free','800Free','1500Free','25Back','50Back','100Back','200Back','25Breast','50Breast','100Breast','200Breast','25Fly','50Fly','100Fly','200Fly','100IM','150IM','200IM','400IM',];
-      $swimsTextArray = ['25&nbsp;Free','50&nbsp;Free','100&nbsp;Free','200&nbsp;Free','400&nbsp;Free','800&nbsp;Free','1500&nbsp;Free','25&nbsp;Back','50&nbsp;Back','100&nbsp;Back','200&nbsp;Back','25&nbsp;Breast','50&nbsp;Breast','100&nbsp;Breast','200&nbsp;Breast','25&nbsp;Fly','50&nbsp;Fly','100&nbsp;Fly','200&nbsp;Fly','100&nbsp;IM','150&nbsp;IM','200&nbsp;IM','400&nbsp;IM',];
-      $swimsTimeArray = ['25FreeTime','50FreeTime','100FreeTime','200FreeTime','400FreeTime','800FreeTime','1500FreeTime','25BackTime','50BackTime','100BackTime','200BackTime','25BreastTime','50BreastTime','100BreastTime','200BreastTime','25FlyTime','50FlyTime','100FlyTime','200FlyTime','100IMTime','150IMTime','200IMTime','400IMTime',];
+      $swimsArray = ['25Free', '50Free', '100Free', '200Free', '400Free', '800Free', '1500Free', '25Back', '50Back', '100Back', '200Back', '25Breast', '50Breast', '100Breast', '200Breast', '25Fly', '50Fly', '100Fly', '200Fly', '100IM', '150IM', '200IM', '400IM',];
+      $swimsTextArray = ['25&nbsp;Free', '50&nbsp;Free', '100&nbsp;Free', '200&nbsp;Free', '400&nbsp;Free', '800&nbsp;Free', '1500&nbsp;Free', '25&nbsp;Back', '50&nbsp;Back', '100&nbsp;Back', '200&nbsp;Back', '25&nbsp;Breast', '50&nbsp;Breast', '100&nbsp;Breast', '200&nbsp;Breast', '25&nbsp;Fly', '50&nbsp;Fly', '100&nbsp;Fly', '200&nbsp;Fly', '100&nbsp;IM', '150&nbsp;IM', '200&nbsp;IM', '400&nbsp;IM',];
+      $swimsTimeArray = ['25FreeTime', '50FreeTime', '100FreeTime', '200FreeTime', '400FreeTime', '800FreeTime', '1500FreeTime', '25BackTime', '50BackTime', '100BackTime', '200BackTime', '25BreastTime', '50BreastTime', '100BreastTime', '200BreastTime', '25FlyTime', '50FlyTime', '100FlyTime', '200FlyTime', '100IMTime', '150IMTime', '200IMTime', '400IMTime',];
 
       // Create the cell and unordered list
       $content .= "<td><ul class=\"mb-0 list-unstyled\">";
 
       // Print <li>Swim Name</li> for each entry
       if (!bool($row['HyTek'])) {
-        for ($y=0; $y<sizeof($swimsArray); $y++) {
+        for ($y = 0; $y < sizeof($swimsArray); $y++) {
           if ($row[$swimsArray[$y]] == 1) {
             $content .= "<li><strong>" . ($swimsTextArray[$y]) . '</strong>';
             if (isset($row[$swimsTimeArray[$y]]) && $row[$swimsTimeArray[$y]]) {
@@ -147,11 +161,13 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
           }
         }
       } else {
-        for ($y=0; $y<sizeof($swimsArray); $y++) {
+        for ($y = 0; $y < sizeof($swimsArray); $y++) {
           $output = "";
           $mins = $secs = $hunds = 0;
           if ($row[$swimsArray[$y]] == 1) {
-            $course; $to; $time;
+            $course;
+            $to;
+            $time;
             if ($row['CourseLength'] == "SHORT") {
               $course = "50m";
               $to = "25m";
@@ -229,10 +245,10 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
       $content .= "
       <div class=\"form-check\">
         <input type=\"checkbox\" value=\"1\" ";
-        if ($row['EntryProcessed'] == 1) {
-          $content .= ' checked ';
-        }
-        $content .= " data-button-action=\"mark-processed\" class=\"form-check-input\" id=\"processedEntry-" . $row['EntryID'] . "\">
+      if ($row['EntryProcessed'] == 1) {
+        $content .= ' checked ';
+      }
+      $content .= " data-button-action=\"mark-processed\" class=\"form-check-input\" id=\"processedEntry-" . $row['EntryID'] . "\">
         <label class=\"form-check-label\" for=\"processedEntry-" . $row['EntryID'] . "\">Processed?</label>
       </div>";
 
@@ -266,13 +282,10 @@ if ($access == "Committee" || $access == "Admin" || $access == "Coach" || $acces
     // Output to browser for AJAX
     if ($count > 0) {
       echo $content;
-    }
-    else {
+    } else {
       echo '<div class="alert alert-warning"><strong>We could not find any entries matching that search</strong> <br>Try another search by selecting a new gala or changing the surname you searched for</div>';
     }
   }
-}
-else {
+} else {
   halt(404);
 }
-?>
