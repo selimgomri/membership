@@ -10,6 +10,9 @@ tinymce.init({
   remove_script_host: false,
   document_base_url: document.getElementById('message').dataset.documentBaseUrl,
   selector: '#message',
+  images_upload_url: document.getElementById('message').dataset.imagesUploadUrl,
+  automatic_uploads: true,
+  images_upload_credentials: true,
   branding: false,
   plugins: [
     'autolink lists link image charmap print preview anchor',

@@ -61,6 +61,10 @@ if ($access == "Admin" || $access == "Coach" || $access == "Galas" || $rep) {
   		include 'Email.php';
   	});
 
+		$this->post('/image-upload', function() {
+  		include 'ImageUpload.php';
+  	});
+
   	$this->post('/', function() {
   		include 'EmailQueuer.php';
   	});

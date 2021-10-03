@@ -265,7 +265,7 @@ include BASE_PATH . "views/notifyMenu.php";
           <span class="font-monospace">User Name</span>,".
         </em>
       </p>
-      <textarea class="form-control" id="message" name="message" rows="10" data-tinymce-css-location="<?= htmlspecialchars(autoUrl("public/css/tinymce.css")) ?>" data-documentBaseUrl="<?= htmlspecialchars(autoUrl("notify/new/")) ?>" required><?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['NotifyPostData']['message'])) { ?><?= htmlspecialchars($_SESSION['TENANT-' . app()->tenant->getId()]['NotifyPostData']['message']) ?><?php } ?></textarea>
+      <textarea class="form-control" id="message" name="message" rows="10" data-tinymce-css-location="<?= htmlspecialchars(autoUrl("public/css/tinymce.css")) ?>" data-document-base-url="<?= htmlspecialchars(autoUrl("notify/new/")) ?>" data-images-upload-url="<?= htmlspecialchars(autoUrl("notify/new/image-upload")) ?>" required><?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['NotifyPostData']['message'])) { ?><?= htmlspecialchars($_SESSION['TENANT-' . app()->tenant->getId()]['NotifyPostData']['message']) ?><?php } ?></textarea>
     </div>
 
     <input type="hidden" name="MAX_FILE_SIZE" value="10485760">
