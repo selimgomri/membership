@@ -154,7 +154,7 @@ if (!function_exists('chesterStandardMenu')) {
                     <a class="dropdown-item" href="<?= autoUrl("members/access-keys") ?>">Access keys</a>
                   <?php } ?>
                   <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Admin") { ?>
-                    <a class="dropdown-item" href="<?= autoUrl("renewal") ?>">Membership renewal</a>
+                    <a class="dropdown-item" href="<?= autoUrl("memberships/renewal") ?>">Membership renewal</a>
                     <a class="dropdown-item" href="<?= autoUrl("members/orphaned") ?>">Orphan swimmers</a>
                   <?php } ?>
                   <a class="dropdown-item" href="<?= autoUrl("squad-reps") ?>">Squad reps</a>
@@ -199,17 +199,15 @@ if (!function_exists('chesterStandardMenu')) {
                     <a class="dropdown-item" href="<?= autoUrl("users") ?>">
                       All Users
                     </a>
+                    <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("onboarding")) ?>">
+                      Add a user (member onboarding)
+                    </a>
                     <a class="dropdown-item" href="<?= autoUrl("users/add") ?>">
-                      Add a user
+                      Add a user (admin, coach, volunteer)
                     </a>
                     <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("assisted-registration")) ?>">
-                      Assisted account registration
+                      Assisted account registration <span class="badge bg-danger">Deprecated</span>
                     </a>
-                    <?php if (bool(getenv('IS_DEV'))) { ?>
-                      <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("onboarding")) ?>">
-                        User onboarding
-                      </a>
-                    <?php } ?>
                     <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') { ?>
                       <a class="dropdown-item" href="<?= autoUrl("payments/user-mandates") ?>">
                         User direct debit mandates

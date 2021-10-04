@@ -624,6 +624,10 @@ if (empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) {
     include BASE_PATH . 'controllers/emergencycontacts/router.php';
   });
 
+  $this->group('/payments', function () {
+    include BASE_PATH . 'controllers/payments/router.php';
+  });
+
   $this->group('/webhooks', function () {
     $this->group('/payments', function () {
       include BASE_PATH . 'controllers/payments/webhooks.php';

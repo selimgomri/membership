@@ -79,13 +79,13 @@ include BASE_PATH . "views/header.php";
 
         <div class="mb-3">
           <div class="form-check">
-            <input class="form-check-input" type="radio" name="charge-fees" id="charge-fees-yes" <?php if ($session->chargeOutstanding) { ?>checked<?php } ?> value="1" data-toggle="pro-rata-box" <?php if (!app()->tenant->getBooleanKey('USE_DIRECT_DEBIT') || $session->renewal) { ?>disabled<?php } ?>>
+            <input class="form-check-input" type="radio" name="charge-fees" id="charge-fees-yes" <?php if ($session->chargeOutstanding) { ?>checked<?php } ?> value="1" data-toggle="pro-rata-box" <?php if (!app()->tenant->getBooleanKey('USE_DIRECT_DEBIT') || $session->renewal || true) { ?>disabled<?php } ?>>
             <label class="form-check-label" for="charge-fees-yes">
               Charge fees up to first Direct Debit date
             </label>
           </div>
           <div class="form-check">
-            <input class="form-check-input" type="radio" name="charge-fees" id="charge-fees-no" <?php if (!$session->chargeOutstanding) { ?>checked<?php } ?> value="0" data-toggle="pro-rata-box" <?php if (!app()->tenant->getBooleanKey('USE_DIRECT_DEBIT') || $session->renewal) { ?>disabled<?php } ?>>
+            <input class="form-check-input" type="radio" name="charge-fees" id="charge-fees-no" <?php if (!$session->chargeOutstanding) { ?>checked<?php } ?> value="0" data-toggle="pro-rata-box" <?php if (!app()->tenant->getBooleanKey('USE_DIRECT_DEBIT') || $session->renewal || true) { ?>disabled<?php } ?>>
             <label class="form-check-label" for="charge-fees-no">
               Ignore missed fees
             </label>
@@ -167,7 +167,7 @@ include BASE_PATH . "views/header.php";
           <div class="form-check">
             <input class="form-check-input" type="checkbox" value="1" id="task-communications_options" name="task-communications_options" <?php if ($session->stages->communications_options->required) { ?>checked<?php } ?> <?php if ($session->stages->communications_options->completed || $session->stages->communications_options->required_locked) { ?>disabled<?php } ?>>
             <label class="form-check-label" for="task-communications_options">
-              Address details
+              Communications options
             </label>
           </div>
 
@@ -243,7 +243,7 @@ include BASE_PATH . "views/header.php";
         <p class="mb-2">
           Registration fees
         </p>
-        <?php if ($session->status != 'complete' || $session->batch) { ?>
+        <?php if ($session->status != 'complete' && $session->batch) { ?>
           <p>
             <a href="<?= htmlspecialchars(autoUrl("memberships/batches/" . $session->batch . "/edit")) ?>" class="btn btn-success">Edit fees</a>
           </p>

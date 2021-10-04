@@ -52,6 +52,8 @@ try {
     if ($status == 'complete') {
       $completedAt = (new DateTime('now', new DateTimeZone('UTC')))->format('Y-m-d H:i:s');
     }
+  } else if ($status == 'not_ready' && isset($_POST['action']) && $_POST['action'] == 'send') {
+    $status = 'pending';
   }
 
   $dueDate = $session->dueDate->format('Y-m-d');
