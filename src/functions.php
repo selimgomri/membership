@@ -285,6 +285,10 @@ function autoUrl($relative, $includeClub = true)
     $rootUrl = 'https://' . app('request')->hostname . '/';
   }
 
+  if ($includeClub && app()->tenant && app()->tenant->getDomain()) {
+    $rootUrl = 'https://' . app()->tenant->getDomain() . '/';
+  }
+
   return rtrim($rootUrl . $relative, '/');
 }
 
