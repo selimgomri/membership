@@ -494,7 +494,7 @@ include BASE_PATH . "views/header.php";
           </p>
 
           <p>
-            Once fully ready, you'll see a list of current memberships for this user's linked members. In the meantime, please <strong>only use the features in this section if you're taking part in our beta trials</strong>.
+            <strong>Please only use the features in this section if you're taking part in our beta trials.</strong>
           </p>
 
           <p class="">

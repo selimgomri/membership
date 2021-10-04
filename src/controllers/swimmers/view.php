@@ -25,6 +25,16 @@ if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin' || $
 
 $squads = $member->getSquads();
 
+// Memberships held
+$today = (new DateTime('now', new DateTimeZone('Europe/London')))->format('Y-m-d');
+$getMemberships = $db->prepare("SELECT clubMembershipClasses.Name membershipName, clubMembershipClasses.Description description, memberships.Amount amount, memberships.PaymentInfo paymentInfo, membershipYear.Name yearName, memberships.StartDate starts, memberships.EndDate ends FROM memberships INNER JOIN clubMembershipClasses ON memberships.Membership = clubMembershipClasses.ID INNER JOIN membershipYear ON memberships.Year = membershipYear.ID WHERE Member = ? AND memberships.StartDate <= ? AND memberships.EndDate >= ? ORDER BY starts ASC, membershipName ASC");
+$getMemberships->execute([
+  $id,
+  $today,
+  $today,
+]);
+$membership = $getMemberships->fetch(PDO::FETCH_OBJ);
+
 $pagetitle = htmlspecialchars($member->getFullName());
 
 $pageHead = [
@@ -628,6 +638,40 @@ include BASE_PATH . 'views/header.php';
 
 
       </dl>
+
+      <h3>Current assigned memberships</h3>
+      <?php if ($membership) { ?>
+
+        <?php do { 
+          $start = new DateTime($membership->starts, new DateTimeZone('Europe/London'));
+          $end = new DateTime($membership->ends, new DateTimeZone('Europe/London'));
+          ?>
+          <div class="card card-body mb-3">
+            <h4><?= htmlspecialchars($membership->membershipName) ?> <small class="text-muted">Paid <?= htmlspecialchars(MoneyHelpers::formatCurrency(MoneyHelpers::intToDecimal($membership->amount), 'GBP')) ?></small></h4>
+            <p class="mb-0">
+              <?= htmlspecialchars($start->format('j F Y')) ?> - <?= htmlspecialchars($end->format('j F Y')) ?>
+            </p>
+          </div>
+        <?php } while ($membership = $getMemberships->fetch(PDO::FETCH_OBJ)); ?>
+
+        <a href="<?= htmlspecialchars(autoUrl('users/' . $user->getId() . '/new-membership-batch')) ?>">Create a membership batch</a> to add more memberships.
+
+      <?php } else { ?>
+        <div class="alert alert-warning">
+          <p class="mb-0">
+            <strong><?= htmlspecialchars($member->getForename()) ?> currently has no assigned memberships</strong>
+          </p>
+          <?php if ($user) { ?>
+            <p class="mb-0">
+              <a href="<?= htmlspecialchars(autoUrl('users/' . $user->getId() . '/new-membership-batch')) ?>" class="alert-link">Create a membership batch</a> to add memberships.
+            </p>
+          <?php } else { ?>
+            <p class="mb-0">
+              <a href="<?= htmlspecialchars(autoUrl('onboarding/new')) ?>" class="alert-link">Create an onboarding session</a> to create or assign a user and add memberships.
+            </p>
+          <?php } ?>
+        </div>
+      <?php } ?>
 
       <hr>
 

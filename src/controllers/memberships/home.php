@@ -130,6 +130,13 @@ include BASE_PATH . "views/header.php";
 					</a>
 				</p>
 
+				<h2>Onboarding Sessions</h2>
+				<p>
+					<a href="<?= htmlspecialchars(autoUrl('onboarding/all')) ?>" class="btn btn-primary">
+						View, create or edit onboarding sessions
+					</a>
+				</p>
+
 				<h2>Legacy Membership Renewal</h2>
 
 				<p>

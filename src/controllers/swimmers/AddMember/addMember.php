@@ -169,13 +169,6 @@ include BASE_PATH . "views/swimmersMenu.php"; ?>
 					<small id="clubmembhelp" class="form-text text-muted">Tick the box if this swimmer will not pay any annual club membership fees.</small>
 				</div>
 
-				<div class="mb-3">
-					<div class="form-check">
-						<input class="form-check-input" type="checkbox" id="transfer" name="transfer" value="1" aria-describedby="transfer-help">
-						<label class="form-check-label" for="transfer">Transferring from another club?</label>
-					</div>
-					<small id="transfer-help" class="form-text text-muted">Tick the box if this swimmer is transferring from another swimming club - They will not be charged for <?= htmlspecialchars($tenant->getKey('NGB_NAME')) ?> membership fees. If it is almost a new Swim England membership year and this swimmer will not be completing membership renewal then leave the box unticked so they pay <?= htmlspecialchars($tenant->getKey('NGB_NAME')) ?> membership fees when registering.</small>
-				</div>
 				<?= SCDS\CSRF::write() ?>
 				<button type="submit" class="btn btn-success">Add Member</button>
 
