@@ -137,6 +137,17 @@ include BASE_PATH . "views/header.php";
 					</a>
 				</p>
 
+				<h2>Membership Batches</h2>
+				<p>
+					<a href="<?= htmlspecialchars(autoUrl('memberships/batches/all')) ?>" class="btn btn-primary">
+						View or edit batches
+					</a>
+				</p>
+
+				<p>
+					Create a new membership batch by navigating to the user you want to issue a batch for.
+				</p>
+
 				<h2>Legacy Membership Renewal</h2>
 
 				<p>

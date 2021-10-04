@@ -48,6 +48,7 @@ include BASE_PATH . "views/header.php";
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl("memberships")) ?>">Memberships</a></li>
+        <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl("memberships/batches")) ?>">Batches</a></li>
         <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl("memberships/batches/$id")) ?>">Batch</a></li>
         <li class="breadcrumb-item active" aria-current="page">Edit</li>
       </ol>

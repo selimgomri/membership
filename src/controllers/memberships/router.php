@@ -41,6 +41,10 @@ $this->group('/renewal', function() {
 });
 
 $this->group('/batches', function() {
+  $this->get('/', function() {
+    include 'batches/list.php';
+  });
+
   $this->get('/{id}:uuid', function($id) {
     include 'batches/batch.php';
   });
