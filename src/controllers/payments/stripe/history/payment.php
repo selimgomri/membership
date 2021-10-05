@@ -146,9 +146,13 @@ if (isset($payment->charges->data[0]->payment_method_details->card)) {
 $date = new DateTime($pm['DateTime'], new DateTimeZone('UTC'));
 $date->setTimezone(new DateTimeZone('Europe/London'));
 
+$notReady = false;
+
 $countries = getISOAlpha2Countries();
 
 ?>
+
+<div id="data" data-ajax-url="<?= htmlspecialchars(autoUrl('payments/card-transactions/refund')) ?>" data-csrf="<?= htmlspecialchars(\SCDS\CSRF::getValue()) ?>"></div>
 
 <div class="bg-light mt-n3 py-3 mb-3">
   <div class="container-xl">
@@ -308,27 +312,85 @@ $countries = getISOAlpha2Countries();
       <p class="lead">All items in this payment</p>
 
       <?php if ($item = $paymentItems->fetch(PDO::FETCH_ASSOC)) { ?>
-        <ul class="list-group mb-3">
-          <?php do { ?>
+        <ul class="list-group mb-3" id="pay-items">
+          <?php do {
+            $amountRefundable = $item['Amount'] - $item['AmountRefunded'];
+            $refundSource = getCardBrand($card->brand) . ' ' . $card->funding . ' card ending ' . $card->last4;
+          ?>
             <li class="list-group-item">
-              <h3><?= htmlspecialchars($item['Name']) ?></h3>
-              <p><?= htmlspecialchars($item['Description']) ?></p>
+              <div class="row">
+                <div class="col-sm">
+                  <h3><?= htmlspecialchars($item['Name']) ?></h3>
+                  <p><?= htmlspecialchars($item['Description']) ?></p>
 
-              <p class="mb-0">&pound;<?= (string) \Brick\Math\BigDecimal::of((string) $item['Amount'])->withPointMovedLeft(2)->toScale(2) ?></p>
+                  <p>&pound;<?= (string) \Brick\Math\BigDecimal::of((string) $item['Amount'])->withPointMovedLeft(2)->toScale(2) ?></p>
+
+                  <div id="<?= $item['ID'] ?>-amount-refunded">
+                    <?php if ($item['AmountRefunded'] > 0) { ?>
+                      <p>
+                        <strong>&pound;<?= (string) (\Brick\Math\BigDecimal::of((string) $item['AmountRefunded']))->withPointMovedLeft(2)->toScale(2) ?></strong> has already been refunded!
+                      </p>
+                    <?php } ?>
+                  </div>
+                </div>
+                <?php if (app()->user->hasPermission('Admin') && !$ents) { ?>
+                  <div class="col">
+                    <form id="refund-form-<?= $item['ID'] ?>">
+                      <div class="row">
+                        <div class="col-xs col-sm-12 col-xl-6">
+                          <div class="mb-3 mb-0">
+                            <label class="form-label" for="<?= $entry['EntryID'] ?>-amount">
+                              Amount charged
+                            </label>
+                            <div class="input-group">
+                              <div class="input-group-text font-monospace">&pound;</div>
+                              <input type="number" class="form-control font-monospace" id="<?= $item['ID'] ?>-amount" name="<?= $item['ID'] ?>-amount" placeholder="0.00" value="<?= htmlspecialchars((string) (\Brick\Math\BigDecimal::of((string) $item['Amount'])->withPointMovedLeft(2)->toScale(2))) ?>" disabled>
+                            </div>
+                          </div>
+                          <div class="d-none d-sm-block d-xl-none mb-3"></div>
+                        </div>
+
+                        <div class="col-xs col-sm-12 col-xl-6">
+                          <div class="mb-3 mb-0">
+                            <label class="form-label" for="<?= $item['ID'] ?>-refund">
+                              Amount to refund
+                            </label>
+                            <div class="input-group">
+                              <div class="input-group-text font-monospace">&pound;</div>
+                              <input type="number" pattern="[0-9]*([\.,][0-9]*)?" class="form-control font-monospace refund-amount-field" id="<?= $item['ID'] ?>-refund" name="<?= $item['ID'] ?>-refund" placeholder="0.00" min="0" max="<?= htmlspecialchars((string) (\Brick\Math\BigDecimal::of((string) $amountRefundable)->withPointMovedLeft(2)->toScale(2))) ?>" data-max-refundable="<?= $amountRefundable ?>" data-amount-refunded="<?= $item['AmountRefunded'] ?>" step="0.01" <?php if ($amountRefundable == 0 || $notReady) { ?>disabled<?php } ?>>
+                            </div>
+                          </div>
+                        </div>
+
+                        <?php if (!($amountRefundable == 0 || $notReady)) { ?>
+                          <div class="col-12 mt-3">
+                            <span id="<?= $item['ID'] ?>-refund-error-warning-box"></span>
+                            <p class="mb-0">
+                              <button type="button" id="<?= $item['ID'] ?>-refund-button" class="refund-button btn btn-primary" data-entry-id="<?= $item['ID'] ?>" data-refund-location="<?= htmlspecialchars($refundSource) ?>" data-swimmer-name="<?= htmlspecialchars($item['Name'] . ', ' . $item['Description']) ?>">
+                                Refund
+                              </button>
+                            </p>
+                          </div>
+                        <?php } ?>
+                      </div>
+                    </form>
+                  </div>
+                <?php } ?>
             </li>
+
           <?php } while ($item = $paymentItems->fetch(PDO::FETCH_ASSOC)); ?>
         </ul>
       <?php } ?>
 
       <?php if (isset($payment->charges->data[0]->amount_refunded) && $payment->charges->data[0]->amount_refunded > 0) { ?>
         <h2>Payment refunds</h2>
-        <p>&pound;<?= (string) \Brick\Math\BigDecimal::of((string) $payment->charges->data[0]->amount_refunded)->withPointMovedLeft(2)->toScale(2) ?>refunded to <?= htmlspecialchars(getCardBrand($card->brand)) ?> **** <?= htmlspecialchars($card->last4) ?></p>
+        <p>&pound;<?= (string) \Brick\Math\BigDecimal::of((string) $payment->charges->data[0]->amount_refunded)->withPointMovedLeft(2)->toScale(2) ?> refunded to <?= htmlspecialchars(getCardBrand($card->brand)) ?> **** <?= htmlspecialchars($card->last4) ?></p>
       <?php } else if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') { ?>
         <h2>Refund this transaction</h2>
-        <p>To refund gala entries, use the gala refunds system.</p>
+        <p>To refund gala entries, use the gala refunds system. Non gala fees may be refunded via this page.</p>
       <?php } ?>
 
-      <?php if ($ents != null) { ?>
+      <?php if ($ents) { ?>
         <h2>Gala entries</h2>
         <p class="lead">
           This payment has linked gala entries
@@ -362,7 +424,29 @@ $countries = getISOAlpha2Countries();
   </div>
 </div>
 
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="myModalTitle">Modal title</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+
+        </button>
+      </div>
+      <div class="modal-body" id="myModalBody">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" id="modalConfirmButton">Confirm refund</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <?php
 
 $footer = new \SCDS\Footer();
+$footer->addJS("js/numerical/bignumber.min.js");
+$footer->addJS("js/payments/stripe-refund.js");
 $footer->render();
