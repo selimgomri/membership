@@ -22,7 +22,7 @@ $onboardingMember = \SCDS\Onboarding\Member::retrieveById($id);
 $member = $onboardingMember->getMember();
 
 // Get permission details
-$get = $db->prepare("SELECT Website, Social, NoticeBoard, FilmTraining, ProPhoto FROM memberPhotography WHERE MemberID = ?");
+$get = $db->prepare("SELECT Website, Social, Noticeboard, FilmTraining, ProPhoto FROM memberPhotography WHERE MemberID = ?");
 $get->execute([
   $member->getId(),
 ]);
@@ -143,11 +143,11 @@ include BASE_PATH . "views/head.php";
 
                 <div>
                   <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" id="noticeboard-yes" name="noticeboard" value="1" <?php if (isset($permissions['NoticeBoard']) && $permissions['NoticeBoard']) { ?>checked<?php } ?>>
+                    <input class="form-check-input" type="radio" id="noticeboard-yes" name="noticeboard" value="1" <?php if (isset($permissions['Noticeboard']) && $permissions['Noticeboard']) { ?>checked<?php } ?>>
                     <label class="form-check-label" for="noticeboard-yes">Yes</label>
                   </div>
                   <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" id="noticeboard-no" name="noticeboard" value="0" <?php if (!(isset($permissions['NoticeBoard']) && $permissions['NoticeBoard'])) { ?>checked<?php } ?>>
+                    <input class="form-check-input" type="radio" id="noticeboard-no" name="noticeboard" value="0" <?php if (!(isset($permissions['Noticeboard']) && $permissions['Noticeboard'])) { ?>checked<?php } ?>>
                     <label class="form-check-label" for="noticeboard-no">No</label>
                   </div>
                 </div>

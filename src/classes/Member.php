@@ -285,11 +285,11 @@ class Member extends Person
     $perm = $getPerms->fetch(PDO::FETCH_ASSOC);
     $allows = $disallowed = [];
     $cats = [
-      'Website' => 'Take photos of this member for our website',
-      'Social' => 'Take photos of this member for our social media',
-      'Noticeboard' => 'Take photos of this member for our noticeboard',
-      'FilmTraining' => 'Film this member for the purposes of training',
-      'ProPhoto' => 'Take professional photographs of this member',
+      'Website' => $this->getForename() . '\'s photograph to be used on the ' . app()->tenant->getName() . ' website.',
+      'Social' => $this->getForename() . '\'s photograph to be used on ' . app()->tenant->getName() . ' social media platform/s.',
+      'Noticeboard' => $this->getForename() . '\'s photograph to be used within other printed publications such as newspaper articles about ' . app()->tenant->getName() . '.',
+      'FilmTraining' => $this->getForename() . ' to be filmed by ' . app()->tenant->getName() . ' for training purposes.',
+      'ProPhoto' => $this->getForename() . '\'s photograph to be taken by a professional photographer employed by ' . app()->tenant->getName() . 'as the official photographer at competitions, galas and other organisational events.',
     ];
 
     foreach ($cats as $cat => $description) {

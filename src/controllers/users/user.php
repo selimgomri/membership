@@ -202,11 +202,6 @@ include BASE_PATH . "views/header.php";
             <a href="#memberships" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
               Current Memberships
             </a>
-            <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin' && (app()->tenant->getGoCardlessAccessToken()) && !userHasMandates($id)) { ?>
-              <a href="#direct-debit-mandate-opt-out" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-                Direct debit opt-out
-              </a>
-            <?php } ?>
           <?php } ?>
           <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') { ?>
             <a href="#squad-rep-settings" class="list-group-item list-group-item-action">
@@ -362,14 +357,14 @@ include BASE_PATH . "views/header.php";
               </div>
 
               <?php if ($tenant->getKey('GOCARDLESS_ACCESS_TOKEN') && !$tenant->getBooleanKey('USE_STRIPE_DIRECT_DEBIT')) { ?>
-              <div class="alert alert-info">
-                <p class="mb-0">
-                  <strong>Plan your migration to Stripe for your Direct Debit payments</strong>
-                </p>
-                <p class="mb-0">
-                  The GoCardless service is deprecated and will eventually be turned off. To start planning your migration to the Stripe powered service, please talk to SCDS for help and support.
-                </p>
-              </div>
+                <div class="alert alert-info">
+                  <p class="mb-0">
+                    <strong>Plan your migration to Stripe for your Direct Debit payments</strong>
+                  </p>
+                  <p class="mb-0">
+                    The GoCardless service is deprecated and will eventually be turned off. To start planning your migration to the Stripe powered service, please talk to SCDS for help and support.
+                  </p>
+                </div>
               <?php } ?>
 
               <div class="card card-body">
@@ -504,25 +499,6 @@ include BASE_PATH . "views/header.php";
         </div>
 
         <hr>
-
-        <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin' && (app()->tenant->getGoCardlessAccessToken()) && !userHasMandates($id)) { ?>
-          <div class="mb-4">
-            <h2 id="direct-debit-mandate-opt-out">
-              Direct debit mandate settings
-            </h2>
-            <p class="lead">
-              Authorise a direct debit opt out for this parent
-            </p>
-
-            <p>
-              <a href="<?= autoUrl("users/" . $id . "/authorise-direct-debit-opt-out") ?>" class="btn btn-primary">
-                Authorise opt out <span class="fa fa-chevron-right"></span>
-              </a>
-            </p>
-          </div>
-
-          <hr>
-        <?php } ?>
 
       <?php } ?>
 

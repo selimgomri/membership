@@ -65,7 +65,7 @@ try {
   $stages = $session->stages;
   foreach ($stages as $key => $value) {
     if (!$stages->$key->completed && !$stages->$key->required_locked) {
-      $stages->$key->required = isset($_POST['task-' . $key]);
+      $stages->$key->required = isset($_POST[$key . '-main-check']);
     }
   }
 

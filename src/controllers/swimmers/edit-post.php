@@ -155,11 +155,11 @@ try {
     setupPhotoPermissions($id);
     $update = $db->prepare("UPDATE `memberPhotography` SET `Website` = ?, `Social` = ?, `Noticeboard` = ?, `FilmTraining` = ?, `ProPhoto` = ? WHERE `MemberID` = ?");
     $update->execute([
-      (int) (isset($_POST['webPhoto']) && bool($_POST['webPhoto'])),
-      (int) (isset($_POST['socPhoto']) && bool($_POST['socPhoto'])),
-      (int) (isset($_POST['noticePhoto']) && bool($_POST['noticePhoto'])),
-      (int) (isset($_POST['trainFilm']) && bool($_POST['trainFilm'])),
-      (int) (isset($_POST['proPhoto']) && bool($_POST['proPhoto'])),
+      (int) (isset($_POST['website']) && bool($_POST['website'])),
+      (int) (isset($_POST['social']) && bool($_POST['social'])),
+      (int) (isset($_POST['noticeboard']) && bool($_POST['noticeboard'])),
+      (int) (isset($_POST['film-training']) && bool($_POST['film-training'])),
+      (int) (isset($_POST['pro-photo']) && bool($_POST['pro-photo'])),
       $id,
     ]);
   }

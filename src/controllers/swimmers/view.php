@@ -424,10 +424,10 @@ include BASE_PATH . 'views/header.php';
           <?php $perms = $member->getPhotoPermissions(); ?>
 
           <?php if (sizeof($perms['allowed']) > 0) { ?>
-            <div class="col-xl-6">
+            <div class="col-xl">
               <div class="card card-body border-success h-100">
                 <p class="text-success">
-                  <i class="fa fa-check-circle" aria-hidden="true"></i> <strong>You may</strong>
+                  <i class="fa fa-check-circle" aria-hidden="true"></i> <strong>Parent/Guardian has allowed</strong>
                 </p>
 
                 <ul class="list-unstyled mb-0">
@@ -444,10 +444,10 @@ include BASE_PATH . 'views/header.php';
           <?php } ?>
 
           <?php if (sizeof($perms['disallowed']) > 0) { ?>
-            <div class="col-xl-6">
+            <div class="col-xl">
               <div class="card card-body border-danger h-100">
                 <p class="text-danger">
-                  <i class="fa fa-exclamation-circle" aria-hidden="true"></i> <strong>You must not</strong>
+                  <i class="fa fa-exclamation-circle" aria-hidden="true"></i> <strong>Parent/Guardian has not allowed</strong>
                 </p>
 
                 <ul class="list-unstyled mb-0">

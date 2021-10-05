@@ -390,55 +390,127 @@ include BASE_PATH . "views/swimmersMenu.php";
             <h2>Photography permissions</h2>
 
             <p>
-              Please read the Swim England/<?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?> Photography Policy before you continue to give or withold consent for photography.
+              You should complete this form after <a href="https://www.swimming.org/swimengland/wavepower-child-safeguarding-for-clubs/">reading the Swim England Photography and Filming guidance contained in Wavepower (opens in new tab)</a> and the <a href="<?= htmlspecialchars(autoUrl('privacy')) ?>" target="_blank"><?= htmlspecialchars($tenant->getName()) ?> Privacy Policy</a>.
             </p>
 
             <p>
-              <?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?> may wish to take photographs <?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?>. Photographs will only be taken and published in accordance with Swim England policy which requires the club to obtain the consent of the parent or guardian to take and use photographs under the following circumstances.
+              <?= htmlspecialchars($tenant->getName()) ?> may wish to take photographs or film individual or groups of members under the age of 18 that may include <?= htmlspecialchars($member->getFullName()) ?> during their membership of <?= htmlspecialchars($tenant->getName()) ?>. All photographs and filming and all use of such images will be in accordance with the Swim England Photography and Filming Guidance and <?= htmlspecialchars($tenant->getName()) ?>'s Privacy Policy.
             </p>
 
             <p>
-              It is entirely up to you whether or not you choose to allow us to take photographs and/or video of <?= htmlspecialchars($row['MForename']) ?>. You can change your choices at any time by heading to this page.
+              <?= htmlspecialchars($tenant->getName()) ?> will take all reasonable steps to ensure images and any footage is being used solely for their intended purpose and not kept for any longer than is necessary for that purpose. If you have any concerns or questions about how they are being used please contact the Welfare Officer to discuss this further.
             </p>
+
+            <p>
+              As a parent/guardian please complete the below in respect of <?= htmlspecialchars($member->getFullName()) ?>. We encourage all parents/guardians to discuss and explain their choices with their child/ren. Please note that either you or your child can withdraw consent or object to a particular type of use by notifying the Welfare Officer at any time and changing the consents given from within your club account.
+            </p>
+
+            <p>
+              As the parent/guardian of <?= htmlspecialchars($member->getFullName()) ?> I am happy for:
+            </p>
+
+            <div class="card mb-3">
+              <div class="card-header">
+                Media uses
+              </div>
+              <div class="list-group list-group-flush">
+                <div class="list-group-item">
+                  <div class="mb-2">
+                    <?= htmlspecialchars($member->getForename()) ?>'s photograph to be used on the <?= htmlspecialchars($tenant->getName()) ?> website.
+                  </div>
+
+                  <div>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" id="website-yes" name="website" value="1" <?php if (isset($photo['Website']) && $photo['Website']) { ?>checked<?php } ?>>
+                      <label class="form-check-label" for="website-yes">Yes</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" id="website-no" name="website" value="0" <?php if (!(isset($photo['Website']) && $photo['Website'])) { ?>checked<?php } ?>>
+                      <label class="form-check-label" for="website-no">No</label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="list-group-item">
+                  <div class="mb-2">
+                    <?= htmlspecialchars($member->getForename()) ?>'s photograph to be used on <?= htmlspecialchars($tenant->getName()) ?> social media platform/s.
+                  </div>
+
+                  <div>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" id="social-yes" name="social" value="1" <?php if (isset($photo['Social']) && $photo['Social']) { ?>checked<?php } ?>>
+                      <label class="form-check-label" for="social-yes">Yes</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" id="social-no" name="social" value="0" <?php if (!(isset($photo['Social']) && $photo['Social'])) { ?>checked<?php } ?>>
+                      <label class="form-check-label" for="social-no">No</label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="list-group-item">
+                  <div class="mb-2">
+                    <?= htmlspecialchars($member->getForename()) ?>'s photograph to be used within other printed publications such as newspaper articles about <?= htmlspecialchars($tenant->getName()) ?>.
+                  </div>
+
+                  <div>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" id="noticeboard-yes" name="noticeboard" value="1" <?php if (isset($photo['Noticeboard']) && $photo['Noticeboard']) { ?>checked<?php } ?>>
+                      <label class="form-check-label" for="noticeboard-yes">Yes</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" id="noticeboard-no" name="noticeboard" value="0" <?php if (!(isset($photo['Noticeboard']) && $photo['Noticeboard'])) { ?>checked<?php } ?>>
+                      <label class="form-check-label" for="noticeboard-no">No</label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="list-group-item">
+                  <div class="mb-2">
+                    <?= htmlspecialchars($member->getForename()) ?>'s photograph to be taken by a professional photographer employed by <?= htmlspecialchars($tenant->getName()) ?> as the official photographer at competitions, galas and other organisational events.
+                  </div>
+
+                  <div>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" id="pro-photo-yes" name="pro-photo" value="1" <?php if (isset($photo['ProPhoto']) && $photo['ProPhoto']) { ?>checked<?php } ?>>
+                      <label class="form-check-label" for="pro-photo-yes">Yes</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" id="pro-photo-no" name="pro-photo" value="0" <?php if (!(isset($photo['ProPhoto']) && $photo['ProPhoto'])) { ?>checked<?php } ?>>
+                      <label class="form-check-label" for="pro-photo-no">No</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card mb-3">
+              <div class="card-header">
+                Training uses (training videos to be deleted once the relevant training is complete)
+              </div>
+              <div class="list-group list-group-flush">
+                <div class="list-group-item">
+                  <div class="mb-2">
+                    <?= htmlspecialchars($member->getForename()) ?> to be filmed by <?= htmlspecialchars($tenant->getName()) ?> for training purposes.
+                  </div>
+
+                  <div>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" id="film-training-yes" name="film-training" value="1" <?php if (isset($photo['FilmTraining']) && $photo['FilmTraining']) { ?>checked<?php } ?>>
+                      <label class="form-check-label" for="film-training-yes">Yes</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" id="film-training-no" name="film-training" value="0" <?php if (!(isset($photo['FilmTraining']) && $photo['FilmTraining'])) { ?>checked<?php } ?>>
+                      <label class="form-check-label" for="film-training-no">No</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
 
             <p>
               If you do not give your consent, please also inform <?= htmlspecialchars($row['MForename']) ?> so that they know, if possible, not to get into any photos.
             </p>
-
-            <div class="mb-3">
-              <div class="form-check">
-                <input type="checkbox" value="1" class="form-check-input" name="webPhoto" id="webPhoto" <?php if (isset($photo['Website']) && $photo['Website']) { ?>checked<?php } ?>>
-                <label class="form-check-label" for="webPhoto">
-                  Take photographs to use on the clubs website
-                </label>
-              </div>
-              <div class="form-check">
-                <input type="checkbox" value="1" class="form-check-input" name="socPhoto" id="socPhoto" <?php if (isset($photo['Social']) && $photo['Social']) { ?>checked<?php } ?>>
-                <label class="form-check-label" for="socPhoto">
-                  Take photographs to use on social media sites
-                </label>
-              </div>
-              <div class="form-check">
-                <input type="checkbox" value="1" class="form-check-input" name="noticePhoto" id="noticePhoto" <?php if (isset($photo['Noticeboard']) && $photo['Noticeboard']) { ?>checked<?php } ?>>
-                <label class="form-check-label" for="noticePhoto">
-                  Take photographs to use on club noticeboards
-                </label>
-              </div>
-              <div class="form-check">
-                <input type="checkbox" value="1" class="form-check-input" name="trainFilm" id="trainFilm" <?php if (isset($photo['FilmTraining']) && $photo['FilmTraining']) { ?>checked<?php } ?>>
-                <label class="form-check-label" for="trainFilm">
-                  Filming for training purposes only
-                </label>
-              </div>
-              <div class="form-check">
-                <input type="checkbox" value="1" class="form-check-input" name="proPhoto" id="proPhoto" <?php if (isset($photo['ProPhoto']) && $photo['ProPhoto']) { ?>checked<?php } ?>>
-                <label class="form-check-label" for="proPhoto">
-                  Employ a professional photographer (approved by the club) who will take
-                  photographs in competitions and/or club events.
-                </label>
-              </div>
-              <ul></ul>
-            </div>
           </div>
         <?php } ?>
 

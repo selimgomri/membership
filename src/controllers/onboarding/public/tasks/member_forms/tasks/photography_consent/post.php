@@ -55,7 +55,7 @@ $exists = $get->fetchColumn();
 
 if ($exists) {
   // UPDATE
-  $update = $db->prepare("UPDATE memberPhotography SET Website = ?, Social = ?, NoticeBoard = ?, FilmTraining = ?, ProPhoto = ? WHERE MemberID = ?");
+  $update = $db->prepare("UPDATE memberPhotography SET Website = ?, Social = ?, Noticeboard = ?, FilmTraining = ?, ProPhoto = ? WHERE MemberID = ?");
   $update->execute([
     (int) $website,
     (int) $social,
