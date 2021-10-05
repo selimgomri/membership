@@ -352,6 +352,10 @@ $this->group('/card-transactions', function () {
 		include 'stripe/history/payment.php';
 	});
 
+	$this->post('/refund', function () {
+		include 'stripe/history/payment-refund.php';
+	});
+
 	$this->get('/{id}:int/receipt.pdf', function ($id) {
 		include 'stripe/history/payment.pdf.php';
 	});
