@@ -63,9 +63,34 @@ include BASE_PATH . "views/header.php";
           <?php if ($year) { ?>
 
             <div class="mb-3">
-              <label for="year" class="form-label">Membership year</label>
-              <select class="form-select" id="year" name="year" required>
+              <label for="year-ngb" class="form-label">Membership year (for Swim England)</label>
+              <select class="form-select" id="year-ngb" name="year-ngb" required>
                 <option selected disabled>Choose a year</option>
+                <option value="NONE">None</option>
+                <?php do {
+                  $start = new DateTime($year->start, new DateTimeZone('Europe/London'));
+                  $end = new DateTime($year->end, new DateTimeZone('Europe/London'));
+                ?>
+                  <option value="<?= htmlspecialchars($year->id) ?>"><?= htmlspecialchars($year->name) ?> (<?= htmlspecialchars($start->format('j M Y')) ?> - <?= htmlspecialchars($end->format('j M Y')) ?>)</option>
+                <?php } while ($year = $getYears->fetch(PDO::FETCH_OBJ)); ?>
+              </select>
+            </div>
+
+            <?php
+
+            // Fetch again
+            $getYears->execute([
+              $tenant->getId(),
+              $today->format('Y-m-d'),
+            ]);
+            $year = $getYears->fetch(PDO::FETCH_OBJ);
+            ?>
+
+            <div class="mb-3">
+              <label for="year-club" class="form-label">Membership year (for Club Membership)</label>
+              <select class="form-select" id="year-club" name="year-club" required>
+                <option selected disabled>Choose a year</option>
+                <option value="NONE">None</option>
                 <?php do {
                   $start = new DateTime($year->start, new DateTimeZone('Europe/London'));
                   $end = new DateTime($year->end, new DateTimeZone('Europe/London'));

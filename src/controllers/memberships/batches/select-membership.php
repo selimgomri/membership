@@ -8,7 +8,7 @@ $user = app()->user;
 $db = app()->db;
 $tenant = app()->tenant;
 
-$getBatch = $db->prepare("SELECT membershipBatch.ID id, membershipYear.ID yearId, membershipBatch.Completed completed, DueDate due, Total total, membershipYear.Name yearName, membershipYear.StartDate yearStart, membershipYear.EndDate yearEnd, PaymentTypes payMethods, PaymentDetails payDetails, membershipBatch.User `user` FROM membershipBatch INNER JOIN membershipYear ON membershipBatch.Year = membershipYear.ID INNER JOIN users ON users.UserID = membershipBatch.User WHERE membershipBatch.ID = ? AND users.Tenant = ?");
+$getBatch = $db->prepare("SELECT membershipBatch.ID id, membershipBatch.Completed completed, DueDate due, Total total, PaymentTypes payMethods, PaymentDetails payDetails, membershipBatch.User `user` FROM membershipBatch INNER JOIN users ON users.UserID = membershipBatch.User WHERE membershipBatch.ID = ? AND users.Tenant = ?");
 $getBatch->execute([
   $id,
   app()->tenant->getId(),
@@ -29,12 +29,21 @@ $getMembers->execute([
 
 $member = $getMembers->fetch(PDO::FETCH_OBJ);
 
+// Validate year
+$getYears = $db->prepare("SELECT ID FROM `membershipYear` WHERE `Tenant` = ? AND `ID` = ?");
+$getYears->execute([
+  $tenant->getId(),
+  $_POST['membership-year'],
+]);
+$year = $getYears->fetchColumn();
+if (!$year) throw new Exception('Invalid membership year');
+
 // Work out available memberships
 $getMemberships = $db->prepare("SELECT `ID` `id`, `Name` `name`, `Description` `description`, `Fees` `fees`, `Type` `type` FROM `clubMembershipClasses` WHERE `Tenant` = ? AND `ID` NOT IN (SELECT `Membership` AS `ID` FROM `memberships` WHERE `Member` = ? AND `Year` = ?) AND `ID` NOT IN (SELECT `Membership` AS `ID` FROM `membershipBatchItems` INNER JOIN membershipBatch ON membershipBatchItems.Batch = membershipBatch.ID WHERE `Member` = ? AND `membershipBatch`.`ID` = ?)");
 $getMemberships->execute([
   $tenant->getId(),
   $_POST['member'],
-  $batch->yearId,
+  $year,
   $_POST['member'],
   $batch->id,
 ]);

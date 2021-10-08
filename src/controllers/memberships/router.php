@@ -45,6 +45,14 @@ $this->group('/batches', function() {
     include 'batches/list.php';
   });
 
+  $this->get('/new', function() {
+    include 'batches/new.php';
+  });
+
+  $this->post('/new', function() {
+    include 'batches/new-post.php';
+  });
+
   $this->get('/{id}:uuid', function($id) {
     include 'batches/batch.php';
   });
@@ -112,14 +120,6 @@ $this->group('/years', function() {
 
     $this->post('/edit', function($id) {
       include 'years/edit-post.php';
-    });
-
-    $this->get('/new-batch', function($id) {
-      include 'years/batches/new.php';
-    });
-
-    $this->post('/new-batch', function($id) {
-      include 'years/batches/new-post.php';
     });
   });
 });

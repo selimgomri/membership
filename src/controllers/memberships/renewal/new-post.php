@@ -16,15 +16,33 @@ $memberStageNames = SCDS\Onboarding\Member::stagesOrder();
 
 try {
 
-  // Validate year
-  $getYears = $db->prepare("SELECT ID FROM `membershipYear` WHERE `Tenant` = ? AND `ID` = ?");
-  $getYears->execute([
-    $tenant->getId(),
-    $_POST['year'],
-  ]);
-  $year = $getYears->fetchColumn();
+  $yearClub = $yearNgb = null;
 
-  if (!$year) throw new Exception('Invalid membership year');
+  if ($_POST['year-ngb'] != 'NONE') {
+
+    // Validate year
+    $getYears = $db->prepare("SELECT ID FROM `membershipYear` WHERE `Tenant` = ? AND `ID` = ?");
+    $getYears->execute([
+      $tenant->getId(),
+      $_POST['year-ngb'],
+    ]);
+    $yearNgb = $getYears->fetchColumn();
+    if (!$yearNgb) throw new Exception('Invalid membership year');
+  }
+
+  if ($_POST['year-club'] != 'NONE') {
+
+    // Validate year
+    $getYears = $db->prepare("SELECT ID FROM `membershipYear` WHERE `Tenant` = ? AND `ID` = ?");
+    $getYears->execute([
+      $tenant->getId(),
+      $_POST['year-club'],
+    ]);
+    $yearClub = $getYears->fetchColumn();
+    if (!$yearClub) throw new Exception('Invalid membership year');
+  }
+
+  if (!$yearClub && !$yearNgb) throw new Exception('No membership year selected');
 
   // Validate date
   $start = new DateTime($_POST['start'], new DateTimeZone('Europe/London'));
@@ -48,10 +66,11 @@ try {
   $id = Uuid::uuid4();
 
   // Prepare to add the DB
-  $insert = $db->prepare("INSERT INTO `renewalv2` (`id`, `year`, `start`, `end`, `default_stages`, `default_member_stages`, `metadata`, `Tenant`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+  $insert = $db->prepare("INSERT INTO `renewalv2` (`id`, `club_year`, `ngb_year`, `start`, `end`, `default_stages`, `default_member_stages`, `metadata`, `Tenant`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
   $insert->execute([
     $id,
-    $_POST['year'],
+    $yearClub,
+    $yearNgb,
     $start->format('Y-m-d'),
     $end->format('Y-m-d'),
     json_encode($stages),

@@ -642,10 +642,10 @@ include BASE_PATH . 'views/header.php';
       <h3>Current assigned memberships</h3>
       <?php if ($membership) { ?>
 
-        <?php do { 
+        <?php do {
           $start = new DateTime($membership->starts, new DateTimeZone('Europe/London'));
           $end = new DateTime($membership->ends, new DateTimeZone('Europe/London'));
-          ?>
+        ?>
           <div class="card card-body mb-3">
             <h4><?= htmlspecialchars($membership->membershipName) ?> <small class="text-muted">Paid <?= htmlspecialchars(MoneyHelpers::formatCurrency(MoneyHelpers::intToDecimal($membership->amount), 'GBP')) ?></small></h4>
             <p class="mb-0">
@@ -654,21 +654,25 @@ include BASE_PATH . 'views/header.php';
           </div>
         <?php } while ($membership = $getMemberships->fetch(PDO::FETCH_OBJ)); ?>
 
-        <a href="<?= htmlspecialchars(autoUrl('users/' . $user->getId() . '/new-membership-batch')) ?>">Create a membership batch</a> to add more memberships.
+        <?php if (app()->user->hasPermission('Admin')) { ?>
+          <a href="<?= htmlspecialchars(autoUrl('users/' . $user->getId() . '/new-membership-batch')) ?>">Create a membership batch</a> to add more memberships.
+        <?php } ?>
 
       <?php } else { ?>
         <div class="alert alert-warning">
           <p class="mb-0">
             <strong><?= htmlspecialchars($member->getForename()) ?> currently has no assigned memberships</strong>
           </p>
-          <?php if ($user) { ?>
-            <p class="mb-0">
-              <a href="<?= htmlspecialchars(autoUrl('users/' . $user->getId() . '/new-membership-batch')) ?>" class="alert-link">Create a membership batch</a> to add memberships.
-            </p>
-          <?php } else { ?>
-            <p class="mb-0">
-              <a href="<?= htmlspecialchars(autoUrl('onboarding/new')) ?>" class="alert-link">Create an onboarding session</a> to create or assign a user and add memberships.
-            </p>
+          <?php if (app()->user->hasPermission('Admin')) { ?>
+            <?php if ($user) { ?>
+              <p class="mb-0">
+                <a href="<?= htmlspecialchars(autoUrl('users/' . $user->getId() . '/new-membership-batch')) ?>" class="alert-link">Create a membership batch</a> to add memberships.
+              </p>
+            <?php } else { ?>
+              <p class="mb-0">
+                <a href="<?= htmlspecialchars(autoUrl('onboarding/new')) ?>" class="alert-link">Create an onboarding session</a> to create or assign a user and add memberships.
+              </p>
+            <?php } ?>
           <?php } ?>
         </div>
       <?php } ?>

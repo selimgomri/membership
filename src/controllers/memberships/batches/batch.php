@@ -3,7 +3,7 @@
 $user = app()->user;
 $db = app()->db;
 
-$getBatch = $db->prepare("SELECT membershipBatch.ID id, membershipYear.ID yearId, membershipBatch.Completed completed, DueDate due, Total total, membershipYear.Name yearName, membershipYear.StartDate yearStart, membershipYear.EndDate yearEnd, PaymentTypes payMethods, PaymentDetails payDetails, users.UserID user, users.Forename firstName, users.Surname lastName FROM membershipBatch INNER JOIN membershipYear ON membershipBatch.Year = membershipYear.ID INNER JOIN users ON users.UserID = membershipBatch.User WHERE membershipBatch.ID = ? AND users.Tenant = ?");
+$getBatch = $db->prepare("SELECT membershipBatch.ID id, membershipBatch.Completed completed, DueDate due, Total total, PaymentTypes payMethods, PaymentDetails payDetails, users.UserID user, users.Forename firstName, users.Surname lastName FROM membershipBatch INNER JOIN users ON users.UserID = membershipBatch.User WHERE membershipBatch.ID = ? AND users.Tenant = ?");
 $getBatch->execute([
   $id,
   app()->tenant->getId(),
@@ -16,7 +16,7 @@ if (!$batch) halt(404);
 if ($batch->user != $user->getId() && !$user->hasPermission('Admin')) halt(404);
 
 // Get batch items
-$getBatchItems = $db->prepare("SELECT membershipBatchItems.ID id, membershipBatchItems.Membership membershipId, membershipBatchItems.Amount amount, membershipBatchItems.Notes notes, members.MForename firstName, members.MSurname lastName, members.ASANumber ngbId, clubMembershipClasses.Type membershipType, clubMembershipClasses.Name membershipName, clubMembershipClasses.Description membershipDescription FROM membershipBatchItems INNER JOIN members ON members.MemberID = membershipBatchItems.Member INNER JOIN clubMembershipClasses ON clubMembershipClasses.ID = membershipBatchItems.Membership WHERE Batch = ?");
+$getBatchItems = $db->prepare("SELECT membershipBatchItems.ID id, membershipBatchItems.Membership membershipId, membershipBatchItems.Amount amount, membershipBatchItems.Notes notes, members.MForename firstName, members.MSurname lastName, members.ASANumber ngbId, clubMembershipClasses.Type membershipType, clubMembershipClasses.Name membershipName, clubMembershipClasses.Description membershipDescription, membershipYear.ID yearId, membershipYear.Name yearName, membershipYear.StartDate yearStart, membershipYear.EndDate yearEnd FROM membershipBatchItems INNER JOIN membershipYear ON membershipBatchItems.Year = membershipYear.ID INNER JOIN members ON members.MemberID = membershipBatchItems.Member INNER JOIN clubMembershipClasses ON clubMembershipClasses.ID = membershipBatchItems.Membership WHERE Batch = ?");
 $getBatchItems->execute([
   $id
 ]);
@@ -61,7 +61,7 @@ include BASE_PATH . "views/header.php";
     <div class="row align-items-center">
       <div class="col-lg-8">
         <h1>
-          Batch for <?= htmlspecialchars($batch->yearName) ?><?php if ($batch->user != $user->getId() && $user->hasPermission('Admin')) { ?> <small class="text-muted">(<?= htmlspecialchars($batch->firstName . ' ' . $batch->lastName) ?>)</small><?php } ?>
+          Batch for <?= htmlspecialchars($batch->firstName . ' ' . $batch->lastName) ?>
         </h1>
         <p class="lead mb-0">
           <?= htmlspecialchars($id) ?>
@@ -104,13 +104,6 @@ include BASE_PATH . "views/header.php";
         </dd>
 
         <dt class="col-3">
-          Period
-        </dt>
-        <dd class="col-9">
-          <?= htmlspecialchars((new DateTime($batch->yearStart))->format('j F Y')) ?> to <?= htmlspecialchars((new DateTime($batch->yearEnd))->format('j F Y')) ?>
-        </dd>
-
-        <dt class="col-3">
           Amount
         </dt>
         <dd class="col-9">
@@ -141,7 +134,7 @@ include BASE_PATH . "views/header.php";
         <?php } ?>
       </dl>
 
-      <?php if (!$batch->completed && $batch->total > 0 && sizeof($payMethods) > 0 && $canPay) { ?>
+      <?php if (!$batch->completed && $batch->total > 0 && sizeof($payMethods) > 0 && $canPay && $batch->user == $user->getId()) { ?>
         <form method="post" class="needs-validation" novalidate>
           <h2>Pay</h2>
           <?php if (sizeof($payMethods) > 1) { ?>
@@ -210,6 +203,13 @@ include BASE_PATH . "views/header.php";
                 </dt>
                 <dd class="col-9">
                   <?= htmlspecialchars($item->membershipId) ?>
+                </dd>
+
+                <dt class="col-3">
+                  Period
+                </dt>
+                <dd class="col-9">
+                  <?= htmlspecialchars($item->yearName) ?> (<?= htmlspecialchars((new DateTime($item->yearStart))->format('j F Y')) ?> to <?= htmlspecialchars((new DateTime($item->yearEnd))->format('j F Y')) ?>)
                 </dd>
 
                 <dt class="col-3">

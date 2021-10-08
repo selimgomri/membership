@@ -14,18 +14,20 @@ class Batch
 
     $object = new stdClass();
 
-    $getBatch = $db->prepare("SELECT membershipBatch.ID id, membershipYear.ID yearId, DueDate due, Total total, membershipYear.Name yearName, membershipYear.StartDate yearStart, membershipYear.EndDate yearEnd, PaymentTypes payMethods, membershipBatch.User `user` FROM membershipBatch INNER JOIN membershipYear ON membershipBatch.Year = membershipYear.ID INNER JOIN users ON users.UserID = membershipBatch.User WHERE membershipBatch.ID = ? AND users.Tenant = ?");
+    $getBatch = $db->prepare("SELECT membershipBatch.ID id, DueDate due, Total total, PaymentTypes payMethods, membershipBatch.User `user` FROM membershipBatch INNER JOIN users ON users.UserID = membershipBatch.User WHERE membershipBatch.ID = ? AND users.Tenant = ?");
     $getBatch->execute([
       $batchId,
       app()->tenant->getId(),
     ]);
+
+    // membershipYear.ID yearId, Total total, membershipYear.Name yearName, membershipYear.StartDate yearStart, membershipYear.EndDate yearEnd
 
     $batch = $getBatch->fetch(\PDO::FETCH_OBJ);
 
     if (!$batch) throw new \Exception();
 
     // Get batch items
-    $getBatchItems = $db->prepare("SELECT membershipBatchItems.ID id, membershipBatchItems.Membership membershipId, membershipBatchItems.Amount amount, membershipBatchItems.Notes notes, members.MForename firstName, members.MSurname lastName, members.ASANumber ngbId, clubMembershipClasses.Type membershipType, clubMembershipClasses.Name membershipName, clubMembershipClasses.Description membershipDescription FROM membershipBatchItems INNER JOIN members ON members.MemberID = membershipBatchItems.Member INNER JOIN clubMembershipClasses ON clubMembershipClasses.ID = membershipBatchItems.Membership WHERE Batch = ?");
+    $getBatchItems = $db->prepare("SELECT membershipBatchItems.ID id, membershipBatchItems.Membership membershipId, membershipBatchItems.Amount amount, membershipBatchItems.Notes notes, members.MForename firstName, members.MSurname lastName, members.ASANumber ngbId, clubMembershipClasses.Type membershipType, clubMembershipClasses.Name membershipName, clubMembershipClasses.Description membershipDescription, membershipYear.ID yearId, membershipYear.Name yearName, membershipYear.StartDate yearStart, membershipYear.EndDate yearEnd FROM membershipBatchItems INNER JOIN membershipYear ON membershipYear.ID = membershipBatchItems.Year INNER JOIN members ON members.MemberID = membershipBatchItems.Member INNER JOIN clubMembershipClasses ON clubMembershipClasses.ID = membershipBatchItems.Membership WHERE Batch = ?");
     $getBatchItems->execute([
       $batchId
     ]);
@@ -148,7 +150,7 @@ class Batch
     $time = new \DateTime('now', new \DateTimeZone('UTC'));
 
     // Get batch items
-    $getBatchItems = $db->prepare("SELECT membershipBatchItems.ID, membershipBatchItems.Batch, membershipBatchItems.Membership, membershipBatchItems.Member, membershipBatchItems.Amount, membershipBatchItems.Notes, members.MForename, members.MSurname, clubMembershipClasses.Name, membershipBatch.Year, membershipYear.StartDate, membershipYear.EndDate FROM ((((membershipBatchItems INNER JOIN members ON members.MemberID = membershipBatchItems.Member) INNER JOIN clubMembershipClasses ON clubMembershipClasses.ID = membershipBatchItems.Membership) INNER JOIN membershipBatch ON membershipBatch.ID = membershipBatchItems.Batch) INNER JOIN membershipYear ON membershipYear.ID = membershipBatch.Year) WHERE membershipBatch.ID = ?");
+    $getBatchItems = $db->prepare("SELECT membershipBatchItems.ID, membershipBatchItems.Batch, membershipBatchItems.Membership, membershipBatchItems.Member, membershipBatchItems.Amount, membershipBatchItems.Notes, members.MForename, members.MSurname, clubMembershipClasses.Name, membershipBatchItems.Year, membershipYear.StartDate, membershipYear.EndDate FROM ((((membershipBatchItems INNER JOIN members ON members.MemberID = membershipBatchItems.Member) INNER JOIN clubMembershipClasses ON clubMembershipClasses.ID = membershipBatchItems.Membership) INNER JOIN membershipBatch ON membershipBatch.ID = membershipBatchItems.Batch) INNER JOIN membershipYear ON membershipYear.ID = membershipBatchItems.Year) WHERE membershipBatch.ID = ?");
     $getBatchItems->execute([
       $batchId,
     ]);
@@ -176,7 +178,7 @@ class Batch
     $tenant = app()->tenant;
 
     // Get batch items
-    $getBatchItems = $db->prepare("SELECT membershipBatchItems.ID, membershipBatchItems.Batch, membershipBatchItems.Membership, membershipBatchItems.Member, membershipBatchItems.Amount, membershipBatchItems.Notes, members.MForename, members.MSurname, clubMembershipClasses.Name, membershipBatch.Year, membershipYear.StartDate, membershipYear.EndDate, membershipBatch.User FROM ((((membershipBatchItems INNER JOIN members ON members.MemberID = membershipBatchItems.Member) INNER JOIN clubMembershipClasses ON clubMembershipClasses.ID = membershipBatchItems.Membership) INNER JOIN membershipBatch ON membershipBatch.ID = membershipBatchItems.Batch) INNER JOIN membershipYear ON membershipYear.ID = membershipBatch.Year) WHERE membershipBatch.ID = ? AND members.Tenant = ?");
+    $getBatchItems = $db->prepare("SELECT membershipBatchItems.ID, membershipBatchItems.Batch, membershipBatchItems.Membership, membershipBatchItems.Member, membershipBatchItems.Amount, membershipBatchItems.Notes, members.MForename, members.MSurname, clubMembershipClasses.Name, membershipBatchItems.Year, membershipYear.StartDate, membershipYear.EndDate, membershipBatch.User FROM ((((membershipBatchItems INNER JOIN members ON members.MemberID = membershipBatchItems.Member) INNER JOIN clubMembershipClasses ON clubMembershipClasses.ID = membershipBatchItems.Membership) INNER JOIN membershipBatch ON membershipBatch.ID = membershipBatchItems.Batch) INNER JOIN membershipYear ON membershipYear.ID = membershipBatchItems.Year) WHERE membershipBatch.ID = ? AND members.Tenant = ?");
     $getBatchItems->execute([
       $batchId,
       $tenant->getId(),

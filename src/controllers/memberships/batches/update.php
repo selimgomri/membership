@@ -10,7 +10,7 @@ $user = app()->user;
 $db = app()->db;
 $tenant = app()->tenant;
 
-$getBatch = $db->prepare("SELECT membershipBatch.ID id, membershipYear.ID yearId, membershipBatch.Completed completed, DueDate due, Total total, membershipYear.Name yearName, membershipYear.StartDate yearStart, membershipYear.EndDate yearEnd, PaymentTypes payMethods, PaymentDetails payDetails, membershipBatch.User `user` FROM membershipBatch INNER JOIN membershipYear ON membershipBatch.Year = membershipYear.ID INNER JOIN users ON users.UserID = membershipBatch.User WHERE membershipBatch.ID = ? AND users.Tenant = ?");
+$getBatch = $db->prepare("SELECT membershipBatch.ID id, membershipBatch.Completed completed, DueDate due, Total total, PaymentTypes payMethods, PaymentDetails payDetails, membershipBatch.User `user` FROM membershipBatch INNER JOIN users ON users.UserID = membershipBatch.User WHERE membershipBatch.ID = ? AND users.Tenant = ?");
 $getBatch->execute([
   $id,
   app()->tenant->getId(),
@@ -31,6 +31,15 @@ $getItem->execute([
 
 if ($getItem->fetchColumn() == 0) halt(404);
 
+// Validate year
+$getYears = $db->prepare("SELECT ID FROM `membershipYear` WHERE `Tenant` = ? AND `ID` = ?");
+$getYears->execute([
+  $tenant->getId(),
+  $_POST['membership-year'],
+]);
+$year = $getYears->fetchColumn();
+if (!$year) throw new Exception('Invalid membership year');
+
 $success = false;
 
 // Update batch item
@@ -38,10 +47,11 @@ $amount = (int) MoneyHelpers::decimalToInt($_POST['amount']);
 
 if ($amount < 0) throw new Exception('Negative number');
 
-$addBatchItem = $db->prepare("UPDATE `membershipBatchItems` SET `Amount` = ?, `Notes` = ? WHERE `ID` = ?;");
+$addBatchItem = $db->prepare("UPDATE `membershipBatchItems` SET `Amount` = ?, `Notes` = ?, `Year` = ? WHERE `ID` = ?;");
 $addBatchItem->execute([
   $amount,
   trim($_POST['notes']),
+  $year,
   $_POST['item-id'],
 ]);
 

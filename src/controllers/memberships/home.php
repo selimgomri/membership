@@ -5,7 +5,7 @@ $db = app()->db;
 
 $today = new DateTime('now', new DateTimeZone('Europe/London'));
 
-$getPending = $db->prepare("SELECT membershipBatch.ID id, membershipYear.ID yearId, DueDate due, Total total, membershipYear.Name yearName, membershipYear.StartDate yearStart, membershipYear.EndDate yearEnd, PaymentTypes payMethods FROM membershipBatch INNER JOIN membershipYear ON membershipBatch.Year = membershipYear.ID WHERE User = ? AND (DueDate >= ? OR DueDate IS NULL) AND NOT Completed AND NOT Cancelled");
+$getPending = $db->prepare("SELECT membershipBatch.ID id, DueDate due, Total total, PaymentTypes payMethods FROM membershipBatch WHERE User = ? AND (DueDate >= ? OR DueDate IS NULL) AND NOT Completed AND NOT Cancelled");
 $getPending->execute([
 	$user->getId(),
 	$today->format('Y-m-d'),
@@ -63,7 +63,7 @@ include BASE_PATH . "views/header.php";
 					?>
 						<li class="list-group-item">
 
-							<h3><?= htmlspecialchars($pending->yearName) ?> <small class="text-muted"><?= htmlspecialchars((new DateTime($pending->yearStart))->format('d/m/Y')) ?> to <?= htmlspecialchars((new DateTime($pending->yearEnd))->format('d/m/Y')) ?></small></h3>
+							<h3>Membership Batch</h3>
 
 							<dl class="row">
 

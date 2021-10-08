@@ -14,7 +14,8 @@ use Exception;
 class Renewal
 {
   public $id;
-  public $year;
+  public $clubYear;
+  public $ngbYear;
   public $start;
   public $end;
   public $defaultStages;
@@ -43,14 +44,16 @@ class Renewal
     $renewal = new Renewal();
 
     $renewal->id = $sessionInfo->id;
-    $renewal->year = $sessionInfo->year;
+    $renewal->clubYear = $sessionInfo->club_year;
+    $renewal->ngbYear = $sessionInfo->ngb_year;
     $renewal->start = new DateTime($sessionInfo->start, new DateTimeZone('Europe/London'));
     $renewal->end = new DateTime($sessionInfo->end, new DateTimeZone('Europe/London'));
     $renewal->end->setTime(23, 59, 59);
     $renewal->defaultStages = json_decode($sessionInfo->default_stages);
     $renewal->defaultMemberStages = json_decode($sessionInfo->default_member_stages);
     $renewal->metadata = json_decode($sessionInfo->metadata);
-    $renewal->year = \SCDS\Memberships\Year::retrieve($sessionInfo->year);
+    if ($sessionInfo->club_year) $renewal->clubYear = \SCDS\Memberships\Year::retrieve($sessionInfo->club_year);
+    if ($sessionInfo->ngb_year) $renewal->ngbYear = \SCDS\Memberships\Year::retrieve($sessionInfo->ngb_year);
 
     return $renewal;
   }
@@ -168,80 +171,108 @@ class Renewal
       $total = 0;
       $batchItems = [];
 
-      // Do SE fees
-      $getMembers = $db->prepare("SELECT `MemberID`, `NGBCategory`, `ASAPaid`, `Name`, `Description`, `Fees` FROM `members` INNER JOIN `clubMembershipClasses` ON members.NGBCategory = clubMembershipClasses.ID WHERE `UserID` = ? ORDER BY `MForename` ASC, `MSurname` ASC;");
-      $getMembers->execute([
-        $user,
-      ]);
-
-      while ($member = $getMembers->fetch(\PDO::FETCH_OBJ)) {
-        // Parse fee object
-        $fees = json_decode($member->Fees);
-        $amount = $fees->fees[0];
-        if ($member->ASAPaid) $amount = 0;
-        $total += $amount;
-
-        $batchItems[] = [
-          \Ramsey\Uuid\Uuid::uuid4(),
-          $batch,
-          $member->NGBCategory,
-          $member->MemberID,
-          $amount,
-          null,
-        ];
-      }
-
-      // Handle complex CLUB MEMBERSHIP fees
-      // Get membership classes for this user's members
-      $getClasses = $db->prepare("SELECT DISTINCT `ClubCategory` FROM `members` WHERE `UserID` = ?;");
-      $getClasses->execute([
-        $user,
-      ]);
-
-      while ($classId = $getClasses->fetchColumn()) {
-
-        // Get full class details
-        $getClassDetails = $db->prepare("SELECT `Name`, `Description`, `Fees` FROM clubMembershipClasses WHERE ID = ?");
-        $getClassDetails->execute([
-          $classId,
-        ]);
-
-        $classDetails = $getClassDetails->fetch(\PDO::FETCH_OBJ);
-
-        $fees = json_decode($classDetails->Fees);
-
-        // Get members with class
-
-        $getClassMembers = $db->prepare("SELECT MemberID FROM members WHERE UserID = ? AND ClubCategory = ? AND ClubPaid = ?");
-
-        $getCountClassMembers = $db->prepare("SELECT COUNT(*) FROM members WHERE UserID = ? AND ClubCategory = ? AND ClubPaid = ?");
-
-        // Get paying
-        $getCountClassMembers->execute([
+      if ($this->ngbYear) {
+        // Do SE fees
+        $getMembers = $db->prepare("SELECT `MemberID`, `NGBCategory`, `ASAPaid`, `Name`, `Description`, `Fees` FROM `members` INNER JOIN `clubMembershipClasses` ON members.NGBCategory = clubMembershipClasses.ID WHERE `UserID` = ? ORDER BY `MForename` ASC, `MSurname` ASC;");
+        $getMembers->execute([
           $user,
-          $classId,
-          0,
         ]);
 
-        $count = $getCountClassMembers->fetchColumn();
-
-        if ($count > 0) {
-
-          $amount = $fees->fees[max($count, sizeof($fees->fees)) - 1];
+        while ($member = $getMembers->fetch(\PDO::FETCH_OBJ)) {
+          // Parse fee object
+          $fees = json_decode($member->Fees);
+          $amount = $fees->fees[0];
+          if ($member->ASAPaid) $amount = 0;
           $total += $amount;
 
-          $getClassMembers->execute([
+          $batchItems[] = [
+            \Ramsey\Uuid\Uuid::uuid4(),
+            $batch,
+            $member->NGBCategory,
+            $member->MemberID,
+            $amount,
+            null,
+            $this->ngbYear->id,
+          ];
+        }
+      }
+
+      if ($this->clubYear) {
+        // Handle complex CLUB MEMBERSHIP fees
+        // Get membership classes for this user's members
+        $getClasses = $db->prepare("SELECT DISTINCT `ClubCategory` FROM `members` WHERE `UserID` = ?;");
+        $getClasses->execute([
+          $user,
+        ]);
+
+        while ($classId = $getClasses->fetchColumn()) {
+
+          // Get full class details
+          $getClassDetails = $db->prepare("SELECT `Name`, `Description`, `Fees` FROM clubMembershipClasses WHERE ID = ?");
+          $getClassDetails->execute([
+            $classId,
+          ]);
+
+          $classDetails = $getClassDetails->fetch(\PDO::FETCH_OBJ);
+
+          $fees = json_decode($classDetails->Fees);
+
+          // Get members with class
+
+          $getClassMembers = $db->prepare("SELECT MemberID FROM members WHERE UserID = ? AND ClubCategory = ? AND ClubPaid = ?");
+
+          $getCountClassMembers = $db->prepare("SELECT COUNT(*) FROM members WHERE UserID = ? AND ClubCategory = ? AND ClubPaid = ?");
+
+          // Get paying
+          $getCountClassMembers->execute([
             $user,
             $classId,
             0,
           ]);
 
-          $done = false;
+          $count = $getCountClassMembers->fetchColumn();
+
+          if ($count > 0) {
+
+            $amount = $fees->fees[max($count, sizeof($fees->fees)) - 1];
+            $total += $amount;
+
+            $getClassMembers->execute([
+              $user,
+              $classId,
+              0,
+            ]);
+
+            $done = false;
+
+            while ($member = $getClassMembers->fetchColumn()) {
+              if ($done) {
+                $amount = 0;
+              }
+
+              $batchItems[] = [
+                \Ramsey\Uuid\Uuid::uuid4(),
+                $batch,
+                $classId,
+                $member,
+                $amount,
+                null,
+                $this->clubYear->id,
+              ];
+
+              $done = true;
+            }
+          }
+
+          // Get non-paying
+          $getClassMembers->execute([
+            $user,
+            $classId,
+            1,
+          ]);
 
           while ($member = $getClassMembers->fetchColumn()) {
-            if ($done) {
-              $amount = 0;
-            }
+            $amount = 0;
 
             $batchItems[] = [
               \Ramsey\Uuid\Uuid::uuid4(),
@@ -250,46 +281,24 @@ class Renewal
               $member,
               $amount,
               null,
+              $this->clubYear->id,
             ];
-
-            $done = true;
           }
-        }
-
-        // Get non-paying
-        $getClassMembers->execute([
-          $user,
-          $classId,
-          1,
-        ]);
-
-        while ($member = $getClassMembers->fetchColumn()) {
-          $amount = 0;
-
-          $batchItems[] = [
-            \Ramsey\Uuid\Uuid::uuid4(),
-            $batch,
-            $classId,
-            $member,
-            $amount,
-            null,
-          ];
         }
       }
 
       // Add batch
-      $add = $db->prepare("INSERT INTO `membershipBatch` (`ID`, `User`, `Year`, `Total`, `PaymentTypes`, `PaymentDetails`) VALUES (?, ?, ?, ?, ?, ?);");
+      $add = $db->prepare("INSERT INTO `membershipBatch` (`ID`, `User`, `Total`, `PaymentTypes`, `PaymentDetails`) VALUES (?, ?, ?, ?, ?);");
       $add->execute([
         $batch,
         $user,
-        $this->year->id,
         $total,
         json_encode($paymentTypes),
         json_encode([]),
       ]);
 
       // Add batch items
-      $addBatchItem = $db->prepare("INSERT INTO `membershipBatchItems` (`ID`, `Batch`, `Membership`, `Member`, `Amount`, `Notes`) VALUES (?, ?, ?, ?, ?, ?)");
+      $addBatchItem = $db->prepare("INSERT INTO `membershipBatchItems` (`ID`, `Batch`, `Membership`, `Member`, `Amount`, `Notes`, `Year`) VALUES (?, ?, ?, ?, ?, ?, ?)");
       foreach ($batchItems as $batchItem) {
         $addBatchItem->execute($batchItem);
       }

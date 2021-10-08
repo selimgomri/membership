@@ -56,7 +56,11 @@ function getPossibleMemberships(ev) {
 
   document.getElementById('modal-confirm-button').disabled = true;
 
-  if (ev.target.value != 'null') {
+  let member = document.getElementById('member');
+  let year = document.getElementById('membership-year');
+
+  // Check values for member and membership-year
+  if (member.value != 'null' && year.value != 'null') {
     request.addEventListener('load', function () {
       if (this.status == 200) {
         let out = JSON.parse(this.responseText);
@@ -83,7 +87,8 @@ function getPossibleMemberships(ev) {
 
     let formData = new FormData();
     formData.append('id', data.batchId);
-    formData.append('member', ev.target.value);
+    formData.append('member', member.value);
+    formData.append('membership-year', year.value);
 
     request.open("POST", data.selectAjaxUrl);
     request.send(formData);
@@ -157,6 +162,7 @@ addButton.addEventListener('click', ev => {
 
       // Listen to select box and load memberships
       document.getElementById('member').addEventListener('change', getPossibleMemberships);
+      document.getElementById('membership-year').addEventListener('change', getPossibleMemberships);
 
     } else {
       box.innerHTML = failed;

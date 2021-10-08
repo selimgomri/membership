@@ -29,5 +29,6 @@ try {
     header("Location: " . autoUrl('memberships/batches/' . $id));
   }
 } catch (Exception $e) {
+  reportError($e);
   halt(404);
 }
