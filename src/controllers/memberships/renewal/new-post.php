@@ -65,6 +65,14 @@ try {
 
   $id = Uuid::uuid4();
 
+  $paymentTypes = [];
+  if (isset($_POST['payment-card']) && bool($_POST['payment-card'])) {
+    $paymentTypes[] = 'card';
+  }
+  if (isset($_POST['payment-direct-debit']) && bool($_POST['payment-direct-debit'])) {
+    $paymentTypes[] = 'dd';
+  }
+
   // Prepare to add the DB
   $insert = $db->prepare("INSERT INTO `renewalv2` (`id`, `club_year`, `ngb_year`, `start`, `end`, `default_stages`, `default_member_stages`, `metadata`, `Tenant`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
   $insert->execute([
@@ -75,7 +83,9 @@ try {
     $end->format('Y-m-d'),
     json_encode($stages),
     json_encode($memberStages),
-    json_encode([]),
+    json_encode([
+      'supported_payment_types' => $paymentTypes
+    ]),
     $tenant->getId(),
   ]);
 

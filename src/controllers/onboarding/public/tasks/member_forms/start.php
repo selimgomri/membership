@@ -91,6 +91,19 @@ include BASE_PATH . "views/head.php";
           <?php } while ($member = $getMembers->fetch(PDO::FETCH_OBJ)); ?>
         <?php } ?>
 
+        <?php if ($session->checkMemberTasksComplete()) {
+          $session->completeTask('member_forms');
+          ?>
+          <div class="alert alert-info">
+            <p class="mb-0">
+              <strong>There are no member tasks to complete</strong>
+            </p>
+            <p class="mb-0">
+              We have marked the member section as complete. <a href="<?= htmlspecialchars(autoUrl('onboarding/go')) ?>" class="alert-link">Return to main page</a>.
+            </p>
+          </div>
+        <?php } ?>
+
         </form>
       </div>
     </div>

@@ -160,13 +160,7 @@ class Renewal
       // Put together membership batch
       $batch = \Ramsey\Uuid\Uuid::uuid4();
 
-      $paymentTypes = [];
-      if (true) {
-        $paymentTypes[] = 'card';
-      }
-      if (true) {
-        $paymentTypes[] = 'dd';
-      }
+      $paymentTypes = $this->metadata->supported_payment_types;
 
       $total = 0;
       $batchItems = [];

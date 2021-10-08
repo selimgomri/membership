@@ -86,8 +86,32 @@ try {
 
   if (isset($_POST['action'])) {
     if ($_POST['action'] == 'fees') {
-      // Redirect to batch page
-      header('location: ' . autoUrl("onboarding/sessions/a/$id/batch?year=" . $_POST['year']));
+      // Create a new batch and edit
+      $addBatch = $db->prepare("INSERT INTO `membershipBatch` (`ID`, `User`, `StartText`, `Footer`, `DueDate`, `Total`, `PaymentTypes`, `PaymentDetails`, `AutoReminders`, `Creator`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+
+      $batchId = Ramsey\Uuid\Uuid::uuid4();
+
+      $addBatch->execute([
+        $batchId,
+        $session->user,
+        null,
+        null,
+        null,
+        0,
+        json_encode(['dd', 'card']),
+        json_encode([]),
+        0,
+        app()->user->getId(),
+      ]);
+
+      // Set batch ID for session
+      $update = $db->prepare("UPDATE onboardingSessions SET batch = ? WHERE id = ?");
+      $update->execute([
+        $batchId,
+        $id,
+      ]);
+
+      header('location: ' . autoUrl("memberships/batches/$batchId/edit"));
     } else if ($_POST['action'] == 'send') {
       // Send email
       $session->sendEmail();

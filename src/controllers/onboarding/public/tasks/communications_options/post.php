@@ -24,8 +24,8 @@ if ($good) {
   // If all good,
   $update = $db->prepare("UPDATE `users` SET `EmailComms` = ?, `MobileComms` = ? WHERE `UserID` = ?");
   $update->execute([
-    isset($_POST['emailContactOK']),
-    isset($_POST['smsContactOK']),
+    (int) isset($_POST['emailContactOK']),
+    (int) isset($_POST['smsContactOK']),
     $user->getId(),
   ]);
 

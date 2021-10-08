@@ -169,13 +169,23 @@ if (!$hasMembers || !$status) {
   ]);
 
   // Add members
-  $add = $db->prepare("INSERT INTO onboardingMembers (`id`, `session`, `member`) VALUES (?, ?, ?)");
+  $add = $db->prepare("INSERT INTO onboardingMembers (`id`, `session`, `member`, `stages`) VALUES (?, ?, ?, ?)");
 
   foreach ($selectedSwimmers as $member) {
+
+    $memberObj = new \Member($member);
+    $memberStages = json_decode(json_encode(\SCDS\Onboarding\Member::getDefaultStages()));
+
+    // Don't require photo consent for adults
+    if ($memberObj->getAge() >= 18) {
+      $memberStages->photography_consent->required = false;
+    }
+
     $add->execute([
       Uuid::uuid4(),
       $id,
       $member,
+      json_encode($memberStages),
     ]);
   }
 

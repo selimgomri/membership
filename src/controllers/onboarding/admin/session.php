@@ -173,18 +173,6 @@ include BASE_PATH . "views/header.php";
           </p>
         </div>
 
-        <?php if ($membershipYear && $session->status == 'not_ready' && !$session->batch) { ?>
-          <div class="mb-3">
-            <label for="year" class="form-label">Membership year</label>
-            <select class="form-select" name="year" id="year" required>
-              <option selected value="" disabled="true">Select a membership year</option>
-              <?php do { ?>
-                <option value="<?= htmlspecialchars($membershipYear->id) ?>"><?= htmlspecialchars($membershipYear->name) ?></option>
-              <?php } while ($membershipYear = $getMembershipYears->fetch(PDO::FETCH_OBJ)) ?>
-            </select>
-          </div>
-        <?php } ?>
-
         <p class="mb-2">
           Onboarding members
         </p>

@@ -62,6 +62,32 @@ include BASE_PATH . "views/header.php";
 
           <?php if ($year) { ?>
 
+            <div class="card card-body mb-3">
+              <h2 class="card-title">
+                About Membership Years
+              </h2>
+
+              <p class="lead">
+                The membership system assigns a type of membership to a specific member for a specified time period (a membership year).
+              </p>
+
+              <p>
+                At most clubs, the club and Swim England membership years run concurrently with the same start and end dates (usually 1 Jan - 31 Dec). If this applies to you, select the same membership year from both dropdowns.
+              </p>
+
+              <p>
+                If you club does not have an annual "Club Membership", select <strong>None</strong> for your "Club Membership" membership year.
+              </p>
+
+              <p>
+                If your club and Swim England membership years run with different dates, please either;
+              </p>
+              <ul class="mb-0">
+                <li>Select the appropriate membership year for club and Swim England fees. Members will pay for both types at the same time.</li>
+                <li>Select a membership year for the appropriate membership type you want to renew and select <strong>None</strong> for the other. You can repeat this the other way around when you want to renew the other type (you may wish to remove some of the required stages for one of the renewals). In this case, members will only renew and pay for the type of membership you chose a membership year for.</li>
+              </ul>
+            </div>
+
             <div class="mb-3">
               <label for="year-ngb" class="form-label">Membership year (for Swim England)</label>
               <select class="form-select" id="year-ngb" name="year-ngb" required>
@@ -151,6 +177,48 @@ include BASE_PATH . "views/header.php";
 
             <p>
               Photography consents will only be asked from members who are aged under 18 when renewal opens.
+            </p>
+
+            <div class="mb-3">
+              <p class="mb-2">Payment Options</p>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="payment-card" name="payment-card" value="1" checked>
+                <label class="form-check-label" for="payment-card">
+                  Credit/Debit card
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="payment-direct-debit" name="payment-direct-debit" value="1" checked>
+                <label class="form-check-label" for="payment-direct-debit">
+                  Direct Debit
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="payment-cash" name="payment-cash" value="1" disabled>
+                <label class="form-check-label" for="payment-cash">
+                  Cash
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="payment-cheque" name="payment-cheque" value="1" disabled>
+                <label class="form-check-label" for="payment-cheque">
+                  Cheque
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="payment-wire" name="payment-wire" value="1" disabled>
+                <label class="form-check-label" for="payment-wire">
+                  Bank Transfer
+                </label>
+              </div>
+            </div>
+
+            <p>
+              Payment types will only be available to users if they also meet the criteria for that type. e.g. to pay by Direct Debit, it must be enabled for their renewal session, your club must have Direct Debit payments enabled and the user must have a Direct Debit mandate set up.
+            </p>
+
+            <p>
+              You can edit payment options for individual users later - for example if your preferred and only enabled payment method for a renewal is Direct Debit but have a member for whom this is inappropriate, you can enable the card payment option just for them.
             </p>
 
             <?= \SCDS\CSRF::write(); ?>
