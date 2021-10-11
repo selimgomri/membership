@@ -3,6 +3,10 @@
 // Verify user has access
 \SCDS\Can::view('TeamManager', $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], $id);
 
+use Brick\PhoneNumber\PhoneNumber;
+use Brick\PhoneNumber\PhoneNumberParseException;
+use Brick\PhoneNumber\PhoneNumberFormat;
+
 $db = app()->db;
 $tenant = app()->tenant;
 
@@ -26,10 +30,6 @@ $swimmer = $getSwimmers->fetch(PDO::FETCH_ASSOC);
 $squads = $db->prepare("SELECT SquadName FROM squads INNER JOIN squadMembers ON squads.SquadID = squadMembers.Squad WHERE squadMembers.Member = ?");
 
 $markdown = new ParsedownExtra();
-
-use Brick\PhoneNumber\PhoneNumber;
-use Brick\PhoneNumber\PhoneNumberParseException;
-use Brick\PhoneNumber\PhoneNumberFormat;
 
 $mobile = null;
 try {
@@ -80,6 +80,9 @@ include BASE_PATH . 'views/header.php';
               $swimmer['id']
             ]);
             $s = $squads->fetchAll(PDO::FETCH_COLUMN);
+
+            $member = new Member($swimmer['id']);
+            $medical = $member->getMedicalNotes();
           ?>
             <li class="list-group-item <?php if ($i % 2 == 1) { ?>bg-light<?php } ?>">
               <div class="row align-items-center">
@@ -112,25 +115,83 @@ include BASE_PATH . 'views/header.php';
                   <div class="col-md">
                     <h3>Medical information</h3>
 
-                    <h4>Medical conditions</h4>
-                    <?php if ($swimmer['Conditions']) { ?>
-                      <?= $markdown->text($swimmer['Conditions']) ?>
-                    <?php } else { ?>
-                      <p>None</p>
-                    <?php } ?>
+                    <dl>
+                      <?php if ($medical->hasMedicalNotes()) { ?>
+                        <dt class="text-truncate">
+                          Medical Conditions or Disabilities
+                        </dt>
+                        <dd>
+                          <?= $medical->getConditions() ?>
+                        </dd>
 
-                    <h4>Allergies</h4>
-                    <?php if ($swimmer['Allergies']) { ?>
-                      <?= $markdown->text($swimmer['Allergies']) ?>
-                    <?php } else { ?>
-                      <p>None</p>
-                    <?php } ?>
+                        <dt class="text-truncate">
+                          Allergies
+                        </dt>
+                        <dd>
+                          <?= $medical->getAllergies() ?>
+                        </dd>
 
-                    <h4>Medication</h4>
-                    <?php if ($swimmer['Medication']) { ?>
-                      <?= $markdown->text($swimmer['Medication']) ?>
-                    <?php } else { ?>
-                      <p>None</p>
+                        <dt class="text-truncate">
+                          Medication
+                        </dt>
+                        <dd>
+                          <?= $medical->getMedication() ?>
+                        </dd>
+                      <?php } ?>
+
+                      <?php if ($member->getAge() < 18) { ?>
+                        <dt class="text-truncate">
+                          Consent
+                        </dt>
+                        <dd>
+                          <?= htmlspecialchars($medical->hasConsent()) ?>
+                        </dd>
+
+                        <?php if ($medical->getGpName()) { ?>
+                          <dt class="text-truncate">
+                            Name of GP
+                          </dt>
+                          <dd>
+                            <?= htmlspecialchars($medical->getGpName()) ?>
+                          </dd>
+                        <?php } ?>
+
+                        <?php if ($medical->getGpAddress()) { ?>
+                          <dt class="text-truncate">
+                            GP Address
+                          </dt>
+                          <dd>
+                            <?php foreach ($medical->getGpAddress() as $line) { ?>
+                              <?= htmlspecialchars($line) ?><br>
+                            <?php } ?>
+                          </dd>
+                        <?php } ?>
+
+                        <?php if ($medical->getGpPhone()) {
+                          try {
+                            $number = PhoneNumber::parse($medical->getGpPhone());
+
+                        ?>
+                            <dt class="text-truncate">
+                              GP Phone
+                            </dt>
+                            <dd>
+                              <a href="<?= htmlspecialchars($number->format(PhoneNumberFormat::RFC3966)) ?>"><?= htmlspecialchars($number->format(PhoneNumberFormat::INTERNATIONAL)) ?></a>
+                            </dd>
+                        <?php
+                          } catch (PhoneNumberParseException $e) {
+                            // Ignore
+                          }
+                        } ?>
+                      <?php } ?>
+                    </dl>
+
+                    <?php if (!$medical->hasMedicalNotes()) { ?>
+
+                      <p>
+                        <?= htmlspecialchars($member->getForename()) ?> does not have any specific medical notes to display.
+                      </p>
+
                     <?php } ?>
                   </div>
                   <div class="col-md">

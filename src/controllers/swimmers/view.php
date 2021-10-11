@@ -6,6 +6,10 @@
 
 $db = app()->db;
 
+use Brick\PhoneNumber\PhoneNumber;
+use Brick\PhoneNumber\PhoneNumberParseException;
+use Brick\PhoneNumber\PhoneNumberFormat;
+
 try {
   $member = new Member($id);
 } catch (Exception $e) {
@@ -306,9 +310,9 @@ include BASE_PATH . 'views/header.php';
       <h2 id="medical-details">Medical notes</h2>
 
       <?php $medical = $member->getMedicalNotes(); ?>
-      <?php if ($medical->hasMedicalNotes()) { ?>
 
-        <dl>
+      <dl>
+        <?php if ($medical->hasMedicalNotes()) { ?>
           <dt class="text-truncate">
             Medical Conditions or Disabilities
           </dt>
@@ -329,12 +333,59 @@ include BASE_PATH . 'views/header.php';
           <dd>
             <div class="cell mt-1 mb-0"><?= $medical->getMedication() ?></div>
           </dd>
-        </dl>
+        <?php } ?>
 
-      <?php } else { ?>
+        <?php if ($member->getAge() < 18) { ?>
+          <dt class="text-truncate">
+            Consent
+          </dt>
+          <dd>
+            <?= htmlspecialchars($medical->hasConsent()) ?>
+          </dd>
+
+          <?php if ($medical->getGpName()) { ?>
+            <dt class="text-truncate">
+              Name of GP
+            </dt>
+            <dd>
+              <?= htmlspecialchars($medical->getGpName()) ?>
+            </dd>
+          <?php } ?>
+
+          <?php if ($medical->getGpAddress()) { ?>
+            <dt class="text-truncate">
+              GP Address
+            </dt>
+            <dd>
+              <?php foreach ($medical->getGpAddress() as $line) { ?>
+                <?= htmlspecialchars($line) ?><br>
+              <?php } ?>
+            </dd>
+          <?php } ?>
+
+          <?php if ($medical->getGpPhone()) {
+            try {
+              $number = PhoneNumber::parse($medical->getGpPhone());
+
+          ?>
+              <dt class="text-truncate">
+                GP Phone
+              </dt>
+              <dd>
+                <a href="<?= htmlspecialchars($number->format(PhoneNumberFormat::RFC3966)) ?>"><?= htmlspecialchars($number->format(PhoneNumberFormat::INTERNATIONAL)) ?></a>
+              </dd>
+          <?php
+            } catch (PhoneNumberParseException $e) {
+              // Ignore
+            }
+          } ?>
+        <?php } ?>
+      </dl>
+
+      <?php if (!$medical->hasMedicalNotes()) { ?>
 
         <p>
-          <?= htmlspecialchars($member->getForename()) ?> does not have any medical notes to display.
+          <?= htmlspecialchars($member->getForename()) ?> does not have any specific medical notes to display.
         </p>
 
       <?php } ?>
