@@ -5,6 +5,8 @@ $_SESSION['TENANT-' . app()->tenant->getId()]['NotifyPostData'] = $_POST;
 $db = app()->db;
 $tenant = app()->tenant;
 
+$sendingCategory = 'Notify';
+
 $client = new Aws\S3\S3Client([
   'version'     => 'latest',
   'region'      => getenv('AWS_S3_REGION'),
@@ -197,6 +199,19 @@ try {
   }
 
   // reportError($attachments);
+
+  if (isset($_POST['subscription-category']) && $_POST['subscription-category'] != 'DEFAULT') {
+    // Check exists
+    $checkCategory = $db->prepare("SELECT COUNT(*) FROM `notifyCategories` WHERE `ID` = ? AND `Tenant` = ? AND Active");
+    $checkCategory->execute([
+      $_POST['subscription-category'],
+      $tenant->getId(),
+    ]);
+
+    if ($check->fetchColumn() != 1) throw new Exception('No subscription category');
+
+    $sendingCategory = $_POST['subscription-category'];
+  }
 
   $subject = trim(str_replace('!', '', str_replace('*', '', $_POST['subject'])));
   $message = str_replace($to_remove, "", $_POST['message']);
@@ -517,7 +532,7 @@ try {
     }
     $tos = [];
     while ($user = $getUsersForEmail->fetch(PDO::FETCH_ASSOC)) {
-      if ($currentMessage['ForceSend'] || isSubscribed($user['UserID'], 'Notify')) {
+      if (($sendingCategory == 'Notify' && ($currentMessage['ForceSend'] || isSubscribed($user['UserID'], $sendingCategory))) || ($sendingCategory != 'Notify' && ($currentMessage['ForceSend'] || isAbsolutelySubscribed($user['UserID'], $sendingCategory)))) {
         $tos[] = new \SendGrid\Mail\To(
           $user['EmailAddress'],
           $user['Forename'] . ' ' . $user['Surname'],
@@ -526,17 +541,19 @@ try {
             '-unsub_link-' => autoUrl("notify/unsubscribe/" . dechex($user['UserID']) .  "/" . urlencode($user['EmailAddress']) . "/Notify")
           ]
         );
-        $getExtraEmails->execute([$user['UserID']]);
-        while ($extraEmails = $getExtraEmails->fetch(PDO::FETCH_ASSOC)) {
-          $tos[] = new \SendGrid\Mail\To(
-            $extraEmails['EmailAddress'],
-            $extraEmails['Name'],
-            [
-              '-name-' => $extraEmails['Name'],
-              '-unsub_link-' => autoUrl("cc/" . dechex($extraEmails['ID']) .  "/" . hash('sha256', $extraEmails['ID']) . "/unsubscribe")
-            ]
-          );
-          $ccEmails[$extraEmails['EmailAddress']] = $extraEmails['Name'];
+        if ($sendingCategory == 'Notify') {
+          $getExtraEmails->execute([$user['UserID']]);
+          while ($extraEmails = $getExtraEmails->fetch(PDO::FETCH_ASSOC)) {
+            $tos[] = new \SendGrid\Mail\To(
+              $extraEmails['EmailAddress'],
+              $extraEmails['Name'],
+              [
+                '-name-' => $extraEmails['Name'],
+                '-unsub_link-' => autoUrl("cc/" . dechex($extraEmails['ID']) .  "/" . hash('sha256', $extraEmails['ID']) . "/unsubscribe")
+              ]
+            );
+            $ccEmails[$extraEmails['EmailAddress']] = $extraEmails['Name'];
+          }
         }
         // $completed->execute(['Sent', $user['EmailID']]);
       } else {

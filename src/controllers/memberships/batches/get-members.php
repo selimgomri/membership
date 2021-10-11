@@ -54,7 +54,7 @@ ob_start();
   </div>
 
   <div class="">
-    <label for="membership-year" class="form-label">Membership year (for Swim England)</label>
+    <label for="membership-year" class="form-label">Membership year</label>
     <select class="form-select" id="membership-year" name="membership-year" required>
       <option disabled selected value="null">Choose a year</option>
       <?php do {

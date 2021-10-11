@@ -46,7 +46,7 @@ if (isset($_POST['medicineDetails']) && mb_strlen(trim($_POST['medicineDetails']
   $medication = trim($_POST['medicineDetails']);
 }
 
-if ($member->getAge() < 18 && isset($_POST['emergency-medical-auth'])) {
+if ($member->getAge() < 18) {
   if (isset($_POST['gp-name']) && mb_strlen(trim($_POST['gp-name'])) > 0) {
     $gpName = trim($_POST['gp-name']);
   }
@@ -58,7 +58,7 @@ if ($member->getAge() < 18 && isset($_POST['emergency-medical-auth'])) {
   if (isset($_POST['gp-phone']) && mb_strlen(trim($_POST['gp-phone'])) > 0 && v::phone()->validate($_POST['gp-phone'])) {
     try {
       $mobile = PhoneNumber::parse($_POST['gp-phone'], 'GB');
-      $phone = $mobile->format(PhoneNumberFormat::E164);
+      $gpPhone = $mobile->format(PhoneNumberFormat::E164);
     } catch (Exception $e) {
     }
   }
@@ -85,7 +85,7 @@ if ($getCount->fetchColumn() == 0) {
     $gpName,
     $gpAddress,
     $gpPhone,
-    $withhold,
+    (int) $withhold,
   ]);
 } else {
   $update = $db->prepare("UPDATE `memberMedical` SET `Conditions` = ?, `Allergies` = ?, `Medication` = ?, `GPName` = ?, `GPAddress` = ?, `GPPhone` = ?, `WithholdConsent` = ? WHERE `MemberID` = ?");
@@ -96,7 +96,7 @@ if ($getCount->fetchColumn() == 0) {
     $gpName,
     $gpAddress,
     $gpPhone,
-    $withhold,
+    (int) $withhold,
     $member->getId(),
   ]);
 }

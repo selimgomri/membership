@@ -74,7 +74,12 @@ $this->group('/fees', function () {
   });
 });
 
+$this->get('/sign-in', function () {
+  include 'sign-in.php';
+});
+
 $this->get('/error', function () {
+  include 'error.php';
 });
 
 $this->get('/wrong-account', function () {

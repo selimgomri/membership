@@ -90,6 +90,16 @@ include BASE_PATH . "views/head.php";
           <p>
             You're all set. Welcome to <?= htmlspecialchars(app()->tenant->getName()) ?>.
           </p>
+
+          <?php if (!isset(app()->user)) { ?>
+            <p>
+              <a href="<?= htmlspecialchars(autoUrl('onboarding/go/sign-in')) ?>" class="btn btn-success">Continue to your account</a>
+            </p>
+          <?php } else { ?>
+            <p>
+              <a href="<?= htmlspecialchars(autoUrl('')) ?>" class="btn btn-success">Return to your account</a>
+            </p>
+          <?php } ?>
         <?php } else { ?>
 
           <?php if ($session->dueDate) { ?>

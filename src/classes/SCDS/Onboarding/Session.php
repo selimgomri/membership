@@ -32,6 +32,7 @@ class Session
   public $members;
   public $renewal;
   private $currentStage;
+  public $type;
 
   private function __construct()
   {
@@ -70,6 +71,7 @@ class Session
     $session->stages = json_decode($sessionInfo->stages);
     $session->metadata = json_decode($sessionInfo->metadata);
     $session->batch = $sessionInfo->batch;
+    $session->type = $sessionInfo->type;
     if ($sessionInfo->renewal) {
       // Get renewal
       $session->renewal = Renewal::retrieve($sessionInfo->renewal);
@@ -236,12 +238,13 @@ class Session
       // Check if marked as done
       if ($this->status != 'complete') {
 
-        $update = $db->prepare("UPDATE `onboardingSessions` SET `status` = ?, `completed_at` = ? WHERE `id` = ?");
+        $update = $db->prepare("UPDATE `onboardingSessions` SET `status` = ?, `completed_at` = ?, `token_on` = ? WHERE `id` = ?");
         $this->status = 'complete';
         $this->completedAt = (new DateTime('now', new DateTimeZone('UTC')));
         $update->execute([
           $this->status,
           $this->completedAt->format('Y-m-d H:i:s'),
+          (int) false,
           $this->id,
         ]);
 
@@ -276,7 +279,11 @@ class Session
 
           $content .= '<p>Thank you for completing your ' . $name . ' tasks.</p>';
 
-          $content .= '<p>In future this email will contain welcome info (if registration onboarding).</p>';
+          if ($this->creator && !$this->renewal) {
+            $content .= '<p>We have also told the person who started your onboarding session that you have completed your tasks.</p>';
+          }
+
+          // $content .= '<p>In future this email will contain welcome info (if registration onboarding).</p>';
 
           $content .= '<p>Thank you, <br>The ' . htmlspecialchars(app()->tenant->getName()) . ' team.</p>';
 

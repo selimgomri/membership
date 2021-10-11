@@ -34,8 +34,9 @@ if (app()->tenant->getBooleanKey('ALLOW_STRIPE_DIRECT_DEBIT_SET_UP') && app()->t
   ]);
   $mandate = $getMandates->fetch(PDO::FETCH_ASSOC);
 
-  $ddi = new stdClass();
+  $ddi = null;
   if ($mandate) {
+    $ddi = new stdClass();
     $good = true;
     $ddi->last4 = $mandate['Last4'];
     $ddi->sortCode = implode("-", str_split($mandate['SortCode'], 2));

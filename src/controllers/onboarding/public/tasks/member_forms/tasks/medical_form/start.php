@@ -198,7 +198,7 @@ include BASE_PATH . "views/head.php";
 
             <div class="mb-3">
               <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="1" id="emergency-medical-auth" name="emergency-medical-auth" <?php if (isset($row['WitholdConsent']) && !$row['WitholdConsent']) { ?>checked<?php } ?>>
+                <input class="form-check-input" type="checkbox" value="1" id="emergency-medical-auth" name="emergency-medical-auth" <?php if (isset($row['WithholdConsent']) && !$row['WithholdConsent']) { ?>checked<?php } ?>>
                 <label class="form-check-label" for="emergency-medical-auth">
                   I, <?= htmlspecialchars($user->getFullName()) ?> consent and grant such authority
                 </label>
@@ -210,14 +210,26 @@ include BASE_PATH . "views/head.php";
               <input type="text" class="form-control" id="gp-name" name="gp-name" <?php if (isset($row['GPName'])) { ?>value="<?= htmlspecialchars($row['GPName']) ?>"<?php } ?>>
             </div>
 
+            <?php
+
+            $address = "";
+            if ($row['GPAddress']) {
+              $data = json_decode($row['GPAddress']);
+              for ($i=0; $i < sizeof($data); $i++) { 
+                $address .= $data[$i] . "\r\n";
+              }
+              $address = trim($address);
+            }
+            ?>
+
             <div class="mb-3">
-              <label for="gp-name" class="form-label">Address</label>
-              <textarea id="gp-name" name="gp-name" class="form-control" rows="5"><?php if (isset($row['GPAddress'])) { ?><?= htmlspecialchars($row['GPAddress']) ?><?php } ?></textarea>
+              <label for="gp-address" class="form-label">Address</label>
+              <textarea id="gp-address" name="gp-address" class="form-control" rows="5"><?= htmlspecialchars($address) ?></textarea>
             </div>
 
             <div class="mb-3">
-              <label for="gp-tel" class="form-label">GP telephone number</label>
-              <input type="tel" class="form-control" id="gp-tel" name="gp-tel" <?php if (isset($row['GPPhone'])) { ?>value="<?= htmlspecialchars($row['GPPhone']) ?>"<?php } ?>>
+              <label for="gp-phone" class="form-label">GP telephone number</label>
+              <input type="tel" class="form-control" id="gp-phone" name="gp-phone" <?php if (isset($row['GPPhone'])) { ?>value="<?= htmlspecialchars($row['GPPhone']) ?>"<?php } ?>>
             </div>
           <?php } ?>
 

@@ -24,7 +24,7 @@ class Login
     $checkExists = $this->db->prepare("SELECT COUNT(*) FROM users WHERE UserID = ?");
     $checkExists->execute([$user]);
     if ($checkExists->fetchColumn() == 0) {
-      throw new Exception();
+      throw new \Exception();
     }
   }
 

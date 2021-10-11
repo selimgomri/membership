@@ -27,12 +27,57 @@ class Batch
     if (!$batch) throw new \Exception();
 
     // Get batch items
-    $getBatchItems = $db->prepare("SELECT membershipBatchItems.ID id, membershipBatchItems.Membership membershipId, membershipBatchItems.Amount amount, membershipBatchItems.Notes notes, members.MForename firstName, members.MSurname lastName, members.ASANumber ngbId, clubMembershipClasses.Type membershipType, clubMembershipClasses.Name membershipName, clubMembershipClasses.Description membershipDescription, membershipYear.ID yearId, membershipYear.Name yearName, membershipYear.StartDate yearStart, membershipYear.EndDate yearEnd FROM membershipBatchItems INNER JOIN membershipYear ON membershipYear.ID = membershipBatchItems.Year INNER JOIN members ON members.MemberID = membershipBatchItems.Member INNER JOIN clubMembershipClasses ON clubMembershipClasses.ID = membershipBatchItems.Membership WHERE Batch = ?");
+    $getBatchItems = $db->prepare("SELECT membershipBatchItems.ID id, membershipBatchItems.Membership membershipId, membershipBatchItems.Amount amount, membershipBatchItems.Notes notes, members.MemberID memberId, members.MForename firstName, members.MSurname lastName, members.ASANumber ngbId, clubMembershipClasses.Type membershipType, clubMembershipClasses.Name membershipName, clubMembershipClasses.Description membershipDescription, membershipYear.ID yearId, membershipYear.Name yearName, membershipYear.StartDate yearStart, membershipYear.EndDate yearEnd FROM membershipBatchItems INNER JOIN membershipYear ON membershipYear.ID = membershipBatchItems.Year INNER JOIN members ON members.MemberID = membershipBatchItems.Member INNER JOIN clubMembershipClasses ON clubMembershipClasses.ID = membershipBatchItems.Membership WHERE Batch = ?");
     $getBatchItems->execute([
       $batchId
     ]);
 
     $payMethods = json_decode($batch->payMethods);
+
+    // CHECK IF ALREADY ASSIGNED
+    $checkExists = $db->prepare("SELECT COUNT(*) FROM `memberships` WHERE `Member` = ? AND `Year` = ? AND `Membership` = ?");
+    $deleteFromBatch = $db->prepare("DELETE FROM `membershipBatchItems` WHERE `ID` = ?");
+    $batchTotal = $db->prepare("SELECT SUM(`Amount`) FROM `membershipBatchItems` WHERE `Batch` = ?");
+    $updateBatch = $db->prepare("UPDATE `membershipBatch` SET `Total` = ? WHERE `ID` = ?");
+
+    while ($item = $getBatchItems->fetch(\PDO::FETCH_OBJ)) {
+      $checkExists->execute([
+        $item->memberId,
+        $item->yearId,
+        $item->membershipId
+      ]);
+
+      if ($checkExists->fetchColumn()) {
+        // Remove from batch because the membership is already assigned for this year
+        $deleteFromBatch->execute([
+          $item->id,
+        ]);
+
+        // Recalculate batch total
+        $batchTotal->execute([
+          $batchId,
+        ]);
+        $total = $batchTotal->fetchColumn();
+
+        // Update batch total
+        $updateBatch->execute([
+          $total,
+          $batchId,
+        ]);
+      }
+    }
+
+    // Reload list of items
+    $getBatchItems->execute([
+      $batchId
+    ]);
+
+    // Reload batch data
+    $getBatch->execute([
+      $batchId,
+      app()->tenant->getId(),
+    ]);
+    $batch = $getBatch->fetch(\PDO::FETCH_OBJ);
 
     if ($method == 'card') {
       // Create a checkout_v1 session

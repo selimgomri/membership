@@ -29,6 +29,20 @@ if ($good) {
     $user->getId(),
   ]);
 
+  updateSubscription(isset($_POST['PaymentComms']), 'Payments', $user->getId());
+  if ($user->hasPermission('Admin')) {
+    updateSubscription(isset($_POST['NewMemberComms']), 'NewMember', $user->getId());
+  }
+
+  $getCategories = $db->prepare("SELECT `ID` `id`, `Name` `name`, `Description` `description` FROM `notifyCategories` WHERE `Tenant` = ? AND `Active` ORDER BY `Name` ASC;");
+  $getCategories->execute([
+    $tenant->getId()
+  ]);
+
+  while ($category = $getCategories->fetch(PDO::FETCH_OBJ)) {
+    updateSubscription(isset($_POST['email-category-' . $category->id]), $category->id, $user->getId());
+  }
+
   // Set complete
   $session->completeTask('communications_options');
 

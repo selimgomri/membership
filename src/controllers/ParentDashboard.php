@@ -115,9 +115,14 @@ include BASE_PATH . "views/header.php";
             <?php do {
               $onboarding = \SCDS\Onboarding\Session::retrieve($onboardingId);
             ?>
-              <a href="<?= htmlspecialchars(autoUrl("onboarding/go-to-session?session=" . urlencode($onboarding->id))) ?>" class="btn btn-dark">
-                Go
-              </a>
+              <p>
+                Complete your <?= htmlspecialchars($onboarding->type) ?> now
+              </p>
+              <p class="mb-0">
+                <a href="<?= htmlspecialchars(autoUrl("onboarding/go-to-session?session=" . urlencode($onboarding->id))) ?>" class="btn btn-dark">
+                  Start now <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                </a>
+              </p>
             <?php } while ($onboardingId = $getOnboarding->fetchColumn()); ?>
 
           </div>

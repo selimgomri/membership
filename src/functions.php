@@ -1122,6 +1122,24 @@ function isSubscribed($user, $email_type)
   return false;
 }
 
+function isAbsolutelySubscribed($user, $type) {
+  $db = app()->db;
+  $tenant = app()->tenant;
+
+  $get = $db->prepare("SELECT Subscribed FROM notifyOptions INNER JOIN users ON users.UserID = notifyOptions.UserID WHERE notifyOptions.UserID = ? AND Tenant = ? AND EmailType = ?");
+  $get->execute([
+    $user,
+    $tenant->getId(),
+    $type,
+  ]);
+
+  $result = $get->fetchColumn();
+
+  if (!$result) return false;
+
+  return bool($result);
+}
+
 function updateSubscription($post, $list, $user = null)
 {
   $db = app()->db;

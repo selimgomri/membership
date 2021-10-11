@@ -22,6 +22,11 @@ $userDetails->execute([
 
 $details = $userDetails->fetch(PDO::FETCH_ASSOC);
 
+$getCategories = $db->prepare("SELECT `ID` `id`, `Name` `name`, `Description` `description` FROM `notifyCategories` WHERE `Tenant` = ? AND `Active` ORDER BY `Name` ASC;");
+$getCategories->execute([
+  $tenant->getId()
+]);
+
 
 $pagetitle = 'Communications Options - Onboarding';
 
@@ -66,19 +71,65 @@ include BASE_PATH . "views/head.php";
 
         <form method="post" class="needs-validation" novalidate>
 
-          <div class="mb-3">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="1" id="emailContactOK" aria-describedby="emailContactOKHelp" name="emailContactOK" <?php if ($details['EmailComms']) { ?>checked<?php } ?>>
-              <label class="form-check-label" for="emailContactOK">I would like to receive important news and messages from squad coaches by email</label>
-              <div><small id="emailContactOKHelp" class="form-text text-muted">You'll still receive emails relating to your account if you don't receive news</small></div>
+          <div class="card mb-3">
+            <div class="card-header">
+              Email
+            </div>
+            <div class="card-body pb-0">
+
+              <div class="mb-3">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" value="1" id="emailContactOK" aria-describedby="emailContactOKHelp" name="emailContactOK" <?php if ($details['EmailComms']) { ?>checked<?php } ?>>
+                  <label class="form-check-label" for="emailContactOK">I would like to receive important news and messages from squad coaches by email</label>
+                  <div><small id="emailContactOKHelp" class="form-text text-muted">You'll still receive emails relating to your account if you don't receive news</small></div>
+                </div>
+              </div>
+
+              <?php if ($user->hasPermission('Parent')) { ?>
+                <div class="mb-3">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="1" id="PaymentComms" aria-describedby="PaymentCommsHelp" name="PaymentComms" <?php if (isSubscribed($user->getId(), 'Payments')) { ?>checked<?php } ?>>
+                    <label class="form-check-label" for="PaymentComms">Receive payment emails</label>
+                    <div><small id="PaymentCommsHelp" class="form-text text-muted">If you opt out, you'll still receive emails required for regulatory purposes such as receipts or advance payment emails.</small></div>
+                  </div>
+                </div>
+              <?php } ?>
+
+              <?php if ($user->hasPermission('Admin')) { ?>
+                <div class="mb-3">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="1" id="NewMemberComms" aria-describedby="NewMemberCommsHelp" name="NewMemberComms" <?php if (isSubscribed($user->getId(), 'NewMember')) { ?>checked<?php } ?>>
+                    <label class="form-check-label" for="NewMemberComms">Receive new member emails</label>
+                    <div><small id="NewMemberCommsHelp" class="form-text text-muted">Get notified when new members are added.</small></div>
+                  </div>
+                </div>
+              <?php } ?>
+
+              <?php while ($category = $getCategories->fetch(PDO::FETCH_OBJ)) { ?>
+                <div class="mb-3">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="1" id="<?= htmlspecialchars('email-category-' . $category->id) ?>" aria-describedby="<?= htmlspecialchars('help-email-category-' . $category->id) ?>" name="<?= htmlspecialchars('email-category-' . $category->id) ?>" <?php if (isAbsolutelySubscribed($user->getId(), $category->id)) { ?>checked<?php } ?>>
+                    <label class="form-check-label" for="<?= htmlspecialchars('email-category-' . $category->id) ?>"><?= htmlspecialchars($category->name) ?></label>
+                    <div><small id="<?= htmlspecialchars('help-email-category-' . $category->id) ?>" class="form-text text-muted"><?= htmlspecialchars($category->description) ?></small></div>
+                  </div>
+                </div>
+              <?php } ?>
             </div>
           </div>
 
-          <div class="mb-3">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="1" id="smsContactOK" aria-describedby="smsContactOKHelp" name="smsContactOK" <?php if ($details['MobileComms']) { ?>checked<?php } ?>>
-              <label class="form-check-label" for="smsContactOK">I would like to receive important text messages</label>
-              <div><small id="smsContactOKHelp" class="form-text text-muted">We'll still use this to contact you in an emergency. <?= htmlspecialchars(app()->tenant->getName()) ?> may not offer SMS services.</small></div>
+          <div class="card mb-3">
+            <div class="card-header">
+              SMS
+            </div>
+            <div class="card-body pb-0">
+
+              <div class="mb-3">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" value="1" id="smsContactOK" aria-describedby="smsContactOKHelp" name="smsContactOK" <?php if ($details['MobileComms']) { ?>checked<?php } ?>>
+                  <label class="form-check-label" for="smsContactOK">I would like to receive important text messages</label>
+                  <div><small id="smsContactOKHelp" class="form-text text-muted">We'll still use this to contact you in an emergency. <?= htmlspecialchars(app()->tenant->getName()) ?> may not offer SMS services.</small></div>
+                </div>
+              </div>
             </div>
           </div>
 

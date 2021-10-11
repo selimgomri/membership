@@ -1,11 +1,15 @@
 <?php
 
-if (!isset($_GET['session']) || !isset($_GET['token'])) halt(404);
+if (!isset($_GET['session']) || !isset($_GET['token'])) {
+  header("location: " . autoUrl("onboarding/go/error"));
+  return;
+}
 
 $session = \SCDS\Onboarding\Session::retrieve($_GET['session']);
 
 if ($session->token != $_GET['token']) {
-  halt(404);
+  header("location: " . autoUrl("onboarding/go/error"));
+  return;
 }
 
 if ($session->status == 'not_ready') {
@@ -17,7 +21,7 @@ if ($session->status == 'not_ready') {
 } else {
   // Good to go
 
-  // Login?
+  // Login only at the end if onboarding session
 
   // Redirect
   $_SESSION['OnboardingSessionId'] = $session->id;

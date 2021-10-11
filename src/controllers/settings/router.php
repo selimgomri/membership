@@ -52,6 +52,28 @@ $this->group('/terms-and-conditions', function() {
   });
 });
 
+$this->group('/notify-categories', function() {
+  $this->get('/', function() {
+    include 'notify-categories.php';
+  });
+
+  $this->post('/list', function() {
+    include 'notify-categories-list.php';
+  });
+
+  $this->post('/new', function() {
+    include 'notify-categories-new.php';
+  });
+
+  $this->post('/delete', function() {
+    include 'notify-categories-delete.php';
+  });
+
+  $this->post('/update', function() {
+    include 'notify-categories-update.php';
+  });
+});
+
 $this->group('/codes-of-conduct', function() {
   $this->get('/', function() {
     header("Location: " . autoUrl("settings/codes-of-conduct/parent"));
