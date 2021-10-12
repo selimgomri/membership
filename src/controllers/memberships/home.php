@@ -139,7 +139,7 @@ include BASE_PATH . "views/header.php";
 
 				<h2>Membership Batches</h2>
 				<p>
-					<a href="<?= htmlspecialchars(autoUrl('memberships/batches/all')) ?>" class="btn btn-primary">
+					<a href="<?= htmlspecialchars(autoUrl('memberships/batches')) ?>" class="btn btn-primary">
 						View or edit batches
 					</a>
 				</p>

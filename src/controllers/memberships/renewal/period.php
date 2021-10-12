@@ -22,6 +22,21 @@ $stageNames = SCDS\Onboarding\Session::stagesOrder();
 $memberStages = SCDS\Onboarding\Member::getDefaultStages();
 $memberStageNames = SCDS\Onboarding\Member::stagesOrder();
 
+// Calculate statistics
+$getCount = $db->prepare("SELECT COUNT(*) FROM `onboardingSessions` WHERE `renewal` = ? AND `status` = ?");
+$getCount->execute([
+  $id,
+  'complete',
+]);
+$complete = $getCount->fetchColumn();
+
+$getCount = $db->prepare("SELECT COUNT(*) FROM `onboardingSessions` WHERE `renewal` = ? AND `status` != ?");
+$getCount->execute([
+  $id,
+  'complete',
+]);
+$notComplete = $getCount->fetchColumn();
+
 $pagetitle = htmlspecialchars($renewal->start->format('j M Y') . " - " . $renewal->end->format('j M Y')) . " - Renewal - Membership Centre";
 include BASE_PATH . "views/header.php";
 
@@ -45,7 +60,7 @@ include BASE_PATH . "views/header.php";
           <?= htmlspecialchars($renewal->start->format('j M Y')) ?> - <?= htmlspecialchars($renewal->end->format('j M Y')) ?> Renewal
         </h1>
         <p class="lead mb-0">
-          For the year <?= htmlspecialchars($renewal->year->start->format('j M Y')) ?> - <?= htmlspecialchars($renewal->year->end->format('j M Y')) ?> (<?= htmlspecialchars($renewal->year->name) ?>)
+          For the <?php if ($renewal->clubYear) { ?> club membership year <?= htmlspecialchars($renewal->clubYear->start->format('j M Y')) ?> - <?= htmlspecialchars($renewal->clubYear->end->format('j M Y')) ?><?php } ?><?php if ($renewal->clubYear && $renewal->ngbYear) { ?> and the <?php } ?><?php if ($renewal->ngbYear) { ?> Swim England membership year <?= htmlspecialchars($renewal->ngbYear->start->format('j M Y')) ?> - <?= htmlspecialchars($renewal->ngbYear->end->format('j M Y')) ?><?php } ?>
         </p>
       </div>
       <div class="col text-lg-end">
@@ -63,7 +78,39 @@ include BASE_PATH . "views/header.php";
     <div class="col-lg-8">
       <main>
 
-      <?php //$renewal->generateSessions() ?>
+        <?php //$renewal->generateSessions() 
+        ?>
+
+        <?php if ($complete + $notComplete == 0) { ?>
+          <div class="alert alert-warning">
+            <p class="mb-0">
+              <strong>Renewal sessions for this renewal period have not been created yet.</strong>
+            </p>
+            <p class="mb-0">
+              They will be created automatically when this renewal period starts.
+            </p>
+          </div>
+        <?php } else { ?>
+
+          <h2>View associated onboarding sessions</h2>
+
+          <div class="d-grid gap-2">
+            <a class="btn btn-primary" href="<?= htmlspecialchars(autoUrl("onboarding/all?renewal=" . urlencode($id) . "&type=")) ?>">All</a>
+            <a class="btn btn-primary" href="<?= htmlspecialchars(autoUrl("onboarding/all?renewal=" . urlencode($id) . "&type=not_ready")) ?>">Not Ready</a>
+            <a class="btn btn-primary" href="<?= htmlspecialchars(autoUrl("onboarding/all?renewal=" . urlencode($id) . "&type=pending")) ?>">Pending</a>
+            <a class="btn btn-primary" href="<?= htmlspecialchars(autoUrl("onboarding/all?renewal=" . urlencode($id) . "&type=in_progress")) ?>">In Progress</a>
+            <a class="btn btn-primary" href="<?= htmlspecialchars(autoUrl("onboarding/all?renewal=" . urlencode($id) . "&type=complete")) ?>">Complete</a>
+          </div>
+
+        <?php } ?>
+
+        <p>
+          Note: Our new onboarding and renewal systems have soft-launched and are working, but we still have a few things to finish off.
+        </p>
+
+        <p>
+          <?= htmlspecialchars($complete) ?> renewals completed of <?= htmlspecialchars($complete + $notComplete) ?> total.
+        </p>
 
       </main>
     </div>

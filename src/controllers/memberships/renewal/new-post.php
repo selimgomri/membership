@@ -74,7 +74,7 @@ try {
   }
 
   // Prepare to add the DB
-  $insert = $db->prepare("INSERT INTO `renewalv2` (`id`, `club_year`, `ngb_year`, `start`, `end`, `default_stages`, `default_member_stages`, `metadata`, `Tenant`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+  $insert = $db->prepare("INSERT INTO `renewalv2` (`id`, `club_year`, `ngb_year`, `start`, `end`, `default_stages`, `default_member_stages`, `metadata`, `Tenant`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
   $insert->execute([
     $id,
     $yearClub,
@@ -93,5 +93,6 @@ try {
 
   header("location: " . autoUrl("memberships/renewal/$id"));
 } catch (Exception $e) {
+  reportError($e);
   header("location: " . autoUrl("memberships/renewal/new"));
 }

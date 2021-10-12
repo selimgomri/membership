@@ -7,29 +7,64 @@ $tenant = app()->tenant;
 $pagination = new \SCDS\Pagination();
 $pagination->records_per_page(10);
 
+$queryString = '';
+
 $getCount = $getSessions = null;
-if (isset($_GET['type'])) {
-  $getCount = $db->prepare("SELECT COUNT(*) FROM onboardingSessions INNER JOIN users ON users.UserID = onboardingSessions.user WHERE users.Active AND users.Tenant = ? AND onboardingSessions.status = ?");
-  $getCount->execute([
-    $tenant->getId(),
-    $_GET['type']
-  ]);
-  $getSessions = $db->prepare("SELECT users.Forename firstName, users.Surname lastName, onboardingSessions.id FROM onboardingSessions INNER JOIN users ON users.UserID = onboardingSessions.user WHERE users.Active AND users.Tenant = :tenant AND onboardingSessions.status = :statusString ORDER BY created DESC LIMIT :offset, :num");
-  $getSessions->bindValue(':tenant', $tenant->getId(), PDO::PARAM_INT);
-  $getSessions->bindValue(':statusString', $_GET['type'], PDO::PARAM_STR);
-  $getSessions->bindValue(':offset', $pagination->get_limit_start(), PDO::PARAM_INT);
-  $getSessions->bindValue(':num', 10, PDO::PARAM_INT);
-  $getSessions->execute();
+if (isset($_GET['renewal'])) {
+
+  $queryString = 'renewal=' . urlencode($_GET['renewal']) . '&';
+
+  if (isset($_GET['type'])) {
+    $getCount = $db->prepare("SELECT COUNT(*) FROM onboardingSessions INNER JOIN users ON users.UserID = onboardingSessions.user WHERE users.Active AND users.Tenant = ? AND onboardingSessions.status = ? AND onboardingSessions.renewal = ?");
+    $getCount->execute([
+      $tenant->getId(),
+      $_GET['type'],
+      $_GET['renewal'],
+    ]);
+    $getSessions = $db->prepare("SELECT users.Forename firstName, users.Surname lastName, onboardingSessions.id FROM onboardingSessions INNER JOIN users ON users.UserID = onboardingSessions.user WHERE users.Active AND users.Tenant = :tenant AND onboardingSessions.status = :statusString AND onboardingSessions.renewal = :renewal ORDER BY created DESC LIMIT :offset, :num");
+    $getSessions->bindValue(':tenant', $tenant->getId(), PDO::PARAM_INT);
+    $getSessions->bindValue(':statusString', $_GET['type'], PDO::PARAM_STR);
+    $getSessions->bindValue(':renewal', $_GET['renewal'], PDO::PARAM_STR);
+    $getSessions->bindValue(':offset', $pagination->get_limit_start(), PDO::PARAM_INT);
+    $getSessions->bindValue(':num', 10, PDO::PARAM_INT);
+    $getSessions->execute();
+  } else {
+    $getCount = $db->prepare("SELECT COUNT(*) FROM onboardingSessions INNER JOIN users ON users.UserID = onboardingSessions.user WHERE users.Active AND users.Tenant = ? AND onboardingSessions.renewal = ?");
+    $getCount->execute([
+      $tenant->getId(),
+      $_GET['renewal']
+    ]);
+    $getSessions = $db->prepare("SELECT users.Forename firstName, users.Surname lastName, onboardingSessions.id FROM onboardingSessions INNER JOIN users ON users.UserID = onboardingSessions.user WHERE users.Active AND users.Tenant = :tenant AND onboardingSessions.renewal = :renewal ORDER BY created DESC LIMIT :offset, :num");
+    $getSessions->bindValue(':tenant', $tenant->getId(), PDO::PARAM_INT);
+    $getSessions->bindValue(':offset', $pagination->get_limit_start(), PDO::PARAM_INT);
+    $getSessions->bindValue(':renewal', $_GET['renewal'], PDO::PARAM_STR);
+    $getSessions->bindValue(':num', 10, PDO::PARAM_INT);
+    $getSessions->execute();
+  }
 } else {
-  $getCount = $db->prepare("SELECT COUNT(*) FROM onboardingSessions INNER JOIN users ON users.UserID = onboardingSessions.user WHERE users.Active AND users.Tenant = ?");
-  $getCount->execute([
-    $tenant->getId(),
-  ]);
-  $getSessions = $db->prepare("SELECT users.Forename firstName, users.Surname lastName, onboardingSessions.id FROM onboardingSessions INNER JOIN users ON users.UserID = onboardingSessions.user WHERE users.Active AND users.Tenant = :tenant ORDER BY created DESC LIMIT :offset, :num");
-  $getSessions->bindValue(':tenant', $tenant->getId(), PDO::PARAM_INT);
-  $getSessions->bindValue(':offset', $pagination->get_limit_start(), PDO::PARAM_INT);
-  $getSessions->bindValue(':num', 10, PDO::PARAM_INT);
-  $getSessions->execute();
+  if (isset($_GET['type'])) {
+    $getCount = $db->prepare("SELECT COUNT(*) FROM onboardingSessions INNER JOIN users ON users.UserID = onboardingSessions.user WHERE users.Active AND users.Tenant = ? AND onboardingSessions.status = ? AND onboardingSessions.renewal IS NULL");
+    $getCount->execute([
+      $tenant->getId(),
+      $_GET['type']
+    ]);
+    $getSessions = $db->prepare("SELECT users.Forename firstName, users.Surname lastName, onboardingSessions.id FROM onboardingSessions INNER JOIN users ON users.UserID = onboardingSessions.user WHERE users.Active AND users.Tenant = :tenant AND onboardingSessions.status = :statusString ORDER BY created DESC LIMIT :offset, :num");
+    $getSessions->bindValue(':tenant', $tenant->getId(), PDO::PARAM_INT);
+    $getSessions->bindValue(':statusString', $_GET['type'], PDO::PARAM_STR);
+    $getSessions->bindValue(':offset', $pagination->get_limit_start(), PDO::PARAM_INT);
+    $getSessions->bindValue(':num', 10, PDO::PARAM_INT);
+    $getSessions->execute();
+  } else {
+    $getCount = $db->prepare("SELECT COUNT(*) FROM onboardingSessions INNER JOIN users ON users.UserID = onboardingSessions.user WHERE users.Active AND users.Tenant = ? AND onboardingSessions.renewal IS NULL");
+    $getCount->execute([
+      $tenant->getId(),
+    ]);
+    $getSessions = $db->prepare("SELECT users.Forename firstName, users.Surname lastName, onboardingSessions.id FROM onboardingSessions INNER JOIN users ON users.UserID = onboardingSessions.user WHERE users.Active AND users.Tenant = :tenant ORDER BY created DESC LIMIT :offset, :num");
+    $getSessions->bindValue(':tenant', $tenant->getId(), PDO::PARAM_INT);
+    $getSessions->bindValue(':offset', $pagination->get_limit_start(), PDO::PARAM_INT);
+    $getSessions->bindValue(':num', 10, PDO::PARAM_INT);
+    $getSessions->execute();
+  }
 }
 
 $count = $getCount->fetchColumn();
@@ -159,11 +194,11 @@ include BASE_PATH . "views/header.php";
           Filter by state
         </h3>
         <div class="d-grid gap-2">
-          <a class="btn btn-primary" href="<?= htmlspecialchars(autoUrl('onboarding/all?type=')) ?>">All</a>
-          <a class="btn btn-primary" href="<?= htmlspecialchars(autoUrl('onboarding/all?type=not_ready')) ?>">Not Ready</a>
-          <a class="btn btn-primary" href="<?= htmlspecialchars(autoUrl('onboarding/all?type=pending')) ?>">Pending</a>
-          <a class="btn btn-primary" href="<?= htmlspecialchars(autoUrl('onboarding/all?type=in_progress')) ?>">In Progress</a>
-          <a class="btn btn-primary" href="<?= htmlspecialchars(autoUrl('onboarding/all?type=complete')) ?>">Complete</a>
+          <a class="btn btn-primary" href="<?= htmlspecialchars(autoUrl("onboarding/all?" . $queryString . "type=")) ?>">All</a>
+          <a class="btn btn-primary" href="<?= htmlspecialchars(autoUrl("onboarding/all?" . $queryString . "type=not_ready")) ?>">Not Ready</a>
+          <a class="btn btn-primary" href="<?= htmlspecialchars(autoUrl("onboarding/all?" . $queryString . "type=pending")) ?>">Pending</a>
+          <a class="btn btn-primary" href="<?= htmlspecialchars(autoUrl("onboarding/all?" . $queryString . "type=in_progress")) ?>">In Progress</a>
+          <a class="btn btn-primary" href="<?= htmlspecialchars(autoUrl("onboarding/all?" . $queryString . "type=complete")) ?>">Complete</a>
         </div>
       </div>
     </div>

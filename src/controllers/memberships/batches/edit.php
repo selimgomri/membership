@@ -36,6 +36,14 @@ $batchUser = new User($batch->user);
 $markdown = new \ParsedownExtra();
 $markdown->setSafeMode(true);
 
+$session = null;
+$getSession = $db->prepare("SELECT `id` FROM `onboardingSessions` WHERE `batch` = ?");
+$getSession->execute([
+  $id,
+]);
+$sessionId = $getSession->fetchColumn();
+if ($sessionId) $session = \SCDS\Onboarding\Session::retrieve($sessionId);
+
 $pagetitle = "Batch " . htmlspecialchars($id) . " - Membership Centre";
 include BASE_PATH . "views/header.php";
 
@@ -47,10 +55,16 @@ include BASE_PATH . "views/header.php";
     <!-- Page header -->
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl("memberships")) ?>">Memberships</a></li>
-        <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl("memberships/batches")) ?>">Batches</a></li>
-        <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl("memberships/batches/$id")) ?>">Batch</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Edit</li>
+        <?php if ($session) { ?>
+          <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('onboarding')) ?>">Onboarding</a></li>
+          <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('onboarding/' . $session->id)) ?>"><?= htmlspecialchars($session->getUser()->getName()) ?></a></li>
+          <li class="breadcrumb-item active" aria-current="page">Edit Batch</li>
+        <?php } else { ?>
+          <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl("memberships")) ?>">Memberships</a></li>
+          <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl("memberships/batches")) ?>">Batches</a></li>
+          <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl("memberships/batches/$id")) ?>">Batch</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Edit</li>
+        <?php } ?>
       </ol>
     </nav>
 
@@ -63,6 +77,11 @@ include BASE_PATH . "views/header.php";
           <?= htmlspecialchars($id) ?>
         </p>
       </div>
+      <?php if ($session) { ?>
+        <div class="col-auto ms-auto">
+          <a href="<?= htmlspecialchars(autoUrl('onboarding/' . $session->id)) ?>" class="btn btn-success">Back to onboarding</a>
+        </div>
+      <?php } ?>
     </div>
   </div>
 </div>
