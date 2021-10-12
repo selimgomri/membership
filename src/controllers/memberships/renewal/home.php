@@ -68,7 +68,7 @@ include BASE_PATH . "views/header.php";
           <?php do { 
             $renewal = \SCDS\Onboarding\Renewal::retrieve($renewal->id);
             ?>
-            <a class="list-group-item list-group-item-action" href="<?= htmlspecialchars(autoUrl('memberships/renewal/' . $renewal->id)) ?>" title="<?= htmlspecialchars($renewal->start->format('j M Y')) ?> - <?= htmlspecialchars($renewal->end->format('j M Y')) ?> <?= htmlspecialchars($renewal->id) ?>"><?= htmlspecialchars($renewal->start->format('j M Y')) ?> - <?= htmlspecialchars($renewal->end->format('j M Y')) ?> for <?= htmlspecialchars($renewal->year->name) ?> (<?= htmlspecialchars($renewal->year->start->format('j M Y')) ?> - <?= htmlspecialchars($renewal->year->end->format('j M Y')) ?>)</a>
+            <a class="list-group-item list-group-item-action" href="<?= htmlspecialchars(autoUrl('memberships/renewal/' . $renewal->id)) ?>" title="<?= htmlspecialchars($renewal->start->format('j M Y')) ?> - <?= htmlspecialchars($renewal->end->format('j M Y')) ?> <?= htmlspecialchars($renewal->id) ?>"><?= htmlspecialchars($renewal->start->format('j M Y')) ?> - <?= htmlspecialchars($renewal->end->format('j M Y')) ?><br>For the <?php if ($renewal->clubYear) { ?> club membership year <?= htmlspecialchars($renewal->clubYear->start->format('j M Y')) ?> - <?= htmlspecialchars($renewal->clubYear->end->format('j M Y')) ?><?php } ?><?php if ($renewal->clubYear && $renewal->ngbYear) { ?><br><?php } ?><?php if ($renewal->ngbYear) { ?> For the Swim England membership year <?= htmlspecialchars($renewal->ngbYear->start->format('j M Y')) ?> - <?= htmlspecialchars($renewal->ngbYear->end->format('j M Y')) ?><?php } ?></a>
           <?php } while ($renewal = $getRenewals->fetch(PDO::FETCH_OBJ)); ?>
         </div>
 

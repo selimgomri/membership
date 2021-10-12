@@ -56,13 +56,42 @@ try {
     }
   }
 
+  $metadata = $renewal->metadata;
+
+  $clubDate = null;
+  $ngbDate = null;
+
+  if (isset($_POST['use-custom-bill-dates'])) {
+    // Add custom bill dates to metadata
+
+    if ($renewal->clubYear && isset($_POST['dd-club-bills-date'])) {
+      try {
+        $clubDate = (new DateTime($_POST['dd-club-bills-date'], new DateTimeZone('Europe/London')))->format('Y-m-d');
+      } catch (Exception $e) {
+      }
+    }
+
+    if ($renewal->ngbYear && isset($_POST['dd-ngb-bills-date'])) {
+      try {
+        $ngbDate = (new DateTime($_POST['dd-ngb-bills-date'], new DateTimeZone('Europe/London')))->format('Y-m-d');
+      } catch (Exception $e) {
+      }
+    }
+  }
+
+  $metadata->custom_direct_debit_bill_dates = [
+    'club' => $clubDate,
+    'ngb' => $ngbDate,
+  ];
+
   // Prepare to add the DB
-  $insert = $db->prepare("UPDATE `renewalv2` SET `start` = ?, `end` = ?, `default_stages` = ?, `default_member_stages` = ? WHERE `id` = ?");
+  $insert = $db->prepare("UPDATE `renewalv2` SET `start` = ?, `end` = ?, `default_stages` = ?, `default_member_stages` = ?, `metadata` = ? WHERE `id` = ?");
   $insert->execute([
     $start->format('Y-m-d'),
     $end->format('Y-m-d'),
     json_encode($stages),
     json_encode($memberStages),
+    json_encode($metadata),
     $id,
   ]);
 

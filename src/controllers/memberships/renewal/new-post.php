@@ -73,6 +73,35 @@ try {
     $paymentTypes[] = 'dd';
   }
 
+  $metadata = [];
+  $metadata['supported_payment_types'] = $paymentTypes;
+
+  $clubDate = null;
+  $ngbDate = null;
+
+  if (isset($_POST['use-custom-bill-dates'])) {
+    // Add custom bill dates to metadata
+
+    if ($yearClub && isset($_POST['dd-club-bills-date'])) {
+      try {
+        $clubDate = (new DateTime($_POST['dd-club-bills-date'], new DateTimeZone('Europe/London')))->format('Y-m-d');
+      } catch (Exception $e) {
+      }
+    }
+
+    if ($yearNgb && isset($_POST['dd-ngb-bills-date'])) {
+      try {
+        $ngbDate = (new DateTime($_POST['dd-ngb-bills-date'], new DateTimeZone('Europe/London')))->format('Y-m-d');
+      } catch (Exception $e) {
+      }
+    }
+  }
+
+  $metadata['custom_direct_debit_bill_dates'] = [
+    'club' => $clubDate,
+    'ngb' => $ngbDate,
+  ];
+
   // Prepare to add the DB
   $insert = $db->prepare("INSERT INTO `renewalv2` (`id`, `club_year`, `ngb_year`, `start`, `end`, `default_stages`, `default_member_stages`, `metadata`, `Tenant`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
   $insert->execute([

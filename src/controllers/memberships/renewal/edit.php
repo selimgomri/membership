@@ -48,7 +48,7 @@ include BASE_PATH . "views/header.php";
           <?= htmlspecialchars($renewal->start->format('j M Y')) ?> - <?= htmlspecialchars($renewal->end->format('j M Y')) ?> Renewal
         </h1>
         <p class="lead mb-0">
-          For the year <?= htmlspecialchars($renewal->year->start->format('j M Y')) ?> - <?= htmlspecialchars($renewal->year->end->format('j M Y')) ?> (<?= htmlspecialchars($renewal->year->name) ?>)
+          For the <?php if ($renewal->clubYear) { ?> club membership year <?= htmlspecialchars($renewal->clubYear->start->format('j M Y')) ?> - <?= htmlspecialchars($renewal->clubYear->end->format('j M Y')) ?><?php } ?><?php if ($renewal->clubYear && $renewal->ngbYear) { ?> and the <?php } ?><?php if ($renewal->ngbYear) { ?> Swim England membership year <?= htmlspecialchars($renewal->ngbYear->start->format('j M Y')) ?> - <?= htmlspecialchars($renewal->ngbYear->end->format('j M Y')) ?><?php } ?>
         </p>
       </div>
       <div class="col text-lg-end">
@@ -130,6 +130,47 @@ include BASE_PATH . "views/header.php";
           <p>
             Photography consents will only be asked from members who are aged under 18 when renewal opens.
           </p>
+
+          <div class="card card-body mb-3">
+              <h2>Advanced options</h2>
+
+              <h3>
+                Custom Direct Debit Billing Dates
+              </h3>
+
+              <p>
+                For clubs supporting payment by Direct Debit, you can select a custom date on which to bill the Swim England and Club Membership fee components. Selecting a custom date only applies when members choose to pay renewal fees by Direct Debit - if they pay by card they will pay their entire renewal fee in one go.
+              </p>
+
+              <p>
+                Members will be charged on their first billing day on or after your selected bill date. Please note that fees will not be automatically added to accounts if users do not complete renewal.
+              </p>
+
+              <p>
+                To use custom bill dates, you must tick the <em>Use custom bill dates</em> checkbox.
+              </p>
+
+              <p>
+                <strong>Changes made here will not apply to any member who has already completed renewal.</strong>
+              </p>
+
+              <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" value="1" id="use-custom-bill-dates" name="use-custom-bill-dates" <?php if ($renewal->metadata->custom_direct_debit_bill_dates && ($renewal->metadata->custom_direct_debit_bill_dates->club || $renewal->metadata->custom_direct_debit_bill_dates->ngb)) { ?>checked<?php } ?>>
+                <label class="form-check-label" for="use-custom-bill-dates">
+                  Use custom bill dates
+                </label>
+              </div>
+
+              <div class="mb-3">
+                <label for="dd-ngb-bills-date" class="form-label">DD Swim England Bill Date</label>
+                <input type="date" class="form-control" id="dd-ngb-bills-date" name="dd-ngb-bills-date" value="<?php if ($renewal->metadata->custom_direct_debit_bill_dates && $renewal->metadata->custom_direct_debit_bill_dates->ngb) { ?><?= htmlspecialchars($renewal->metadata->custom_direct_debit_bill_dates->ngb) ?><?php } ?>">
+              </div>
+
+              <div class="">
+                <label for="dd-club-bills-date" class="form-label">DD Club Membership Bill Date</label>
+                <input type="date" class="form-control" id="dd-club-bills-date" name="dd-club-bills-date" value="<?php if ($renewal->metadata->custom_direct_debit_bill_dates && $renewal->metadata->custom_direct_debit_bill_dates->club) { ?><?= htmlspecialchars($renewal->metadata->custom_direct_debit_bill_dates->club) ?><?php } ?>">
+              </div>
+            </div>
 
           <?= \SCDS\CSRF::write(); ?>
 

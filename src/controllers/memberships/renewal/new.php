@@ -221,6 +221,43 @@ include BASE_PATH . "views/header.php";
               You can edit payment options for individual users later - for example if your preferred and only enabled payment method for a renewal is Direct Debit but have a member for whom this is inappropriate, you can enable the card payment option just for them.
             </p>
 
+            <div class="card card-body mb-3">
+              <h2>Advanced options</h2>
+
+              <h3>
+                Custom Direct Debit Billing Dates
+              </h3>
+
+              <p>
+                For clubs supporting payment by Direct Debit, you can select a custom date on which to bill the Swim England and Club Membership fee components. Selecting a custom date only applies when members choose to pay renewal fees by Direct Debit - if they pay by card they will pay their entire renewal fee in one go.
+              </p>
+
+              <p>
+                Members will be charged on their first billing day on or after your selected bill date. Please note that fees will not be automatically added to accounts if users do not complete renewal.
+              </p>
+
+              <p>
+                To use custom bill dates, you must tick the <em>Use custom bill dates</em> checkbox.
+              </p>
+
+              <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" value="1" id="use-custom-bill-dates" name="use-custom-bill-dates">
+                <label class="form-check-label" for="use-custom-bill-dates">
+                  Use custom bill dates
+                </label>
+              </div>
+
+              <div class="mb-3">
+                <label for="dd-ngb-bills-date" class="form-label">DD Swim England Bill Date</label>
+                <input type="date" class="form-control" id="dd-ngb-bills-date" name="dd-ngb-bills-date">
+              </div>
+
+              <div class="">
+                <label for="dd-club-bills-date" class="form-label">DD Club Membership Bill Date</label>
+                <input type="date" class="form-control" id="dd-club-bills-date" name="dd-club-bills-date">
+              </div>
+            </div>
+
             <?= \SCDS\CSRF::write(); ?>
 
             <p>

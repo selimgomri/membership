@@ -102,7 +102,7 @@ include BASE_PATH . "views/head.php";
                   </label>
                 </div>
                 <div class="form-check">
-                  <input class="form-check-input" type="radio" name="pay-method" id="pay-dd" value="dd" <?php if (!in_array('card', $payMethods)) { ?>disabled<?php } ?>>
+                  <input class="form-check-input" type="radio" name="pay-method" id="pay-dd" value="dd" <?php if (!in_array('dd', $payMethods)) { ?>disabled<?php } ?>>
                   <label class="form-check-label" for="pay-dd">
                     Add to my next monthly Direct Debit payment
                   </label>
@@ -134,6 +134,19 @@ include BASE_PATH . "views/head.php";
               <input type="hidden" name="pay-method" value="<?= htmlspecialchars($payMethods[0]) ?>">
               <p>You can only pay for this batch with <?= htmlspecialchars($payMethodStrings[$payMethods[0]]) ?>.</p>
             <?php } ?>
+
+            <?php if ($session->renewal->metadata->custom_direct_debit_bill_dates && ($session->renewal->metadata->custom_direct_debit_bill_dates->club || $session->renewal->metadata->custom_direct_debit_bill_dates->ngb)) { ?>
+              <p>
+                If you pay by Direct Debit, you'll pay your <?php if ($session->renewal->metadata->custom_direct_debit_bill_dates->club) { ?>club membership fees on your first billing day on or after <?= htmlspecialchars($session->renewal->metadata->custom_direct_debit_bill_dates->club) ?><?php } ?><?php if ($session->renewal->metadata->custom_direct_debit_bill_dates->club && $session->renewal->metadata->custom_direct_debit_bill_dates->ngb) { ?> and your <?php } ?><?php if ($session->renewal->metadata->custom_direct_debit_bill_dates->ngb) { ?>Swim England membership fees on your first billing day on or after <?= htmlspecialchars($session->renewal->metadata->custom_direct_debit_bill_dates->ngb) ?><?php } ?>.
+              </p>
+
+              <?php if (sizeof($payMethods) > 1) { ?>
+                <p>
+                  This only applies if you choose to pay as part of your upcoming Direct Debit payments.s
+                </p>
+              <?php } ?>
+            <?php } ?>
+
             <p class="d-grid mb-1">
               <button type="submit" class="btn btn-success">Pay now <i class="fa fa-chevron-right" aria-hidden="true"></i></button>
             </p>
