@@ -156,11 +156,15 @@ include BASE_PATH . "views/head.php";
             </p>
           <?php } ?>
 
-          <?php if ($tenant->getBooleanKey('ALLOW_DIRECT_DEBIT_OPT_OUT')) { ?>
+          <?php if ($tenant->getBooleanKey('ALLOW_DIRECT_DEBIT_OPT_OUT') && !($hasGoCardless || $ddi)) { ?>
             <p>
               <button type="submit" class="btn btn-dark">
                 Proceed without setting up a Direct Debit Instruction
               </button>
+            </p>
+          <?php } else if (!($hasGoCardless || $ddi)) { ?>
+            <p>
+              If, for any reason you are unable to set up a Direct Debit, please speak to a member of club staff. They have the discretion to skip this task.
             </p>
           <?php } ?>
 

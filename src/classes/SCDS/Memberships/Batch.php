@@ -223,7 +223,7 @@ class Batch
     $tenant = app()->tenant;
 
     // Get batch items
-    $getBatchItems = $db->prepare("SELECT membershipBatchItems.ID, membershipBatchItems.Batch, membershipBatchItems.Membership, membershipBatchItems.Member, membershipBatchItems.Amount, membershipBatchItems.Notes, members.MForename, members.MSurname, clubMembershipClasses.Name, membershipBatchItems.Year, membershipYear.StartDate, membershipYear.EndDate, membershipBatch.User FROM ((((membershipBatchItems INNER JOIN members ON members.MemberID = membershipBatchItems.Member) INNER JOIN clubMembershipClasses ON clubMembershipClasses.ID = membershipBatchItems.Membership) INNER JOIN membershipBatch ON membershipBatch.ID = membershipBatchItems.Batch) INNER JOIN membershipYear ON membershipYear.ID = membershipBatchItems.Year) WHERE membershipBatch.ID = ? AND members.Tenant = ?");
+    $getBatchItems = $db->prepare("SELECT membershipBatchItems.ID, membershipBatchItems.Batch, membershipBatchItems.Membership, membershipBatchItems.Member, membershipBatchItems.Amount, membershipBatchItems.Notes, members.MForename, members.MSurname, clubMembershipClasses.Name, membershipBatchItems.Year, membershipYear.StartDate, membershipYear.EndDate, membershipBatch.User, clubMembershipClasses.Type FROM ((((membershipBatchItems INNER JOIN members ON members.MemberID = membershipBatchItems.Member) INNER JOIN clubMembershipClasses ON clubMembershipClasses.ID = membershipBatchItems.Membership) INNER JOIN membershipBatch ON membershipBatch.ID = membershipBatchItems.Batch) INNER JOIN membershipYear ON membershipYear.ID = membershipBatchItems.Year) WHERE membershipBatch.ID = ? AND members.Tenant = ?");
     $getBatchItems->execute([
       $batchId,
       $tenant->getId(),
@@ -231,12 +231,38 @@ class Batch
 
     $now = new \DateTime('now', new \DateTimeZone('Europe/London'));
 
+    $clubDate = $now->format('Y-m-d');
+    $ngbDate = $now->format('Y-m-d');
+
+    // Is this renewal related?
+    $getRenewal = $db->prepare("SELECT renewal FROM onboardingSessions WHERE batch = ?");
+    $getRenewal->execute([
+      $batchId,
+    ]);
+    $renewalId = $getRenewal->fetchColumn();
+
+    if ($renewalId) {
+      $renewal = \SCDS\Onboarding\Renewal::retrieve($renewalId);
+
+      if ($renewal->metadata->custom_direct_debit_bill_dates && $renewal->metadata->custom_direct_debit_bill_dates->club) {
+        $clubDate = $renewal->metadata->custom_direct_debit_bill_dates->club;
+      }
+
+      if ($renewal->metadata->custom_direct_debit_bill_dates && $renewal->metadata->custom_direct_debit_bill_dates->ngb) {
+        $ngbDate = $renewal->metadata->custom_direct_debit_bill_dates->ngb;
+      }
+    }
+
     // Add items to pending
     $add = $db->prepare("INSERT INTO `paymentsPending` (`Date`, `Status`, `UserID`, `Name`, `Amount`, `Currency`, `Type`) VALUES (?, ?, ?, ?, ?, ?, ?)");
 
     while ($item = $getBatchItems->fetch(\PDO::FETCH_OBJ)) {
+
+      $date = $clubDate;
+      if ($item->Type == 'national_governing_body') $date = $ngbDate;
+
       $add->execute([
-        $now->format('Y-m-d'),
+        $date,
         'Pending',
         $item->User,
         $item->Amount,

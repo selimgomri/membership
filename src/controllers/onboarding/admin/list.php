@@ -194,7 +194,7 @@ include BASE_PATH . "views/header.php";
           Filter by state
         </h3>
         <div class="d-grid gap-2">
-          <a class="btn btn-primary" href="<?= htmlspecialchars(autoUrl("onboarding/all?" . $queryString . "type=")) ?>">All</a>
+          <a class="btn btn-primary" href="<?= htmlspecialchars(autoUrl("onboarding/all?" . $queryString)) ?>">All</a>
           <a class="btn btn-primary" href="<?= htmlspecialchars(autoUrl("onboarding/all?" . $queryString . "type=not_ready")) ?>">Not Ready</a>
           <a class="btn btn-primary" href="<?= htmlspecialchars(autoUrl("onboarding/all?" . $queryString . "type=pending")) ?>">Pending</a>
           <a class="btn btn-primary" href="<?= htmlspecialchars(autoUrl("onboarding/all?" . $queryString . "type=in_progress")) ?>">In Progress</a>

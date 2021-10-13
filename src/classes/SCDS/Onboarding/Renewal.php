@@ -142,6 +142,7 @@ class Renewal
       ]);
 
       $members = [];
+      $hasMemberUnder18 = false;
       while ($member = $getMembers->fetch(\PDO::FETCH_OBJ)) {
         $memberObj = new \Member($member->MemberID);
         $memberStages = clone $this->defaultMemberStages;
@@ -149,6 +150,8 @@ class Renewal
         // Don't require photo consent for adults
         if ($memberObj->getAge() >= 18) {
           $memberStages->photography_consent->required = false;
+        } else {
+          $hasMemberUnder18 = true;
         }
 
         $members[] = [
@@ -175,7 +178,7 @@ class Renewal
         while ($member = $getMembers->fetch(\PDO::FETCH_OBJ)) {
           // Parse fee object
           $fees = json_decode($member->Fees);
-          $amount = $fees->fees[0];
+          $amount = (int) $fees->fees[0];
           if ($member->ASAPaid) $amount = 0;
           $total += $amount;
 
@@ -228,7 +231,8 @@ class Renewal
 
           if ($count > 0) {
 
-            $amount = $fees->fees[max($count, sizeof($fees->fees)) - 1];
+            $amount = 0;
+            if (isset($fees->fees[max($count, sizeof($fees->fees)) - 1])) $amount = (int) $fees->fees[max($count, sizeof($fees->fees)) - 1];
             $total += $amount;
 
             $getClassMembers->execute([
@@ -304,6 +308,9 @@ class Renewal
       $welcomeText = null;
       $stages = $this->defaultStages;
       $metadata = [];
+
+      // Remove parent code of conduct if no under 18s
+      if (!$hasMemberUnder18) $stages->parent_conduct->required = false;
 
       // Add to db
       $add = $db->prepare("INSERT INTO onboardingSessions (`id`,  `user`, `created`, `creator`, `start`, `charge_outstanding`, `charge_pro_rata`, `welcome_text`, `token`, `token_on`, `status`, `due_date`, `completed_at`, `stages`, `metadata`, `batch`, `type`, `renewal`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");

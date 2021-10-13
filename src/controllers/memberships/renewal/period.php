@@ -78,7 +78,7 @@ include BASE_PATH . "views/header.php";
     <div class="col-lg-8">
       <main>
 
-        <?php //$renewal->generateSessions() 
+        <?php // $renewal->generateSessions() 
         ?>
 
         <?php if ($complete + $notComplete == 0) { ?>
@@ -95,7 +95,7 @@ include BASE_PATH . "views/header.php";
           <h2>View associated onboarding sessions</h2>
 
           <div class="d-grid gap-2">
-            <a class="btn btn-primary" href="<?= htmlspecialchars(autoUrl("onboarding/all?renewal=" . urlencode($id) . "&type=")) ?>">All</a>
+            <a class="btn btn-primary" href="<?= htmlspecialchars(autoUrl("onboarding/all?renewal=" . urlencode($id))) ?>">All</a>
             <a class="btn btn-primary" href="<?= htmlspecialchars(autoUrl("onboarding/all?renewal=" . urlencode($id) . "&type=not_ready")) ?>">Not Ready</a>
             <a class="btn btn-primary" href="<?= htmlspecialchars(autoUrl("onboarding/all?renewal=" . urlencode($id) . "&type=pending")) ?>">Pending</a>
             <a class="btn btn-primary" href="<?= htmlspecialchars(autoUrl("onboarding/all?renewal=" . urlencode($id) . "&type=in_progress")) ?>">In Progress</a>

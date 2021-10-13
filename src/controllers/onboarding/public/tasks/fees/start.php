@@ -136,15 +136,17 @@ include BASE_PATH . "views/head.php";
             <?php } ?>
 
             <?php if ($session->renewal->metadata->custom_direct_debit_bill_dates && ($session->renewal->metadata->custom_direct_debit_bill_dates->club || $session->renewal->metadata->custom_direct_debit_bill_dates->ngb)) { ?>
-              <p>
-                If you pay by Direct Debit, you'll pay your <?php if ($session->renewal->metadata->custom_direct_debit_bill_dates->club) { ?>club membership fees on your first billing day on or after <?= htmlspecialchars($session->renewal->metadata->custom_direct_debit_bill_dates->club) ?><?php } ?><?php if ($session->renewal->metadata->custom_direct_debit_bill_dates->club && $session->renewal->metadata->custom_direct_debit_bill_dates->ngb) { ?> and your <?php } ?><?php if ($session->renewal->metadata->custom_direct_debit_bill_dates->ngb) { ?>Swim England membership fees on your first billing day on or after <?= htmlspecialchars($session->renewal->metadata->custom_direct_debit_bill_dates->ngb) ?><?php } ?>.
-              </p>
-
-              <?php if (sizeof($payMethods) > 1) { ?>
-                <p>
-                  This only applies if you choose to pay as part of your upcoming Direct Debit payments.s
+              <div class="alert alert-info pb-n3">
+                <p class="mb-0">
+                  If you pay by Direct Debit, you'll pay your <?php if ($session->renewal->metadata->custom_direct_debit_bill_dates->club) { ?>club membership fees on your first billing day on or after <?= htmlspecialchars((new DateTime($session->renewal->metadata->custom_direct_debit_bill_dates->club, new DateTimeZone('Europe/London')))->format('j F Y')) ?><?php } ?><?php if ($session->renewal->metadata->custom_direct_debit_bill_dates->club && $session->renewal->metadata->custom_direct_debit_bill_dates->ngb) { ?> and your <?php } ?><?php if ($session->renewal->metadata->custom_direct_debit_bill_dates->ngb) { ?>Swim England membership fees on your first billing day on or after <?= htmlspecialchars((new DateTime($session->renewal->metadata->custom_direct_debit_bill_dates->ngb, new DateTimeZone('Europe/London')))->format('j F Y')) ?><?php } ?>.
                 </p>
-              <?php } ?>
+
+                <?php if (sizeof($payMethods) > 1) { ?>
+                  <p class="mt-3 mb-0">
+                    This only applies if you choose to pay as part of your upcoming Direct Debit payments.
+                  </p>
+                <?php } ?>
+              </div>
             <?php } ?>
 
             <p class="d-grid mb-1">
