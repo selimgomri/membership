@@ -35,8 +35,6 @@ $getBatchItems->execute([
 ]);
 $item = $getBatchItems->fetch(PDO::FETCH_OBJ);
 
-$payMethods = json_decode($batch->payMethods);
-
 $canPay = true;
 $due = new DateTime($batch->due, new DateTimeZone('Europe/London'));
 $due->setTime(0, 0, 0, 0);
@@ -54,6 +52,8 @@ $payMethodStrings = [
   'cheque' => 'cheque',
   'bacs' => 'bank transfer',
 ];
+
+$payMethods = \SCDS\Memberships\Batch::getPaymentMethods($session->batch);
 
 $pagetitle = 'Membership fees - Onboarding';
 
@@ -247,7 +247,7 @@ include BASE_PATH . "views/head.php";
         <?php } else { ?>
           <div class="alert alert-info">
             <p class="mb-0">
-              <strong>There are no memberships to display for the period <?= htmlspecialchars((new DateTime($batch->yearStart))->format('j F Y')) ?> to <?= htmlspecialchars((new DateTime($batch->yearEnd))->format('j F Y')) ?></strong>
+              <strong>There are no memberships to display for the selected period</strong>
             </p>
           </div>
         <?php } ?>

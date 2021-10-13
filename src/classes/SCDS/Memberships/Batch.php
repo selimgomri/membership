@@ -8,6 +8,60 @@ use stdClass;
 class Batch
 {
 
+  public static function getPaymentMethods($batchId)
+  {
+    $db = app()->db;
+
+    // Get batch
+    $getBatch = $db->prepare("SELECT membershipBatch.ID id, DueDate due, Total total, PaymentTypes payMethods, membershipBatch.User `user` FROM membershipBatch INNER JOIN users ON users.UserID = membershipBatch.User WHERE membershipBatch.ID = ? AND users.Tenant = ?");
+    $getBatch->execute([
+      $batchId,
+      app()->tenant->getId(),
+    ]);
+
+    // membershipYear.ID yearId, Total total, membershipYear.Name yearName, membershipYear.StartDate yearStart, membershipYear.EndDate yearEnd
+
+    $batch = $getBatch->fetch(\PDO::FETCH_OBJ);
+
+    if (!$batch) throw new \Exception('No batch found');
+
+    $payMethods = json_decode($batch->payMethods);
+    $user = new \User($batch->user);
+
+    $payMethodsClean = [];
+
+    for ($i = 0; $i < sizeof($payMethods); $i++) {
+      $can = false;
+      if ($payMethods[$i] == 'card') {
+        // Check can pay card
+        $can = getenv('STRIPE') && app()->tenant->getStripeAccount();
+      } else if ($payMethods[$i] == 'dd') {
+        // Check can pay by direct debit
+        $stripeDD = false;
+        $goCardlessDD = false;
+        if (app()->tenant->getBooleanKey('ALLOW_STRIPE_DIRECT_DEBIT_SET_UP') && app()->tenant->getBooleanKey('USE_STRIPE_DIRECT_DEBIT')) {
+          // Get DD details
+          // Get mandates
+          $getMandates = $db->prepare("SELECT ID, Mandate, Last4, SortCode, `Address`, Reference, `URL`, `Status` FROM stripeMandates WHERE Customer = ? AND (`Status` = 'accepted' OR `Status` = 'pending') ORDER BY CreationTime DESC");
+          $getMandates->execute([
+            $user->getStripeCustomer()->id,
+          ]);
+          $mandate = $getMandates->fetch(\PDO::FETCH_ASSOC);
+
+          if ($mandate) $stripeDD = true;
+        } else if (app()->tenant->getGoCardlessAccessToken()) {
+          $goCardlessDD = userHasMandates($user->getId());
+        }
+
+        $can = $stripeDD || $goCardlessDD;
+      }
+
+      if ($can) $payMethodsClean[] = $payMethods[$i];
+    }
+
+    return $payMethodsClean;
+  }
+
   public static function goToCheckout($batchId, $method)
   {
     $db = app()->db;
@@ -32,7 +86,7 @@ class Batch
       $batchId
     ]);
 
-    $payMethods = json_decode($batch->payMethods);
+    $payMethods = \SCDS\Memberships\Batch::getPaymentMethods($batchId);
 
     // CHECK IF ALREADY ASSIGNED
     $checkExists = $db->prepare("SELECT COUNT(*) FROM `memberships` WHERE `Member` = ? AND `Year` = ? AND `Membership` = ?");
@@ -57,7 +111,7 @@ class Batch
         $batchTotal->execute([
           $batchId,
         ]);
-        $total = $batchTotal->fetchColumn();
+        $total = (int) $batchTotal->fetchColumn();
 
         // Update batch total
         $updateBatch->execute([
@@ -125,8 +179,29 @@ class Batch
       // Instantly add all to pending and show success message
       $insert = $db->prepare("INSERT INTO `paymentsPending` (`Date`, `Status`, `UserID`, `Name`, `Amount`, `Currency`, `Type`) VALUES (?, ?, ?, ?, ?, ?, ?)");
 
-      $date = new \DateTime('now', new \DateTimeZone('Europe/London'));
-      $date = $date->format('Y-m-d');
+      $now = new \DateTime('now', new \DateTimeZone('Europe/London'));
+
+      $clubDate = $now->format('Y-m-d');
+      $ngbDate = $now->format('Y-m-d');
+
+      // Is this renewal related?
+      $getRenewal = $db->prepare("SELECT `renewal` FROM `onboardingSessions` WHERE `batch` = ?");
+      $getRenewal->execute([
+        $batchId,
+      ]);
+      $renewalId = $getRenewal->fetchColumn();
+
+      if ($renewalId) {
+        $renewal = \SCDS\Onboarding\Renewal::retrieve($renewalId);
+
+        if ($renewal->metadata->custom_direct_debit_bill_dates && $renewal->metadata->custom_direct_debit_bill_dates->club) {
+          $clubDate = $renewal->metadata->custom_direct_debit_bill_dates->club;
+        }
+
+        if ($renewal->metadata->custom_direct_debit_bill_dates && $renewal->metadata->custom_direct_debit_bill_dates->ngb) {
+          $ngbDate = $renewal->metadata->custom_direct_debit_bill_dates->ngb;
+        }
+      }
 
       $db->beginTransaction();
 
@@ -134,9 +209,15 @@ class Batch
 
         while ($item = $getBatchItems->fetch(\PDO::FETCH_OBJ)) {
 
+          $date = $clubDate;
+          if ($item->membershipType == 'national_governing_body') $date = $ngbDate;
+
           $description = $item->firstName . ' ' . $item->lastName;
+          if ($item->membershipName) {
+            $description .= " - " . $item->membershipName;
+          }
           if ($item->membershipDescription) {
-            $description .= " - " . $item->membershipDescription;
+            $description .= " (" . $item->membershipDescription . ")";
           }
           if ($item->notes) {
             $description .= " - " . $item->notes;
@@ -149,7 +230,7 @@ class Batch
             mb_strimwidth($description, 0, 255),
             $item->amount,
             'GBP',
-            'debit'
+            'Payment'
           ]);
         }
 
@@ -158,9 +239,11 @@ class Batch
         $db->commit();
       } catch (\Exception $e) {
         $db->rollBack();
+        reportError($e);
       }
 
       $object->type = 'dd';
+      return $object;
     }
   }
 
@@ -228,48 +311,6 @@ class Batch
       $batchId,
       $tenant->getId(),
     ]);
-
-    $now = new \DateTime('now', new \DateTimeZone('Europe/London'));
-
-    $clubDate = $now->format('Y-m-d');
-    $ngbDate = $now->format('Y-m-d');
-
-    // Is this renewal related?
-    $getRenewal = $db->prepare("SELECT renewal FROM onboardingSessions WHERE batch = ?");
-    $getRenewal->execute([
-      $batchId,
-    ]);
-    $renewalId = $getRenewal->fetchColumn();
-
-    if ($renewalId) {
-      $renewal = \SCDS\Onboarding\Renewal::retrieve($renewalId);
-
-      if ($renewal->metadata->custom_direct_debit_bill_dates && $renewal->metadata->custom_direct_debit_bill_dates->club) {
-        $clubDate = $renewal->metadata->custom_direct_debit_bill_dates->club;
-      }
-
-      if ($renewal->metadata->custom_direct_debit_bill_dates && $renewal->metadata->custom_direct_debit_bill_dates->ngb) {
-        $ngbDate = $renewal->metadata->custom_direct_debit_bill_dates->ngb;
-      }
-    }
-
-    // Add items to pending
-    $add = $db->prepare("INSERT INTO `paymentsPending` (`Date`, `Status`, `UserID`, `Name`, `Amount`, `Currency`, `Type`) VALUES (?, ?, ?, ?, ?, ?, ?)");
-
-    while ($item = $getBatchItems->fetch(\PDO::FETCH_OBJ)) {
-
-      $date = $clubDate;
-      if ($item->Type == 'national_governing_body') $date = $ngbDate;
-
-      $add->execute([
-        $date,
-        'Pending',
-        $item->User,
-        $item->Amount,
-        'GBP',
-        'Payment',
-      ]);
-    }
 
     $paymentInfo = json_encode([
       'type' => 'direct_debit',

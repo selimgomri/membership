@@ -53,7 +53,7 @@ include BASE_PATH . "views/header.php";
       </div>
       <div class="col text-lg-end">
         <p class="mb-0">
-          <a href="<?= htmlspecialchars(autoUrl("memberships/renewal/$id/edit")) ?>" class="btn btn-success">Edit</a>
+          <a href="<?= htmlspecialchars(autoUrl("memberships/renewal/$id")) ?>" class="btn btn-success">Back</a>
         </p>
       </div>
     </div>

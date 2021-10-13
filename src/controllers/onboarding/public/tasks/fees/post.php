@@ -62,7 +62,8 @@ if (!$session->batch) {
         // \SCDS\Memberships\Batch::completeBatch($session->batch, $paymentInfo);
         \SCDS\Memberships\Batch::completeDirectDebitBatch($session->batch);
 
-        $session->completeTask('fees');
+        // This already gets called
+        // $session->completeTask('fees');
 
         $_SESSION['PaymentSuccess'] = true;
 

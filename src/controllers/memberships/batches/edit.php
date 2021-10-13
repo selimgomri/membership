@@ -79,7 +79,7 @@ include BASE_PATH . "views/header.php";
       </div>
       <?php if ($session) { ?>
         <div class="col-auto ms-auto">
-          <a href="<?= htmlspecialchars(autoUrl('onboarding/' . $session->id)) ?>" class="btn btn-success">Back to onboarding</a>
+          <a href="<?= htmlspecialchars(autoUrl('onboarding/sessions/a/' . $session->id)) ?>" class="btn btn-success">Back to onboarding</a>
         </div>
       <?php } ?>
     </div>
