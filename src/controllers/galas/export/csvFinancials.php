@@ -14,7 +14,7 @@ $output = fopen('php://output', 'w');
 fputcsv($output, array('Forename', 'Surname', 'Squad' , 'Swim England Number' , 'Number of Swims' , 'Fee' , 'PaymentType'));
 
 // fetch the data
-$sql = $db->query("SELECT members.MForename, members.MSurname, squads.SquadName, members.ASANumber, galaEntries.NumberSwims, galaEntries.Fee, , galaEntries.PaymentTypeID FROM (galaEntries (INNER JOIN members ON galaEntries.MemberID = members.MemberID)) ORDER BY `members`.`MForename` , `members`.`MSurname` ASC;");
+$sql = $db->query("SELECT members.MForename, members.MSurname, squads.SquadName, members.ASANumber, galaEntries.NumberSwims, galaEntries.Fee, , galaEntries.PaymentTypeID, galaEntries.AmountRefunded FROM (galaEntries (INNER JOIN members ON galaEntries.MemberID = members.MemberID)) ORDER BY `members`.`MForename` , `members`.`MSurname` ASC;");
 
 // loop over the rows, outputting them
 while ($row = $sql->fetch(PDO::FETCH_ASSOC)) fputcsv($output, $row);
