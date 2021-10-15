@@ -28,7 +28,7 @@ fputcsv($output, [$gala . ' - Report']);
 fputcsv($output, ['Surname', 'Forename', 'Swim England Number' , 'Fee' , 'Refunded']);
 
 // fetch the data
-$getData = $db->prepare("SELECT MForename, MSurname, ASANumber, galaEntries.FeeToPay, galaEntries.Charged, galaEntries.AmountRefunded FROM members INNER JOIN galaEntries ON members.MemberID = galaEntries.MemberID WHERE GalaID = ? AND members.Tenant = ?");
+$getData = $db->prepare("SELECT MForename, MSurname, ASANumber, galaEntries.FeeToPay, galaEntries.Charged, galaEntries.AmountRefunded FROM members INNER JOIN galaEntries ON members.MemberID = galaEntries.MemberID WHERE GalaID = ? AND members.Tenant = ? ORDER BY MSurname ASC, MForename ASC");
 $getData->execute([
   $id,
   $tenant->getId(),
