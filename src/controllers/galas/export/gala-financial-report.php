@@ -12,9 +12,6 @@ header('Content-Disposition: attachment; filename=GalaFeeDetails.csv');
 // create a file pointer connected to the output stream
 $output = fopen('php://output', 'w');
 
-// output the column headings
-fputcsv($output, array('Forename', 'Surname', 'Swim England Number', 'Fee', 'Amount Refunded', 'Payment Type'));
-
 // Get gala
 $getGala = $db->prepare("SELECT GalaName FROM galas WHERE GalaID = ? AND Tenant = ?");
 $getGala->execute([
@@ -40,7 +37,7 @@ $getData->execute([
 // loop over the rows, outputting them
 while ($row = $getData->fetch(PDO::FETCH_OBJ)) {
   // getData
-  $feeToPay = number_format($row->FeeToPay);
+  $feeToPay = number_format($row->FeeToPay, 2, '.', '');
   $refunded = MoneyHelpers::intToDecimal($row->AmountRefunded);
   fputcsv($output, [
     $row->MSurname,
