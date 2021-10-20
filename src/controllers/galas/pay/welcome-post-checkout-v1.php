@@ -126,17 +126,20 @@ if ($entry != null) {
   } while ($entry = $entries->fetch(PDO::FETCH_ASSOC));
 
   if (sizeof($payingEntries) > 0) {
-  $checkoutSession->autoCalculateTotal();
+    $checkoutSession->autoCalculateTotal();
 
-  $checkoutSession->metadata['return']['url'] = autoUrl('galas');
-  $checkoutSession->metadata['return']['instant'] = false;
-  $checkoutSession->metadata['return']['buttonString'] = 'Return to gala page';
+    $checkoutSession->metadata['return']['url'] = autoUrl('galas');
+    $checkoutSession->metadata['return']['instant'] = false;
+    $checkoutSession->metadata['return']['buttonString'] = 'Return to gala page';
 
-  $checkoutSession->metadata['cancel']['url'] = autoUrl('galas/pay-for-entries');
+    $checkoutSession->metadata['cancel']['url'] = autoUrl('galas/pay-for-entries');
 
-  $checkoutSession->save();
+    $checkoutSession->save();
   } else {
     header("Location: " . autoUrl("galas/pay-for-entries"));
+
+    // Call return, else overrides already sent headers further down
+    return;
   }
 } else {
   // Error
