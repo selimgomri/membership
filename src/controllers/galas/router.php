@@ -82,6 +82,10 @@ $this->get('/entergala/help', function () {
 	include 'help/entry.php';
 });
 
+$this->get('/{id}:int/finance-info.csv', function ($id) {
+	include 'export/gala-financial-report.php';
+});
+
 
 if ($access == "Parent") {
 	// Gala Home
@@ -156,7 +160,7 @@ if ($access == "Parent") {
 				include 'pay/welcome-post.php';
 			});
 
-			$this->post('/checkout-v1', function() {
+			$this->post('/checkout-v1', function () {
 				include 'pay/welcome-post-checkout-v1.php';
 			});
 
