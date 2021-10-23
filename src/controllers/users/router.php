@@ -32,6 +32,10 @@ if ($access == "Committee" || $access == "Admin" || $access == "Galas") {
 		include 'new-membership-batch.php';
 	});
 
+	$this->get('/{id}:int/new-membership-batch-select', function ($id) {
+		include 'new-membership-batch-select.php';
+	});
+
 	if ($access == "Admin") {
 		$this->group('/{id}:int/edit', function ($id) {
 			$this->get('/', function ($id) {
