@@ -3,6 +3,18 @@
 $user = app()->user;
 $db = app()->db;
 
+$getBatch = $db->prepare("SELECT membershipBatch.ID id, membershipBatch.Completed completed, DueDate due, Total total, PaymentTypes payMethods, PaymentDetails payDetails, users.UserID user, users.Forename firstName, users.Surname lastName FROM membershipBatch INNER JOIN users ON users.UserID = membershipBatch.User WHERE membershipBatch.ID = ? AND users.Tenant = ?");
+$getBatch->execute([
+  $id,
+  app()->tenant->getId(),
+]);
+
+$batch = $getBatch->fetch(PDO::FETCH_OBJ);
+
+if (!$batch) halt(404);
+
+if ($batch->user != $user->getId() && !$user->hasPermission('Admin')) halt(404);
+
 if (!isset($_POST['pay-method'])) {
   halt(404);
 }

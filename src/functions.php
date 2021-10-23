@@ -285,7 +285,7 @@ function autoUrl($relative, $includeClub = true)
     $rootUrl = 'https://' . app('request')->hostname . '/';
   }
 
-  if ($includeClub && app()->tenant && app()->tenant->getDomain()) {
+  if ($includeClub && isset(app()->tenant) && app()->tenant->getDomain()) {
     $rootUrl = 'https://' . app()->tenant->getDomain() . '/';
   }
 
