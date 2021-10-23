@@ -30,24 +30,9 @@ if ($count == 0) {
   //  Nothing to choose
 
   halt(404);
-} else if ($count == 1) {
+} else {
   // If one, go straight to it
 
-  $getId = $db->prepare("SELECT `ID` FROM membershipYear WHERE EndDate > ? AND Tenant = ?");
-  $getId->execute([
-    $date->format('Y-m-d'),
-    $tenant->getId(),
-  ]);
-
-  $year = $getId->fetchColumn();
-
-  if (!$year) throw new Exception();
-
   http_response_code(302);
-  header("location: " . autoUrl("memberships/years/$year/new-batch?user=" . urlencode($id)));
-} else {
-  // Otherwise, show a choice screen
-
-  http_response_code(302);
-  header("location: " . autoUrl("users/$id/new-membership-batch-select"));
+  header("location: " . autoUrl("memberships/batches?user=" . urlencode($id)));
 }
