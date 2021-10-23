@@ -525,4 +525,54 @@ class Tenant
 
     return $customer;
   }
+
+  public function getSwimEnglandComplianceValue($key)
+  {
+    $db = app()->db;
+    $getKeys = $db->prepare("SELECT `Value` FROM `swimEnglandCompliance` WHERE `Key` = ? AND `Tenant` = ?");
+    $getKeys->execute([
+      $key,
+      $this->id
+    ]);
+    return $getKeys->fetchColumn();
+  }
+
+  public function setSwimEnglandComplianceValue($key, $value)
+  {
+    $db = app()->db;
+
+    if ($value == null) {
+      $delete = $db->prepare("DELETE FROM `swimEnglandCompliance` WHERE `Key` = ? AND `Tenant` = ?;");
+      $delete->execute([
+        $key,
+        $this->id
+      ]);
+
+      return;
+    }
+
+    $exists = $db->prepare("SELECT COUNT(*) FROM `swimEnglandCompliance` WHERE `Key` = ? AND `Tenant` = ?;");
+    $exists->execute([
+      $key,
+      $this->id
+    ]);
+
+    if ($exists->fetchColumn() > 0) {
+      // Update
+      $update = $db->prepare("UPDATE `swimEnglandCompliance` SET `Value` = ? WHERE `Key` = ? AND `Tenant` = ?;");
+      $update->execute([
+        $value,
+        $key,
+        $this->id
+      ]);
+    } else {
+      // Add
+      $insert = $db->prepare("INSERT INTO `swimEnglandCompliance` (`Key`, `Value`, `Tenant`) VALUES (?, ?, ?);");
+      $insert->execute([
+        $key,
+        $value,
+        $this->id
+      ]);
+    }
+  }
 }

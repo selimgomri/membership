@@ -46,4 +46,8 @@ class Pagination extends \Zebra_Pagination
     $this->recordsPerPage = $recordsPerPage;
     parent::records_per_page($recordsPerPage);
   }
+
+  public function get_page_description() {
+    return 'Page ' . $this->get_page() . ' of ' . $this->get_pages();
+  }
 }

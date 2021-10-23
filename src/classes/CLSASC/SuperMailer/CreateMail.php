@@ -113,9 +113,9 @@ class CreateMail
       <table style=\"width:100%;border:0px;text-align:left;padding:0px 0px 0px 0px;background:#ffffff;\"><tr><td align=\"center\">
         <table style=\"width:100%;max-width:700px;border:0px;text-align:center;background:#ffffff;padding:0px 0px 0px 0px;\"><tr><td>";
     if (isset(app()->tenant) && $logos = app()->tenant->getKey('LOGO_DIR')) {
-      $head .= "<img src=\"" . getUploadedAssetUrl($logos . 'logo-150.png') . "\" srcset=\"" .
-      getUploadedAssetUrl($logos . 'logo-150@2x.png') . " 2x, " .
-      getUploadedAssetUrl($logos . 'logo-150@3x.png') . " 3x\" style=\"max-width:100%;max-height:150px;\" alt=\"" . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . " Logo\">";
+      $head .= "<img src=\"" . getUploadedAssetUrl($logos . 'logo-75.png') . "\" srcset=\"" .
+      getUploadedAssetUrl($logos . 'logo-75@2x.png') . " 2x, " .
+      getUploadedAssetUrl($logos . 'logo-75@3x.png') . " 3x\" style=\"max-width:100%;max-height:75px;\" alt=\"" . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . " Logo\">";
     } else if (isset(app()->tenant)) {
       $head .= htmlspecialchars(app()->tenant->getKey('CLUB_NAME'));
     } else {

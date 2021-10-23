@@ -88,8 +88,6 @@ function notifySend($to, $subject, $emailMessage, $name = null, $emailaddress = 
   //   $email->addHeader("List-Archive", autoUrl("myaccount/notify/history"));
   // }
 
-  $email->addHeader("List-Help", autoUrl("notify"));
-
   if (isset($from['CC']) && $from['CC'] != null) {
     $email->addCcs($from['CC']);
   }
@@ -287,7 +285,7 @@ function autoUrl($relative, $includeClub = true)
     $rootUrl = 'https://' . app('request')->hostname . '/';
   }
 
-  if ($includeClub && app()->tenant && app()->tenant->getDomain()) {
+  if ($includeClub && isset(app()->tenant) && app()->tenant->getDomain()) {
     $rootUrl = 'https://' . app()->tenant->getDomain() . '/';
   }
 
@@ -1029,6 +1027,8 @@ function getTimes($asa)
 function user_needs_registration($user)
 {
   $db = app()->db;
+
+  // Check for legacy system
   try {
     $query = $db->prepare("SELECT RR FROM users WHERE UserID = ?");
     $query->execute([$user]);
@@ -1041,6 +1041,20 @@ function user_needs_registration($user)
   } catch (Exception $e) {
     return false;
   }
+
+  // Check for pending onboarding sessions
+  try {
+    $query = $db->prepare("SELECT COUNT(*) FROM `onboardingSessions` WHERE `user` = :userId AND `type` = 'onboarding' AND (`status` = 'pending' OR `status` = 'in_progress') AND `start` <= :today AND `due_date` >= :today");
+    $query->execute([
+      'userId' => $user,
+      'today' => (new DateTime('now', new DateTimeZone('Europe/London')))->format('Y-m-d'),
+    ]);
+
+    return $query->fetchColumn() > 0;
+  } catch (Exception $e) {
+    return false;
+  }
+
   return false;
 }
 
@@ -1106,6 +1120,24 @@ function isSubscribed($user, $email_type)
   }
 
   return false;
+}
+
+function isAbsolutelySubscribed($user, $type) {
+  $db = app()->db;
+  $tenant = app()->tenant;
+
+  $get = $db->prepare("SELECT Subscribed FROM notifyOptions INNER JOIN users ON users.UserID = notifyOptions.UserID WHERE notifyOptions.UserID = ? AND Tenant = ? AND EmailType = ?");
+  $get->execute([
+    $user,
+    $tenant->getId(),
+    $type,
+  ]);
+
+  $result = $get->fetchColumn();
+
+  if (!$result) return false;
+
+  return bool($result);
 }
 
 function updateSubscription($post, $list, $user = null)

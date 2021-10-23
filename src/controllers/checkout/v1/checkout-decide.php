@@ -5,7 +5,14 @@ $tenant = app()->tenant;
 
 $checkoutSession = \SCDS\Checkout\Session::retrieve($id);
 
-if ($checkoutSession->user && $checkoutSession->user != app()->user->getId()) {
+$exCheckout = false;
+if (isset($_SESSION['OnboardingSessionId'])) {
+  // Validate
+  $session = \SCDS\Onboarding\Session::retrieve($_SESSION['OnboardingSessionId']);
+  $exCheckout = $session->user == $checkoutSession->user;
+}
+
+if ($checkoutSession->user && ((isset(app()->user) && $checkoutSession->user != app()->user->getId()) || !$exCheckout)) {
   halt(404);
 }
 

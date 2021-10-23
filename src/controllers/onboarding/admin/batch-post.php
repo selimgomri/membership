@@ -2,6 +2,8 @@
 
 if (!app()->user->hasPermission('Admin')) halt(404);
 
+$session = \SCDS\Onboarding\Session::retrieve($id);
+
 use Ramsey\Uuid\Uuid;
 use Respect\Validation\Exceptions\NegativeException;
 
@@ -10,20 +12,20 @@ $tenant = app()->tenant;
 
 $getYear = $db->prepare("SELECT `Name`, `StartDate`, `EndDate` FROM `membershipYear` WHERE `ID` = ? AND `Tenant` = ?");
 $getYear->execute([
-  $id,
+  $_POST['year'],
   $tenant->getId(),
 ]);
 $year = $getYear->fetch(PDO::FETCH_ASSOC);
 
 if (!$year) halt(404);
 
-if (!isset($_GET['user'])) halt(404);
+if (!isset($session->user)) halt(404);
 
 // Check user exists
 $userInfo = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile, RR FROM users WHERE Tenant = ? AND UserID = ? AND Active");
 $userInfo->execute([
   $tenant->getId(),
-  $_GET['user']
+  $session->user
 ]);
 
 $info = $userInfo->fetch(PDO::FETCH_ASSOC);
@@ -32,10 +34,11 @@ if ($info == null) {
   halt(404);
 }
 
-$getMembers = $db->prepare("SELECT MemberID id, MForename fn, MSurname sn, NGBCategory ngb, ngbMembership.Name ngbName, ngbMembership.Fees ngbFees, ClubCategory club, clubMembership.Name clubName, clubMembership.Fees clubFees FROM members INNER JOIN clubMembershipClasses AS ngbMembership ON ngbMembership.ID = members.NGBCategory INNER JOIN clubMembershipClasses AS clubMembership ON clubMembership.ID = members.ClubCategory WHERE Active AND UserID = ? ORDER BY fn ASC, sn ASC");
+$getMembers = $db->prepare("SELECT MemberID id, MForename fn, MSurname sn, NGBCategory ngb, ngbMembership.Name ngbName, ngbMembership.Fees ngbFees, ClubCategory club, clubMembership.Name clubName, clubMembership.Fees clubFees FROM members INNER JOIN clubMembershipClasses AS ngbMembership ON ngbMembership.ID = members.NGBCategory INNER JOIN clubMembershipClasses AS clubMembership ON clubMembership.ID = members.ClubCategory INNER JOIN onboardingMembers ON onboardingMembers.member = members.MemberID WHERE Active AND onboardingMembers.session = ? ORDER BY fn ASC, sn ASC");
 $getMembers->execute([
-  $_GET['user']
+  $session->id
 ]);
+$member = $getMembers->fetch(PDO::FETCH_OBJ);
 
 $getCurrentMemberships = $db->prepare("SELECT `Name` `name`, `Description` `description`, `Type` `type`, `memberships`.`Amount` `paid`, `clubMembershipClasses`.`Fees` `expectPaid` FROM `memberships` INNER JOIN clubMembershipClasses ON memberships.Membership = clubMembershipClasses.ID WHERE `Member` = ? AND `Year` = ?");
 $hasMembership = $db->prepare("SELECT COUNT(*) FROM memberships WHERE `Member` = ? AND `Year` = ? AND `Membership` = ?");
@@ -49,7 +52,7 @@ try {
   while ($member = $getMembers->fetch(PDO::FETCH_OBJ)) {
     $hasMembership->execute([
       $member->id,
-      $id,
+      $_POST['year'],
       $member->ngb,
     ]);
     $has = $hasMembership->fetchColumn() > 0;
@@ -73,7 +76,7 @@ try {
 
     $hasMembership->execute([
       $member->id,
-      $id,
+      $_POST['year'],
       $member->club,
     ]);
     $has = $hasMembership->fetchColumn() > 0;
@@ -82,7 +85,7 @@ try {
       $amount = (int) MoneyHelpers::decimalToInt($_POST[$member->id . '-' . $member->club . '-amount']);
 
       if ($amount < 0) throw new Exception('Negative number');
-      
+
       $total += $amount;
 
       $items[] = [
@@ -99,15 +102,6 @@ try {
   // Add batch info
 
   $dueDate = null;
-  if (isset($_POST['due-date'])) {
-    try {
-      $dueDate = new DateTime($_POST['due-date'], new DateTimeZone('Europe/London'));
-      $dueDate = $dueDate->format('Y-m-d');
-    } catch (Exception $e) {
-      // Ignore
-      $dueDate = null;
-    }
-  }
 
   $paymentTypes = [];
   if (isset($_POST['payment-card']) && bool($_POST['payment-card'])) {
@@ -121,10 +115,10 @@ try {
 
   $addBatch->execute([
     $batchId,
-    $_GET['user'],
-    $id,
-    trim($_POST['introduction-text']),
-    trim($_POST['footer-text']),
+    $session->user,
+    $_POST['year'],
+    null,
+    null,
     $dueDate,
     $total,
     json_encode($paymentTypes),
@@ -139,16 +133,24 @@ try {
     $addBatchItem->execute($item);
   }
 
-  $message = '<p>There are membership fees for you to review in your club account.</p>';
-  $message .= '<p>Please <a href="' . htmlspecialchars(autoUrl("memberships/batches/$batchId")) . '">visit the membership system</a> to review the fees and pay ' . htmlspecialchars(MoneyHelpers::formatCurrency(MoneyHelpers::intToDecimal($total), 'GBP')) . '.</p>';
-  $message .= '<p>' . htmlspecialchars(autoUrl("memberships/batches/$batchId")) . '</p>';
-  notifySend(null, 'New Memberships', $message, $info['Forename'] . ' ' . $info['Surname'], $info['EmailAddress'], ['Name' => app()->tenant->getName() . ' Membership Secretary']);
+  // $message = '<p>There are membership fees for you to review in your club account.</p>';
+  // $message .= '<p>Please <a href="' . htmlspecialchars(autoUrl("memberships/batches/$batchId")) . '">visit the membership system</a> to review the fees and pay ' . htmlspecialchars(MoneyHelpers::formatCurrency(MoneyHelpers::intToDecimal($total), 'GBP')) . '.</p>';
+  // $message .= '<p>' . htmlspecialchars(autoUrl("memberships/batches/$batchId")) . '</p>';
+  // notifySend(null, 'New Memberships', $message, $info['Forename'] . ' ' . $info['Surname'], $info['EmailAddress'], ['Name' => app()->tenant->getName() . ' Membership Secretary']);
+
+  // Add batch ID to session
+
+  $update = $db->prepare("UPDATE `onboardingSessions` SET `batch` = ? WHERE `id` = ?");
+  $update->execute([
+    $batchId,
+    $id,
+  ]);
 
   http_response_code(302);
-  header("location: " . autoUrl("users/" . $_GET['user']));
+  header("location: " . autoUrl("onboarding/sessions/a/$id"));
 } catch (Exception $e) {
   reportError($e);
 
   http_response_code(302);
-  header("location: " . autoUrl("memberships/years/$id/new-batch?user=" . $_GET['user']));
+  header("location: " . autoUrl("onboarding/sessions/a/$id/batch?year=" . $_POST['year']));
 }

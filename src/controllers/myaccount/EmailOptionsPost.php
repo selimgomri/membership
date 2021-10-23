@@ -3,6 +3,7 @@
 use Respect\Validation\Validator as v;
 $db = app()->db;
 $currentUser = app()->user;
+$tenant = app()->tenant;
 
 $sql = "SELECT `EmailAddress`, `EmailComms` FROM `users` WHERE `UserID` = ?";
 try {
@@ -33,10 +34,19 @@ if ($email_comms != $row['EmailComms']) {
   }
 }
 
-updateSubscription($_POST['SecurityComms'], 'Security');
-updateSubscription($_POST['PaymentComms'], 'Payments');
+updateSubscription(isset($_POST['SecurityComms']), 'Security');
+updateSubscription(isset($_POST['PaymentComms']), 'Payments');
 if ($currentUser->hasPermission('Admin')) {
-	updateSubscription($_POST['NewMemberComms'], 'NewMember');
+	updateSubscription(isset($_POST['NewMemberComms']), 'NewMember');
+}
+
+$getCategories = $db->prepare("SELECT `ID` `id`, `Name` `name`, `Description` `description` FROM `notifyCategories` WHERE `Tenant` = ? AND `Active` ORDER BY `Name` ASC;");
+$getCategories->execute([
+	$tenant->getId()
+]);
+
+while ($category = $getCategories->fetch(PDO::FETCH_OBJ)) {
+	updateSubscription(isset($_POST['email-category-' . $category->id]), $category->id);
 }
 
 if (mb_strtolower($_POST['EmailAddress']) != mb_strtolower($row['EmailAddress'])) {

@@ -4,6 +4,18 @@
 // The script takes the user's saved state and continues where left off
 // Also controls single session progress.
 
+// Work out user ID
+$user = null;
+if (isset(app()->user)) {
+	$user = app()->user->getId();
+} else if (isset($_SESSION['OnboardingSessionId'])) {
+	$session = \SCDS\Onboarding\Session::retrieve($_SESSION['OnboardingSessionId']);
+	$user = $session->user;
+} else {
+	// NO USER
+	halt(404);
+}
+
 $db = app()->db;
 $tenant = app()->tenant;
 
@@ -86,35 +98,11 @@ function getNextSwimmer($user, $current = 0, $rr_only = false)
 
 function isPartialRegistration()
 {
-	$db = app()->db;
-	// Is user RR?
-	$query = $db->prepare("SELECT RR FROM users WHERE UserID = ?");
-	$query->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
-	$userRR = bool($query->fetchColumn());
-
-	$query = $db->prepare("SELECT COUNT(*) FROM `members` WHERE UserID = ?");
-	try {
-		$query->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
-	} catch (PDOException $e) {
-		halt(500);
-	}
-	$total_swimmers = (int) $query->fetchColumn();
-
-	$query = $db->prepare("SELECT COUNT(*) FROM `members` WHERE UserID = ? AND RR = ?");
-	try {
-		$query->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], 1]);
-	} catch (PDOException $e) {
-		halt(500);
-	}
-	$new_swimmers = (int) $query->fetchColumn();
-	if ($userRR && $total_swimmers > $new_swimmers) {
-		return true;
-	}
-	return false;
+	return isset($_SESSION['OnboardingSessionId']);
 }
 
 //$currentRenewal = renewalProgress($user);
-$currentRenewalDetails = renewalProgress($_SESSION['TENANT-' . app()->tenant->getId()]['UserID']);
+$currentRenewalDetails = renewalProgress($user);
 
 $renewal = null;
 
@@ -122,7 +110,7 @@ if ($currentRenewalDetails == null) {
 	// Create a new Progress Record
 	$latestRenewal = latestRenewal();
 
-	if (user_needs_registration($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'])) {
+	if (user_needs_registration($user)) {
 		$renewal = 0;
 	} else if ($latestRenewal == null) {
 		halt(404);
@@ -133,6 +121,9 @@ if ($currentRenewalDetails == null) {
 	$date = date("Y-m-d");
 
 	$doFull = app()->tenant->getBooleanKey('REQUIRE_FULL_RENEWAL');
+	if ($renewal == 0) {
+		$doFull = app()->tenant->getBooleanKey('REQUIRE_FULL_REGISTRATION');
+	}
 	$stage = $substage = $part = 0;
 
 	if (!$doFull) {
@@ -141,21 +132,21 @@ if ($currentRenewalDetails == null) {
 
 	$addRenewal = $db->prepare("INSERT INTO `renewalProgress` (`UserID`, `RenewalID`, `Date`, `Stage`, `Substage`, `Part`) VALUES (?, ?, ?, ?, ?, ?)");
 	$addRenewal->execute([
-		$_SESSION['TENANT-' . app()->tenant->getId()]['UserID'],
+		$user,
 		$renewal,
 		$date,
 		$stage,
 		$substage,
 		$part,
 	]);
-	$currentRenewalDetails = renewalProgress($_SESSION['TENANT-' . app()->tenant->getId()]['UserID']);
+	$currentRenewalDetails = renewalProgress($user);
 } else {
 	$row = latestRenewal();
 	$renewal = null;
 	if ($row) {
 		$renewal = $row['ID'];
 	}
-	if (user_needs_registration($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'])) {
+	if (user_needs_registration($user)) {
 		$renewal = 0;
 	} else if ($row == null) {
 		halt(404);
@@ -165,7 +156,7 @@ if ($currentRenewalDetails == null) {
 $renewalName = 'Renewal';
 if (isset($currentRenewalDetails['Name'])) {
 	$renewalName = $currentRenewalDetails['Name'];
-} else if (user_needs_registration($_SESSION['TENANT-' . app()->tenant->getId()]['UserID'])) {
+} else if (user_needs_registration($user)) {
 	$renewalName = '';
 }
 

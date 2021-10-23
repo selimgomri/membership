@@ -13,7 +13,7 @@ class MembershipFeeBatch
     \Stripe\Stripe::setApiKey(getenv('STRIPE'));
 
     // Get batch item
-    $getBatchItem = $db->prepare("SELECT membershipBatchItems.ID, membershipBatchItems.Batch, membershipBatchItems.Membership, membershipBatchItems.Member, membershipBatchItems.Amount, membershipBatchItems.Notes, members.MForename, members.MSurname, clubMembershipClasses.Name, membershipBatch.Year, membershipYear.StartDate, membershipYear.EndDate FROM ((((membershipBatchItems INNER JOIN members ON members.MemberID = membershipBatchItems.Member) INNER JOIN clubMembershipClasses ON clubMembershipClasses.ID = membershipBatchItems.Membership) INNER JOIN membershipBatch ON membershipBatch.ID = membershipBatchItems.Batch) INNER JOIN membershipYear ON membershipYear.ID = membershipBatch.Year) WHERE membershipBatchItems.ID = ?");
+    $getBatchItem = $db->prepare("SELECT membershipBatchItems.ID, membershipBatchItems.Batch, membershipBatchItems.Membership, membershipBatchItems.Member, membershipBatchItems.Amount, membershipBatchItems.Notes, members.MForename, members.MSurname, clubMembershipClasses.Name, membershipBatchItems.Year, membershipYear.StartDate, membershipYear.EndDate FROM ((((membershipBatchItems INNER JOIN members ON members.MemberID = membershipBatchItems.Member) INNER JOIN clubMembershipClasses ON clubMembershipClasses.ID = membershipBatchItems.Membership) INNER JOIN membershipBatch ON membershipBatch.ID = membershipBatchItems.Batch) INNER JOIN membershipYear ON membershipYear.ID = membershipBatchItems.Year) WHERE membershipBatchItems.ID = ?");
     $getBatchItem->execute([
       $item->attributes->id,
     ]);
@@ -47,6 +47,22 @@ class MembershipFeeBatch
       $paymentInfo,
       $batchItem->Batch,
     ]);
+
+    // Check if the batch relates to am onboarding session
+    try {
+      $get = $db->prepare("SELECT id FROM onboardingSessions WHERE batch = ?");
+      $get->execute([
+        $batchItem->Batch
+      ]);
+      $batch = $get->fetchColumn();
+
+      if ($batch) {
+        $session = \SCDS\Onboarding\Session::retrieve($batch);
+        $session->completeTask('fees');
+      }
+    } catch (\Exception $e) {
+      reportError($e);
+    }
 
     $addPaymentItems = $db->prepare("INSERT INTO stripePaymentItems (Payment, `Name`, `Description`, Amount, Currency, AmountRefunded) VALUES (?, ?, ?, ?, ?, ?)");
     $addPaymentItems->execute([

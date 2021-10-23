@@ -46,11 +46,7 @@ if ((!empty($_POST['forename'])) && (!empty($_POST['surname'])) && (!empty($_POS
 		$cp = 0;
 	}
 
-	if (isset($_POST['transfer']) && bool($_POST['transfer'])) {
-		$transfer = 1;
-	} else {
-		$transfer = 0;
-	}
+	$transfer = 0;
 
 	$getClass = $db->prepare("SELECT `ID`, `Name`, `Description`, `Fees` FROM `clubMembershipClasses` WHERE `ID` = ? AND `Tenant` = ? AND `Type` = ?");
 

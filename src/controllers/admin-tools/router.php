@@ -90,4 +90,14 @@ if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') {
   $this->group('/tier-3', function () {
     include 'tier-3/router.php';
   });
+
+  $this->group('/swim-england-compliance', function () {
+    $this->get('/', function () {
+      include 'swim-england-compliance/home.php';
+    });
+
+    $this->post('/', function () {
+      include 'swim-england-compliance/post.php';
+    });
+  });
 }

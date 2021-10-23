@@ -35,7 +35,7 @@ include BASE_PATH . "views/swimmersMenu.php";
 		<div class="row align-items-center">
 			<div class="col-lg-8">
 				<h1>
-					Membership Renewal System
+					Membership Renewal System <span class="badge bg-danger">Deprecated</span>
 				</h1>
 				<p class="lead mb-0">
 					Welcome to the membership renewal system
@@ -46,6 +46,20 @@ include BASE_PATH . "views/swimmersMenu.php";
 </div>
 
 <div class="container-xl">
+
+	<div class="alert alert-info">
+		<p class="mb-0">
+			<strong>This is the legacy renewal system which has been deprecated</strong>
+		</p>
+		<p class="">
+			You will soon be unable to create new renewal periods in this system.
+		</p>
+
+		<p class="mb-0">
+			<a href="<?= htmlspecialchars(autoUrl('memberships/renewal')) ?>" class="alert-link">Visit the new renewal system</a>
+		</p>
+	</div>
+
 	<div class="">
 		<?php if ($row != null) { ?>
 			<p>
@@ -73,12 +87,12 @@ include BASE_PATH . "views/swimmersMenu.php";
 				<li>
 					<a href="<?= autoUrl("renewal/" . $row['ID']) ?>">
 						<?= htmlspecialchars($row['Name']) ?> (<?= date(
-																										"j F Y",
-																										strtotime($row['StartDate'])
-																									) ?> - <?= date(
-																								"j F Y",
-																								strtotime($row['EndDate'])
-																							) ?>)
+																											"j F Y",
+																											strtotime($row['StartDate'])
+																										) ?> - <?= date(
+																														"j F Y",
+																														strtotime($row['EndDate'])
+																													) ?>)
 					</a>
 				</li>
 			<?php } ?>

@@ -2,6 +2,7 @@
 
 $db = app()->db;
 $tenant = app()->tenant;
+$user = app()->user;
 
 $obj = null;
 if (app()->tenant->isCLS()) {
@@ -70,6 +71,15 @@ if ($showCovid && $tenant->getBooleanKey('HIDE_CONTACT_TRACING_FROM_PARENTS')) {
   $showCovid = $getRepCount->fetchColumn() > 0;
 }
 
+// Onboarding sessions
+$getOnboarding = $db->prepare("SELECT `id` FROM `onboardingSessions` WHERE `user` = ? AND (`status` = ? || `status` = ?) ORDER BY `created` ASC");
+$getOnboarding->execute([
+  $user->getId(),
+  'pending',
+  'in_progress'
+]);
+$onboardingId = $getOnboarding->fetchColumn();
+
 $username = htmlspecialchars(explode(" ", getUserName($_SESSION['TENANT-' . app()->tenant->getId()]['UserID']))[0]);
 
 $pagetitle = "Home";
@@ -92,6 +102,33 @@ include BASE_PATH . "views/header.php";
           </div>
         </div>
       </aside>
+    <?php } ?>
+
+    <?php if ($onboardingId) { ?>
+
+      <aside class="row mb-4">
+        <div class="col-lg-6">
+          <div class="cell bg-tenant-brand tenant-colour">
+
+            <h2 class="">You have tasks to complete</h2>
+
+            <?php do {
+              $onboarding = \SCDS\Onboarding\Session::retrieve($onboardingId);
+            ?>
+              <p>
+                Complete your <?= htmlspecialchars($onboarding->type) ?> now
+              </p>
+              <p class="mb-0">
+                <a href="<?= htmlspecialchars(autoUrl("onboarding/go-to-session?session=" . urlencode($onboarding->id))) ?>" class="btn btn-dark">
+                  Start now <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                </a>
+              </p>
+            <?php } while ($onboardingId = $getOnboarding->fetchColumn()); ?>
+
+          </div>
+        </div>
+      </aside>
+
     <?php } ?>
 
     <div class="mb-4">

@@ -53,8 +53,16 @@
     {
       "id": "settings-terms",
       "name": "Terms and conditions",
-      "title": "CLub membership terms and conditions and privacy polices",
+      "title": "Club membership terms and conditions and privacy polices",
       "link": "settings/terms-and-conditions",
+      "target": "_self",
+      "external": false
+    },
+    {
+      "id": "notify-categories",
+      "name": "Notify categories",
+      "title": "Custom email subscription categories for GDPR compliance",
+      "link": "settings/notify-categories",
       "target": "_self",
       "external": false
     }

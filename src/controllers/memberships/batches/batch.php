@@ -3,7 +3,7 @@
 $user = app()->user;
 $db = app()->db;
 
-$getBatch = $db->prepare("SELECT membershipBatch.ID id, membershipYear.ID yearId, membershipBatch.Completed completed, DueDate due, Total total, membershipYear.Name yearName, membershipYear.StartDate yearStart, membershipYear.EndDate yearEnd, PaymentTypes payMethods, PaymentDetails payDetails FROM membershipBatch INNER JOIN membershipYear ON membershipBatch.Year = membershipYear.ID INNER JOIN users ON users.UserID = membershipBatch.User WHERE membershipBatch.ID = ? AND users.Tenant = ?");
+$getBatch = $db->prepare("SELECT membershipBatch.ID id, membershipBatch.Completed completed, DueDate due, Total total, PaymentTypes payMethods, PaymentDetails payDetails, users.UserID user, users.Forename firstName, users.Surname lastName FROM membershipBatch INNER JOIN users ON users.UserID = membershipBatch.User WHERE membershipBatch.ID = ? AND users.Tenant = ?");
 $getBatch->execute([
   $id,
   app()->tenant->getId(),
@@ -13,8 +13,10 @@ $batch = $getBatch->fetch(PDO::FETCH_OBJ);
 
 if (!$batch) halt(404);
 
+if ($batch->user != $user->getId() && !$user->hasPermission('Admin')) halt(404);
+
 // Get batch items
-$getBatchItems = $db->prepare("SELECT membershipBatchItems.ID id, membershipBatchItems.Membership membershipId, membershipBatchItems.Amount amount, membershipBatchItems.Notes notes, members.MForename firstName, members.MSurname lastName, members.ASANumber ngbId, clubMembershipClasses.Type membershipType, clubMembershipClasses.Name membershipName, clubMembershipClasses.Description membershipDescription FROM membershipBatchItems INNER JOIN members ON members.MemberID = membershipBatchItems.Member INNER JOIN clubMembershipClasses ON clubMembershipClasses.ID = membershipBatchItems.Membership WHERE Batch = ?");
+$getBatchItems = $db->prepare("SELECT membershipBatchItems.ID id, membershipBatchItems.Membership membershipId, membershipBatchItems.Amount amount, membershipBatchItems.Notes notes, members.MForename firstName, members.MSurname lastName, members.ASANumber ngbId, clubMembershipClasses.Type membershipType, clubMembershipClasses.Name membershipName, clubMembershipClasses.Description membershipDescription, membershipYear.ID yearId, membershipYear.Name yearName, membershipYear.StartDate yearStart, membershipYear.EndDate yearEnd FROM membershipBatchItems INNER JOIN membershipYear ON membershipBatchItems.Year = membershipYear.ID INNER JOIN members ON members.MemberID = membershipBatchItems.Member INNER JOIN clubMembershipClasses ON clubMembershipClasses.ID = membershipBatchItems.Membership WHERE Batch = ?");
 $getBatchItems->execute([
   $id
 ]);
@@ -22,12 +24,20 @@ $item = $getBatchItems->fetch(PDO::FETCH_OBJ);
 
 $payMethods = json_decode($batch->payMethods);
 
+$payMethodStrings = [
+  'card' => 'credit/debit card',
+  'dd' => 'next Direct Debit payment',
+  'cash' => 'cash in person',
+  'cheque' => 'cheque',
+  'bacs' => 'bank transfer',
+];
+
 $canPay = true;
 $due = new DateTime($batch->due, new DateTimeZone('Europe/London'));
 $due->setTime(0, 0, 0, 0);
 $now = new DateTime('now', new DateTimeZone('Europe/London'));
 $now->setTime(0, 0, 0, 0);
-if ($now > $due) $canPay = false;
+$canPay = $now < $due;
 
 $markdown = new \ParsedownExtra();
 $markdown->setSafeMode(true);
@@ -43,7 +53,7 @@ include BASE_PATH . "views/header.php";
     <!-- Page header -->
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
-        <li class="breadcrumb-item" aria-current="page"><a href="<?= htmlspecialchars(autoUrl("memberships")) ?>">Memberships</a></li>
+        <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl("memberships")) ?>">Memberships</a></li>
         <li class="breadcrumb-item active" aria-current="page">Batch</li>
       </ol>
     </nav>
@@ -51,12 +61,17 @@ include BASE_PATH . "views/header.php";
     <div class="row align-items-center">
       <div class="col-lg-8">
         <h1>
-          Batch for <?= htmlspecialchars($batch->yearName) ?>
+          Batch for <?= htmlspecialchars($batch->firstName . ' ' . $batch->lastName) ?>
         </h1>
         <p class="lead mb-0">
           <?= htmlspecialchars($id) ?>
         </p>
       </div>
+      <?php if ($user->hasPermission('Admin')) { ?>
+        <div class="col-auto ms-auto">
+          <a href="<?= htmlspecialchars(autoUrl("memberships/batches/$id/edit")) ?>" class="btn btn-success">Edit</a>
+        </div>
+      <?php } ?>
     </div>
   </div>
 </div>
@@ -89,13 +104,6 @@ include BASE_PATH . "views/header.php";
         </dd>
 
         <dt class="col-3">
-          Period
-        </dt>
-        <dd class="col-9">
-          <?= htmlspecialchars((new DateTime($batch->yearStart))->format('j F Y')) ?> to <?= htmlspecialchars((new DateTime($batch->yearEnd))->format('j F Y')) ?>
-        </dd>
-
-        <dt class="col-3">
           Amount
         </dt>
         <dd class="col-9">
@@ -116,11 +124,8 @@ include BASE_PATH . "views/header.php";
           <dd class="col-9">
             <?php if (sizeof($payMethods) > 0) { ?>
               <ul class="mb-0">
-                <?php if (in_array('card', $payMethods)) { ?>
-                  <li>Credit/debit card</li>
-                <?php } ?>
-                <?php if (in_array('dd', $payMethods)) { ?>
-                  <li>Next Direct Debit payment</li>
+                <?php foreach ($payMethods as $method) { ?>
+                  <li><?= htmlspecialchars(mb_strtoupper(mb_substr($payMethodStrings[$method], 0, 1)) . mb_substr($payMethodStrings[$method], 1)) ?></li>
                 <?php } ?>
               <?php } else { ?>
                 No payment methods - speak to club staff
@@ -129,8 +134,8 @@ include BASE_PATH . "views/header.php";
         <?php } ?>
       </dl>
 
-      <?php if (!$batch->completed && $batch->total > 0 && sizeof($payMethods) > 0 && $canPay) { ?>
-        <form method="post">
+      <?php if (!$batch->completed && $batch->total > 0 && sizeof($payMethods) > 0 && $canPay && $batch->user == $user->getId()) { ?>
+        <form method="post" class="needs-validation" novalidate>
           <h2>Pay</h2>
           <?php if (sizeof($payMethods) > 1) { ?>
             <!-- Select payment method -->
@@ -138,13 +143,13 @@ include BASE_PATH . "views/header.php";
 
             <div class="mb-3">
               <div class="form-check">
-                <input class="form-check-input" type="radio" name="pay-method" id="pay-card" value="card" <?php if (!in_array('card', $payMethods)) { ?>disabled<?php } ?>>
+                <input class="form-check-input" type="radio" name="pay-method" id="pay-card" value="card" <?php if (!in_array('card', $payMethods)) { ?>disabled<?php } ?> required>
                 <label class="form-check-label" for="pay-card">
                   Credit/debit card
                 </label>
               </div>
               <div class="form-check">
-                <input class="form-check-input" type="radio" name="pay-method" id="pay-dd" value="dd" <?php if (!in_array('card', $payMethods)) { ?>disabled<?php } ?>>
+                <input class="form-check-input" type="radio" name="pay-method" id="pay-dd" value="dd" <?php if (!in_array('dd', $payMethods)) { ?>disabled<?php } ?>>
                 <label class="form-check-label" for="pay-dd">
                   Next Direct Debit payment
                 </label>
@@ -173,7 +178,8 @@ include BASE_PATH . "views/header.php";
             </div>
           <?php } else if (sizeof($payMethods) > 0) { ?>
             <!-- Just go straight to payment -->
-            <p>You can only pay for this batch with {{PAY_METHOD}}</p>
+            <input type="hidden" name="pay-method" value="<?= htmlspecialchars($payMethods[0]) ?>">
+            <p>You can only pay for this batch with <?= htmlspecialchars($payMethodStrings[$payMethods[0]]) ?>.</p>
           <?php } ?>
           <p class="d-grid mb-1">
             <button type="submit" class="btn btn-success">Pay for memberships <i class="fa fa-chevron-right" aria-hidden="true"></i></button>
@@ -200,6 +206,13 @@ include BASE_PATH . "views/header.php";
                 </dd>
 
                 <dt class="col-3">
+                  Period
+                </dt>
+                <dd class="col-9">
+                  <?= htmlspecialchars($item->yearName) ?> (<?= htmlspecialchars((new DateTime($item->yearStart))->format('j F Y')) ?> to <?= htmlspecialchars((new DateTime($item->yearEnd))->format('j F Y')) ?>)
+                </dd>
+
+                <dt class="col-3">
                   Amount
                 </dt>
                 <dd class="col-9">
@@ -207,7 +220,7 @@ include BASE_PATH . "views/header.php";
                 </dd>
 
                 <dt class="col-3">
-                  NGB ID
+                  <?= htmlspecialchars($tenant->getKey('NGB_NAME')) ?> #
                 </dt>
                 <dd class="col-9">
                   <?= htmlspecialchars($item->ngbId) ?>
@@ -244,4 +257,5 @@ include BASE_PATH . "views/header.php";
 <?php
 
 $footer = new \SCDS\Footer();
+$footer->addJs('js/NeedsValidation.js');
 $footer->render();

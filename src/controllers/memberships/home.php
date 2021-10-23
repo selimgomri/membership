@@ -5,7 +5,7 @@ $db = app()->db;
 
 $today = new DateTime('now', new DateTimeZone('Europe/London'));
 
-$getPending = $db->prepare("SELECT membershipBatch.ID id, membershipYear.ID yearId, DueDate due, Total total, membershipYear.Name yearName, membershipYear.StartDate yearStart, membershipYear.EndDate yearEnd, PaymentTypes payMethods FROM membershipBatch INNER JOIN membershipYear ON membershipBatch.Year = membershipYear.ID WHERE User = ? AND (DueDate >= ? OR DueDate IS NULL) AND NOT Completed AND NOT Cancelled");
+$getPending = $db->prepare("SELECT membershipBatch.ID id, DueDate due, Total total, PaymentTypes payMethods FROM membershipBatch WHERE User = ? AND (DueDate >= ? OR DueDate IS NULL) AND NOT Completed AND NOT Cancelled");
 $getPending->execute([
 	$user->getId(),
 	$today->format('Y-m-d'),
@@ -56,18 +56,18 @@ include BASE_PATH . "views/header.php";
 				</p>
 
 				<ul class="list-group mb-3">
-					<?php do { 
-						
+					<?php do {
+
 						$payMethods = json_decode($pending->payMethods);
-						
-						?>
+
+					?>
 						<li class="list-group-item">
 
-							<h3><?= htmlspecialchars($pending->yearName) ?> <small class="text-muted"><?= htmlspecialchars((new DateTime($pending->yearStart))->format('d/m/Y')) ?> to <?= htmlspecialchars((new DateTime($pending->yearEnd))->format('d/m/Y')) ?></small></h3>
+							<h3>Membership Batch</h3>
 
 							<dl class="row">
 
-							<dt class="col-3">
+								<dt class="col-3">
 									Batch ID
 								</dt>
 								<dd class="col-9">
@@ -116,11 +116,49 @@ include BASE_PATH . "views/header.php";
 			<?php } ?>
 
 			<?php if (app()->user->hasPermission('Admin')) { ?>
-			<p>
-				<a href="<?= htmlspecialchars(autoUrl('memberships/years')) ?>" class="btn btn-primary">
-					Show years/periods
-				</a>
-			</p>
+				<h2>Membership Years</h2>
+				<p>
+					<a href="<?= htmlspecialchars(autoUrl('memberships/years')) ?>" class="btn btn-primary">
+						Show years/periods
+					</a>
+				</p>
+
+				<h2>Membership Renewal</h2>
+				<p>
+					<a href="<?= htmlspecialchars(autoUrl('memberships/renewal')) ?>" class="btn btn-primary">
+						View, add or edit renewal periods
+					</a>
+				</p>
+
+				<h2>Onboarding Sessions</h2>
+				<p>
+					<a href="<?= htmlspecialchars(autoUrl('onboarding/all')) ?>" class="btn btn-primary">
+						View, create or edit onboarding sessions
+					</a>
+				</p>
+
+				<h2>Membership Batches</h2>
+				<p>
+					<a href="<?= htmlspecialchars(autoUrl('memberships/batches')) ?>" class="btn btn-primary">
+						View or edit batches
+					</a>
+				</p>
+
+				<p>
+					Create a new membership batch by navigating to the user you want to issue a batch for.
+				</p>
+
+				<h2>Legacy Membership Renewal</h2>
+
+				<p>
+					The legacy membership renewal system is deprecated and eventually will be removed.
+				</p>
+
+				<p>
+					<a href="<?= htmlspecialchars(autoUrl('renewal')) ?>" class="btn btn-primary">
+						View legacy renewal periods
+					</a>
+				</p>
 			<?php } ?>
 		</div>
 	</div>

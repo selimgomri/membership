@@ -123,6 +123,12 @@ if (bool(getenv('IS_DEV'))) {
   });
 }
 
+if (isset($_SESSION['OnboardingSessionId'])) {
+  $this->group('/renewal', function () {
+    include BASE_PATH . 'controllers/renewal/router.php';
+  });
+}
+
 $this->get('/auth/cookie/redirect', function () {
   //$target = urldecode($target);
   setcookie('TENANT-' . app()->tenant->getId() . '-' . "SeenAccount", true, 0, "/", app('request')->hostname, true, false);
@@ -243,6 +249,10 @@ $this->group(['/timeconverter', '/time-converter'], function () {
   });
 });
 
+$this->group('/onboarding/go', function () {
+  include BASE_PATH . 'controllers/onboarding/public/router.php';
+});
+
 $this->get('/reportanissue', function () {
   include BASE_PATH . 'controllers/help/ReportIssueHandler.php';
 });
@@ -272,6 +282,10 @@ $this->get('/privacy', function () {
 
 $this->get('/cc/{id}/{hash}/unsubscribe', function ($id, $hash) {
   include BASE_PATH . 'controllers/notify/CCUnsubscribe.php';
+});
+
+$this->group('/payments/checkout', function () {
+  include 'checkout.php';
 });
 
 $this->group('/services', function () {
@@ -529,11 +543,10 @@ if (empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) {
     include BASE_PATH . 'controllers/galas/squad-reps-and-team-managers/team-manager-event-list.php';
   });
 
-  if (bool(getenv('IS_DEV'))) {
-    $this->group('/onboarding', function () {
-      include BASE_PATH . 'controllers/onboarding/router.php';
-    });
-  }
+
+  $this->group('/onboarding', function () {
+    include BASE_PATH . 'controllers/onboarding/router.php';
+  });
 
   if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != "Parent") {
     $this->group('/trials', function () {
@@ -553,11 +566,9 @@ if (empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) {
     include BASE_PATH . 'controllers/registration/router.php';
   });
 
-  if (bool(getenv('IS_DEV'))) {
-    $this->group('/memberships', function () {
-      include BASE_PATH . 'controllers/memberships/router.php';
-    });
-  }
+  $this->group('/memberships', function () {
+    include BASE_PATH . 'controllers/memberships/router.php';
+  });
 
   $this->group(['/attendance', '/registers'], function () {
     include BASE_PATH . 'controllers/attendance/router.php';
@@ -591,14 +602,6 @@ if (empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) {
     include BASE_PATH . 'controllers/registration/router.php';
   });
 
-  $this->group('/payments', function () {
-    $this->group('/checkout', function () {
-      include 'checkout.php';
-    });
-
-    include BASE_PATH . 'controllers/payments/router.php';
-  });
-
   $this->group('/form-agreement', function () {
     include BASE_PATH . 'controllers/forms/router.php';
   });
@@ -616,6 +619,10 @@ if (empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) {
 
 
     include BASE_PATH . 'controllers/emergencycontacts/router.php';
+  });
+
+  $this->group('/payments', function () {
+    include BASE_PATH . 'controllers/payments/router.php';
   });
 
   $this->group('/webhooks', function () {

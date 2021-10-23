@@ -81,6 +81,11 @@ $uuid = \Ramsey\Uuid\Uuid::uuid4();
 $date = (new DateTime('now', new DateTimeZone('Europe/London')))->format('Y/m/d');
 $attachments = [];
 
+$getCategories = $db->prepare("SELECT `ID` `id`, `Name` `name`, `Description` `description` FROM `notifyCategories` WHERE `Tenant` = ? AND `Active` ORDER BY `Name` ASC;");
+$getCategories->execute([
+  $tenant->getId()
+]);
+
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/notifyMenu.php";
 
@@ -317,6 +322,19 @@ include BASE_PATH . "views/notifyMenu.php";
           Send a copy of this email to coaches of all selected squads
         </small>
       </div>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label" for="subscription-category">Notify subscription category</label>
+      <select class="form-select" id="subscription-category" name="subscription-category" aria-describedby="subscription-category-help">
+        <option value="DEFAULT" selected>Notify</option>
+        <?php while ($category = $getCategories->fetch(PDO::FETCH_OBJ)) { ?>
+          <option value="<?= htmlspecialchars($category->id) ?>"><?= htmlspecialchars($category->name) ?></option>
+        <?php } ?>
+      </select>
+      <small id="subscription-category-help" class="form-text text-muted">
+        Emails will only be sent to those in selected groups who have opted in to receive messages in the above category.<?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Admin" || $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Galas") { ?> <strong>Force Send</strong> will override this.<?php } ?> Additonial Recipients excluded.
+      </small>
     </div>
 
     <?= SCDS\CSRF::write() ?>

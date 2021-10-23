@@ -7,9 +7,9 @@ $tenant = app()->tenant;
 
 $checkoutSession = \SCDS\Checkout\Session::retrieve($id);
 
-if ($checkoutSession->user && $checkoutSession->user != app()->user->getId()) {
-  halt(404);
-}
+// if ($checkoutSession->user && ($checkoutSession->user != app()->user->getId() || isset($_SESSION['OnboardingSessionId']))) {
+//   halt(404);
+// }
 
 $items = $checkoutSession->getItems();
 
@@ -17,15 +17,15 @@ $expMonth = date("m");
 $expYear = date("Y");
 
 $customer = $db->prepare("SELECT CustomerID FROM stripeCustomers WHERE User = ?");
-$customer->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
+$customer->execute([$checkoutSession->user]);
 $customerId = $customer->fetchColumn();
 
 $numberOfCards = $db->prepare("SELECT COUNT(*) `count`, stripePayMethods.ID FROM stripePayMethods INNER JOIN stripeCustomers ON stripeCustomers.CustomerID = stripePayMethods.Customer WHERE User = ? AND Reusable = ? AND (ExpYear > ? OR (ExpYear = ? AND ExpMonth >= ?))");
-$numberOfCards->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], 1, $expYear, $expYear, $expMonth]);
+$numberOfCards->execute([$checkoutSession->user, 1, $expYear, $expYear, $expMonth]);
 $countCards = $numberOfCards->fetch(PDO::FETCH_ASSOC);
 
 $getCards = $db->prepare("SELECT stripePayMethods.ID, `MethodID`, stripePayMethods.Customer, stripePayMethods.Last4, stripePayMethods.Brand FROM stripePayMethods INNER JOIN stripeCustomers ON stripeCustomers.CustomerID = stripePayMethods.Customer WHERE User = ? AND Reusable = ? AND (ExpYear > ? OR (ExpYear = ? AND ExpMonth >= ?)) ORDER BY `Name` ASC");
-$getCards->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], 1, $expYear, $expYear, $expMonth]);
+$getCards->execute([$checkoutSession->user, 1, $expYear, $expYear, $expMonth]);
 $cards = $getCards->fetchAll(PDO::FETCH_ASSOC);
 
 $methodId = $customerID = null;

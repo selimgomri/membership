@@ -2,25 +2,27 @@
 
 if (!app()->user->hasPermission('Admin')) halt(404);
 
+$session = \SCDS\Onboarding\Session::retrieve($id);
+
 $db = app()->db;
 $tenant = app()->tenant;
 
 $getYear = $db->prepare("SELECT `Name`, `StartDate`, `EndDate` FROM `membershipYear` WHERE `ID` = ? AND `Tenant` = ?");
 $getYear->execute([
-  $id,
+  $_GET['year'],
   $tenant->getId(),
 ]);
 $year = $getYear->fetch(PDO::FETCH_ASSOC);
 
 if (!$year) halt(404);
 
-if (!isset($_GET['user'])) halt(404);
+if (!isset($session->user)) halt(404);
 
 // Check user exists
 $userInfo = $db->prepare("SELECT Forename, Surname, EmailAddress, Mobile, RR FROM users WHERE Tenant = ? AND UserID = ? AND Active");
 $userInfo->execute([
   $tenant->getId(),
-  $_GET['user']
+  $session->user
 ]);
 
 $info = $userInfo->fetch(PDO::FETCH_ASSOC);
@@ -29,9 +31,9 @@ if ($info == null) {
   halt(404);
 }
 
-$getMembers = $db->prepare("SELECT MemberID id, MForename fn, MSurname sn, NGBCategory ngb, ngbMembership.Name ngbName, ngbMembership.Fees ngbFees, ClubCategory club, clubMembership.Name clubName, clubMembership.Fees clubFees FROM members INNER JOIN clubMembershipClasses AS ngbMembership ON ngbMembership.ID = members.NGBCategory INNER JOIN clubMembershipClasses AS clubMembership ON clubMembership.ID = members.ClubCategory WHERE Active AND UserID = ? ORDER BY fn ASC, sn ASC");
+$getMembers = $db->prepare("SELECT MemberID id, MForename fn, MSurname sn, NGBCategory ngb, ngbMembership.Name ngbName, ngbMembership.Fees ngbFees, ClubCategory club, clubMembership.Name clubName, clubMembership.Fees clubFees FROM members INNER JOIN clubMembershipClasses AS ngbMembership ON ngbMembership.ID = members.NGBCategory INNER JOIN clubMembershipClasses AS clubMembership ON clubMembership.ID = members.ClubCategory INNER JOIN onboardingMembers ON onboardingMembers.member = members.MemberID WHERE Active AND onboardingMembers.session = ? ORDER BY fn ASC, sn ASC");
 $getMembers->execute([
-  $_GET['user']
+  $session->id
 ]);
 $member = $getMembers->fetch(PDO::FETCH_OBJ);
 
@@ -49,24 +51,23 @@ include BASE_PATH . "views/header.php";
     <!-- Page header -->
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
-        <li class="breadcrumb-item" aria-current="page"><a href="<?= htmlspecialchars(autoUrl("memberships")) ?>">Memberships</a></li>
-        <li class="breadcrumb-item" aria-current="page"><a href="<?= htmlspecialchars(autoUrl("memberships/years")) ?>">Years</a></li>
-        <li class="breadcrumb-item" aria-current="page"><a href="<?= htmlspecialchars(autoUrl("memberships/years/$id")) ?>"><?= htmlspecialchars($year['Name']) ?></a></li>
-        <li class="breadcrumb-item active" aria-current="page">New Batch</li>
+        <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl('onboarding')) ?>">Onboarding</a></li>
+        <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl("onboarding/a/$id")) ?>"><?= htmlspecialchars($session->getUser()->getName()) ?></a></li>
+        <li class="breadcrumb-item active" aria-current="page">Fees</li>
       </ol>
     </nav>
 
     <div class="row align-items-center">
       <div class="col-lg-8">
         <h1>
-          New batch for <?= htmlspecialchars($info['Forename'] . ' ' . $info['Surname']) ?>
+          Membership fees for <?= htmlspecialchars($info['Forename'] . ' ' . $info['Surname']) ?>
         </h1>
         <p class="lead mb-0">
           For <?= htmlspecialchars($year['Name']) ?>
         </p>
       </div>
       <div class="col-auto ms-lg-auto">
-        <a href="<?= htmlspecialchars(autoUrl("users/" . urlencode($_GET['user']))) ?>" class="btn btn-warning">Cancel</a>
+        <a href="<?= htmlspecialchars(autoUrl("onboarding/a/$id")) ?>" class="btn btn-warning">Cancel</a>
       </div>
     </div>
   </div>
@@ -79,27 +80,23 @@ include BASE_PATH . "views/header.php";
 
       <form method="post" id="form">
 
+        <input type="hidden" name="year" value="<?= htmlspecialchars($_GET['year']) ?>">
+
         <p class="lead">
-          Welcome to the batch creator.
+          Welcome to the fee editor.
         </p>
 
         <p>
-          Select memberships to add for each member connected to <?= htmlspecialchars($info['Forename']) ?>'s account.
+          Select memberships to add for each member you are adding to <?= htmlspecialchars($info['Forename']) ?>'s account.
         </p>
 
         <p>
-          You can make adjustments to the normal fee by editing the prices shown. <strong>When you create a batch manually, we won't automatically apply discounts for families. You'll need to make appropriate adjustments yourself to ensure the total is correct.</strong>
+          You can make adjustments to the normal fee by editing the prices shown. <strong>Note that we won't automatically apply discounts for families. You'll need to make appropriate adjustments yourself to ensure the total is correct.</strong>
         </p>
 
         <p>
-          Once complete, you can save this batch. If there is a fee to pay, we'll send an email notifying <?= htmlspecialchars($info['Forename']) ?> that they need to log in to pay membership fees. If there's no fee, we'll silently assign the appropriate memberships to the members.
+          Once complete, you can save this batch.
         </p>
-
-        <div class="mb-3">
-          <label for="introduction-text" class="form-label">Introduction text <span class="text-muted">(optional)</span></label>
-          <textarea class="form-control" id="introduction-text" name="introduction-text" rows="3"></textarea>
-          <div class="small">We'll put any text you write here are the top of the email we send to <?= htmlspecialchars($info['Forename']) ?>. Formatting with Markdown is supported.</div>
-        </div>
 
         <?php if ($member) { ?>
           <ul class="list-group mb-3">
@@ -108,7 +105,7 @@ include BASE_PATH . "views/header.php";
               // Get memberships
               $getCurrentMemberships->execute([
                 $member->id,
-                $id,
+                $_GET['year'],
               ]);
 
               $membership = $getCurrentMemberships->fetch(PDO::FETCH_OBJ);
@@ -136,14 +133,14 @@ include BASE_PATH . "views/header.php";
                 <?php
                 $hasMembership->execute([
                   $member->id,
-                  $id,
+                  $_GET['year'],
                   $member->ngb,
                 ]);
                 $hasNgb = $hasMembership->fetchColumn() > 0;
 
                 $hasMembership->execute([
                   $member->id,
-                  $id,
+                  $_GET['year'],
                   $member->club,
                 ]);
                 $hasClub = $hasMembership->fetchColumn() > 0;
@@ -236,25 +233,6 @@ include BASE_PATH . "views/header.php";
               </li>
             <?php } while ($member = $getMembers->fetch(PDO::FETCH_OBJ)); ?>
           </ul>
-
-          <div class="mb-3">
-            <label for="footer-text" class="form-label">Footer text <span class="text-muted">(optional)</span></label>
-            <textarea class="form-control" id="footer-text" name="footer-text" rows="3"></textarea>
-            <div class="small">We'll put any text you write here are the end of the email we send to <?= htmlspecialchars($info['Forename']) ?>. Formatting with Markdown is supported.</div>
-          </div>
-
-          <div class="mb-3">
-            <label for="due-date" class="form-label">Due date</label>
-            <input type="date" class="form-control" id="due-date" name="due-date" placeholder="YYYY-MM-DD">
-            <div class="small">Leave blank for no due date.</div>
-          </div>
-
-          <div class="form-check mb-3">
-            <input class="form-check-input" type="checkbox" value="" id="automatic-reminders" name="automatic-reminders" disabled>
-            <label class="form-check-label" for="automatic-reminders">
-              Send automatic email reminders until the user pays or the due date has passed (coming soon)
-            </label>
-          </div>
 
           <div class="mb-3">
             <p class="mb-2">Payment Options</p>
