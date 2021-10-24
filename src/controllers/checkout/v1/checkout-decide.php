@@ -13,6 +13,7 @@ if (isset($_SESSION['OnboardingSessionId'])) {
 }
 
 if ($checkoutSession->user && ((isset(app()->user) && $checkoutSession->user != app()->user->getId()) || !$exCheckout)) {
+  reportError([$checkoutSession,]);
   halt(404);
 }
 
