@@ -14,6 +14,8 @@ $stages = $session->stages;
 
 $tasks = \SCDS\Onboarding\Session::stagesOrder();
 
+$db = app()->db;
+
 $privacy = app()->tenant->getKey('PrivacyPolicy');
 $Extra = new ParsedownExtra();
 $Extra->setSafeMode(true);
