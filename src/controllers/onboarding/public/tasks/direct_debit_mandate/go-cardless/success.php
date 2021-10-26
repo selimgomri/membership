@@ -61,7 +61,7 @@ try {
   // So all good so far, disable any old direct debits and cancel
   $getMandates = $db->prepare("SELECT Mandate, MandateID FROM paymentMandates WHERE UserID = ? AND InUse = 1");
   $getMandates->execute([
-    $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']
+    $user->getId()
   ]);
   $setOutOfUse = $db->prepare("UPDATE paymentMandates SET InUse = 0 WHERE MandateID = ?");
   while ($oldMandate = $getMandates->fetch(PDO::FETCH_ASSOC)) {
@@ -82,12 +82,12 @@ try {
   // Delete old preferred mandates if existing
   $deletePref = $db->prepare("DELETE FROM paymentPreferredMandate WHERE UserID = ?");
   $deletePref->execute([
-    $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']
+    $user->getId()
   ]);
 
   $insertToMandates = $db->prepare("INSERT INTO `paymentMandates` (`UserID`, `Name`, `Mandate`, `Customer`, `BankAccount`, `BankName`, `AccountHolderName`, `AccountNumEnd`, `InUse`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
   $insertToMandates->execute([
-    $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'],
+    $user->getId(),
     'Mandate',
     $mandate,
     $customer,
@@ -103,7 +103,7 @@ try {
   // Set as preferred mandate
   $setPref = $db->prepare("INSERT INTO paymentPreferredMandate (UserID, MandateID) VALUES (?, ?)");
   $setPref->execute([
-    $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'],
+    $user->getId(),
     $mandateDbId
   ]);
 

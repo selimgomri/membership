@@ -31,7 +31,7 @@ $cancelUrl = autoUrl('onboarding/go/start-task');
 $scheduleExists = false;
 try {
   $getPaySchdeule = $db->prepare("SELECT * FROM `paymentSchedule` WHERE `UserID` = ?");
-  $getPaySchdeule->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
+  $getPaySchdeule->execute([$user->getId()]);
   $scheduleExists = $getPaySchdeule->fetch(PDO::FETCH_ASSOC);
 } catch (Exception $e) {
   halt(500);
@@ -42,14 +42,14 @@ if ($scheduleExists == null) {
   $date = 1;
 
   $insert = $db->prepare("INSERT INTO `paymentSchedule` (`UserID`, `Day`) VALUES (?, ?)");
-  $insert->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], $date]);
+  $insert->execute([$user->getId(), $date]);
 }
 
 $getDetails = $db->prepare("SELECT Forename, Surname, EmailAddress FROM users WHERE UserID = ?");
-$getDetails->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
+$getDetails->execute([$user->getId()]);
 $row = $getDetails->fetch(PDO::FETCH_ASSOC);
 
-$_SESSION['TENANT-' . app()->tenant->getId()]['Token'] = hash('sha256', $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'] . "-" . rand(1000, 9999));
+$_SESSION['TENANT-' . app()->tenant->getId()]['Token'] = hash('sha256', $user->getId() . "-" . rand(1000, 9999));
 
 $addr = null;
 $currentUser = app()->user;
