@@ -52,8 +52,7 @@ $row = $getDetails->fetch(PDO::FETCH_ASSOC);
 $_SESSION['TENANT-' . app()->tenant->getId()]['Token'] = hash('sha256', $user->getId() . "-" . rand(1000, 9999));
 
 $addr = null;
-$currentUser = app()->user;
-$json = $currentUser->getUserOption('MAIN_ADDRESS');
+$json = $user->getUserOption('MAIN_ADDRESS');
 if ($json != null) {
   $addr = json_decode($json);
 }
