@@ -62,7 +62,10 @@ ob_start();
       <option disabled selected value="null">Select a membership</option>
       <?php do { ?>
         <?php
-        $fee = MoneyHelpers::intToDecimal(json_decode($membership->fees)->fees[0]);
+        $fee = 0;
+        if (isset(($membership->fees)->fees[0])) {
+          $fee = MoneyHelpers::intToDecimal(json_decode($membership->fees)->fees[0]);
+        }
         ?>
         <option value="<?= htmlspecialchars($membership->id) ?>" data-id="<?= htmlspecialchars($membership->id) ?>" data-name="<?= htmlspecialchars($membership->name) ?>" data-description="<?= htmlspecialchars($membership->description) ?>" data-fee="<?= htmlspecialchars($fee) ?>" data-fees="<?= htmlspecialchars($membership->fees) ?>" data-type="<?= htmlspecialchars($membership->type) ?>"><?= htmlspecialchars($membership->name) ?></option>
       <?php } while ($membership = $getMemberships->fetch(PDO::FETCH_OBJ)); ?>
