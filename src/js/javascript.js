@@ -13,3 +13,8 @@ const markdown = new MarkdownIt();
 // window.jQuery = $;
 // window.$ = $;
 window.markdownParser = markdown;
+
+if (window.location.pathname === "/notify/new/react") {
+  import("./notify/forms/Composer").then(foo => console.log(foo))
+}
+// import("module/foo").then(foo => console.log(foo.default))
