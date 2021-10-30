@@ -33,6 +33,11 @@ if (!isset($_SESSION['SCDS-SuperUser'])) {
     http_response_code(303);
     header("Location: " . autoUrl('admin/login?target=' . urlencode(app('request')->path)));
   });
+} else {
+  $this->any(['/', '/*'], function () {
+    http_response_code(303);
+    header("Location: " . autoUrl('admin'));
+  });
 }
 
 $this->get('/', function () {
