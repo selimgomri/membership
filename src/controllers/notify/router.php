@@ -65,6 +65,10 @@ if ($access == "Admin" || $access == "Coach" || $access == "Galas" || $rep) {
   		include 'EmailReact.php';
   	});
 
+		$this->get('/react-data', function() {
+  		include 'EmailAPIData.php';
+  	});
+
 		$this->post('/image-upload', function() {
   		include 'ImageUpload.php';
   	});

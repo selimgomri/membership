@@ -3,16 +3,20 @@
 if (!isset($_SESSION['SCDS-SuperUser'])) {
   $this->group('/login', function () {
     $this->get('/', function () {
-      require BASE_PATH . 'controllers/global-admin/login/view.php';
+      require BASE_PATH . 'controllers/global-admin/login/oauth.php';
     });
 
-    $this->post('/', function () {
-      require BASE_PATH . 'controllers/global-admin/login/post.php';
+    $this->get('/oauth', function () {
+      require BASE_PATH . 'controllers/global-admin/login/oauth.php';
     });
 
-    $this->post('/2fa', function () {
-      require BASE_PATH . 'controllers/global-admin/login/post-2fa.php';
-    });
+    // $this->post('/', function () {
+    //   require BASE_PATH . 'controllers/global-admin/login/post.php';
+    // });
+
+    // $this->post('/2fa', function () {
+    //   require BASE_PATH . 'controllers/global-admin/login/post-2fa.php';
+    // });
 
     $this->group('/reset-password', function () {
       $this->get('/', function () {

@@ -708,3 +708,37 @@ footer .focus-highlight a:focus,
     display: none;
   }
 }
+
+// REACT PILL
+.component-pill {
+  background-color: $gray-200;
+  color: $gray-900;
+  border-radius: 50rem;
+  // font-size: .75em;
+  display: inline-block;
+  padding: 0;
+
+  .component-pill-text-left {
+    margin: .35em .35em .35em .65em;
+    display: inline;
+  }
+
+  .component-pill-text-right {
+    margin: .35em .65em .35em .35em;
+    display: inline;
+  }
+
+  .component-pill-button {
+    border-radius: 0 50rem 50rem 0;
+    background-color: $gray-200;
+    border: 1px solid $gray-200;
+    // border-left: 1px solid $gray-200;
+    color: $gray-900;
+    padding: 0;
+  }
+
+  .component-pill-button:hover {
+    background-color: $gray-400;
+    // border: 1px solid $gray-300;
+  }
+}

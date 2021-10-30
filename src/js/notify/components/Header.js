@@ -3,7 +3,6 @@ import React from "react";
 class Header extends React.Component {
 
   render() {
-    console.log(this.props);
 
     return (
       <div className="bg-light mt-n3 py-3 mb-3">
