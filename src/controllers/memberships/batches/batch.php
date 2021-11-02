@@ -87,7 +87,8 @@ include BASE_PATH . "views/header.php";
             <strong>Email sent successfully</strong>
           </p>
         </div>
-      <?php unset($_SESSION['SentEmail']); } ?>
+      <?php unset($_SESSION['SentEmail']);
+      } ?>
 
       <?php if (!$canPay) { ?>
         <div class="alert alert-danger">
