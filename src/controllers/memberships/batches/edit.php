@@ -225,9 +225,9 @@ include BASE_PATH . "views/header.php";
           </form>
         </div>
 
-        <div class="card card-body mb-3">
+        <!-- <div class="card card-body mb-3">
           <h2 class="card-title">Totals</h2>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>

@@ -57,6 +57,10 @@ $this->group('/batches', function() {
     include 'batches/batch.php';
   });
 
+  $this->get('/{id}:uuid/send-email', function($id) {
+    include 'batches/send-email.php';
+  });
+
   $this->get('/{id}:uuid/edit', function($id) {
     include 'batches/edit.php';
   });

@@ -81,6 +81,14 @@ include BASE_PATH . "views/header.php";
   <div class="row">
     <div class="col-lg-8">
 
+      <?php if (isset($_SESSION['SentEmail']) && $_SESSION['SentEmail']) { ?>
+        <div class="alert alert-success">
+          <p class="mb-0">
+            <strong>Email sent successfully</strong>
+          </p>
+        </div>
+      <?php unset($_SESSION['SentEmail']); } ?>
+
       <?php if (!$canPay) { ?>
         <div class="alert alert-danger">
           <p class="mb-0">
@@ -247,7 +255,16 @@ include BASE_PATH . "views/header.php";
             </li>
           <?php } while ($item = $getBatchItems->fetch(PDO::FETCH_OBJ)); ?>
         </ul>
+
+        <?php if (app()->user->hasPermission('Admin')) { ?>
+          <p>
+            <a href="<?= htmlspecialchars(autoUrl("memberships/batches/$id/send-email")) ?>">Send email to user</a>
+          </p>
+        <?php } ?>
       <?php } else { ?>
+        <div class="alert alert-warning">
+          There are no memberships in this batch
+        </div>
       <?php } ?>
     </div>
   </div>
