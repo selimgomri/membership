@@ -496,6 +496,10 @@ include BASE_PATH . "views/header.php";
             <a href="<?= htmlspecialchars(autoUrl("users/$id/new-membership-batch")) ?>" class="btn btn-primary">New Payment Batch</a>
           </p>
 
+          <p class="">
+            <a href="<?= htmlspecialchars(autoUrl("onboarding/new?user=$id")) ?>" class="btn btn-primary">Repeat onboarding forms</a>
+          </p>
+
         </div>
 
         <hr>
