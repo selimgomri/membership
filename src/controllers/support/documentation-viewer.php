@@ -5,6 +5,11 @@ $date = null;
 $markdown = new ParsedownForMembership();
 $markdown->setSafeMode(false);
 
+$branch = 'main';
+if (defined('SOFTWARE_BRANCH')) {
+  $branch = SOFTWARE_BRANCH;
+}
+
 $path = trim($this[0], '/');
 
 // This will do for now
@@ -123,7 +128,7 @@ include BASE_PATH . "views/root/header.php";
         <aside class="">
           <h2>Feedback</h2>
           <p>
-            <a target="_blank" href="<?= htmlspecialchars("https://github.com/Swimming-Club-Data-Systems/Membership/blob/main$helpPath") ?>">Submit and view feedback for this page on GitHub.</a>
+            <a target="_blank" href="<?= htmlspecialchars("https://github.com/Swimming-Club-Data-Systems/Membership/blob/$branch$helpPath") ?>">Submit and view feedback for this page on GitHub.</a>
           </p>
         </aside>
       </div>
