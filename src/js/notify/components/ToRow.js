@@ -1,5 +1,6 @@
 import React from "react";
 import Pill from "./Pill";
+import Button from "react-bootstrap/Button";
 
 class ToRow extends React.Component {
 
@@ -14,9 +15,9 @@ class ToRow extends React.Component {
       <div className="my-2 border rounded p-2">
         <div className="row">
           <div className="col-auto">
-            <button className="btn btn-primary">
+            <Button variant="primary" onClick={this.props.handleShowTo}>
               To
-            </button>
+            </Button>
           </div>
           <div className="col p-1">
             {pills}
