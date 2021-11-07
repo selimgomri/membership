@@ -237,8 +237,8 @@ include BASE_PATH . "views/header.php";
               ?>
                 <div class="card card-body mb-3">
                   <div class="form-check mb-0">
-                    <input class="form-check-input" type="checkbox" id="member-<?= htmlspecialchars($member->id) ?>" name="member-<?= htmlspecialchars($member->id) ?>" data-collapse="member-<?= htmlspecialchars($member->id) ?>-collapse" value="1" autocomplete="off">
-                    <label class="form-check-label" for="member-<?= htmlspecialchars($member->id) ?>">
+                    <input class="form-check-input" type="checkbox" id="exisiting-member-<?= htmlspecialchars($member->id) ?>" name="exisiting-member-<?= htmlspecialchars($member->id) ?>" data-collapse="exisiting-member-<?= htmlspecialchars($member->id) ?>-collapse" value="1" autocomplete="off">
+                    <label class="form-check-label" for="exisiting-member-<?= htmlspecialchars($member->id) ?>">
                       <p class="mb-0 fw-bold">
                         <?= htmlspecialchars($member->firstName . ' ' . $member->lastName) ?>
                       </p>
@@ -254,14 +254,14 @@ include BASE_PATH . "views/header.php";
                     </label>
                   </div>
 
-                  <div class="collapse" id="member-<?= htmlspecialchars($member->id) ?>-collapse">
+                  <div class="collapse" id="exisiting-member-<?= htmlspecialchars($member->id) ?>-collapse">
                     <div class="form-check custom-control-inline mt-2">
-                      <input type="radio" id="member-rr-yes-<?= htmlspecialchars($member->id) ?>" name="member-rr-<?= htmlspecialchars($member->id) ?>" class="form-check-input" checked value="yes">
-                      <label class="form-check-label" for="member-rr-yes-<?= htmlspecialchars($member->id) ?>">Require registration</label>
+                      <input type="radio" id="exisiting-member-rr-yes-<?= htmlspecialchars($member->id) ?>" name="exisiting-member-rr-<?= htmlspecialchars($member->id) ?>" class="form-check-input" checked value="yes">
+                      <label class="form-check-label" for="exisiting-member-rr-yes-<?= htmlspecialchars($member->id) ?>">Require registration</label>
                     </div>
                     <div class="form-check custom-control-inline mb-0">
-                      <input type="radio" id="member-rr-no-<?= htmlspecialchars($member->id) ?>" name="member-rr-<?= htmlspecialchars($member->id) ?>" class="form-check-input" value="no">
-                      <label class="form-check-label" for="member-rr-no-<?= htmlspecialchars($member->id) ?>">Add to account quietly</label>
+                      <input type="radio" id="exisiting-member-rr-no-<?= htmlspecialchars($member->id) ?>" name="exisiting-member-rr-<?= htmlspecialchars($member->id) ?>" class="form-check-input" value="no">
+                      <label class="form-check-label" for="exisiting-member-rr-no-<?= htmlspecialchars($member->id) ?>">Add to account quietly</label>
                     </div>
                   </div>
                 </div>
