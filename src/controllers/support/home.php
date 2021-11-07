@@ -40,6 +40,7 @@ include BASE_PATH . "views/root/header.php";
           <a href="<?= htmlspecialchars('help-and-support/competitions') ?>" class="list-group-item list-group-item-action">Competitions</a>
           <a href="<?= htmlspecialchars('help-and-support/payments') ?>" class="list-group-item list-group-item-action">Payments</a>
           <a href="<?= htmlspecialchars('help-and-support/notify') ?>" class="list-group-item list-group-item-action">Notify (Emails from your club)</a>
+          <a href="<?= htmlspecialchars('help-and-support/onboarding') ?>" class="list-group-item list-group-item-action">Member onboarding, membership years and batches</a>
           <a href="<?= htmlspecialchars('help-and-support/log-books') ?>" class="list-group-item list-group-item-action">Log books</a>
           <a href="<?= htmlspecialchars('help-and-support/emergency-contacts') ?>" class="list-group-item list-group-item-action">Emergency contacts</a>
           <a href="<?= htmlspecialchars('help-and-support/covid-19') ?>" class="list-group-item list-group-item-action">Coronavirus (COVID-19)</a>
