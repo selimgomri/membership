@@ -177,6 +177,10 @@ class Session
   private function findCurrentTask()
   {
     // Loop through stages, Return on first match
+    if (!$this->stages) {
+      return null;
+    }
+    
     foreach ($this->stages as $stage => $data) {
       if ($data->required && !$data->completed) {
         $this->currentStage = $stage;

@@ -131,7 +131,7 @@ if ($user) {
     $user,
   ]);
   while ($swimmer = $getMembers->fetch(PDO::FETCH_ASSOC)) {
-    if ($_POST['member-' . $swimmer['id']]) {
+    if ($_POST['exisiting-member-' . $swimmer['id']]) {
       $selectedSwimmers[] = $swimmer['id'];
       // Already set parent here!
 

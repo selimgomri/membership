@@ -5,6 +5,8 @@ import Breadcrumb from 'react-bootstrap/Breadcrumb';
 import ToRow from '../components/ToRow';
 import DropdownRow from "../components/DropdownRow";
 import TextRow from "../components/TextRow";
+import Modal from "react-bootstrap/Modal";
+import Button from "react-bootstrap/Button";
 
 class App extends React.Component {
 
@@ -26,6 +28,9 @@ class App extends React.Component {
       forceSend: false,
       canForceSend: false,
       category: 'DEFAULT',
+
+      // Modals
+      showTo: false,
 
       // Options for this
       possibleTos: [],
@@ -70,6 +75,18 @@ class App extends React.Component {
     }
   }
 
+  handleShowTo = (event) => {
+    this.setState({
+      showTo: true,
+    });
+  }
+
+  handleCloseTo = (event) => {
+    this.setState({
+      showTo: false,
+    });
+  }
+
   render() {
     const breadcrumbs = (
       <Breadcrumb>
@@ -83,11 +100,23 @@ class App extends React.Component {
         <Header title="Send a new email" subtitle="Send emails to targeted groups" breadcrumbs={breadcrumbs} />
 
         <form className="container-xl" /*onChange={this.handleChange}*/>
-          <ToRow to={this.state.to} handleClick={this.handlePillClick} />
+          <ToRow to={this.state.to} handleClick={this.handlePillClick} handleShowTo={this.handleShowTo} />
           <DropdownRow name="from" options={this.state.possibleFroms} label="Send as" formValue={this.state.from} handleChange={this.handleChange} />
           <DropdownRow name="replyTo" options={this.state.possibleReplyTos} label="Send replies to" formValue={this.state.replyTo} handleChange={this.handleChange} />
           <DropdownRow name="category" options={this.state.possibleCategories} label="Subscription category" formValue={this.state.category} handleChange={this.handleChange} />
           <TextRow name="subject" label="Subject" formValue={this.state.subject} handleChange={this.handleChange} />
+
+          <Modal show={this.state.showTo} onHide={this.handleCloseTo}>
+            <Modal.Header closeButton>
+              <Modal.Title>Add recipients</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>Selection checkboxes by category will appear here</Modal.Body>
+            <Modal.Footer>
+              <Button variant="primary" onClick={this.handleCloseTo}>
+                Save and close
+              </Button>
+            </Modal.Footer>
+          </Modal>
         </form>
       </div>
     )
