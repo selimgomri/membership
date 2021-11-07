@@ -149,7 +149,7 @@ include BASE_PATH . "views/header.php";
                   <?= htmlspecialchars(\SCDS\Onboarding\Session::getStates()[$onboardingSession->status]) ?>
                 </dd>
 
-                <?php if ($onboardingSession->status != 'complete') { ?>
+                <?php if ($onboardingSession->status != 'complete' && isset(\SCDS\Onboarding\Session::stagesOrder()[$onboardingSession->getCurrentTask()])) { ?>
                   <dt class="col-md-3">
                     Next stage
                   </dt>
