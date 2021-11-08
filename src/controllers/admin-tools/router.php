@@ -26,6 +26,14 @@ if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') {
       include 'reports/no-email-subscription.php';
     });
 
+    $this->get('/adult-members', function () {
+      include 'reports/adult-members-form.php';
+    });
+
+    $this->get('/adult-members-list', function () {
+      include 'reports/adult-members-list.php';
+    });
+
     $this->get('/pending-payments-data-export.csv', function () {
       include BASE_PATH . 'controllers/payments/admin/reports/pending-payments.csv.php';
     });
