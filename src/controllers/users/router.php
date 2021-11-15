@@ -28,6 +28,10 @@ if ($access == "Committee" || $access == "Admin" || $access == "Galas") {
 		include 'user.php';
 	});
 
+	$this->get('/{id}:int/current-memberships', function ($id) {
+		include 'current-memberships.php';
+	});
+
 	$this->get('/{id}:int/new-membership-batch', function ($id) {
 		include 'new-membership-batch.php';
 	});

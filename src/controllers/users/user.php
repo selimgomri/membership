@@ -482,18 +482,18 @@ include BASE_PATH . "views/header.php";
 
         <div class="mb-4">
 
-          <h2 id="memberships">Current Memberships <span class="badge bg-secondary">BETA</span></h2>
+          <h2 id="memberships">Current Memberships</h2>
 
           <p class="lead">
-            We're adding new features which will change the way the membership system tracks which memberships a member has.
-          </p>
-
-          <p>
-            <strong>Please only use the features in this section if you're taking part in our beta trials.</strong>
+            We're adding new features which will change the way the membership system tracks which memberships a member holds.
           </p>
 
           <p class="">
             <a href="<?= htmlspecialchars(autoUrl("users/$id/new-membership-batch")) ?>" class="btn btn-primary">New Payment Batch</a>
+          </p>
+
+          <p class="">
+            <a href="<?= htmlspecialchars(autoUrl("users/$id/current-memberships")) ?>" class="btn btn-primary">View Current Memberships</a> <i>including totals paid for this year</i>
           </p>
 
           <p class="">
