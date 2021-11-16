@@ -7,8 +7,9 @@ import DropdownRow from "../components/DropdownRow";
 import TextRow from "../components/TextRow";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
+// import exports from "enhanced-resolve";
 
-class App extends React.Component {
+export class App extends React.Component {
 
   constructor() {
     super();
@@ -123,4 +124,5 @@ class App extends React.Component {
   }
 }
 
-ReactDOM.render(<App />, document.getElementById('scds-react-root'));
+// ReactDOM.render(<App />, document.getElementById('scds-react-root'));
+export default App;
