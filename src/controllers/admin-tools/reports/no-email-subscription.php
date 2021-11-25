@@ -35,7 +35,7 @@ include BASE_PATH . 'views/header.php';
         <div class="list-group">
           <?php do { ?>
             <a class="list-group-item list-group-item-action" href="<?= htmlspecialchars(autoUrl('users/' . $user['UserID'])) ?>">
-              <div><strong><?= htmlspecialchars($user['Forename'] . ' ' . $user['Surname']) ?></strong></div>
+              <div><strong><?= htmlspecialchars(\SCDS\Formatting\Names::format($user['Forename'], $user['Surname'])) ?></strong></div>
               <div class="text-truncate"><?= htmlspecialchars($user['EmailAddress']) ?></div>
             </a>
           <?php } while ($user = $getUsers->fetch(PDO::FETCH_ASSOC)); ?>

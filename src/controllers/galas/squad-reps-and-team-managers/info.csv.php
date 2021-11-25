@@ -15,7 +15,7 @@ fputcsv($output, ['Swimmer', 'Age Now', 'Age Last Day', 'Age EoY', 'Row Type', '
 
 foreach ($data->entries as $entry) {
   $swimmerRow = $swimmerTimeRow = [];
-  $swimmerRow[] = $entry->forename . ' ' . $entry->surname;
+  $swimmerRow[] = \SCDS\Formatting\Names::format($entry->forename, $entry->surname);
   $swimmerRow[] = $entry->age_today;
   $swimmerRow[] = $entry->age_on_last_day;
   $swimmerRow[] = $entry->age_at_end_of_year;

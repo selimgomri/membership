@@ -79,7 +79,7 @@ if ($order == 'time') {
 $getTime->execute([$id, (int) $_GET['stroke'], (int) $_GET['distance'], $_GET['course']]);
 $result = $getTime->fetch(PDO::FETCH_ASSOC);
 
-$pagetitle = htmlspecialchars($swimmer['MForename'] . ' ' . $swimmer['MSurname']) . ' Times';
+$pagetitle = htmlspecialchars(\SCDS\Formatting\Names::format($swimmer['MForename'], $swimmer['MSurname'])) . ' Times';
 
 include BASE_PATH . 'views/header.php';
 

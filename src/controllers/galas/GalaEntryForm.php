@@ -107,7 +107,7 @@ include "galaMenu.php";
             <option value="null" <?php if ($swimmerCount > 1) { ?>selected<?php } ?> disabled>Select a swimmer</option>
             <?php do { ?>
               <option value="<?= htmlspecialchars($mySwimmer['id']) ?>" <?php if ($swimmerCount == 1) { ?>selected<?php } ?>>
-                <?= htmlspecialchars($mySwimmer['fn'] . " " . $mySwimmer['sn']) ?>
+                <?= htmlspecialchars(\SCDS\Formatting\Names::format($mySwimmer['fn'], $mySwimmer['sn'])) ?>
               </option>
             <?php } while ($mySwimmer = $mySwimmers->fetch(PDO::FETCH_ASSOC)); ?>
           </select>

@@ -86,7 +86,7 @@ include BASE_PATH . 'views/header.php';
           <?php foreach ($data->entries as $entry) { ?>
             <?php $hasNoDD = (!isset($entry->mandate->id) || $entry->mandate->id == null) || (getUserOption($entry->user, 'GalaDirectDebitOptOut')); ?>
             <li class="list-group-item" id="entry-<?= htmlspecialchars($entry->id) ?>">
-              <h3><?= htmlspecialchars($entry->forename . ' ' . $entry->surname) ?></h3>
+              <h3><?= htmlspecialchars(\SCDS\Formatting\Names::format($entry->forename, $entry->surname)) ?></h3>
               <div class="row">
                 <div class="col-sm-5 col-md-4 col-lg-6">
                   <p class="mb-0">

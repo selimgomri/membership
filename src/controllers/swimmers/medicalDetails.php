@@ -35,7 +35,7 @@ if ($row == null) {
 	halt(404);
 }
 
-$pagetitle = "Medical Review - " . htmlspecialchars($row['MForename'] . ' ' . $row['MSurname']);
+$pagetitle = "Medical Review - " . htmlspecialchars(\SCDS\Formatting\Names::format($row['MForename'], $row['MSurname']));
 
 include BASE_PATH . "views/header.php";
 ?>
@@ -58,7 +58,7 @@ include BASE_PATH . "views/header.php";
 					Medical Form
 				</h1>
 				<p class="lead mb-0" id="leadDesc">
-					Check the details for <?= htmlspecialchars($row['MForename'] . ' ' . $row['MSurname']) ?> are correct.
+					Check the details for <?= htmlspecialchars(\SCDS\Formatting\Names::format($row['MForename'], $row['MSurname'])) ?> are correct.
 				</p>
 			</div>
 		</div>

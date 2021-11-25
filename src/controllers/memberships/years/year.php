@@ -101,7 +101,7 @@ include BASE_PATH . "views/header.php";
           ?>
             <li class="list-group-item">
               <h2>
-                <?php if (!$member->current) { ?><s><?php } ?><?= htmlspecialchars($member->fn . ' ' . $member->sn) ?><?php if (!$member->current) { ?></s><small class="text-muted"> (left the club)</small><?php } ?>
+                <?php if (!$member->current) { ?><s><?php } ?><?= htmlspecialchars(\SCDS\Formatting\Names::format($member->fn, $member->sn)) ?><?php if (!$member->current) { ?></s><small class="text-muted"> (left the club)</small><?php } ?>
               </h2>
 
               <dl class="row">

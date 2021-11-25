@@ -92,12 +92,12 @@ include BASE_PATH . "views/header.php";
           </div>
         <?php } else { ?>
 
-          <h2>View member renewal status</h2>
+          <!-- <h2>View member renewal status</h2>
 
           <div class="d-grid gap-2 mb-3">
             <a class="btn btn-primary" href="<?= htmlspecialchars(autoUrl("memberships/renewal/$id/renewal-member-list")) ?>">Members in this renewal</a>
             <a class="btn btn-primary" href="<?= htmlspecialchars(autoUrl("memberships/renewal/$id/current-members-not-in-renewal-list")) ?>">Current club members not in this renewal</a>
-          </div>
+          </div> -->
 
           <h2>View associated onboarding sessions</h2>
 

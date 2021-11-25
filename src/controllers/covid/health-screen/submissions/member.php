@@ -52,7 +52,7 @@ $getForms->bindValue(':num', 10, PDO::PARAM_INT);
 $getForms->execute();
 $form = $getForms->fetch(PDO::FETCH_ASSOC);
 
-$pagetitle = htmlspecialchars($member['MForename'] . ' ' . $member['MSurname']) . ' - COVID Health Screening';
+$pagetitle = htmlspecialchars(\SCDS\Formatting\Names::format($member['MForename'], $member['MSurname'])) . ' - COVID Health Screening';
 
 $markdown = new ParsedownExtra();
 $markdown->setSafeMode(true);
@@ -75,7 +75,7 @@ include BASE_PATH . 'views/header.php';
     <div class="row align-items-center">
       <div class="col-lg-8">
         <h1>
-          COVID-19 Health Screens <small class="text-muted"><?= htmlspecialchars($member['MForename']) . '&nbsp;' . htmlspecialchars($member['MSurname']) ?></small>
+          COVID-19 Health Screens <small class="text-muted"><?= htmlspecialchars(\SCDS\Formatting\Names::format($member['MForename'], $member['MSurname'])) ?></small>
         </h1>
         <p class="lead mb-0">
           Submitted forms
@@ -261,7 +261,7 @@ include BASE_PATH . 'views/header.php';
       <?php } else { ?>
         <div class="alert alert-warning">
           <p class="mb-0">
-            <strong><?= htmlspecialchars($member['MForename']) . ' ' . htmlspecialchars($member['MSurname']) ?> has never submitted a COVID-19 health survey</strong>
+            <strong><?= htmlspecialchars(\SCDS\Formatting\Names::format($member['MForename'], $member['MSurname'])) ?> has never submitted a COVID-19 health survey</strong>
           </p>
           <p class="mb-0">
             <a href="<?= htmlspecialchars(autoUrl('covid/health-screening/members/' . $member['MemberID'] . '/new-survey')) ?>" class="alert-link">Start the survey</a>

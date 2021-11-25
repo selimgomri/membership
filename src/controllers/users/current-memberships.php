@@ -31,7 +31,7 @@ $getClasses = $db->prepare("SELECT DISTINCT Membership, clubMembershipClasses.Na
 
 $getMembershipMembers = $db->prepare("SELECT MForename, MSurname, Amount, StartDate, EndDate FROM memberships INNER JOIN members ON memberships.Member = members.MemberID WHERE Membership = ? AND `Year` = ? AND UserID = ? ORDER BY MSurname ASC, MForename ASC");
 
-$pagetitle = htmlspecialchars($info['Forename'] . ' ' . $info['Surname']) . " Information";
+$pagetitle = htmlspecialchars(\SCDS\Formatting\Names::format($info['Forename'], $info['Surname'])) . " Information";
 include BASE_PATH . "views/header.php";
 
 ?>
@@ -52,7 +52,7 @@ include BASE_PATH . "views/header.php";
       <div class="col-sm-9 col-md-10 col-lg-11">
         <h1 class="mb-0">
           Current Memberships
-          <small><?= htmlspecialchars($info['Forename'] . ' ' . $info['Surname']) ?></small>
+          <small><?= htmlspecialchars(\SCDS\Formatting\Names::format($info['Forename'], $info['Surname'])) ?></small>
         </h1>
       </div>
     </div>
@@ -110,7 +110,7 @@ include BASE_PATH . "views/header.php";
                     ?>
                       <div class="row mb-2 pb-2 align-items-center border-bottom">
                         <div class="col-9">
-                          <strong><?= htmlspecialchars($memberships['MForename'] . ' ' . $memberships['MSurname']) ?></strong><br>
+                          <strong><?= htmlspecialchars(\SCDS\Formatting\Names::format($memberships['MForename'], $memberships['MSurname'])) ?></strong><br>
                           <?= htmlspecialchars($memberships['StartDate']) ?> until <?= htmlspecialchars($memberships['EndDate']) ?>
                         </div>
                         <div class="col text-end fw-bold">

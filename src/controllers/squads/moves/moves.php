@@ -48,7 +48,7 @@ include BASE_PATH . "views/squadMenu.php";
                 <div class="row align-items-center">
                   <div class="col">
                     <p>
-                      <strong><a href="<?= autoUrl("members/" . $member['MemberID']) ?>"><?= htmlspecialchars($member['MForename'] . " " . $member['MSurname']) ?></a></strong>
+                      <strong><a href="<?= autoUrl("members/" . $member['MemberID']) ?>"><?= htmlspecialchars(\SCDS\Formatting\Names::format($member['MForename'], $member['MSurname'])) ?></a></strong>
                     </p>
 
                     <ul class="mb-0 list-unstyled">

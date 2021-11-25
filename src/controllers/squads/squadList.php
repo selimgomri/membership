@@ -51,7 +51,7 @@ include BASE_PATH . "views/header.php";
 								</span>
 								<span>
 									<?php for ($i = 0; $i < min(sizeof($coaches), 3); $i++) { ?>
-										<?= htmlspecialchars($coaches[$i]['fn'] . ' ' . $coaches[$i]['sn']) ?><?php if ($i < min(sizeof($coaches), 3) - 1) { ?>, <?php } ?>
+										<?= htmlspecialchars(\SCDS\Formatting\Names::format($coaches[$i]['fn'], $coaches[$i]['sn'])) ?><?php if ($i < min(sizeof($coaches), 3) - 1) { ?>, <?php } ?>
 								<?php } ?>
 								<?php if (sizeof($coaches) > 3) { ?> <em>and more</em><?php } ?>
 								<?php if (sizeof($coaches) == 0) { ?>

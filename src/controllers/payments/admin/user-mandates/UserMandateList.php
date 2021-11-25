@@ -51,7 +51,7 @@ include BASE_PATH . 'views/header.php';
         <a href="<?= htmlspecialchars(autoUrl("users/" . $mandate['UserID'] . '#payment-information')) ?>" class="list-group-item list-group-item-action <?php if (!$mandate['BankName']) { ?> list-group-item-danger <?php } ?>">
           <div class="row align-items-center">
             <div class="col-md-6">
-              <h2 class="mb-0 h4"><?= htmlspecialchars($mandate['Surname'] . ', ' . $mandate['Forename']) ?></h2>
+              <h2 class="mb-0 h4"><?= htmlspecialchars(\SCDS\Formatting\Names::format($mandate['Surname'], $mandate['Forename'])) ?></h2>
               <div class="mb-3 d-md-none"></div>
             </div>
             <div class="col text-md-end">

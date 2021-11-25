@@ -172,7 +172,7 @@ $countries = getISOAlpha2Countries();
 
     <div class="row">
       <div class="col-lg-8">
-        <h1><?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') { ?><?= htmlspecialchars($pm['Forename'] . ' ' . $pm['Surname'] . ':') ?> <?php } ?>Card payment #<?= htmlspecialchars($id) ?></h1>
+        <h1><?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') { ?><?= htmlspecialchars(\SCDS\Formatting\Names::format($pm['Forename'], $pm['Surname']) . ':') ?> <?php } ?>Card payment #<?= htmlspecialchars($id) ?></h1>
         <p class="lead mb-0">At <?= $date->format("H:i \o\\n j F Y") ?></p>
       </div>
     </div>
@@ -454,7 +454,7 @@ $countries = getISOAlpha2Countries();
         <ul class="list-group mb-3">
           <?php do { ?>
             <li class="list-group-item">
-              <h3><?= htmlspecialchars($ents['GalaName']) ?><br><small><?= htmlspecialchars($ents['MForename'] . ' ' . $ents['MSurname']) ?></small></h3>
+              <h3><?= htmlspecialchars($ents['GalaName']) ?><br><small><?= htmlspecialchars(\SCDS\Formatting\Names::format($ents['MForename'], $ents['MSurname'])) ?></small></h3>
 
               <p>Fee &pound;<?= (string) \Brick\Math\BigDecimal::of((string) $ents['FeeToPay'])->toScale(2) ?></p>
               <?php if (bool($ents['Refunded']) && $ents['AmountRefunded'] > 0) { ?>

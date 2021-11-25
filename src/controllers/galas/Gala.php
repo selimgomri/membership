@@ -322,7 +322,7 @@ include "galaMenu.php";
       <?php do { ?>
         <div class="col-md-6 col-lg-4">
           <h3>
-            <?= htmlspecialchars($entry['MForename'] . ' ' . $entry['MSurname']) ?>
+            <?= htmlspecialchars(\SCDS\Formatting\Names::format($entry['MForename'], $entry['MSurname'])) ?>
           </h3>
 
           <p>

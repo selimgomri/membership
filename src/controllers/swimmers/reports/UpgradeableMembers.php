@@ -97,7 +97,7 @@ include BASE_PATH . 'views/header.php';
                 <div class="row align-items-center">
                   <div class="col-md">
                     <a href="<?= htmlspecialchars(autoUrl("members/" . $member['id'])) ?>" class="">
-                      <strong><?= htmlspecialchars($member['fn'] . ' ' . $member['sn']) ?></strong>
+                      <strong><?= htmlspecialchars(\SCDS\Formatting\Names::format($member['fn'], $member['sn'])) ?></strong>
                     </a>
                     <?php if ($squads) { ?>
                       <ul class="list-unstyled">

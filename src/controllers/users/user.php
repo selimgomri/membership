@@ -89,7 +89,7 @@ $pageHead = [
 
 $fluidContainer = true;
 
-$pagetitle = htmlspecialchars($info['Forename'] . ' ' . $info['Surname']) . " Information";
+$pagetitle = htmlspecialchars(\SCDS\Formatting\Names::format($info['Forename'], $info['Surname'])) . " Information";
 $title = null;
 include BASE_PATH . "views/header.php";
 ?>
@@ -110,7 +110,7 @@ include BASE_PATH . "views/header.php";
     <div class="row align-items-center">
       <div class="col-sm-9 col-md-10 col-lg-11">
         <h1 class="mb-0">
-          <?= htmlspecialchars($info['Forename'] . ' ' . $info['Surname']) ?>
+          <?= htmlspecialchars(\SCDS\Formatting\Names::format($info['Forename'], $info['Surname'])) ?>
           <small><?= htmlspecialchars($accessLevel) ?></small>
         </h1>
         <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') { ?>
@@ -236,7 +236,7 @@ include BASE_PATH . "views/header.php";
         <div class="row">
           <div class="col-sm-6 col-lg-4">
             <h3 class="h6">Name</h3>
-            <p><?= htmlspecialchars($info['Forename'] . ' ' . $info['Surname']) ?></p>
+            <p><?= htmlspecialchars(\SCDS\Formatting\Names::format($info['Forename'], $info['Surname'])) ?></p>
           </div>
           <div class="col-sm-6 col-lg-4">
             <h3 class="h6">Email</h3>
@@ -263,7 +263,7 @@ include BASE_PATH . "views/header.php";
           </h2>
           <p class="lead">Registration is still pending for this user.</p>
           <p>
-            <button id="registration-resend-button" class="btn btn-primary" data-ajax-url="<?= htmlspecialchars(autoUrl("users/ajax/resend-registration-email")) ?>" data-user-name="<?= htmlspecialchars($info['Forename'] . ' ' . $info['Surname']) ?>" data-user-edit-link="<?= htmlspecialchars(autoUrl("users/" . $id . "/edit")) ?>" data-user="<?= htmlspecialchars($id) ?>">
+            <button id="registration-resend-button" class="btn btn-primary" data-ajax-url="<?= htmlspecialchars(autoUrl("users/ajax/resend-registration-email")) ?>" data-user-name="<?= htmlspecialchars(\SCDS\Formatting\Names::format($info['Forename'], $info['Surname'])) ?>" data-user-edit-link="<?= htmlspecialchars(autoUrl("users/" . $id . "/edit")) ?>" data-user="<?= htmlspecialchars($id) ?>">
               Resend registration email <span class="fa fa-chevron-right"></span>
             </button>
           </p>
@@ -447,7 +447,7 @@ include BASE_PATH . "views/header.php";
             <div class="row">
               <?php do { ?>
                 <div class="col-sm-6 col-lg-4">
-                  <h3 class="h6"><a href="<?= autoUrl("swimmers/" . $s['id']) ?>" title="Full information about <?= htmlspecialchars($s['fn'] . ' ' . $s['sn']) ?>"><?= htmlspecialchars($s['fn'] . ' ' . $s['sn']) ?></a>
+                  <h3 class="h6"><a href="<?= autoUrl("swimmers/" . $s['id']) ?>" title="Full information about <?= htmlspecialchars(\SCDS\Formatting\Names::format($s['fn'], $s['sn'])) ?>"><?= htmlspecialchars(\SCDS\Formatting\Names::format($s['fn'], $s['sn'])) ?></a>
                   </h3>
                   <?php
                   $getSquads->execute([
@@ -611,7 +611,7 @@ include BASE_PATH . "views/header.php";
           <div class="col-sm-6 col-lg-4">
             <h3 class="h6">Delete account</h3>
             <p>
-              <button data-ajax-url="<?= htmlspecialchars(autoUrl("users/delete-user")) ?>" data-users-url="<?= htmlspecialchars(autoUrl("users")) ?>" data-user-id="<?= htmlspecialchars($id) ?>" data-user-name="<?= htmlspecialchars($info['Forename'] . ' ' . $info['Surname']) ?>" id="delete-button" class="btn btn-danger">
+              <button data-ajax-url="<?= htmlspecialchars(autoUrl("users/delete-user")) ?>" data-users-url="<?= htmlspecialchars(autoUrl("users")) ?>" data-user-id="<?= htmlspecialchars($id) ?>" data-user-name="<?= htmlspecialchars(\SCDS\Formatting\Names::format($info['Forename'], $info['Surname'])) ?>" id="delete-button" class="btn btn-danger">
                 Delete account
               </button>
             </p>

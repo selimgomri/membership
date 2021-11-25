@@ -104,7 +104,7 @@ $extraFee = $getExtraMetadata->fetch(PDO::FETCH_OBJ);
                 <div class="form-check">
                   <input class="form-check-input" type="checkbox" value="1" name="<?= htmlspecialchars("squad-fee-" . $squadFee->squadId . "-" . $squadFee->memberId) ?>" id="<?= htmlspecialchars("squad-fee-" . $squadFee->squadId . "-" . $squadFee->memberId) ?>" data-amount="<?= htmlspecialchars(MoneyHelpers::decimalToInt($amount)) ?>">
                   <label class="form-check-label fw-bold" for="<?= htmlspecialchars("squad-fee-" . $squadFee->squadId . "-" . $squadFee->memberId) ?>">
-                    <div><?= htmlspecialchars($squadFee->squad) ?> (<?= htmlspecialchars($squadFee->forename . " " . $squadFee->surname) ?>)</div>
+                    <div><?= htmlspecialchars($squadFee->squad) ?> (<?= htmlspecialchars(\SCDS\Formatting\Names::format($squadFee->forename, $squadFee->surname)) ?>)</div>
                     <div><?= htmlspecialchars(MoneyHelpers::formatCurrency((float) $amount, 'GBP')) ?></div>
                   </label>
                 </div>
@@ -132,7 +132,7 @@ $extraFee = $getExtraMetadata->fetch(PDO::FETCH_OBJ);
                 <div class="form-check">
                   <input class="form-check-input" type="checkbox" value="1" name="<?= htmlspecialchars("extra-fee-" . $extraFee->extraId . "-" . $extraFee->memberId) ?>" id="<?= htmlspecialchars("extra-fee-" . $extraFee->extraId . "-" . $extraFee->memberId) ?>" data-amount="<?= htmlspecialchars(MoneyHelpers::decimalToInt($amount)) ?>">
                   <label class="form-check-label fw-bold" for="<?= htmlspecialchars("extra-fee-" . $extraFee->extraId . "-" . $extraFee->memberId) ?>">
-                    <div><?= htmlspecialchars($extraFee->extra) ?> (<?= htmlspecialchars($extraFee->forename . " " . $extraFee->surname) ?>)</div>
+                    <div><?= htmlspecialchars($extraFee->extra) ?> (<?= htmlspecialchars(\SCDS\Formatting\Names::format($extraFee->forename, $extraFee->surname)) ?>)</div>
                     <div><?= htmlspecialchars(MoneyHelpers::formatCurrency((float) $amount, 'GBP')) ?></div>
                   </label>
                 </div>
@@ -189,7 +189,7 @@ $extraFee = $getExtraMetadata->fetch(PDO::FETCH_OBJ);
     <div class="form-check">
       <input class="form-check-input" type="checkbox" value="1" id="confirm-charge" required disabled>
       <label class="form-check-label" for="confirm-charge">
-        I have checked the amount I am charging <?= htmlspecialchars($info['Forename'] . ' ' . $info['Surname']) ?> and confirm I want to proceed.
+        I have checked the amount I am charging <?= htmlspecialchars(\SCDS\Formatting\Names::format($info['Forename'], $info['Surname'])) ?> and confirm I want to proceed.
       </label>
     </div>
 

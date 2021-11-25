@@ -39,22 +39,21 @@ if ((isset($_POST["squadID"])) && (isset($_POST["search"]))) {
 
   if (isset($_POST['type']) && $_POST['type'] == "orphan") {
     // Search the database for the results
-		if ($squadID == "allSquads") {
+    if ($squadID == "allSquads") {
       $query = $db->prepare("SELECT members.MemberID, members.MForename,
       members.MSurname, members.ASANumber,
       members.DateOfBirth FROM members WHERE members.Tenant = ? AND members.UserID IS NULL AND members.Active AND (" .
-      $selection . ") ORDER BY `members`.`MForename`, `members`.`MSurname`
+        $selection . ") ORDER BY `members`.`MForename`, `members`.`MSurname`
       ASC");
       $names = array_merge([$tenant->getId()], $names);
-	  }
-	  else {
+    } else {
       $query = $db->prepare("SELECT members.MemberID, members.MForename,
       members.MSurname, members.ASANumber,
       members.DateOfBirth FROM members INNER JOIN squadMembers ON members.MemberID = squadMembers.Member WHERE members.Tenant = ? AND members.UserID IS NULL AND members.Active AND squadMembers.Squad = ? AND (" .
-      $selection . ") ORDER BY `members`.`MForename` , `members`.`MSurname`
+        $selection . ") ORDER BY `members`.`MForename` , `members`.`MSurname`
       ASC");
       $names = array_merge([$tenant->getId(), $_POST["squadID"]], $names);
-	  }
+    }
   } else {
     if ($squadID == "allSquads") {
       $query = $db->prepare("SELECT members.MemberID, members.MForename,
@@ -62,14 +61,13 @@ if ((isset($_POST["squadID"])) && (isset($_POST["search"]))) {
       members.DateOfBirth FROM members WHERE members.Tenant = ? AND members.Active AND (" . $selection . ") ORDER BY
       `members`.`MForename` , `members`.`MSurname` ASC");
       $names = array_merge([$tenant->getId()], $names);
-	  }
-	  else {
+    } else {
       $query = $db->prepare("SELECT members.MemberID, members.MForename,
       members.MSurname, members.ASANumber,
       members.DateOfBirth FROM members INNER JOIN squadMembers ON members.MemberID = squadMembers.Member WHERE members.Tenant = ? AND squadMembers.Squad = ? AND members.Active AND (" . $selection . ") ORDER
       BY `members`.`MForename` , `members`.`MSurname` ASC");
       $names = array_merge([$tenant->getId(), $_POST["squadID"]], $names);
-	  }
+    }
   }
 }
 
@@ -83,65 +81,68 @@ $row = $query->fetch(PDO::FETCH_ASSOC);
 
 <?php if ($row != null) { ?>
 
-<div class="list-group">
+  <div class="list-group">
 
-<?php do {
-  $count += 1;
-  $getSquads->execute([
-    $row['MemberID']
-  ]);
-  // $row = mysqli_fetch_array($resultX, MYSQLI_ASSOC);
-  $swimmerLink = autoUrl("swimmers/" . $row['MemberID'] . "");
-  $DOB = date('j F Y', strtotime($row['DateOfBirth']));
-  $age = date_diff(date_create($row['DateOfBirth']), date_create('today'))->y;
-  //$ageEoY = date('Y') - date('Y', strtotime($row['DateOfBirth'])); ?>
+    <?php do {
+      $count += 1;
+      $getSquads->execute([
+        $row['MemberID']
+      ]);
+      // $row = mysqli_fetch_array($resultX, MYSQLI_ASSOC);
+      $swimmerLink = autoUrl("swimmers/" . $row['MemberID'] . "");
+      $DOB = date('j F Y', strtotime($row['DateOfBirth']));
+      $age = date_diff(date_create($row['DateOfBirth']), date_create('today'))->y;
+      //$ageEoY = date('Y') - date('Y', strtotime($row['DateOfBirth'])); 
+    ?>
 
-  <a href="<?=htmlspecialchars(autoUrl("members/" . $row['MemberID']))?>" class="list-group-item list-group-item-action">
-    <div class="row align-items-center">
-      <div class="col-12 col-sm-4 col-md-3">
-        <p class="mb-0">
-          <strong class="text-link-color">
-            <?=htmlspecialchars($row['MForename'] . " " . $row['MSurname'])?>
-          </strong>
-        </p>
-        <ul class="mb-0 list-unstyled">
-        <?php if ($squad = $getSquads->fetch(PDO::FETCH_ASSOC)) { do { ?>
-          <li><?=htmlspecialchars($squad['SquadName'])?></li>
-        <?php } while ($squad = $getSquads->fetch(PDO::FETCH_ASSOC)); } else { ?>
-          <li>No squads</li>
-        <?php } ?>
-        </ul>
-        <div class="mb-2 d-sm-none"></div>
-      </div>
-      <div class="col text-sm-end">
-        <p class="mb-0">
-          <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Galas') { ?>
-          <strong>Born:</strong> <?=$DOB?> (<em>Age <?=htmlspecialchars($age)?></em>)
-          <?php } else { ?>
-          <strong>Age:</strong> <?=htmlspecialchars($age)?>
-          <?php } ?>
-        </p>
-        <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Galas') { ?>
-        <p class="mb-0">
-          <strong>Attendance:</strong> <?=getAttendanceByID(null, $row['MemberID'], 4)?>%
-        </p>
-        <?php } ?>
-        <p class="mb-0">
-          <strong>SE Number:</strong> <?=htmlspecialchars($row['ASANumber'])?>
-        </p>
-      </div>
-    </div>
-  </a>
+      <a href="<?= htmlspecialchars(autoUrl("members/" . $row['MemberID'])) ?>" class="list-group-item list-group-item-action">
+        <div class="row align-items-center">
+          <div class="col-12 col-sm-4 col-md-3">
+            <p class="mb-0">
+              <strong class="text-link-color">
+                <?= htmlspecialchars(\SCDS\Formatting\Names::format($row['MForename'], $row['MSurname'])) ?>
+              </strong>
+            </p>
+            <ul class="mb-0 list-unstyled">
+              <?php if ($squad = $getSquads->fetch(PDO::FETCH_ASSOC)) {
+                do { ?>
+                  <li><?= htmlspecialchars($squad['SquadName']) ?></li>
+                <?php } while ($squad = $getSquads->fetch(PDO::FETCH_ASSOC));
+              } else { ?>
+                <li>No squads</li>
+              <?php } ?>
+            </ul>
+            <div class="mb-2 d-sm-none"></div>
+          </div>
+          <div class="col text-sm-end">
+            <p class="mb-0">
+              <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Galas') { ?>
+                <strong>Born:</strong> <?= $DOB ?> (<em>Age <?= htmlspecialchars($age) ?></em>)
+              <?php } else { ?>
+                <strong>Age:</strong> <?= htmlspecialchars($age) ?>
+              <?php } ?>
+            </p>
+            <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] != 'Galas') { ?>
+              <p class="mb-0">
+                <strong>Attendance:</strong> <?= getAttendanceByID(null, $row['MemberID'], 4) ?>%
+              </p>
+            <?php } ?>
+            <p class="mb-0">
+              <strong>SE Number:</strong> <?= htmlspecialchars($row['ASANumber']) ?>
+            </p>
+          </div>
+        </div>
+      </a>
 
-<?php } while ($row = $query->fetch(PDO::FETCH_ASSOC)); ?>
+    <?php } while ($row = $query->fetch(PDO::FETCH_ASSOC)); ?>
 
-</div>
+  </div>
 
 <?php } else { ?>
 
-<div class="alert alert-warning">
-  <strong>No members found for that squad</strong><br>
-  Please try another search
-</div>
+  <div class="alert alert-warning">
+    <strong>No members found for that squad</strong><br>
+    Please try another search
+  </div>
 
 <?php } ?>

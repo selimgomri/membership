@@ -25,34 +25,34 @@ include BASE_PATH . 'views/header.php';
       <h1>Select payment</h1>
       <p class="lead">Select the payment from the list below.</p>
 
-      <form action="<?=autoUrl("confirmation/confirm-selected")?>" method="post">
+      <form action="<?= autoUrl("confirmation/confirm-selected") ?>" method="post">
 
         <div class="list-group mb-3">
 
           <?php foreach ($ids as $paymentId) { ?>
 
-          <?php
-          $getPayments->execute([
-            $paymentId,
-            $tenant->getId()
-          ]);
-          $payment = $getPayments->fetch(PDO::FETCH_ASSOC);
-          if ($payment == null) {
-            break;
-          }
-          ?>
+            <?php
+            $getPayments->execute([
+              $paymentId,
+              $tenant->getId()
+            ]);
+            $payment = $getPayments->fetch(PDO::FETCH_ASSOC);
+            if ($payment == null) {
+              break;
+            }
+            ?>
 
-          <div class="list-group-item">
-            <div class="form-check">
-              <input type="radio" id="payment-<?=htmlspecialchars($paymentId)?>" name="payment" value="<?=htmlspecialchars($paymentId)?>" class="form-check-input">
-              <label class="form-check-label d-block" for="payment-<?=htmlspecialchars($paymentId)?>">
-                <?=htmlspecialchars($payment['Forename'] . ' ' . $payment['Surname'])?>: 
-                <span class="font-monospace">
-                  &pound;<?= (string) (\Brick\Math\BigDecimal::of((string) $payment['Amount']))->withPointMovedLeft(2)->toScale(2) ?>, <?=htmlspecialchars($payment['Name'])?>, <?=htmlspecialchars($payment['Date'])?>
-                </span>
-              </label>
+            <div class="list-group-item">
+              <div class="form-check">
+                <input type="radio" id="payment-<?= htmlspecialchars($paymentId) ?>" name="payment" value="<?= htmlspecialchars($paymentId) ?>" class="form-check-input">
+                <label class="form-check-label d-block" for="payment-<?= htmlspecialchars($paymentId) ?>">
+                  <?= htmlspecialchars(\SCDS\Formatting\Names::format($payment['Forename'], $payment['Surname'])) ?>:
+                  <span class="font-monospace">
+                    &pound;<?= (string) (\Brick\Math\BigDecimal::of((string) $payment['Amount']))->withPointMovedLeft(2)->toScale(2) ?>, <?= htmlspecialchars($payment['Name']) ?>, <?= htmlspecialchars($payment['Date']) ?>
+                  </span>
+                </label>
+              </div>
             </div>
-          </div>
 
           <?php } ?>
 

@@ -104,7 +104,7 @@ include BASE_PATH . 'views/header.php';
                 <div class="col-auto">
                   <h2>
                     <a href="<?= htmlspecialchars(autoUrl("log-books/logs/" . $log['ID'])) ?>"><?= htmlspecialchars($log['Title']) ?></a><br>
-                    <small><?= htmlspecialchars($log['fn'] . ' ' . $log['sn']) ?></small>
+                    <small><?= htmlspecialchars(\SCDS\Formatting\Names::format($log['fn'], $log['sn'])) ?></small>
                   </h2>
                   <p class="mb-0"><?= htmlspecialchars($dateObject->format("H:i \\o\\n j F Y")) ?></p>
                 </div>

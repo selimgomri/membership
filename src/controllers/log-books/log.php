@@ -22,7 +22,7 @@ if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['LogBooks-MemberLoggedIn
   halt(404);
 }
 
-$pagetitle = htmlspecialchars("Log #" . htmlspecialchars($id) . " - " . $info['fn'] . ' ' . $info['sn']);
+$pagetitle = htmlspecialchars("Log #" . htmlspecialchars($id) . " - " . \SCDS\Formatting\Names::format($info['fn'], $info['sn']));
 
 $contentType = "text/plain";
 if (isset($info['ContentType'])) {

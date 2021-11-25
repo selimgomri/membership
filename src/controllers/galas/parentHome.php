@@ -206,7 +206,7 @@ include "galaMenu.php";
           <a href="<?= autoUrl("galas/entries/" . $entry['EntryID']) ?>">
             <div>
               <span class="title mb-0 justify-content-between align-items-start">
-                <span><?= htmlspecialchars($entry['MForename'] . ' ' . $entry['MSurname']) ?></span>
+                <span><?= htmlspecialchars(\SCDS\Formatting\Names::format($entry['MForename'], $entry['MSurname'])) ?></span>
                 <span class="text-end">
                   <?php if ($now <= $closingDate && !$entry['Charged'] && !$entry['Processed'] && !$entry['Locked']) { ?><span class="ms-2 badge bg-success">EDITABLE</span><?php } ?>
                   <?php if ($entry['Charged']) { ?><span class="ms-2 badge bg-warning"><i class="fa fa-money" aria-hidden="true"></i> PAID</span><?php } ?>
@@ -247,7 +247,7 @@ include "galaMenu.php";
             <a href="<?= autoUrl("galas/entries/" . $gala['EntryID'] . '/manual-time') ?>">
               <div>
                 <span class="title mb-0 justify-content-between align-items-start">
-                  <span><?= htmlspecialchars($gala['MForename'] . ' ' . $gala['MSurname']) ?></span>
+                  <span><?= htmlspecialchars(\SCDS\Formatting\Names::format($gala['MForename'], $gala['MSurname'])) ?></span>
                 </span>
                 <span class="d-flex mb-3"><?= htmlspecialchars($gala['GalaName']) ?></span>
               </div>

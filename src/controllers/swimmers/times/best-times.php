@@ -60,7 +60,7 @@ $distances = [
 $getTime = $db->prepare("SELECT `Time`, `Date`, `Round`, `Stroke`, `Distance`, `Name`, `City`, `GalaName` FROM ((meetResults INNER JOIN meetsWithResults ON meetResults.Meet = meetsWithResults.Meet) LEFT JOIN galas ON meetsWithResults.Gala = galas.GalaID) WHERE Member = ? AND Stroke = ? AND Distance = ? AND meetResults.Course = ? ORDER BY IntTime ASC LIMIT 1");
 $getTime->execute([$id, 1, 200, 'S']);
 
-$pagetitle = htmlspecialchars($swimmer['MForename'] . ' ' . $swimmer['MSurname']) . ' Times';
+$pagetitle = htmlspecialchars(\SCDS\Formatting\Names::format($swimmer['MForename'], $swimmer['MSurname'])) . ' Times';
 
 include BASE_PATH . 'views/header.php';
 

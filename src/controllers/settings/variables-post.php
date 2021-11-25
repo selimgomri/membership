@@ -41,6 +41,7 @@ $vars = [
   'GLOBAL_PERSONAL_KEY_ID_NUMBER' => null,
   'REQUIRE_SQUAD_REP_FOR_APPROVAL' => true,
   'HIDE_MOVE_FEE_INFO' => false,
+  'DISPLAY_NAME_FORMAT' => 'FL',
 ];
 
 try {
@@ -70,6 +71,12 @@ try {
       $type = 'NONE';
     }
     app()->tenant->setKey('EMERGENCY_MESSAGE_TYPE', $type);
+  }
+
+  // DISPLAY_NAME_FORMAT
+  $type = $_POST['DISPLAY_NAME_FORMAT'];
+  if ($type == 'FL' || $type == 'L,F') {
+    app()->tenant->setKey('DISPLAY_NAME_FORMAT', $type);
   }
 
   $hide = 1;

@@ -18,7 +18,7 @@ if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent' && 
   halt(404);
 }
 
-$pagetitle = htmlspecialchars("Password for " . $member['fn'] . ' ' . $member['sn']);
+$pagetitle = htmlspecialchars("Password for " . \SCDS\Formatting\Names::format($member['fn'], $member['sn']));
 
 include BASE_PATH . 'views/header.php';
 
@@ -33,13 +33,13 @@ include BASE_PATH . 'views/header.php';
           Manage password
         </h1>
         <p class="lead mb-0">
-          For <?=htmlspecialchars($member['fn'] . ' ' . $member['sn'])?>
+          For <?= htmlspecialchars(\SCDS\Formatting\Names::format($member['fn'], $member['sn'])) ?>
         </p>
         <div class="mb-3 d-lg-none"></div>
       </div>
       <div class="col text-end">
         <p class="mb-0">
-          <?php if (isset($_GET['return'])) { ?><a href="<?=htmlspecialchars($_GET['return'])?>" class="btn btn-dark-l btn-outline-light-d">Back</a><?php } ?>
+          <?php if (isset($_GET['return'])) { ?><a href="<?= htmlspecialchars($_GET['return']) ?>" class="btn btn-dark-l btn-outline-light-d">Back</a><?php } ?>
           <button type="submit" class="btn btn-success">Save <i class="fa fa-floppy-o" aria-hidden="true"></i></button>
         </p>
       </div>
@@ -54,35 +54,36 @@ include BASE_PATH . 'views/header.php';
     <div class="col-lg-8">
 
       <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['SetMemberPassError'])) { ?>
-      <div class="alert alert-danger">
-        <p class="mb-0">
-          <strong>We could not set the password.</strong>
-        </p>
-        <p class="mb-0">
-          <?=htmlspecialchars($_SESSION['TENANT-' . app()->tenant->getId()]['SetMemberPassError'])?>
-        </p>
-      </div>
-      <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['SetMemberPassError']); } ?>
+        <div class="alert alert-danger">
+          <p class="mb-0">
+            <strong>We could not set the password.</strong>
+          </p>
+          <p class="mb-0">
+            <?= htmlspecialchars($_SESSION['TENANT-' . app()->tenant->getId()]['SetMemberPassError']) ?>
+          </p>
+        </div>
+      <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['SetMemberPassError']);
+      } ?>
 
-      <p>Set a password for <?=htmlspecialchars($member['fn'])?> to give them access to their log book.</p>
+      <p>Set a password for <?= htmlspecialchars($member['fn']) ?> to give them access to their log book.</p>
 
       <p>If they forget their password, you can come back here to reset it at any time.</p>
 
-      <p>Usual <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?> password policies apply - Use 8 characters or more, with at least one lowercase letter, at least one uppercase letter and at least one number</p>
+      <p>Usual <?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?> password policies apply - Use 8 characters or more, with at least one lowercase letter, at least one uppercase letter and at least one number</p>
 
       <?php if (isset($_GET['return'])) { ?>
-      <p>When you press save, we will return you to the page you came from.</p>
+        <p>When you press save, we will return you to the page you came from.</p>
       <?php } ?>
 
       <form method="post" class="needs-validation" novalidate>
         <?php if (isset($_GET['return'])) { ?>
-        <input type="hidden" name="return" value="<?=htmlspecialchars($_GET['return'])?>">
+          <input type="hidden" name="return" value="<?= htmlspecialchars($_GET['return']) ?>">
         <?php } ?>
 
         <div class="mb-3">
           <label class="form-label" for="username">Swim England number</label>
-          <input type="text" class="form-control" id="username" name="username" aria-describedby="username-help" value="<?=htmlspecialchars($member['se'])?>" disabled>
-          <small id="username-help" class="form-text text-muted"><?=htmlspecialchars($member['fn'])?> will log in with their Swim England number</small>
+          <input type="text" class="form-control" id="username" name="username" aria-describedby="username-help" value="<?= htmlspecialchars($member['se']) ?>" disabled>
+          <small id="username-help" class="form-text text-muted"><?= htmlspecialchars($member['fn']) ?> will log in with their Swim England number</small>
         </div>
 
         <div class="mb-3">

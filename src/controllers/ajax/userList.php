@@ -45,31 +45,31 @@ $user = $users->fetch(PDO::FETCH_ASSOC);
 
 if ($user != null) { ?>
 
-<div class="list-group">
+  <div class="list-group">
 
-  <?php do {
-    $getAccessLevels->execute([
-      $user['UserID']
-    ]);
-      ?>
-  <a href="<?=autoUrl("users/" . $user['UserID'])?>" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-    <?=htmlspecialchars($user['Forename'] . " " . $user['Surname'])?>
-    <div class="text-end">
-    <?php while ($al = $getAccessLevels->fetchColumn()) { ?>
-      <span class="badge bg-primary rounded-pill">
-        <?=$al?>
-      </span>
-    <?php } ?>
-    </div>
-  </a>
-  <?php } while ($user = $users->fetch(PDO::FETCH_ASSOC)); ?>
-</div>
+    <?php do {
+      $getAccessLevels->execute([
+        $user['UserID']
+      ]);
+    ?>
+      <a href="<?= autoUrl("users/" . $user['UserID']) ?>" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+        <?= htmlspecialchars(\SCDS\Formatting\Names::format($user['Forename'], $user['Surname'])) ?>
+        <div class="text-end">
+          <?php while ($al = $getAccessLevels->fetchColumn()) { ?>
+            <span class="badge bg-primary rounded-pill">
+              <?= $al ?>
+            </span>
+          <?php } ?>
+        </div>
+      </a>
+    <?php } while ($user = $users->fetch(PDO::FETCH_ASSOC)); ?>
+  </div>
 
 <?php } else { ?>
 
-<div class="alert alert-warning">
-  <strong>No users found for that name</strong><br>
-  Please try another search
-</div>
+  <div class="alert alert-warning">
+    <strong>No users found for that name</strong><br>
+    Please try another search
+  </div>
 
 <?php } ?>

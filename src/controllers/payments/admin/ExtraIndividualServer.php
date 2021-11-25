@@ -34,7 +34,7 @@ if ($_POST['response'] == "getSwimmers") {
                 <div class="col-auto">
                   <p class="mb-0">
                     <strong>
-                      <?= htmlspecialchars($row['MForename'] . " " . $row['MSurname']) ?>
+                      <?= htmlspecialchars(\SCDS\Formatting\Names::format($row['MForename'], $row['MSurname'])) ?>
                     </strong>
                   </p>
                   <?php if ($squad) { ?>
@@ -88,7 +88,7 @@ if ($_POST['response'] == "getSwimmers") {
     $state = false;
     $output = '<option value="null" selected>Select a swimmer</option>';
     while ($row = $getSwimmers->fetch(PDO::FETCH_ASSOC)) {
-      $output .= '<option value="' . htmlspecialchars($row['MemberID']) . '">' . htmlspecialchars($row['MForename'] . " " . $row['MSurname']) . '</option>';
+      $output .= '<option value="' . htmlspecialchars($row['MemberID']) . '">' . htmlspecialchars(\SCDS\Formatting\Names::format($row['MForename'], $row['MSurname'])) . '</option>';
       $state = true;
     }
     echo json_encode([
@@ -119,7 +119,7 @@ if ($_POST['response'] == "getSwimmers") {
       $getCount = $db->prepare("SELECT COUNT(*) FROM `extrasRelations` WHERE ExtraID = ? AND MemberID = ?");
       $getCount->execute([$id, $swimmer]);
       if ($getCount->fetchColumn() > 0) {
-        throw new Exception($name['fn'] . ' ' . $name['sn'] . ' is already assigned to this extra');
+        throw new Exception(\SCDS\Formatting\Names::format($name['fn'], $name['sn']) . ' is already assigned to this extra');
       } else {
         $addToExtra = $db->prepare("INSERT INTO `extrasRelations` (`ExtraID`, `MemberID`) VALUES (?, ?)");
         $addToExtra->execute([$id, $swimmer]);
@@ -129,7 +129,7 @@ if ($_POST['response'] == "getSwimmers") {
 
         $responseData = [
           'alertClass' => 'alert-success',
-          'alertContent' => '<p class="mb-0"><strong>' . htmlspecialchars($name['fn'] . ' ' . $name['sn']) . ' added to extra</strong></p>',
+          'alertContent' => '<p class="mb-0"><strong>' . htmlspecialchars(\SCDS\Formatting\Names::format($name['fn'], $name['sn'])) . ' added to extra</strong></p>',
           'status' => true
         ];
       }

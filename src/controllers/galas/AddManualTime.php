@@ -66,7 +66,7 @@ if ($row['CourseLength'] == 'LONG') {
 		</nav>
 
 
-		<h1>Add Manual Times for <?= htmlspecialchars($row['MForename'] . ' ' . $row['MSurname']) ?></h1>
+		<h1>Add Manual Times for <?= htmlspecialchars(\SCDS\Formatting\Names::format($row['MForename'], $row['MSurname'])) ?></h1>
 		<p class="lead mb-0">
 			<?= htmlspecialchars($row['GalaName']) ?>
 		</p>

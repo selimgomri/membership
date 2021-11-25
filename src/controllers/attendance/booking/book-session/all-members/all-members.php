@@ -42,7 +42,7 @@ function getAllBookedMembersForSession($session, $date)
             <div class="col">
               <div>
                 <a class="font-weight-bold" href="<?= htmlspecialchars(autoUrl('members/' . $bookedMember['id'])) ?>">
-                  <?= htmlspecialchars($bookedMember['fn'] . ' ' . $bookedMember['sn']) ?>
+                  <?= htmlspecialchars(\SCDS\Formatting\Names::format($bookedMember['fn'], $bookedMember['sn'])) ?>
                 </a>
               </div>
               <div>
@@ -53,7 +53,7 @@ function getAllBookedMembersForSession($session, $date)
               <?php if ($bookingClosed) { ?>
                 <span class="text-muted">Booking closed</span>
               <?php } else { ?>
-                <button class="btn btn-danger" type="button" data-member-name="<?= htmlspecialchars($bookedMember['fn'] . ' ' . $bookedMember['sn']) ?>" data-member-id="<?= htmlspecialchars($bookedMember['id']) ?>" data-operation="cancel-place" data-session-id="<?= htmlspecialchars($session['SessionID']) ?>" data-session-name="<?= htmlspecialchars($session['SessionName']) ?> on <?= htmlspecialchars($date->format('j F Y')) ?>" data-session-location="<?= htmlspecialchars($session['Location']) ?>" data-session-date="<?= htmlspecialchars($date->format('Y-m-d')) ?>">Remove</button>
+                <button class="btn btn-danger" type="button" data-member-name="<?= htmlspecialchars(\SCDS\Formatting\Names::format($bookedMember['fn'], $bookedMember['sn'])) ?>" data-member-id="<?= htmlspecialchars($bookedMember['id']) ?>" data-operation="cancel-place" data-session-id="<?= htmlspecialchars($session['SessionID']) ?>" data-session-name="<?= htmlspecialchars($session['SessionName']) ?> on <?= htmlspecialchars($date->format('j F Y')) ?>" data-session-location="<?= htmlspecialchars($session['Location']) ?>" data-session-date="<?= htmlspecialchars($date->format('Y-m-d')) ?>">Remove</button>
               <?php } ?>
             </div>
           </div>

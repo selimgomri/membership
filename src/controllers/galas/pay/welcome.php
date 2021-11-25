@@ -111,7 +111,7 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
               <?php $notReady = !$entry['EntryProcessed']; ?>
               <?php $galaData = new GalaPrices($db, $entry['GalaID']); ?>
               <li class="list-group-item">
-                <h3><?= htmlspecialchars($entry['MForename'] . ' ' . $entry['MSurname']) ?> for <?= htmlspecialchars($entry['GalaName']) ?></h3>
+                <h3><?= htmlspecialchars(\SCDS\Formatting\Names::format($entry['MForename'], $entry['MSurname'])) ?> for <?= htmlspecialchars($entry['GalaName']) ?></h3>
                 <div class="row">
                   <div class="col-sm-5 col-md-4 col-lg-6">
                     <p class="mb-0">

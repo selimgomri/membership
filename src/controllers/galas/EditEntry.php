@@ -30,7 +30,7 @@ if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Parent") {
     $id
   ]);
   if ($parent = $getParentName->fetch(PDO::FETCH_ASSOC)) {
-    $parentName = $parent['Forename'] . ' ' . $parent['Surname'];
+    $parentName = \SCDS\Formatting\Names::format($parent['Forename'], $parent['Surname']);
   } else {
     $parentName = 'Unknown User';
   }
@@ -62,7 +62,7 @@ $rowArrayText = ["Freestyle", null, null, null, null, null, 2, "Backstroke",  nu
 
 $disabled = "";
 
-$pagetitle = htmlspecialchars($row['MForename'] . " " . $row['MSurname'] . " - " . $row['GalaName'] . "");
+$pagetitle = htmlspecialchars(\SCDS\Formatting\Names::format($row['MForename'], $row['MSurname']) . " - " . $row['GalaName'] . "");
 include BASE_PATH . "views/header.php";
 include "galaMenu.php"; ?>
 

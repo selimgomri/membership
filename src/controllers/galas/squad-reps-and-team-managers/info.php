@@ -153,7 +153,7 @@ include BASE_PATH . 'views/header.php';
               <li class="list-group-item <?php if (bool($entry->charged)) { ?>list-group-item-success<?php } ?>" id="refund-box-<?= htmlspecialchars($entry->id) ?>">
                 <div class="row">
                   <div class="col-sm-5 col-md-4 col-lg-6">
-                    <h3><?= htmlspecialchars($entry->forename . ' ' . $entry->surname) ?></h3>
+                    <h3><?= htmlspecialchars(\SCDS\Formatting\Names::format($entry->forename, $entry->surname)) ?></h3>
 
                     <p>
                       <strong>Swim England Number:</strong> <?= htmlspecialchars($entry->asa_number) ?><br>

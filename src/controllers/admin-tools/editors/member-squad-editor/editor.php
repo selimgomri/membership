@@ -56,7 +56,7 @@ include BASE_PATH . 'views/header.php';
       <?php do { ?>
 
         <li class="list-group-item">
-          <h2><?= htmlspecialchars($member['fn'] . ' ' . $member['sn']) ?></h2>
+          <h2><?= htmlspecialchars(\SCDS\Formatting\Names::format($member['fn'], $member['sn'])) ?></h2>
 
           <?php if (sizeof($squads) > 0) { ?>
             <div class="row">
@@ -69,7 +69,7 @@ include BASE_PATH . 'views/header.php';
               ?>
                 <div class="col">
                   <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="<?= htmlspecialchars('squad-member-check-squad-' . $squad['id'] . '-member-' . $member['id']) ?>" <?php if ($isMember) { ?>checked<?php } ?> data-member="<?= htmlspecialchars($member['id']) ?>" data-squad="<?= htmlspecialchars($squad['id']) ?>" data-member-name="<?= htmlspecialchars($member['fn'] . ' ' . $member['sn']) ?>">
+                    <input class="form-check-input" type="checkbox" id="<?= htmlspecialchars('squad-member-check-squad-' . $squad['id'] . '-member-' . $member['id']) ?>" <?php if ($isMember) { ?>checked<?php } ?> data-member="<?= htmlspecialchars($member['id']) ?>" data-squad="<?= htmlspecialchars($squad['id']) ?>" data-member-name="<?= htmlspecialchars(\SCDS\Formatting\Names::format($member['fn'], $member['sn'])) ?>">
                     <label class="form-check-label" for="<?= htmlspecialchars('squad-member-check-squad-' . $squad['id'] . '-member-' . $member['id']) ?>"><?= htmlspecialchars($squad['name']) ?></label>
                   </div>
                 </div>

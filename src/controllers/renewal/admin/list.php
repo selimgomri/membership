@@ -182,10 +182,10 @@ include BASE_PATH . "views/swimmersMenu.php";
 																																																																																					}
 																																																																											?>
 							<td>
-								<?= htmlspecialchars($renewalItem['MForename'] . " " . $renewalItem['MSurname']) ?><?php if (!bool($renewalItem['Active'])) { ?> <em>INACTIVE</em><?php } ?>
+								<?= htmlspecialchars(\SCDS\Formatting\Names::format($renewalItem['MForename'], $renewalItem['MSurname'])) ?><?php if (!bool($renewalItem['Active'])) { ?> <em>INACTIVE</em><?php } ?>
 							</td>
 							<td>
-								<?= htmlspecialchars($renewalItem['Forename'] . " " . $renewalItem['Surname']) ?>
+								<?= htmlspecialchars(\SCDS\Formatting\Names::format($renewalItem['Forename'], $renewalItem['Surname'])) ?>
 							</td>
 							<td>
 								<span class="font-monospace">

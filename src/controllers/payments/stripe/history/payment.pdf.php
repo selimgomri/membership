@@ -165,7 +165,7 @@ ob_start(); ?>
   </div>
 
   <p>
-    <strong><?php if (isset($payment->charges->data[0]->billing_details->name)) { ?><?= htmlspecialchars($payment->charges->data[0]->billing_details->name) ?><?php } else { ?><?= htmlspecialchars($pm['Forename'] . ' ' . $pm['Surname']) ?><?php } ?></strong><br>
+    <strong><?php if (isset($payment->charges->data[0]->billing_details->name)) { ?><?= htmlspecialchars($payment->charges->data[0]->billing_details->name) ?><?php } else { ?><?= htmlspecialchars(\SCDS\Formatting\Names::format($pm['Forename'], $pm['Surname'])) ?><?php } ?></strong><br>
     Cardholder
   </p>
 

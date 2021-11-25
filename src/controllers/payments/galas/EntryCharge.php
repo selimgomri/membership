@@ -158,7 +158,7 @@ include BASE_PATH . 'views/header.php';
 							<li class="list-group-item <?php if ($hasNoDD || $notReady) { ?>list-group-item-danger<?php } ?> <?php if ($entry['Charged']) { ?>list-group-item-success<?php } ?>">
 								<div class="row">
 									<div class="col-sm-5 col-md-4 col-lg-6">
-										<h3><?= htmlspecialchars($entry['MForename'] . ' ' . $entry['MSurname']) ?></h3>
+										<h3><?= htmlspecialchars(\SCDS\Formatting\Names::format($entry['MForename'], $entry['MSurname'])) ?></h3>
 
 										<p class="mb-0">
 											<?= htmlspecialchars($entry['MForename']) ?> is entered in;
