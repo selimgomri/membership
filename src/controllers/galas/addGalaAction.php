@@ -40,12 +40,12 @@ if (!empty($_POST['venue'])) {
   }
 }
 
-if (!empty($_POST['closingDate']) && v::date()->validate($_POST['closingDate'])) {
-  $date = strtotime($_POST['closingDate']);
-  $closingDate = date("Y-m-d", $date);
+if (!empty($_POST['closingDate']) && !empty($_POST['closingTime']) && v::date()->validate($_POST['closingDate']) && v::time('H:i')->validate($_POST['closingTime'])) {
+  $date = DateTime::createFromFormat('Y-m-d H:i', $_POST['closingDate'] . ' ' . $_POST['closingTime'], new DateTimeZone('Europe/London'));
+  $closingDate = $date->format('Y-m-d H:i:s');
 } else {
   $status = false;
-  $statusInfo .= "<li>The closing date was malformed and not understood clearly by the system</li>";
+  $statusInfo .= "<li>The closing date and time was malformed and not understood clearly by the system</li>";
 }
 
 if (!empty($_POST['lastDate']) && v::date()->validate($_POST['lastDate'])) {

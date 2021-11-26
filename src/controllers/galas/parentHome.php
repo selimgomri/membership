@@ -161,7 +161,7 @@ include "galaMenu.php";
               <span class="d-flex mb-3"><?= htmlspecialchars($gala['GalaVenue']) ?></span>
             </div>
             <?php if ($now <= $closingDate) { ?>
-              <span class="category">Entries close on <?= $closingDate->format('j F Y') ?></span>
+              <span class="category">Entries close at <?= htmlspecialchars($closingDate->format('H:i, j F Y')) ?></span>
             <?php } else { ?>
               <span class="category">Ends on <?= $endDate->format('j F Y') ?></span>
             <?php } ?>

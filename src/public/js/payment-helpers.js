@@ -57,6 +57,8 @@ function setCardBrandIcon(brand) {
     content = '<img class="fa fa-fw d-dark-none" src="' + root + '/img/stripe/brand-checkout/diners_light.svg" aria-hidden="true"><img class="fa fa-fw d-light-none" src="' + root + '/img/stripe/brand-checkout/diners_dark.svg" aria-hidden="true">';
   } else if (brand === 'jcb') {
     content = '<img class="fa fa-fw" src="' + root + '/img/stripe/network-svgs/jcb.svg" aria-hidden="true">';
+  } else if (brand === 'unionpay') {
+    content = '<img class="fa fa-fw" src="' + root + '/img/stripe/network-svgs/union.svg" aria-hidden="true">';
   }
   document.getElementById('card-brand-element').innerHTML = content;
 }
