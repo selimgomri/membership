@@ -269,7 +269,7 @@ include BASE_PATH . "views/header.php";
             <a href="<?= autoUrl("swimmers/" . $s->getId()) ?>">
               <span class="mb-3">
                 <span class="title mb-0">
-                  <?= htmlspecialchars($s->getForename() . ' ' . $s->getSurname()) ?>
+                  <?= htmlspecialchars($s->getFullName()) ?>
                 </span>
                 <span>
                   <?= $s->getAge() ?> years old
