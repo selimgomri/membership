@@ -1,7 +1,7 @@
 import React from "react";
 import { render } from "react-dom";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { App as NotifyComposer } from "./notify/forms/Composer";
+import { Composer as NotifyComposer } from "./notify/forms/Composer";
 import { NotFound } from "./views/NotFound";
 
 const rootElement = document.getElementById("root");

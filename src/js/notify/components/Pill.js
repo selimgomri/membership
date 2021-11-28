@@ -6,10 +6,10 @@ class Pill extends React.Component {
     // console.log(this.props);
 
     return (
-      <div className="component-pill me-2">
+      <div className="component-pill me-2 mb-1">
         <div className="component-pill-text-left">{this.props.data.name}</div>
-        <button className="component-pill-button">
-          <div className="component-pill-text-right" onClick={this.props.handleClick}>
+        <button className="component-pill-button" type="button">
+          <div className="component-pill-text-right" onClick={(event) => { this.props.handleClick(event, this.props.data) }}>
             <i className="fa fa-times" aria-hidden="true"></i>
           </div>
         </button>
