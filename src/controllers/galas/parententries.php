@@ -13,9 +13,12 @@ $timesheets = $db->prepare("SELECT DISTINCT `galas`.`GalaID`, `GalaName`, `GalaV
 $timesheets->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 $timesheet = $timesheets->fetch(PDO::FETCH_ASSOC);
 
+$now = new DateTime('now', new DateTimeZone('Europe/London'));
+
 $pagetitle = "My Gala Entries";
 include BASE_PATH . "views/header.php";
 include "galaMenu.php";
+
 ?>
 
 <div class="front-page" style="margin-bottom: -1rem;">
@@ -48,7 +51,6 @@ include "galaMenu.php";
 
       <div class="news-grid mb-4">
         <?php do {
-          $now = new DateTime();
           $closingDate = new DateTime($entry['ClosingDate']);
 
         ?>

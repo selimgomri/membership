@@ -101,6 +101,8 @@ foreach ($swimsArray as $col => $name) {
 
 $strokeCountsData = array_values($strokeCounts);
 
+$now = new DateTime('now', new DateTimeZone('Europe/London'));
+
 include BASE_PATH . "views/header.php";
 include "galaMenu.php"; ?>
 <div class="front-page" style="margin-bottom: -1rem;">
@@ -115,7 +117,6 @@ include "galaMenu.php"; ?>
       <?php if ($gala) { ?>
       <div class="news-grid mb-4">
         <?php do {
-          $now = new DateTime();
           $closingDate = new DateTime($gala['ClosingDate']);
           $endDate = new DateTime($gala['GalaDate']);
 

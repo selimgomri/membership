@@ -35,11 +35,10 @@ if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent') {
 }
 
 $now = new DateTime('now', new DateTimeZone('Europe/London'));
-$nowDay = $now->format('Y-m-d');
 $galas = $db->prepare("SELECT GalaID id, GalaName `name` FROM `galas` WHERE Tenant = ? AND ClosingDate >= ? ORDER BY `galas`.`ClosingDate` ASC");
 $galas->execute([
   $tenant->getId(),
-  $nowDay
+  $now->format('Y-m-d H:i:s')
 ]);
 
 $mySwimmer = $mySwimmers->fetch(PDO::FETCH_ASSOC);

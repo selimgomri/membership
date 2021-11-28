@@ -109,7 +109,7 @@ if (isset($_POST['is-select-sessions']) && bool($_POST['is-select-sessions'])) {
 
       $now = new DateTime('now', new DateTimeZone('Europe/London'));
       $getGalaInformation = $db->prepare("SELECT GalaFee, GalaFeeConstant, GalaName, HyTek, RequiresApproval FROM galas WHERE GalaID = ? AND NOT CoachEnters AND ClosingDate >= ?");
-      $getGalaInformation->execute([$_POST['gala'], $now->format('Y-m-d')]);
+      $getGalaInformation->execute([$_POST['gala'], $now->format('Y-m-d H:i:s')]);
       $row = $getGalaInformation->fetch(PDO::FETCH_ASSOC);
 
       if ($row == null) {
