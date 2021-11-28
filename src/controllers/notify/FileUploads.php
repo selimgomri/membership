@@ -1,7 +1,18 @@
 <?php
 
-$email = $_POST['notify_uuid'];
-$date = $_POST['notify_date'];
+$email = $date = null;
+
+if (isset($_POST['notify_uuid'])) {
+  $email = $_POST['notify_uuid'];
+} else {
+  $email = \Ramsey\Uuid\Uuid::uuid4();
+}
+
+if (isset($_POST['notify_date'])) {
+  $date = $_POST['notify_date'];
+} else {
+  $date = (new DateTime('now', new DateTimeZone('Europe/London')))->format('Y/m/d');
+}
 
 $db = app()->db;
 $tenant = app()->tenant;

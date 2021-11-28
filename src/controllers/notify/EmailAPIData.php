@@ -93,6 +93,9 @@ while ($list = $lists->fetch(PDO::FETCH_ASSOC)) {
   $possibleTosList[] = [
     'name' => $list['Name'],
     'id' => $list['ID'],
+    'key' => 'list-' . $list['ID'],
+    'state' => false,
+    'type' => 'lists',
   ];
 };
 $group = [
@@ -106,6 +109,9 @@ while ($squad = $squads->fetch(PDO::FETCH_ASSOC)) {
   $possibleTosList[] = [
     'name' => $squad['SquadName'],
     'id' => $squad['SquadID'],
+    'key' => 'squad-' . $squad['SquadID'],
+    'state' => false,
+    'type' => 'squads',
   ];
 };
 $group = [
@@ -119,6 +125,9 @@ while ($gala = $galas->fetch(PDO::FETCH_ASSOC)) {
   $possibleTosList[] = [
     'name' => $gala['GalaName'],
     'id' => $gala['GalaID'],
+    'key' => 'gala-' . $gala['GalaID'],
+    'state' => false,
+    'type' => 'galas',
   ];
 };
 $group = [
@@ -128,7 +137,7 @@ $group = [
 $possibleTos['galas'] = $group;
 
 $clubName = app()->tenant->getKey('CLUB_NAME');
-$userName = app()->user->getFullName();
+$userName = app()->user->getForename() . ' ' . app()->user->getSurname();
 
 $replyAddress = getUserOption(app()->user->getId(), 'NotifyReplyAddress');
 
@@ -178,6 +187,9 @@ if (app()->user->hasPermissions(['Admin', 'Galas'])) {
   $canForceSend = true;
 }
 
+$uuid = \Ramsey\Uuid\Uuid::uuid4();
+$date = new DateTime('now', new DateTimeZone('Europe/London'));
+
 header("content-type: application/json");
 echo json_encode([
   'possibleTos' => $possibleTos,
@@ -185,4 +197,9 @@ echo json_encode([
   'possibleFroms' => $sendAs,
   'possibleCategories' => $categories,
   'canForceSend' => $canForceSend,
+  'documentBaseUrl' => autoUrl('notify/new/'),
+  'imagesUploadUrl' => autoUrl('notify/new/image-upload'),
+  'tinyMceCssLocation' => autoUrl('public/css/tinymce.css'),
+  'uuid' => $uuid,
+  'date' => $date->format('Y/m/d'),
 ]);
