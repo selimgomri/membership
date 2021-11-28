@@ -20,7 +20,7 @@ if ($info = null) {
 $sql = null;
 
 if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Parent") {
-	$sql = $db->prepare("SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE galas.GalaID = '$id' AND members.UserID = '$uid' ORDER BY members.MForename ASC, members.MSurname ASC;");
+	$sql = $db->prepare("SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE galas.GalaID = ? AND members.UserID = ? ORDER BY members.MForename ASC, members.MSurname ASC;");
 	$sql->execute([$id, $_SESSION['TENANT-' . app()->tenant->getId()]['UserID']]);
 } else {
 	$sql = $db->prepare("SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE galas.GalaID = ? ORDER BY members.MForename ASC, members.MSurname ASC;");

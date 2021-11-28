@@ -20,7 +20,7 @@ if ($info == null) {
   halt(404);
 }
 
-$pagetitle = htmlspecialchars($info['Forename'] . ' ' . $info['Surname']) . ' Targeted List Access';
+$pagetitle = htmlspecialchars(\SCDS\Formatting\Names::format($info['Forename'], $info['Surname'])) . ' Targeted List Access';
 
 include BASE_PATH . "views/header.php";
 
@@ -39,7 +39,7 @@ include BASE_PATH . "views/header.php";
   <div class="row">
     <div class="col-lg-8">
       <h1>
-        <?=htmlspecialchars($info['Forename'] . ' ' . $info['Surname'])?><br><small>Targeted list access</small>
+        <?=htmlspecialchars(\SCDS\Formatting\Names::format($info['Forename'], $info['Surname']))?><br><small>Targeted list access</small>
       </h1>
 
       <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['AssignListSuccess']) && $_SESSION['TENANT-' . app()->tenant->getId()]['AssignListSuccess']) { ?>

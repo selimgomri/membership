@@ -11,7 +11,7 @@ $sql = null;
 
 $parentName = null;
 if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Parent") {
-  $sql = $db->prepare("SELECT * FROM ((((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) LEFT JOIN stripePayments ON galaEntries.StripePayment = stripePayments.ID) LEFT JOIN stripePayMethods ON stripePayMethods.ID = stripePayments.Method) WHERE galas.Tenant = ? AND`EntryID` = ? AND members.UserID = ?;");
+  $sql = $db->prepare("SELECT * FROM ((((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) LEFT JOIN stripePayments ON galaEntries.StripePayment = stripePayments.ID) LEFT JOIN stripePayMethods ON stripePayMethods.ID = stripePayments.Method) WHERE galas.Tenant = ? AND `EntryID` = ? AND members.UserID = ?;");
   $sql->execute([
     $tenant->getId(),
     $id,
@@ -30,7 +30,7 @@ if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == "Parent") {
     $id
   ]);
   if ($parent = $getParentName->fetch(PDO::FETCH_ASSOC)) {
-    $parentName = $parent['Forename'] . ' ' . $parent['Surname'];
+    $parentName = \SCDS\Formatting\Names::format($parent['Forename'], $parent['Surname']);
   } else {
     $parentName = 'Unknown User';
   }
@@ -62,9 +62,11 @@ $rowArrayText = ["Freestyle", null, null, null, null, null, 2, "Backstroke",  nu
 
 $disabled = "";
 
-$pagetitle = htmlspecialchars($row['MForename'] . " " . $row['MSurname'] . " - " . $row['GalaName'] . "");
+$pagetitle = htmlspecialchars(\SCDS\Formatting\Names::format($row['MForename'], $row['MSurname']) . " - " . $row['GalaName'] . "");
 include BASE_PATH . "views/header.php";
-include "galaMenu.php"; ?>
+include "galaMenu.php";
+
+?>
 
 <div class="bg-light mt-n3 py-3 mb-3">
   <div class="container-xl">

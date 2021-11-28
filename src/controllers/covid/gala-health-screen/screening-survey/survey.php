@@ -61,7 +61,7 @@ $age = new DateTime($member['DateOfBirth'], new DateTimeZone('Europe/London'));
 $age = $age->diff($today);
 $age = (int) $age->format('%y');
 
-$pagetitle = htmlspecialchars($member['MForename'] . ' ' . $member['MSurname']) . ' - COVID Return to Competition Screening';
+$pagetitle = htmlspecialchars(\SCDS\Formatting\Names::format($member['MForename'], $member['MSurname'])) . ' - COVID Return to Competition Screening';
 
 include BASE_PATH . 'views/header.php';
 
@@ -105,7 +105,7 @@ include BASE_PATH . 'views/header.php';
     <div class="row align-items-center">
       <div class="col-lg-8">
         <h1>
-          Return to Competition <small class="text-muted"><?= htmlspecialchars($member['MForename']) . '&nbsp;' . htmlspecialchars($member['MSurname']) ?></small>
+          Return to Competition <small class="text-muted"><?= htmlspecialchars(\SCDS\Formatting\Names::format($member['MForename'], $member['MSurname'])) ?></small>
         </h1>
         <p class="lead mb-0">
           COVID-19 and Risk Awareness Declaration.
@@ -139,7 +139,7 @@ include BASE_PATH . 'views/header.php';
       <div class="row">
         <div class="col-lg-8">
           <p>
-            This form is for <em><?= htmlspecialchars($member['MForename'] . ' ' . $member['MSurname']) ?></em> at <em><?= htmlspecialchars($gala['GalaName']) ?></em> only. This declaration will expire seven days after submission. If the gala spans multiple weekends, you must resubmit this form no more than seven days ahead of each weekend.
+            This form is for <em><?= htmlspecialchars(\SCDS\Formatting\Names::format($member['MForename'], $member['MSurname'])) ?></em> at <em><?= htmlspecialchars($gala['GalaName']) ?></em> only. This declaration will expire seven days after submission. If the gala spans multiple weekends, you must resubmit this form no more than seven days ahead of each weekend.
           </p>
 
           <form method="post" class="needs-validation" novalidate>
@@ -148,7 +148,7 @@ include BASE_PATH . 'views/header.php';
             <input type="hidden" name="gala" value="<?= htmlspecialchars($_GET['gala']) ?>">
 
             <p>
-              [I / my child] <?= htmlspecialchars($member['MForename']) . '&nbsp;' . htmlspecialchars($member['MSurname']) ?> [am / is] able to participate in this competition having completed and signed the relevant Health Survey and Return to Training Declaration forms as requested by <?= htmlspecialchars(app()->tenant->getName()) ?>.
+              [I / my child] <?= htmlspecialchars(\SCDS\Formatting\Names::format($member['MForename'], $member['MSurname'])) ?> [am / is] able to participate in this competition having completed and signed the relevant Health Survey and Return to Training Declaration forms as requested by <?= htmlspecialchars(app()->tenant->getName()) ?>.
             </p>
 
             <p>
@@ -179,7 +179,7 @@ include BASE_PATH . 'views/header.php';
 
             <div class="form-check mb-3">
               <input class="form-check-input" type="checkbox" id="member-declaration" name="member-declaration" required value="1">
-              <label class="form-check-label" for="member-declaration">I <strong><?= htmlspecialchars($member['MForename']) . '&nbsp;' . htmlspecialchars($member['MSurname']) ?></strong>, agree to this declaration<br><span class="badge bg-dark"><?= $today->format("j F Y") ?></span></label>
+              <label class="form-check-label" for="member-declaration">I <strong><?= htmlspecialchars(\SCDS\Formatting\Names::format($member['MForename'], $member['MSurname'])) ?></strong>, agree to this declaration<br><span class="badge bg-dark"><?= $today->format("j F Y") ?></span></label>
               <div class="invalid-feedback">
                 You (<?= htmlspecialchars($member['MForename']) ?>) must agree to this declaration to proceed.
               </div>
@@ -188,7 +188,7 @@ include BASE_PATH . 'views/header.php';
             <?php if ($parent && $age < 18) { ?>
               <div class="form-check mb-3">
                 <input class="form-check-input" type="checkbox" id="parent-declaration" name="parent-declaration" required value="1">
-                <label class="form-check-label" for="parent-declaration">As <?= htmlspecialchars($member['MForename']) ?> is under 18 (aged <?= htmlspecialchars($age) ?>), I <strong><?= htmlspecialchars($parent['Forename']) . '&nbsp;' . htmlspecialchars($parent['Surname']) ?></strong>, also agree to this declaration, <?= $today->format("j F Y") ?></label>
+                <label class="form-check-label" for="parent-declaration">As <?= htmlspecialchars($member['MForename']) ?> is under 18 (aged <?= htmlspecialchars($age) ?>), I <strong><?= htmlspecialchars(\SCDS\Formatting\Names::format($parent['Forename'], $parent['Surname'])) ?></strong>, also agree to this declaration, <?= $today->format("j F Y") ?></label>
                 <div class="invalid-feedback">
                   You (<?= htmlspecialchars($parent['Forename']) ?>) must agree to this declaration to proceed.
                 </div>

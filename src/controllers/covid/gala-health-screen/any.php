@@ -86,14 +86,14 @@ include BASE_PATH . 'views/header.php';
                     <li class="list-group-item">
                       <div class="row align-items-center">
                         <div class="col-sm">
-                          <h3 class="h6 mb-1"><strong><?= htmlspecialchars($member['MForename'] . ' ' . $member['MSurname']) ?></strong></h3>
+                          <h3 class="h6 mb-1"><strong><?= htmlspecialchars(\SCDS\Formatting\Names::format($member['MForename'], $member['MSurname'])) ?></strong></h3>
                           <p class="mb-0">
                             <?php if ($latest) {
                               $time = new DateTime($latest['DateTime'], new DateTimeZone('UTC'));
                               $time->setTimezone(new DateTimeZone('Europe/London'));
                             ?>
                               <?php if (bool($latest['MemberAgreement'])) { ?>
-                                <span class="text-success"><i class="fa fa-check-circle" aria-hidden="true"></i> Signed at <?= htmlspecialchars($time->format('H:i, j F Y')) ?><?php if ($latest['Guardian']) { ?> with <?= htmlspecialchars($latest['Forename'] . ' ' . $latest['Surname']) ?> as parent/guardian<?php } ?></span>
+                                <span class="text-success"><i class="fa fa-check-circle" aria-hidden="true"></i> Signed at <?= htmlspecialchars($time->format('H:i, j F Y')) ?><?php if ($latest['Guardian']) { ?> with <?= htmlspecialchars(\SCDS\Formatting\Names::format($latest['Forename'], $latest['Surname'])) ?> as parent/guardian<?php } ?></span>
                               <?php } else { ?>
                                 <span class="text-warning"><i class="fa fa-minus-circle" aria-hidden="true"></i> A new declaration form is required</span>
                               <?php } ?>

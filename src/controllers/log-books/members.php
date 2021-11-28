@@ -39,7 +39,7 @@ include BASE_PATH . 'views/header.php';
           <?php do { ?>
             <a href="<?= htmlspecialchars(autoUrl("log-books/members/" . $member['id'])) ?>" class="list-group-item list-group-item-action">
               <p class="mb-0">
-                <strong><?= htmlspecialchars($member['fn'] . ' ' . $member['sn']) ?>'s log book</strong>
+                <strong><?= htmlspecialchars(\SCDS\Formatting\Names::format($member['fn'], $member['sn'])) ?>'s log book</strong>
               </p>
             </a>
           <?php } while ($member = $getMembers->fetch(PDO::FETCH_ASSOC)); ?>

@@ -42,8 +42,16 @@ module.exports = (env, options) => {
   return {
     mode: options.mode,
     devtool: 'source-map',
+    // resolve: {
+    //   fallback: {
+    //     "path": require.resolve("path-browserify"),
+    //     "constants": require.resolve("constants-browserify"),
+    //     "stream": require.resolve("stream-browserify"),
+    //   }
+    // },
     entry: {
       'main': './js/javascript.js',
+      'main-react-router': './js/javascript-react-router.js',
       // 'clse': './scss/clse.scss',
       'generic': './scss/generic.scss',
       'generic-dark-mode': './scss/generic-dark-mode.scss',
@@ -112,6 +120,7 @@ module.exports = (env, options) => {
         filename: "css/[name].[contenthash].css",
         chunkFilename: "css/[id].css",
       }),
-    ]
+    ],
+    // target: "web",
   };
 };

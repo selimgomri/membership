@@ -726,7 +726,10 @@ $this->any('/', function () {
 });
 
 // Global Catch All 404
-$this->any('/*', function () {
+$this->get('/*', function () {
+  include BASE_PATH . 'views/react-base.php';
+});
 
+$this->any('/*', function () {
   include BASE_PATH . 'views/404.php';
 });

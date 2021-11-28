@@ -80,7 +80,7 @@ include BASE_PATH . 'views/header.php';
             <li class="list-group-item">
               <div class="row align-items-center">
                 <div class="col-sm">
-                  <p class="mb-0"><?= htmlspecialchars($member['MForename'] . ' ' . $member['MSurname']) ?></p>
+                  <p class="mb-0"><?= htmlspecialchars(\SCDS\Formatting\Names::format($member['MForename'], $member['MSurname'])) ?></p>
                   <p class="mb-0">
                     <?php if ($latest) {
                       $time = new DateTime($latest['DateTime'], new DateTimeZone('UTC'));
@@ -102,7 +102,7 @@ include BASE_PATH . 'views/header.php';
                 <?php if ($latest && bool($latest['MemberAgreement'])) { ?>
                   <div class="col-auto">
                     <div class="mt-3 d-sm-none"></div>
-                    <button class="btn btn-warning" data-member-name="<?= htmlspecialchars($member['MForename'] . ' ' . $member['MSurname']) ?>" data-form-submission-id="<?= htmlspecialchars($latest['ID']) ?>" data-action="void" title="Require that <?= htmlspecialchars($member['MForename']) ?> submits a new declaration form">
+                    <button class="btn btn-warning" data-member-name="<?= htmlspecialchars(\SCDS\Formatting\Names::format($member['MForename'], $member['MSurname'])) ?>" data-form-submission-id="<?= htmlspecialchars($latest['ID']) ?>" data-action="void" title="Require that <?= htmlspecialchars($member['MForename']) ?> submits a new declaration form">
                       Void form
                     </button>
                   </div>

@@ -33,6 +33,7 @@ $vars = [
   'GLOBAL_PERSONAL_KEY_ID_NUMBER' => null,
   'REQUIRE_SQUAD_REP_FOR_APPROVAL' => true,
   'HIDE_MOVE_FEE_INFO' => false,
+  'DISPLAY_NAME_FORMAT' => 'FL',
 ];
 
 $disabled = [];
@@ -279,6 +280,21 @@ include BASE_PATH . 'views/header.php';
             <div class="form-switch mb-2">
               <input class="form-check-input" type="checkbox" id="HIDE_CONTACT_TRACING_FROM_PARENTS" value="1" name="HIDE_CONTACT_TRACING_FROM_PARENTS" <?php if (!bool($vars['HIDE_CONTACT_TRACING_FROM_PARENTS'])) { ?>checked<?php } ?> <?= $disabled['HIDE_CONTACT_TRACING_FROM_PARENTS'] ?>>
               <label class="form-check-label" for="HIDE_CONTACT_TRACING_FROM_PARENTS">Show contact tracing links to all member users</label>
+            </div>
+          </div>
+
+          <p class="mb-2">
+            User and member display name settings
+          </p>
+
+          <div class="mb-3">
+            <div class="form-check">
+              <input type="radio" value="FL" id="DISPLAY_NAME_FORMAT_FL" name="DISPLAY_NAME_FORMAT" class="form-check-input" <?php if ($vars['DISPLAY_NAME_FORMAT'] == 'FL') { ?>checked<?php } ?> <?= $disabled['DISPLAY_NAME_FORMAT'] ?>>
+              <label class="form-check-label" for="DISPLAY_NAME_FORMAT_FL">First Last</label>
+            </div>
+            <div class="form-check">
+              <input type="radio" value="L,F" id="DISPLAY_NAME_FORMAT_LF" name="DISPLAY_NAME_FORMAT" class="form-check-input" <?php if ($vars['DISPLAY_NAME_FORMAT'] == 'L,F') { ?>checked<?php } ?> <?= $disabled['DISPLAY_NAME_FORMAT'] ?>>
+              <label class="form-check-label" for="DISPLAY_NAME_FORMAT_LF">Last, First</label>
             </div>
           </div>
 

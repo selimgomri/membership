@@ -37,6 +37,16 @@ $this->group('/renewal', function() {
     $this->post('/edit', function($id) {
       include 'renewal/edit-post.php';
     });
+
+    $this->get('/renewal-member-list', function($id) {
+      $type = 'member-list';
+      include 'renewal/member-list.php';
+    });
+
+    $this->get('/current-members-not-in-renewal-list', function($id) {
+      $type = 'current-members-not-in-renewal-list';
+      include 'renewal/member-list.php';
+    });
   });
 });
 

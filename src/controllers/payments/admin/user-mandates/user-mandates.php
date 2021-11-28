@@ -16,7 +16,7 @@ if (!$un) {
   halt(404);
 }
 
-$pagetitle = htmlspecialchars($un['Forename'] . ' ' . $un['Surname'] . "'s Direct Debit Mandate");
+$pagetitle = htmlspecialchars(\SCDS\Formatting\Names::format($un['Forename'], $un['Surname']) . "'s Direct Debit Mandate");
 
 include BASE_PATH . "views/header.php";
 include BASE_PATH . "views/paymentsMenu.php";

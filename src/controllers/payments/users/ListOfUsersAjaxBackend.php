@@ -40,7 +40,7 @@ if ($row = $getSearch->fetch(PDO::FETCH_ASSOC)) {
       $url = autoUrl("payments/history/users/" . $row['UserID'] . "");
     }
     $output .= "<tr>
-      <td><a href=\"" . $url . "\">" . htmlspecialchars($row['Forename'] . " " . $row['Surname']) . "</a></td>";
+      <td><a href=\"" . $url . "\">" . htmlspecialchars(\SCDS\Formatting\Names::format($row['Forename'], $row['Surname'])) . "</a></td>";
 			if ($row['MandateID'] == null || $row['MandateID'] == "") {
 			$output .= "<td>No Direct Debit set up</td>";
 		} else {

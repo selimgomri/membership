@@ -179,7 +179,7 @@ include BASE_PATH . "views/header.php";
 
         <ul class="mb-3">
           <?php foreach ($session->members as $member) { ?>
-            <li><?= htmlspecialchars($member->firstName . ' ' . $member->lastName) ?></li>
+            <li><?= htmlspecialchars(\SCDS\Formatting\Names::format($member->firstName, $member->lastName)) ?></li>
           <?php } ?>
         </ul>
 

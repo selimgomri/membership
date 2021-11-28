@@ -56,7 +56,7 @@ include BASE_PATH . 'views/header.php';
           Select a year
         </h1>
         <p class="lead mb-0">
-          For <?= htmlspecialchars($info['Forename'] . ' ' . $info['Surname']) ?>'s batch
+          For <?= htmlspecialchars(\SCDS\Formatting\Names::format($info['Forename'], $info['Surname'])) ?>'s batch
         </p>
       </div>
       <div class="col-auto ms-lg-auto">

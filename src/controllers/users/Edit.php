@@ -27,7 +27,7 @@ function selected($userObject, $perm)
   }
 }
 
-$pagetitle = htmlspecialchars("Edit " . $info['Forename'] . ' ' . $info['Surname']);
+$pagetitle = htmlspecialchars("Edit " . \SCDS\Formatting\Names::format($info['Forename'], $info['Surname']));
 
 include BASE_PATH . 'views/header.php';
 

@@ -138,9 +138,9 @@ include BASE_PATH . "views/paymentsMenu.php";
 						?>
 							<?php if ($row['Status'] == "confirmed" || $row['Status'] == "paid_out" || $row['Status'] == "paid_manually" || $row['Status'] == "succeeded") {
 							?><tr class="table-success"><?php
-																			$link = "text-success";
-																		} else if ($row['Status'] == "failed" || $row['Status'] == "charged_back" || $row['Status'] == "canceled" || $row['Status'] == "requires_payment_method" || $row['Status'] == null) {
-																			?>
+																					$link = "text-success";
+																				} else if ($row['Status'] == "failed" || $row['Status'] == "charged_back" || $row['Status'] == "canceled" || $row['Status'] == "requires_payment_method" || $row['Status'] == null) {
+																					?>
 								<tr class="table-danger"><?php
 																					$link = "text-danger";
 																				} else if ($row['Status'] == "cust_not_dd") {
@@ -152,7 +152,7 @@ include BASE_PATH . "views/paymentsMenu.php";
 																				} ?>
 								<td>
 									<?php if ($row['Forename'] != null && $row['Surname'] != null) { ?>
-										<?= htmlspecialchars($row['Forename'] . " " . $row['Surname']) ?><br>
+										<?= htmlspecialchars(\SCDS\Formatting\Names::format($row['Forename'], $row['Surname'])) ?><br>
 										<small><strong>
 												<a target="_blank" href="<?= autoUrl("notify/newemail/individual/" . $row['UserID']) ?>">
 													Contact Parent
@@ -166,7 +166,7 @@ include BASE_PATH . "views/paymentsMenu.php";
 										<?php if ($row['MForename'] == null || $row['MSurname'] == null || $row['MForename'] == "" || $row['MSurname'] == "") { ?>
 											<li><?= $swimmer_name ?></li>
 										<?php } else { ?>
-											<li><?= htmlspecialchars($row['MForename'] . " " . $row['MSurname']) ?></li>
+											<li><?= htmlspecialchars(\SCDS\Formatting\Names::format($row['MForename'], $row['MSurname'])) ?></li>
 										<?php } ?>
 										<li><em><?= htmlspecialchars($row['Description']) ?></em></li>
 									</ul>

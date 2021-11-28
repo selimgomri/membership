@@ -33,6 +33,16 @@ class Person
    */
   public function getFullName()
   {
+    return \SCDS\Formatting\Names::format($this->forename, $this->surname);
+  }
+
+  /**
+   * Get the person's full name without optional formatting
+   * 
+   * @return string full name
+   */
+  public function getFullNameUnformatted()
+  {
     return $this->forename . ' ' . $this->surname;
   }
 

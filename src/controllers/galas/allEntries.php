@@ -20,14 +20,16 @@ if (isset($_GET['sex'])) {
   $sex = $_GET['sex'];
 }
 
+$date = new DateTime('now', new DateTimeZone('Europe/London'));
+
 $galas = null;
 if ($galaIDParam == 0) {
-  $galas = $db->prepare("SELECT GalaID, GalaName FROM `galas` WHERE Tenant = ? AND GalaDate >= CURDATE() ORDER BY `galas`.`GalaDate` DESC");
+  $galas = $db->prepare("SELECT GalaID, GalaName FROM `galas` WHERE Tenant = ? AND GalaDate >= ? ORDER BY `galas`.`GalaDate` DESC");
   $galas->execute([
-    $tenant->getId()
+    $tenant->getId(),
+    $date->format('Y-m-d')
   ]);
 } else {
-  $date = new DateTime('now', new DateTimeZone('Europe/london'));
   $galas = $db->prepare("SELECT GalaID, GalaName FROM `galas` WHERE Tenant = ? AND (GalaDate >= ? OR GalaID = ?) ORDER BY `galas`.`GalaDate` DESC");
   $galas->execute([
     $tenant->getId(),

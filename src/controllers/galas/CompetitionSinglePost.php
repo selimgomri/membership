@@ -2,6 +2,7 @@
 
 $db = app()->db;
 $tenant = app()->tenant;
+use Respect\Validation\Validator as v;
 
 // Verify comp
 $galaCount = $db->prepare("SELECT COUNT(*) FROM galas WHERE Tenant = ? AND GalaID = ?");
@@ -30,8 +31,9 @@ if (!empty($_POST['length'])) {
 if (!empty($_POST['venue'])) {
   $galaVenue = trim($_POST['venue']);
 }
-if (!empty($_POST['closingDate'])) {
-  $closingDate = $_POST['closingDate'];
+if (!empty($_POST['closingDate']) && !empty($_POST['closingTime']) && v::date()->validate($_POST['closingDate']) && v::time('H:i')->validate($_POST['closingTime'])) {
+  $date = DateTime::createFromFormat('Y-m-d H:i', $_POST['closingDate'] . ' ' . $_POST['closingTime'], new DateTimeZone('Europe/London'));
+  $closingDate = $date->format('Y-m-d H:i:s');
 }
 if (!empty($_POST['galaDate'])) {
   $galaDate = $_POST['galaDate'];

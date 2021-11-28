@@ -145,7 +145,7 @@ include BASE_PATH . 'views/header.php';
                   <dd class="col-sm-9">
                     <ul class="list-unstyled mb-0">
                       <?php for ($y = 0; $y < sizeof($coaches); $y++) { ?>
-                        <li><strong><?= htmlspecialchars($coaches[$y]['fn'] . ' ' . $coaches[$y]['sn']) ?></strong>, <?= htmlspecialchars(coachTypeDescription($coaches[$y]['code'])) ?></li>
+                        <li><strong><?= htmlspecialchars(\SCDS\Formatting\Names::format($coaches[$y]['fn'], $coaches[$y]['sn'])) ?></strong>, <?= htmlspecialchars(coachTypeDescription($coaches[$y]['code'])) ?></li>
                       <?php } ?>
                       <?php if (sizeof($coaches) == 0) { ?>
                         <li>None assigned</li>
@@ -188,7 +188,7 @@ include BASE_PATH . 'views/header.php';
                       ?>
                         <a href="<?= htmlspecialchars(autoUrl('members/' . $bookedMember['id'])) ?>" class="list-group-item list-group-item-action">
                           <span class="mb-0 d-block">
-                            <strong><?= htmlspecialchars($bookedMember['fn'] . ' ' . $bookedMember['sn']) ?></strong>
+                            <strong><?= htmlspecialchars(\SCDS\Formatting\Names::format($bookedMember['fn'], $bookedMember['sn'])) ?></strong>
                           </span>
                           <span class="mb-0 d-block">
                             <em>Booked at <?= htmlspecialchars($bookedAt->format('H:i, j F Y')) ?></em>

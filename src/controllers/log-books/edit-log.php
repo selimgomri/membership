@@ -22,7 +22,7 @@ if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['LogBooks-MemberLoggedIn
   halt(404);
 }
 
-$pagetitle = htmlspecialchars("Edit log entry - " . $info['fn'] . ' ' . $info['sn']);
+$pagetitle = htmlspecialchars("Edit log entry - " . \SCDS\Formatting\Names::format($info['fn'], $info['sn']));
 
 $title = $entry = $date = $time = "";
 $contentType = "text/plain";
@@ -53,22 +53,22 @@ include BASE_PATH . 'views/header.php';
     <div class="container-xl">
 
       <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['LogBooks-MemberLoggedIn']) && bool($_SESSION['TENANT-' . app()->tenant->getId()]['LogBooks-MemberLoggedIn'])) { ?>
-      <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="<?=htmlspecialchars(autoUrl("log-books"))?>">Log book</a></li>
-        <li class="breadcrumb-item"><a href="<?=htmlspecialchars(autoUrl("log-books/logs/" . $id))?>">#<?=htmlspecialchars($id)?></a></li>
-        <li class="breadcrumb-item active" aria-current="page">Edit</li>
-        </ol>
-      </nav>
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl("log-books")) ?>">Log book</a></li>
+            <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl("log-books/logs/" . $id)) ?>">#<?= htmlspecialchars($id) ?></a></li>
+            <li class="breadcrumb-item active" aria-current="page">Edit</li>
+          </ol>
+        </nav>
       <?php } else { ?>
-      <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="<?=htmlspecialchars(autoUrl("log-books"))?>">Members</a></li>
-          <li class="breadcrumb-item"><a href="<?=htmlspecialchars(autoUrl("log-books/members/" . $info['MemberID']))?>"><?=htmlspecialchars(mb_substr($info['fn'], 0, 1, 'utf-8') . mb_substr($info['sn'], 0, 1, 'utf-8'))?></a></li>
-          <li class="breadcrumb-item"><a href="<?=htmlspecialchars(autoUrl("log-books/logs/" . $id))?>">#<?=htmlspecialchars($id)?></a></li>
-          <li class="breadcrumb-item active" aria-current="page">Edit</li>
-        </ol>
-      </nav>
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl("log-books")) ?>">Members</a></li>
+            <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl("log-books/members/" . $info['MemberID'])) ?>"><?= htmlspecialchars(mb_substr($info['fn'], 0, 1, 'utf-8') . mb_substr($info['sn'], 0, 1, 'utf-8')) ?></a></li>
+            <li class="breadcrumb-item"><a href="<?= htmlspecialchars(autoUrl("log-books/logs/" . $id)) ?>">#<?= htmlspecialchars($id) ?></a></li>
+            <li class="breadcrumb-item active" aria-current="page">Edit</li>
+          </ol>
+        </nav>
       <?php } ?>
 
       <div class="row align-items-center">
@@ -77,7 +77,7 @@ include BASE_PATH . 'views/header.php';
             Edit log book entry
           </h1>
           <p class="lead mb-0">
-            <?=htmlspecialchars($info['fn'] . ' ' . $info['sn'])?>'s log book
+            <?= htmlspecialchars(\SCDS\Formatting\Names::format($info['fn'], $info['sn'])) ?>'s log book
           </p>
           <div class="mb-3 d-lg-none"></div>
         </div>
@@ -96,23 +96,25 @@ include BASE_PATH . 'views/header.php';
       <div class="col-lg-8">
 
         <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['EditLogErrorMessage'])) { ?>
-        <div class="alert alert-danger">
-        <?=$_SESSION['TENANT-' . app()->tenant->getId()]['EditLogErrorMessage']?>
-        </div>
-        <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['EditLogErrorMessage']); } ?>
+          <div class="alert alert-danger">
+            <?= $_SESSION['TENANT-' . app()->tenant->getId()]['EditLogErrorMessage'] ?>
+          </div>
+        <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['EditLogErrorMessage']);
+        } ?>
 
         <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['EditLogSuccessMessage']) && bool($_SESSION['TENANT-' . app()->tenant->getId()]['EditLogSuccessMessage'])) { ?>
-        <div class="alert alert-success">
-          <p class="mb-0">
-            <strong>Changes saved successfully</strong>
-          </p>
-        </div>
-        <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['EditLogSuccessMessage']); } ?>
+          <div class="alert alert-success">
+            <p class="mb-0">
+              <strong>Changes saved successfully</strong>
+            </p>
+          </div>
+        <?php unset($_SESSION['TENANT-' . app()->tenant->getId()]['EditLogSuccessMessage']);
+        } ?>
 
         <h2>Log entry</h2>
         <div class="mb-3">
           <label class="form-label" for="title">Log title</label>
-          <input type="text" required class="form-control" id="title" name="title" placeholder="e.g. Swimming training" value="<?=htmlspecialchars($title)?>">
+          <input type="text" required class="form-control" id="title" name="title" placeholder="e.g. Swimming training" value="<?= htmlspecialchars($title) ?>">
           <div class="invalid-feedback">
             You must give this log entry a title.
           </div>
@@ -120,7 +122,7 @@ include BASE_PATH . 'views/header.php';
 
         <div class="mb-3">
           <label class="form-label" for="entry">Log entry</label>
-          <textarea rows="15" required class="form-control" id="entry" name="entry" placeholder="e.g.&#13;&#10;5 x 200m free&#13;&#10;10 x 50m back"><?=htmlspecialchars($entry)?></textarea>
+          <textarea rows="15" required class="form-control" id="entry" name="entry" placeholder="e.g.&#13;&#10;5 x 200m free&#13;&#10;10 x 50m back"><?= htmlspecialchars($entry) ?></textarea>
           <div class="invalid-feedback">
             You must fill out the log entry.
           </div>
@@ -135,7 +137,7 @@ include BASE_PATH . 'views/header.php';
           </p>
           <div class="mb-3">
             <label class="form-label" for="date">Date</label>
-            <input class="form-control" id="date" name="date" type="date" value="<?=htmlspecialchars($date)?>">
+            <input class="form-control" id="date" name="date" type="date" value="<?= htmlspecialchars($date) ?>">
             <div class="invalid-feedback">
               You must enter a valid date.
             </div>
@@ -143,7 +145,7 @@ include BASE_PATH . 'views/header.php';
 
           <div class="mb-3">
             <label class="form-label" for="time">Time</label>
-            <input class="form-control" id="time" name="time" type="time" value="<?=htmlspecialchars($time)?>">
+            <input class="form-control" id="time" name="time" type="time" value="<?= htmlspecialchars($time) ?>">
             <div class="invalid-feedback">
               You must enter a valid time.
             </div>
@@ -152,9 +154,9 @@ include BASE_PATH . 'views/header.php';
           <div class="mb-3 mb-0">
             <label class="form-label" for="content-type">Content type</label>
             <select required class="form-select" id="content-type" name="content-type" aria-describedby="content-type-help">
-              <option value="text/plain" <?php if ($contentType == 'text/plain') { ?>selected<?php } ?> >Plain text</option>
-              <option value="text/plain-font-monospacespace" <?php if ($contentType == 'text/plain-font-monospacespace') { ?>selected<?php } ?> >font-monospacespaced plain text</option>
-              <option value="text/markdown" <?php if ($contentType == 'text/markdown') { ?>selected<?php } ?> >Markdown</option>
+              <option value="text/plain" <?php if ($contentType == 'text/plain') { ?>selected<?php } ?>>Plain text</option>
+              <option value="text/plain-font-monospacespace" <?php if ($contentType == 'text/plain-font-monospacespace') { ?>selected<?php } ?>>font-monospacespaced plain text</option>
+              <option value="text/markdown" <?php if ($contentType == 'text/markdown') { ?>selected<?php } ?>>Markdown</option>
             </select>
             <div class="invalid-feedback">
               You must select a content type.

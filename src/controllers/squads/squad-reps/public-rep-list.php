@@ -87,14 +87,14 @@ include BASE_PATH . 'views/header.php';
           <?php foreach ($member['squads'] as $squad) { ?>
             <div class="card mb-3">
               <div class="card-header">
-                <h3 class="h6 font-weight-normal mb-0"><strong><?= htmlspecialchars($member['forename']) ?> <?= htmlspecialchars($member['surname']) ?></strong> <?= htmlspecialchars($squad['name']) ?> Squad Rep<?php if (sizeof($squad) > 1) { ?>s<?php } ?></h3>
+                <h3 class="h6 font-weight-normal mb-0"><strong><?= htmlspecialchars(\SCDS\Formatting\Names::format($member['forename'], $member['surname'])) ?></strong> <?= htmlspecialchars($squad['name']) ?> Squad Rep<?php if (sizeof($squad) > 1) { ?>s<?php } ?></h3>
               </div>
               <ul class="list-group list-group-flush">
                 <?php foreach ($squad['reps'] as $reps) { ?>
 
                   <li class="list-group-item">
                     <div>
-                      <h4 class="h6 mb-0"><?= htmlspecialchars($reps['forename'] . ' ' . $reps['surname']) ?></h4>
+                      <h4 class="h6 mb-0"><?= htmlspecialchars(\SCDS\Formatting\Names::format($reps['forename'], $reps['surname'])) ?></h4>
                     </div>
                     <?php if ($reps['contact']) { ?><div class="">
                         <hr>
@@ -132,7 +132,7 @@ include BASE_PATH . 'views/header.php';
 
                 <li class="list-group-item">
                   <div>
-                    <h4 class="h6 mb-0"><?= htmlspecialchars($reps['forename'] . ' ' . $reps['surname']) ?></h4>
+                    <h4 class="h6 mb-0"><?= htmlspecialchars(\SCDS\Formatting\Names::format($reps['forename'], $reps['surname'])) ?></h4>
                   </div>
                   <?php if ($reps['contact']) { ?><div class="">
                       <hr>

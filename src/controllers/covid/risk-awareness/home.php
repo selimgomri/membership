@@ -111,7 +111,7 @@ include BASE_PATH . 'views/header.php';
             <li class="list-group-item">
               <div class="row align-items-center">
                 <div class="col-sm">
-                  <p class="mb-0"><?= htmlspecialchars($member['MForename'] . ' ' . $member['MSurname']) ?></p>
+                  <p class="mb-0"><?= htmlspecialchars(\SCDS\Formatting\Names::format($member['MForename'], $member['MSurname'])) ?></p>
                   <p class="mb-0">
                     <?php if ($latest) {
                       $time = new DateTime($latest['DateTime'], new DateTimeZone('UTC'));

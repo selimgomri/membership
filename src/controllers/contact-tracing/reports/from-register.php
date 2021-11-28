@@ -92,7 +92,7 @@ try {
               <li class="list-group-item <?php if (!$row['tick']) { ?>bg-light text-muted<?php } ?>">
                 <div class="row">
                   <div class="col-md-6 col-lg-8">
-                    <div class=" <?php if ($row['tick']) { ?>font-weight-bold<?php } ?>"><?= htmlspecialchars($row['fn'] . ' ' . $row['sn']) ?></div>
+                    <div class=" <?php if ($row['tick']) { ?>font-weight-bold<?php } ?>"><?= htmlspecialchars(\SCDS\Formatting\Names::format($row['fn'], $row['sn'])) ?></div>
                     <?php if (!$row['tick']) { ?>
                       <div class="small">Not present at this session</div>
                     <?php } ?>

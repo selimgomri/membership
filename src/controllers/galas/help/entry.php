@@ -23,7 +23,7 @@ include BASE_PATH . 'views/header.php';
       <h1>Entering a gala</h1>
       <p class="lead">We’re happy to now be able to let you enter competitions online. The new system asks you the important information which we need to know in order to make an entry and then submits it for you.</p>
 
-      <p>Please be aware that the system does not support open water events or galas where 25m events are being competed. For these competitions your club will let you know the entry procedure.</p>
+      <p>Please be aware that the system does not support open water events. For these competitions your club will let you know the entry procedure.</p>
 
       <ul>
         <li>The name of the swimmer</li>

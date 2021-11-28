@@ -12,43 +12,42 @@ if ($_POST['response'] == "getSwimmers") {
   ]);
   $row = $swimmers->fetch(PDO::FETCH_ASSOC);
 
-  ?>
+?>
 
   <div class="">
     <?php if ($row != null) { ?>
-    <div class="card">
-      <div class="card-header">
-        List members
+      <div class="card">
+        <div class="card-header">
+          List members
+        </div>
+        <ul class="list-group list-group-flush">
+          <?php do { ?>
+            <li class="list-group-item">
+              <div class="row align-items-center">
+                <div class="col-auto">
+                  <p class="mb-0">
+                    <strong>
+                      <?= htmlspecialchars(\SCDS\Formatting\Names::format($row['MForename'], $row['MSurname'])) ?>
+                    </strong>
+                  </p>
+                  <p class="mb-0">
+                    <?= htmlspecialchars($row['SquadName']) ?>
+                  </p>
+                </div>
+                <div class="col text-end">
+                  <button type="button" id="RelationDrop-<?= $row['ID'] ?>" class="btn btn-light" value="<?= $row['ID'] ?>">
+                    Remove
+                  </button>
+                </div>
+              </div>
+            </li>
+          <?php } while ($row = $swimmers->fetch(PDO::FETCH_ASSOC)); ?>
+        </ul>
       </div>
-      <ul class="list-group list-group-flush">
-        <?php do { ?>
-        <li class="list-group-item">
-          <div class="row align-items-center">
-            <div class="col-auto">
-              <p class="mb-0">
-                <strong>
-                  <?=htmlspecialchars($row['MForename'] . " " . $row['MSurname'])?>
-                </strong>
-              </p>
-              <p class="mb-0">
-                <?=htmlspecialchars($row['SquadName'])?>
-              </p>
-            </div>
-            <div class="col text-end">
-              <button type="button" id="RelationDrop-<?=$row['ID']?>"
-                class="btn btn-light" value="<?=$row['ID']?>">
-                Remove
-              </button>
-            </div>
-          </div>
-        </li>
-        <?php } while ($row = $swimmers->fetch(PDO::FETCH_ASSOC)); ?>
-      </ul>
-    </div>
     <?php } else { ?>
-    <div class="alert alert-info mb-0">
-      <strong>There are no swimmers linked to this targeted list</strong>
-    </div>
+      <div class="alert alert-info mb-0">
+        <strong>There are no swimmers linked to this targeted list</strong>
+      </div>
     <?php } ?>
   </div>
 <?php
@@ -74,7 +73,7 @@ if ($_POST['response'] == "getSwimmers") {
       ]);
     }
     while ($row = $members->fetch(PDO::FETCH_ASSOC)) {
-      $output .= '<option value="' . htmlspecialchars($row['MemberID']) . '">' . htmlspecialchars($row['MForename'] . " " . $row['MSurname']) . '</option>';
+      $output .= '<option value="' . htmlspecialchars($row['MemberID']) . '">' . htmlspecialchars(\SCDS\Formatting\Names::format($row['MForename'], $row['MSurname'])) . '</option>';
       $status = true;
     }
   } catch (Exception $e) {
@@ -99,10 +98,10 @@ if ($_POST['response'] == "getSwimmers") {
         'searchTerm' => $searchTerm,
         'list' => $id
       ]);
-      
+
       $usersOutput = '<option value="null" selected>Select a user</option>';
       while ($row = $members->fetch(PDO::FETCH_ASSOC)) {
-        $usersOutput .= '<option value="' . htmlspecialchars($row['UserID']) . '">' . htmlspecialchars($row['Forename'] . " " . $row['Surname']) . '</option>';
+        $usersOutput .= '<option value="' . htmlspecialchars($row['UserID']) . '">' . htmlspecialchars(\SCDS\Formatting\Names::format($row['Forename'], $row['Surname'])) . '</option>';
         $status = true;
       }
       if ($status) {
@@ -116,7 +115,7 @@ if ($_POST['response'] == "getSwimmers") {
   echo json_encode([
     'userSelectContent' => $output,
     'status' => $status
-  ]); 
+  ]);
 } else if ($_POST['response'] == "insert") {
   $swimmer = $_POST['swimmerInsert'];
   if ($swimmer != null && $swimmer != "") {
@@ -150,7 +149,6 @@ if ($_POST['response'] == "getSwimmers") {
         $swimmer,
         'Member'
       ]);
-
     } catch (Exception $e) {
       halt(403);
     }
@@ -180,14 +178,13 @@ if ($_POST['response'] == "getSwimmers") {
       if ($getCount->fetchColumn() > 0) {
         throw new Exception();
       }
-    
+
       $insert = $db->prepare("INSERT INTO `targetedListMembers` (`ListID`, `ReferenceID`, `ReferenceType`) VALUES (?, ?, ?)");
       $insert->execute([
         $id,
         $swimmer,
         'User'
       ]);
-      
     } catch (Exception $e) {
       halt(403);
     }

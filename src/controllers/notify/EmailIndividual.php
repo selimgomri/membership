@@ -95,7 +95,7 @@ include BASE_PATH . "views/notifyMenu.php";
     <?php } ?>
 
     <h1>Contact a user</h1>
-    <p class="lead mb-0">Send an email<?php if ($mySwimmer) { ?> to <?= htmlspecialchars($mySwimmer['fn'] . ' ' . $mySwimmer['sn']) ?>'s account<?php } ?></p>
+    <p class="lead mb-0">Send an email<?php if ($mySwimmer) { ?> to <?= htmlspecialchars(\SCDS\Formatting\Names::format($mySwimmer['fn'], $mySwimmer['sn'])) ?>'s account<?php } ?></p>
 
   </div>
 </div>

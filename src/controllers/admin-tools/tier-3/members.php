@@ -61,7 +61,7 @@ include BASE_PATH . 'views/header.php';
         <ul class="list-group">
           <?php do { ?>
             <li class="list-group-item">
-              <?= htmlspecialchars($member['MForename'] . ' ' . $member['MSurname']) ?>
+              <?= htmlspecialchars(\SCDS\Formatting\Names::format($member['MForename'], $member['MSurname'])) ?>
             </li>
           <?php } while ($member = $getMembers->fetch(PDO::FETCH_ASSOC)); ?>
         </ul>

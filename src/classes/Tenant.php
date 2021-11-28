@@ -155,6 +155,7 @@ class Tenant
       'ENABLE_BILLING_SYSTEM' => true,
       'NGB_NAME' => 'Swim England',
       'REQUIRE_SQUAD_REP_FOR_APPROVAL' => true,
+      'DISPLAY_NAME_FORMAT' => 'FL',
     ];
 
     foreach ($keys as $key => $value) {

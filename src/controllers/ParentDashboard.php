@@ -269,7 +269,7 @@ include BASE_PATH . "views/header.php";
             <a href="<?= autoUrl("swimmers/" . $s->getId()) ?>">
               <span class="mb-3">
                 <span class="title mb-0">
-                  <?= htmlspecialchars($s->getForename() . ' ' . $s->getSurname()) ?>
+                  <?= htmlspecialchars($s->getFullName()) ?>
                 </span>
                 <span>
                   <?= $s->getAge() ?> years old
@@ -299,7 +299,7 @@ include BASE_PATH . "views/header.php";
             <a href="<?= autoUrl("galas/entries/" . $g['EntryID']) ?>">
               <span class="mb-3">
                 <span class="title mb-0">
-                  <?= htmlspecialchars($g['MForename'] . ' ' . $g['MSurname']) ?>
+                  <?= htmlspecialchars(\SCDS\Formatting\Names::format($g['MForename'], $g['MSurname'])) ?>
                 </span>
                 <span>
                   &pound;<?= htmlspecialchars((string) (\Brick\Math\BigDecimal::of((string) $g['FeeToPay']))->toScale(2)) ?>

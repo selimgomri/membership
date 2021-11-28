@@ -38,7 +38,7 @@ include BASE_PATH . 'views/header.php';
 
       <ul>
         <?php while ($s = $getUserSwimmers->fetch(PDO::FETCH_ASSOC)) { ?>
-          <li><?= htmlspecialchars($s['fn'] . ' ' . $s['sn']) ?></li>
+          <li><?= htmlspecialchars(\SCDS\Formatting\Names::format($s['fn'], $s['sn'])) ?></li>
         <?php } ?>
       </ul>
 

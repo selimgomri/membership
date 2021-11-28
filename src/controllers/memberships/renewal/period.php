@@ -92,9 +92,16 @@ include BASE_PATH . "views/header.php";
           </div>
         <?php } else { ?>
 
+          <!-- <h2>View member renewal status</h2>
+
+          <div class="d-grid gap-2 mb-3">
+            <a class="btn btn-primary" href="<?= htmlspecialchars(autoUrl("memberships/renewal/$id/renewal-member-list")) ?>">Members in this renewal</a>
+            <a class="btn btn-primary" href="<?= htmlspecialchars(autoUrl("memberships/renewal/$id/current-members-not-in-renewal-list")) ?>">Current club members not in this renewal</a>
+          </div> -->
+
           <h2>View associated onboarding sessions</h2>
 
-          <div class="d-grid gap-2">
+          <div class="d-grid gap-2 mb-3">
             <a class="btn btn-primary" href="<?= htmlspecialchars(autoUrl("onboarding/all?renewal=" . urlencode($id))) ?>">All</a>
             <a class="btn btn-primary" href="<?= htmlspecialchars(autoUrl("onboarding/all?renewal=" . urlencode($id) . "&type=not_ready")) ?>">Not Ready</a>
             <a class="btn btn-primary" href="<?= htmlspecialchars(autoUrl("onboarding/all?renewal=" . urlencode($id) . "&type=pending")) ?>">Pending</a>
@@ -104,9 +111,14 @@ include BASE_PATH . "views/header.php";
 
         <?php } ?>
 
-        <p>
-          Note: Our new onboarding and renewal systems have soft-launched and are working, but we still have a few things to finish off.
-        </p>
+        <div class="alert alert-info">
+          <p class="mb-0">
+            <strong>Note</strong>
+          </p>
+          <p class="mb-0">
+            Our new onboarding and renewal systems have soft-launched and are working, but we still have a few things to finish off.
+          </p>
+        </div>
 
         <p>
           <?= htmlspecialchars($complete) ?> renewals completed of <?= htmlspecialchars($complete + $notComplete) ?> total.

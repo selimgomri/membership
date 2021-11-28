@@ -39,7 +39,7 @@ $member = $getMembers->fetch(PDO::FETCH_OBJ);
 $getCurrentMemberships = $db->prepare("SELECT `Name` `name`, `Description` `description`, `Type` `type`, `memberships`.`Amount` `paid`, `clubMembershipClasses`.`Fees` `expectPaid` FROM `memberships` INNER JOIN clubMembershipClasses ON memberships.Membership = clubMembershipClasses.ID WHERE `Member` = ? AND `Year` = ?");
 $hasMembership = $db->prepare("SELECT COUNT(*) FROM memberships WHERE `Member` = ? AND `Year` = ? AND `Membership` = ?");
 
-$pagetitle = "New batch for " . htmlspecialchars($info['Forename'] . ' ' . $info['Surname']) . " - Membership Centre";
+$pagetitle = "New batch for " . htmlspecialchars(\SCDS\Formatting\Names::format($info['Forename'], $info['Surname'])) . " - Membership Centre";
 include BASE_PATH . "views/header.php";
 
 ?>
@@ -59,7 +59,7 @@ include BASE_PATH . "views/header.php";
     <div class="row align-items-center">
       <div class="col-lg-8">
         <h1>
-          New batch for <?= htmlspecialchars($info['Forename'] . ' ' . $info['Surname']) ?>
+          New batch for <?= htmlspecialchars(\SCDS\Formatting\Names::format($info['Forename'], $info['Surname'])) ?>
         </h1>
         <p class="lead mb-0">
           TEST

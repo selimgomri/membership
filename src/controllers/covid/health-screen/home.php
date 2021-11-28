@@ -109,7 +109,7 @@ include BASE_PATH . 'views/header.php';
             <li class="list-group-item">
               <div class="row align-items-center">
                 <div class="col-sm">
-                  <h3 class="h6 mb-1"><?= htmlspecialchars($member['MForename'] . ' ' . $member['MSurname']) ?><?php if ($latest && bool($latest['OfficerApproval'])) { ?> <span class="badge bg-success"><i class="fa fa-check-circle" aria-hidden="true"></i> Approved by club</span><?php } ?></h3>
+                  <h3 class="h6 mb-1"><?= htmlspecialchars(\SCDS\Formatting\Names::format($member['MForename'], $member['MSurname'])) ?><?php if ($latest && bool($latest['OfficerApproval'])) { ?> <span class="badge bg-success"><i class="fa fa-check-circle" aria-hidden="true"></i> Approved by club</span><?php } ?></h3>
                   <p class="mb-0">
                     <?php if ($latest) {
                       $time = new DateTime($latest['DateTime'], new DateTimeZone('UTC'));

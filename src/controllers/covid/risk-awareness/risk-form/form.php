@@ -35,7 +35,7 @@ $age = new DateTime($member['DateOfBirth'], new DateTimeZone('Europe/London'));
 $age = $age->diff($today);
 $age = (int) $age->format('%y');
 
-$pagetitle = htmlspecialchars($member['MForename'] . ' ' . $member['MSurname']) . ' - COVID Risk Awareness';
+$pagetitle = htmlspecialchars(\SCDS\Formatting\Names::format($member['MForename'], $member['MSurname'])) . ' - COVID Risk Awareness';
 
 include BASE_PATH . 'views/header.php';
 
@@ -55,7 +55,7 @@ include BASE_PATH . 'views/header.php';
     <div class="row align-items-center">
       <div class="col-lg-8">
         <h1>
-          <?php if (mb_strtoupper(app()->tenant->getKey('ASA_CLUB_CODE')) == 'UOSZ') { ?><?= htmlspecialchars(UOS_RETURN_FORM_NAME) ?><?php } else { ?>COVID-19 Risk Awareness Declaration<?php } ?> <small class="text-muted"><?= htmlspecialchars($member['MForename']) . '&nbsp;' . htmlspecialchars($member['MSurname']) ?></small>
+          <?php if (mb_strtoupper(app()->tenant->getKey('ASA_CLUB_CODE')) == 'UOSZ') { ?><?= htmlspecialchars(UOS_RETURN_FORM_NAME) ?><?php } else { ?>COVID-19 Risk Awareness Declaration<?php } ?> <small class="text-muted"><?= htmlspecialchars(\SCDS\Formatting\Names::format($member['MForename'], $member['MSurname'])) ?></small>
         </h1>
         <p class="lead mb-0">
           Confirm your awareness of risk before returning to training.
@@ -90,7 +90,7 @@ include BASE_PATH . 'views/header.php';
         } ?>
 
         <p>
-          [I / my child] <?= htmlspecialchars($member['MForename']) . '&nbsp;' . htmlspecialchars($member['MSurname']) ?> [am / is] returning to training having completed and signed the Health Survey as requested by <?= htmlspecialchars($tenant->getName()) ?>.
+          [I / my child] <?= htmlspecialchars(\SCDS\Formatting\Names::format($member['MForename'], $member['MSurname'])) ?> [am / is] returning to training having completed and signed the Health Survey as requested by <?= htmlspecialchars($tenant->getName()) ?>.
         </p>
 
         <p>
@@ -129,7 +129,7 @@ include BASE_PATH . 'views/header.php';
 
         <div class="form-check mb-3">
           <input class="form-check-input" type="checkbox" id="member-declaration" name="member-declaration" required value="1">
-          <label class="form-check-label" for="member-declaration">I <strong><?= htmlspecialchars($member['MForename']) . '&nbsp;' . htmlspecialchars($member['MSurname']) ?></strong>, agree to this declaration<br><span class="badge bg-light">Signed <?= $today->format("j F Y") ?></span></label>
+          <label class="form-check-label" for="member-declaration">I <strong><?= htmlspecialchars(\SCDS\Formatting\Names::format($member['MForename'], $member['MSurname'])) ?></strong>, agree to this declaration<br><span class="badge bg-light">Signed <?= $today->format("j F Y") ?></span></label>
           <div class="invalid-feedback">
             You (<?= htmlspecialchars($member['MForename']) ?>) must agree to this declaration to proceed.
           </div>
@@ -138,7 +138,7 @@ include BASE_PATH . 'views/header.php';
         <?php if (app()->tenant->getKey('ASA_CLUB_CODE') == 'UOSZ') { ?>
           <div class="form-check mb-3">
             <input class="form-check-input" type="checkbox" id="uosswpc-member-declaration" name="uosswpc-member-declaration" required value="1">
-            <label class="form-check-label" for="uosswpc-member-declaration">I <strong><?= htmlspecialchars($member['MForename']) . '&nbsp;' . htmlspecialchars($member['MSurname']) ?></strong>, accept that I am swimming at my own risk and won't hold the club accountable if I catch coronavirus (COVID-19).<br><span class="badge bg-light">Signed <?= $today->format("j F Y") ?></span></label>
+            <label class="form-check-label" for="uosswpc-member-declaration">I <strong><?= htmlspecialchars(\SCDS\Formatting\Names::format($member['MForename'], $member['MSurname'])) ?></strong>, accept that I am swimming at my own risk and won't hold the club accountable if I catch coronavirus (COVID-19).<br><span class="badge bg-light">Signed <?= $today->format("j F Y") ?></span></label>
             <div class="invalid-feedback">
               You (<?= htmlspecialchars($member['MForename']) ?>) must agree to this special UoSSWPC declaration to proceed.
             </div>
@@ -148,7 +148,7 @@ include BASE_PATH . 'views/header.php';
         <?php if ($parent && $age < 18) { ?>
           <div class="form-check mb-3">
             <input class="form-check-input" type="checkbox" id="parent-declaration" name="parent-declaration" required value="1">
-            <label class="form-check-label" for="parent-declaration">As <?= htmlspecialchars($member['MForename']) ?> is under 18 (aged <?= htmlspecialchars($age) ?>), I <strong><?= htmlspecialchars($parent['Forename']) . '&nbsp;' . htmlspecialchars($parent['Surname']) ?></strong>, also agree to this declaration, <?= $today->format("j F Y") ?></label>
+            <label class="form-check-label" for="parent-declaration">As <?= htmlspecialchars($member['MForename']) ?> is under 18 (aged <?= htmlspecialchars($age) ?>), I <strong><?= htmlspecialchars(\SCDS\Formatting\Names::format($parent['Forename'], $parent['Surname'])) ?></strong>, also agree to this declaration, <?= $today->format("j F Y") ?></label>
             <div class="invalid-feedback">
               You (<?= htmlspecialchars($parent['Forename']) ?>) must agree to this declaration to proceed.
             </div>
