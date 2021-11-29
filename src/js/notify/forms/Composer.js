@@ -17,7 +17,7 @@ import Dropzone from "../components/Dropzone";
 import Accordion from "react-bootstrap/Accordion"
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 // import exports from "enhanced-resolve";
 
 export class Composer extends React.Component {
@@ -50,6 +50,7 @@ export class Composer extends React.Component {
       showTo: false,
       showDemoSubmission: false,
       showUserSettingsDialog: false,
+      showConfirmSendDialog: false,
 
       // Options for this
       possibleTos: [],
@@ -74,6 +75,10 @@ export class Composer extends React.Component {
       canSubmitAttachments: true,
 
       validated: false,
+      emailSent: false,
+
+      disableSendConfirm: false,
+      disableSettingsSave: false,
 
       settings: {
         replyEmailAddress: '',
@@ -164,35 +169,56 @@ export class Composer extends React.Component {
     // console.log(event);
 
     const form = event.currentTarget;
-    if (form.checkValidity() === false || this.getGroupList().length === 0) {
-      event.preventDefault();
+    if (form.checkValidity() === false || this.getGroupList().length === 0 || !this.state.canSubmitAttachments || this.state.editorValue.length == 0) {
       event.stopPropagation();
     } else {
-      this.handleDemoOpen(event);
-      const list = this.getGroupList();
-      let recipients = {};
-
-      list.forEach(element => {
-        if (element.state) {
-          recipients[element.key] = element;
-        }
+      this.setState({
+        showConfirmSendDialog: true,
       });
-
-      axios.post('/notify/send-email', {
-        state: this.state,
-        recipients,
-      })
-        .then(response => {
-          let data = response.data;
-          console.info(data);
-        })
-        .catch(error => {
-          console.warn(error);
-        });
     }
 
     this.setState({
       validated: true,
+    });
+  }
+
+  handleConfirmSend = (event) => {
+    this.setState({
+      disableSendConfirm: true,
+    })
+
+    const list = this.getGroupList();
+    let recipients = {};
+
+    list.forEach(element => {
+      if (element.state) {
+        recipients[element.key] = element;
+      }
+    });
+
+    axios.post('/notify/send-email', {
+      state: this.state,
+      recipients,
+    })
+      .then(response => {
+        let data = response.data;
+        console.info(data);
+        this.setState({
+          showConfirmSendDialog: false,
+          emailSent: true,
+        });
+      })
+      .catch(error => {
+        console.warn(error);
+        this.setState({
+          disableSendConfirm: false,
+        })
+      });
+  }
+
+  handleConfirmSendClose = (event) => {
+    this.setState({
+      showConfirmSendDialog: false,
     });
   }
 
@@ -322,6 +348,10 @@ export class Composer extends React.Component {
   }
 
   handleSettingsSave = (event) => {
+    this.setState({
+      disableSettingsSave: true,
+    });
+
     axios.post('/notify/save-user-settings', {
       ...this.state.settings
     })
@@ -330,11 +360,15 @@ export class Composer extends React.Component {
         this.setState({
           settings: data.settings,
           possibleReplyTos: data.possibleReplyTos,
-          showUserSettingsDialog: false
+          showUserSettingsDialog: false,
+          disableSettingsSave: false,
         });
       })
       .catch(function (error) {
         console.log(error);
+        this.setState({
+          disableSettingsSave: false,
+        });
       })
   }
 
@@ -448,7 +482,14 @@ export class Composer extends React.Component {
     }
 
     return (
+
       <div>
+
+        {
+          this.state.emailSent &&
+          <Navigate to="/notify/new/success" />
+        }
+
         <Header title="Send a new email" subtitle="Send emails to targeted groups" breadcrumbs={breadcrumbs} />
 
         {
@@ -581,7 +622,12 @@ export class Composer extends React.Component {
                   </div>
 
                   <p>
-                    <Button type="button" variant="primary" onClick={this.handleSettingsOpen}><i className="fa fa-cog" aria-hidden="true"></i> Change Settings</Button>
+                    <Button type="button" variant="primary" onClick={this.handleSettingsOpen}>
+                      <i className="fa fa-cog" aria-hidden="true"></i> Change Settings
+                    </Button>{' '}
+                    <Button type="button" variant="info" onClick={this.handleDemoOpen}>
+                      Developers: React State
+                    </Button>
                   </p>
                 </Tab>
               </Tabs>
@@ -662,29 +708,11 @@ export class Composer extends React.Component {
               </Modal.Footer>
             </Modal>
 
-            <Modal show={this.state.showDemoSubmission} onHide={this.handleDemoClose} centered fullscreen>
+            <Modal show={this.state.showDemoSubmission} onHide={this.handleDemoClose} centered>
               <Modal.Header closeButton>
                 <Modal.Title>Submission Demo</Modal.Title>
               </Modal.Header>
               <Modal.Body>
-
-                <h2>The new Notify Composer</h2>
-
-                <p>
-                  Thank you for taking a look at the new Notify Composer. This new version will replace the old one soon, but we want your comments on the layout and design.
-                </p>
-
-                <p>
-                  This page will not send your email. Please use the old Notify Composer for now.
-                </p>
-
-                <p>
-                  Please send any feedback to <a href="mailto:support@myswimmingclub.uk">support@myswimmingclub.uk</a>.
-                </p>
-
-                <p>
-                  <Link to="/notify/new/react" reloadDocument>Try the new Notify Composer again</Link>.
-                </p>
 
                 <h2>Email preview</h2>
 
@@ -692,13 +720,34 @@ export class Composer extends React.Component {
                   {this.renderPreview()}
                 </div>
 
-                <h2>For Developers: React State</h2>
+                <h2>For Developers: React Component State</h2>
 
                 <pre>{JSON.stringify(this.state, undefined, 2)}</pre>
               </Modal.Body>
               <Modal.Footer>
                 <Button variant="primary" onClick={this.handleDemoClose}>
                   Close
+                </Button>
+              </Modal.Footer>
+            </Modal>
+
+            <Modal show={this.state.showConfirmSendDialog} onHide={this.handleConfirmSendClose} centered>
+              <Modal.Header closeButton>
+                <Modal.Title>Confirm send?</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+
+                <p className="mb-0">
+                  Are you sure you want to send your email? Emails can't be unsent.
+                </p>
+
+              </Modal.Body>
+              <Modal.Footer>
+                <Button variant="dark" onClick={this.handleConfirmSendClose}>
+                  Cancel
+                </Button>
+                <Button variant="primary" onClick={this.handleConfirmSend} disabled={this.state.disableSendConfirm}>
+                  Confirm
                 </Button>
               </Modal.Footer>
             </Modal>
@@ -716,11 +765,11 @@ export class Composer extends React.Component {
                 </Form>
               </Modal.Body>
               <Modal.Footer>
-                <Button variant="primary" type="submit" onClick={this.handleSettingsSave}>
-                  Save
-                </Button>
                 <Button variant="dark" onClick={this.handleSettingsClose}>
                   Close
+                </Button>
+                <Button variant="primary" type="submit" onClick={this.handleSettingsSave} disabled={this.state.disableSettingsSave}>
+                  Save
                 </Button>
               </Modal.Footer>
             </Modal>
