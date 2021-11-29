@@ -100,7 +100,6 @@ try {
         $attachments[$i]['uploaded'] = true;
       } catch (League\Flysystem\FilesystemException | League\Flysystem\UnableToWriteFile $exception) {
       }
-
     }
   }
 
@@ -458,7 +457,27 @@ try {
   echo json_encode([
     'success' => true,
   ]);
-  
+
+  try {
+
+    if (!app()->user->getUserBooleanOption('BeenSentReactNotifyEmail')) {
+      $name = app()->user->getForename() . " " . app()->user->getSurname();
+      $email = app()->user->getEmail();
+      $subject = "Thank you for trying the new Notify Composer";
+
+      $message = "<p>Hello " . htmlspecialchars(app()->user->getForename()) . ",</p>";
+      $message .= "<p>We would love to get your feedback on the new Notify Composer.</p>";
+      $message .= "<p>Please send feedback on the new Notify Composer to <a href=\"mailto:support@myswimmingclub.uk\">support@myswimmingclub.uk</a>. It is your chance to ensure any changes to the the new version, that you think are required, are made before it replaces the existing editor.</p>";
+      $message .= "<p>Thank you.</p>";
+
+      $message .= "<p><em>PS: We won't send you this email again.</em></p>";
+
+      notifySend(null, $subject, $message, $name, $email, ['Name' => 'SCDS User Research', 'ReplyTo' => ['Name' => 'SCDS Support', 'Email' => 'support@myswimmingclub.uk']]);
+
+      app()->user->setUserOption('BeenSentReactNotifyEmail', true);
+    }
+  } catch (Exception $e) {
+  }
 } catch (Exception $e) {
   $db->rollback();
 
@@ -467,5 +486,5 @@ try {
   echo json_encode([
     'success' => false,
     'exception' => $e,
-  ]); 
+  ]);
 }
