@@ -1,7 +1,5 @@
 <?php
 
-$pagetitle = "React";
-
 include BASE_PATH . "views/header.php";
 
 ?>
