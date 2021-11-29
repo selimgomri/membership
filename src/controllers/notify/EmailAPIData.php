@@ -137,13 +137,14 @@ $group = [
 $possibleTos['galas'] = $group;
 
 $clubName = app()->tenant->getKey('CLUB_NAME');
+$clubEmail = app()->tenant->getKey('CLUB_EMAIL');
 $userName = app()->user->getForename() . ' ' . app()->user->getSurname();
 
-$replyAddress = getUserOption(app()->user->getId(), 'NotifyReplyAddress');
+$replyAddress = app()->user->getUserOption('NotifyReplyAddress');
 
 $possibleReplyTos = [
   [
-    'name' => 'Main club email address <enquiries@myswimmingclub.uk>',
+    'name' => 'Main club email address <' . $clubEmail . '>',
     'value' => 'toClub'
   ],
 ];
@@ -202,4 +203,7 @@ echo json_encode([
   'tinyMceCssLocation' => autoUrl('public/css/tinymce.css'),
   'uuid' => $uuid,
   'date' => $date->format('Y/m/d'),
+  'settings' => [
+    'replyEmailAddress' => (string) app()->user->getUserOption('NotifyReplyAddress'),
+  ],
 ]);
