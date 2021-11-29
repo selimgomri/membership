@@ -66,19 +66,19 @@ class Dropzone extends React.Component {
 
     this.dropzone.on("success", (file, response) => {
       // console.log(file);
-      console.log(this.dropzoneRef, this.dropzone);
       if (response.status == 200) {
-        let attachments = this.props.attachments;
-        attachments.push({
-          filename: response.name,
-          filesize: response.size,
-          mimetype: response.type,
-          s3_key: response.key,
-          url: response.url,
-        });
+        let attachments = [
+          ...this.props.attachments,
+          {
+            filename: response.name,
+            filesize: response.size,
+            mimetype: response.type,
+            s3_key: response.key,
+            url: response.url,
+          }];
         this.props.setAttachments(attachments);
       } else {
-        console.log(response);
+        console.error(response);
       }
       this.printFileDetails();
     });
@@ -86,7 +86,7 @@ class Dropzone extends React.Component {
     this.dropzone.on("removedfile", (file) => {
       // console.log(file);
 
-      let attachments = this.props.attachments;
+      let attachments = [...this.props.attachments];
       for (let i = 0; i < attachments.length; i++) {
         if (attachments[i].filename == file.name && attachments[i].mimetype == file.type) {
           attachments.splice(i, 1);
@@ -133,11 +133,7 @@ class Dropzone extends React.Component {
       }
     }
 
-    console.info(totalFileSize);
-
     var maxTotalFileSizeOK = totalFileSize <= maxTotalFileSize;
-
-    console.log(maxTotalFileSizeOK);
 
     if (maxTotalFileSizeOK && tooLarge.length == 0) {
       this.setState({ warningMessage: null });

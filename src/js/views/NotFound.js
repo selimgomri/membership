@@ -2,6 +2,15 @@ import React from "react";
 import ReactDOM from "react-dom";
 
 export class NotFound extends React.Component {
+
+  constructor() {
+    super();
+  }
+
+  componentDidMount = () => {
+    document.title = 'Error 404';
+  }
+
   render = () => {
     return (
       <div className="container-xl">

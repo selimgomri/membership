@@ -5,8 +5,7 @@ import Button from "react-bootstrap/Button";
 class ToRow extends React.Component {
 
   render() {
-    const groups = [...this.props.to.squads.groups, ...this.props.to.lists.groups, ...this.props.to.galas.groups];
-    const pills = groups.map(data => {
+    const pills = this.props.groups.map(data => {
       if (data.state) {
         return (
           <Pill key={data.key} data={data} handleClick={this.props.handleClick} />
@@ -14,18 +13,29 @@ class ToRow extends React.Component {
       }
     })
 
+    let classes = ["form-control", "h-100"];
+    if (this.props.validated && this.props.numTos === 0) {
+      classes.push("is-invalid");
+    } else if (this.props.validated) {
+      classes.push("is-valid");
+    }
+    let controlClassNames = classes.join(" ");
+
     return (
-      <div className="my-2 border rounded p-2">
-        <div className="row">
-          <div className="col-auto">
-            <Button variant="primary" onClick={this.props.handleShowTo}>
-              To
-            </Button>
-          </div>
-          <div className="col p-1 pb-0">
-            {pills}
+      <div className="my-2 form-floating">
+        <div className={controlClassNames} id="tosInput">
+          <div className="row">
+            <div className="col-auto">
+              <Button variant="primary" onClick={this.props.handleShowTo}>
+                To
+              </Button>
+            </div>
+            <div className="col p-1 pb-0">
+              {pills}
+            </div>
           </div>
         </div>
+        <label>Recipients</label>
       </div>
     )
   }

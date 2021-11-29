@@ -106,7 +106,9 @@ function notifySend($to, $subject, $emailMessage, $name = null, $emailaddress = 
   }
 
   if (getenv('SENDGRID_API_KEY') && $emailaddress != null && $name != null) {
-    if (isset(app()->tenant)) {
+    if (isset($from['ReplyTo'])) {
+      $email->setReplyTo($from['ReplyTo']['Email'], $from['ReplyTo']['Name']);
+    } else if (isset(app()->tenant)) {
       $email->setReplyTo(app()->tenant->getKey('CLUB_EMAIL'), app()->tenant->getKey('CLUB_NAME'));
     }
     $email->setFrom($from['Email'], $from['Name']);

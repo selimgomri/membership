@@ -103,6 +103,12 @@ include BASE_PATH . "views/notifyMenu.php";
   <h1>Notify Composer</h1>
   <p class="lead">Send emails to targeted groups</p>
 
+  <div class="alert alert-info">
+    <p class="mb-0">
+      <a href="<?= htmlspecialchars(autoUrl("notify/new/react")) ?>" class="alert-link">Take a look at the new notify composer</a> and give us feedback before we launch it.
+    </p>
+  </div>
+
   <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['UploadSuccess']) && $_SESSION['TENANT-' . app()->tenant->getId()]['UploadSuccess']) { ?>
     <div class="alert alert-success">
       <p class="mb-0"><strong>Results have been uploaded</strong>.</p>
