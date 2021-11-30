@@ -467,7 +467,7 @@ try {
 
       $message = "<p>Hello " . htmlspecialchars(app()->user->getForename()) . ",</p>";
       $message .= "<p>We would love to get your feedback on the new Notify Composer.</p>";
-      $message .= "<p>Please send feedback on the new Notify Composer to <a href=\"mailto:support@myswimmingclub.uk\">support@myswimmingclub.uk</a>. It is your chance to ensure any changes to the the new version, that you think are required, are made before it replaces the existing editor.</p>";
+      $message .= "<p>Please send feedback on the new Notify Composer to <a href=\"mailto:support@myswimmingclub.uk\">support@myswimmingclub.uk</a>. It is your chance to ensure any changes to the new version, that you think are required, are made before it replaces the existing editor.</p>";
       $message .= "<p>Thank you.</p>";
 
       $message .= "<p><em>PS: We won't send you this email again.</em></p>";
