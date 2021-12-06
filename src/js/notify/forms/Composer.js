@@ -18,6 +18,7 @@ import Accordion from "react-bootstrap/Accordion"
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { Link, Navigate } from "react-router-dom";
+import Dropdown from "../components/Dropdown";
 // import exports from "enhanced-resolve";
 
 export class Composer extends React.Component {
@@ -30,13 +31,6 @@ export class Composer extends React.Component {
       loaded: false,
 
       from: 'asClub',
-      to: [
-        {
-          name: 'Test',
-          type: 'squad',
-          id: 20,
-        }
-      ],
       replyTo: 'toClub',
       subject: "",
       attachments: [],
@@ -82,6 +76,8 @@ export class Composer extends React.Component {
 
       settings: {
         replyEmailAddress: '',
+        defaultReplyTo: 'toClub',
+        defaultSendAs: 'asClub'
       }
     }
   }
@@ -102,6 +98,8 @@ export class Composer extends React.Component {
           date: data.date,
           emailUuid: data.uuid,
           loaded: true,
+          from: data.settings.defaultSendAs,
+          replyTo: data.settings.defaultReplyTo,
           settings: data.settings,
         })
       })
@@ -536,7 +534,7 @@ export class Composer extends React.Component {
                         ],
                         statusbar: false,
                         paste_as_text: true,
-                        toolbar: 'insert | undo redo |  formatselect | bold italic | bullist numlist outdent indent | removeformat | help',
+                        toolbar: 'insert | undo redo |  formatselect | bold italic underline | bullist numlist outdent indent | removeformat | help',
                         content_css: (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'default'),
                         fontsize_formats: '12pt',
                         font_formats: 'Default=system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";',
@@ -626,7 +624,7 @@ export class Composer extends React.Component {
                       <i className="fa fa-cog" aria-hidden="true"></i> Change Settings
                     </Button>{' '}
                     <Button type="button" variant="info" onClick={this.handleDemoOpen}>
-                      Developers: React State
+                      Developer Info
                     </Button>
                   </p>
                 </Tab>
@@ -762,6 +760,11 @@ export class Composer extends React.Component {
                     <Form.Label>Reply-to email address</Form.Label>
                     <Form.Control type="email" placeholder="name@example.com" name="replyEmailAddress" value={this.state.settings.replyEmailAddress} onChange={this.handleSettingsChange} />
                   </Form.Group>
+                  <Dropdown name="defaultSendAs" label="Default send email as" formValue={this.state.settings.defaultSendAs} handleChange={this.handleSettingsChange} options={this.state.possibleFroms} />
+                  {
+                    this.state.possibleReplyTos.length > 1 &&
+                    <Dropdown name="defaultReplyTo" label="Default reply-to address" formValue={this.state.settings.defaultReplyTo} handleChange={this.handleSettingsChange} options={this.state.possibleReplyTos} />
+                  }
                 </Form>
               </Modal.Body>
               <Modal.Footer>

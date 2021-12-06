@@ -142,6 +142,9 @@ $userName = app()->user->getForename() . ' ' . app()->user->getSurname();
 
 $replyAddress = app()->user->getUserOption('NotifyReplyAddress');
 
+$defaultSendAs = app()->user->getUserOption('NotifyDefaultSendAs');
+$defaultReplyTo = app()->user->getUserOption('NotifyDefaultReplyTo');
+
 $possibleReplyTos = [
   [
     'name' => 'Main club email address <' . $clubEmail . '>',
@@ -205,5 +208,7 @@ echo json_encode([
   'date' => $date->format('Y/m/d'),
   'settings' => [
     'replyEmailAddress' => (string) app()->user->getUserOption('NotifyReplyAddress'),
+    'defaultReplyTo' => ($defaultReplyTo && $replyAddress) ? $defaultReplyTo : 'toClub',
+    'defaultSendAs' => ($defaultSendAs) ? $defaultSendAs : 'asClub',
   ],
 ]);
