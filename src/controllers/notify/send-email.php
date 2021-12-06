@@ -293,7 +293,7 @@ try {
     ];
   }
 
-  if ($replyAddress && $data->state->replyTo == "fromMe") {
+  if ($replyAddress && $data->state->replyTo == "toMe") {
     $recipientGroups["ReplyToMe"] = [
       "Email" => $replyAddress,
       "Name" => $_SESSION['TENANT-' . app()->tenant->getId()]['Forename'] . ' ' . $_SESSION['TENANT-' . app()->tenant->getId()]['Surname'],
@@ -351,7 +351,7 @@ try {
   ];
 
   $db = app()->db;
-  $getExtraEmails = $db->prepare("SELECT Name, EmailAddress, ID FROM notifyAdditionalEmails WHERE UserID = ? AND Verified = '1'");
+  $getExtraEmails = $db->prepare("SELECT `Name`, `EmailAddress`, `ID` FROM `notifyAdditionalEmails` WHERE `UserID` = ? AND `Verified` = '1'");
 
   $getPendingGroupMail = $db->prepare("SELECT ID, notifyHistory.Subject, notifyHistory.Message, notifyHistory.ForceSend, notifyHistory.JSONData FROM notifyHistory WHERE ID = ?");
   $getPendingGroupMail->execute([$id]);

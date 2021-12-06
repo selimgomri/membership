@@ -37,11 +37,14 @@ function generateResourcesHash(hash) {
 generateResourcesHash(compileTime);
 
 module.exports = (env, options) => {
-  var inProduction = options.mode === 'production';
+  const inProduction = options.mode === 'production';
+
+  const devtool = (inProduction) ? 'source-map' : 'eval-source-map';
+
 
   return {
     mode: options.mode,
-    devtool: 'source-map',
+    devtool: devtool,
     // resolve: {
     //   fallback: {
     //     "path": require.resolve("path-browserify"),

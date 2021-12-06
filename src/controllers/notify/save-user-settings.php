@@ -8,7 +8,17 @@ if (v::email()->validate($data->replyEmailAddress)) {
   setUserOption(app()->user->getId(), 'NotifyReplyAddress', $data->replyEmailAddress);
 }
 
+if ($data->defaultSendAs) {
+  setUserOption(app()->user->getId(), 'NotifyDefaultSendAs', $data->defaultSendAs);
+}
+
 $replyAddress = app()->user->getUserOption('NotifyReplyAddress');
+if ($replyAddress && $data->defaultReplyTo) {
+  setUserOption(app()->user->getId(), 'NotifyDefaultReplyTo', $data->defaultReplyTo);
+}
+
+$defaultSendAs = app()->user->getUserOption('NotifyDefaultSendAs');
+$defaultReplyTo = app()->user->getUserOption('NotifyDefaultReplyTo');
 
 $clubName = app()->tenant->getKey('CLUB_NAME');
 $clubEmail = app()->tenant->getKey('CLUB_EMAIL');
@@ -33,5 +43,7 @@ echo json_encode([
   'possibleReplyTos' => $possibleReplyTos,
   'settings' => [
     'replyEmailAddress' => (string) app()->user->getUserOption('NotifyReplyAddress'),
+    'defaultReplyTo' => ($defaultReplyTo && $replyAddress) ? $defaultReplyTo : 'toClub',
+    'defaultSendAs' => ($defaultSendAs) ? $defaultSendAs : 'asClub',
   ],
 ]);
