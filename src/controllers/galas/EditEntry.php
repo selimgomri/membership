@@ -156,6 +156,12 @@ include "galaMenu.php";
           Your entry fee is <strong>&pound;<span id="total-field" data-total="<?= htmlspecialchars((string) (\Brick\Math\BigDecimal::of((string) $row['FeeToPay'])->withPointMovedRight(2)->toInt())) ?>"><?= htmlspecialchars((string) (\Brick\Math\BigDecimal::of((string) $row['FeeToPay'])->toScale(2))) ?></span></strong>.
         </p>
 
+        <?php if ($row['ProcessingFee']) { ?>
+        <p>
+          Your entry will include a processing fee of £<?= htmlspecialchars(MoneyHelpers::intToDecimal($row['ProcessingFee'])) ?>
+        </p>
+        <?php } ?>
+
         <input type="hidden" value="<?= htmlspecialchars($row['EntryID']) ?>" name="entryID">
         <p>
           <button type="submit" id="submit" class="btn btn-success">Update</button>

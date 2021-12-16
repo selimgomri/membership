@@ -34,6 +34,7 @@ $vars = [
   'REQUIRE_SQUAD_REP_FOR_APPROVAL' => true,
   'HIDE_MOVE_FEE_INFO' => false,
   'DISPLAY_NAME_FORMAT' => 'FL',
+  'DEFAULT_GALA_PROCESSING_FEE' => 0,
 ];
 
 $disabled = [];
@@ -319,6 +320,15 @@ include BASE_PATH . 'views/header.php';
               <input class="form-check-input" type="checkbox" id="REQUIRE_SQUAD_REP_FOR_APPROVAL" value="1" name="REQUIRE_SQUAD_REP_FOR_APPROVAL" <?php if (bool($vars['REQUIRE_SQUAD_REP_FOR_APPROVAL'])) { ?>checked<?php } ?> <?= $disabled['REQUIRE_SQUAD_REP_FOR_APPROVAL'] ?>>
               <label class="form-check-label" for="REQUIRE_SQUAD_REP_FOR_APPROVAL">Only require entry approval for members in squads with squad reps</label>
             </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label" for="DEFAULT_GALA_PROCESSING_FEE">Default per gala entry processing fee</label>
+            <div class="input-group">
+              <span class="input-group-text">£</span>
+              <input class="form-control font-monospace" type="number" min="0" step="0.01" name="DEFAULT_GALA_PROCESSING_FEE" id="DEFAULT_GALA_PROCESSING_FEE" value="<?= htmlspecialchars(MoneyHelpers::intToDecimal($vars['DEFAULT_GALA_PROCESSING_FEE'])) ?>" <?= $disabled['DEFAULT_GALA_PROCESSING_FEE'] ?>>
+            </div>
+            <div class="small mt-1">To comply with the law on credit/debit card surcharges, you must charge this fee for any payment method you support - even cash or bank transfer</div>
           </div>
 
           <h2>Billing options</h2>

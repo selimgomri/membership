@@ -93,6 +93,16 @@ include "galaMenu.php"; ?>
           <input type="date" class="form-control" id="galaDate" name="galaDate" placeholder="YYYY-MM-DD" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}" value="<?= htmlspecialchars($row['GalaDate']) ?>" required>
         </div>
 
+        <div class="mb-3">
+          <label for="per-entry-fee" class="form-label">Per gala entry processing fee</label>
+          <div class="input-group">
+            <span class="input-group-text">&pound;</span>
+            <input type="number" min="0" step="0.01" class="form-control" id="per-entry-fee" name="per-entry-fee" aria-describedby="per-entry-fee-help" placeholder="0.00" required value="<?= htmlspecialchars(MoneyHelpers::intToDecimal($row['ProcessingFee'])) ?>">
+            <div class="invalid-feedback">You must enter a numeric value for the per gala entry processing fee - it can be £0</div>
+          </div>
+          <small id="per-entry-fee-help" class="form-text text-muted">To comply with the law on credit/debit card surcharges, you must charge this fee for any payment method you support - even cash or bank transfer</small>
+        </div>
+
         <?php if ($row['HyTek'] == 1) { ?>
           <div class="mb-3">
             <label class="form-label" for="HyTek" class="form-label">Require times?</label>

@@ -108,12 +108,16 @@ if (isset($_POST['is-select-sessions']) && bool($_POST['is-select-sessions'])) {
       }
 
       $now = new DateTime('now', new DateTimeZone('Europe/London'));
-      $getGalaInformation = $db->prepare("SELECT GalaFee, GalaFeeConstant, GalaName, HyTek, RequiresApproval FROM galas WHERE GalaID = ? AND NOT CoachEnters AND ClosingDate >= ?");
+      $getGalaInformation = $db->prepare("SELECT GalaFee, GalaFeeConstant, GalaName, HyTek, RequiresApproval, ProcessingFee FROM galas WHERE GalaID = ? AND NOT CoachEnters AND ClosingDate >= ?");
       $getGalaInformation->execute([$_POST['gala'], $now->format('Y-m-d H:i:s')]);
       $row = $getGalaInformation->fetch(PDO::FETCH_ASSOC);
 
       if ($row == null) {
         halt(404);
+      }
+
+      if ($row['ProcessingFee'] > 0) {
+        $price += $row['ProcessingFee'];
       }
 
       $fee = (string) (\Brick\Math\BigInteger::of((string) $price))->toBigDecimal()->withPointMovedLeft(2);
@@ -149,7 +153,7 @@ if (isset($_POST['is-select-sessions']) && bool($_POST['is-select-sessions'])) {
         }
       }
 
-      $get = $db->prepare("SELECT members.MForename, members.MSurname, galas.GalaName, galas.GalaFee, galas.GalaFeeConstant, users.EmailAddress, users.Forename, users.Surname FROM (((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) INNER JOIN users ON members.UserID = users.UserID) WHERE galaEntries.MemberID = ? AND galaEntries.GalaID = ?");
+      $get = $db->prepare("SELECT members.MForename, members.MSurname, galas.GalaName, galas.GalaFee, galas.GalaFeeConstant, galas.ProcessingFee, users.EmailAddress, users.Forename, users.Surname FROM (((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) INNER JOIN users ON members.UserID = users.UserID) WHERE galaEntries.MemberID = ? AND galaEntries.GalaID = ?");
       $get->execute([$_POST['swimmer'], $_POST['gala']]);
       $row = $get->fetch(PDO::FETCH_ASSOC);
       $to = $row['Forename'] . " " . $row['Surname'] . "<" . $row['EmailAddress'] . ">";
@@ -158,6 +162,9 @@ if (isset($_POST['is-select-sessions']) && bool($_POST['is-select-sessions'])) {
       $message .= "<p>Here are the swims selected for " . htmlspecialchars($row['MForename'] . " " . $row['MSurname']) . "'s " . htmlspecialchars($row['GalaName']) . " entry.</p>";
       $message .= "<ul>" . $entryList . "</ul>";
       $message .= "<p>You have entered " . (new NumberFormatter("en", NumberFormatter::SPELLOUT))->format($counter) . " events. The <strong>total fee payable is &pound;" . $fee . "</strong>.</p>";
+      if ($row['ProcessingFee'] > 0) {
+        $message .= "<p>Your entry includes a processing fee of <strong>&pound;" . htmlspecialchars(MoneyHelpers::intToDecimal($row['ProcessingFee'])) . "</strong>.</p>";
+      }
       if (bool($row['HyTek'])) {
         $message .= "<p><strong>This is a HyTek gala.</strong> Please remember to add times for this entry.</p>";
       }

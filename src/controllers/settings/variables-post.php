@@ -42,6 +42,7 @@ $vars = [
   'REQUIRE_SQUAD_REP_FOR_APPROVAL' => true,
   'HIDE_MOVE_FEE_INFO' => false,
   'DISPLAY_NAME_FORMAT' => 'FL',
+  'DEFAULT_GALA_PROCESSING_FEE' => 0,
 ];
 
 try {
@@ -137,6 +138,12 @@ try {
     $hide = 0;
   }
   app()->tenant->setKey('HIDE_MOVE_FEE_INFO', $hide);
+
+  $fee = 0;
+  if (isset($_POST['DEFAULT_GALA_PROCESSING_FEE'])) {
+    $fee = MoneyHelpers::decimalToInt($_POST['DEFAULT_GALA_PROCESSING_FEE']);
+  }
+  app()->tenant->setKey('DEFAULT_GALA_PROCESSING_FEE', $fee);
 
   $vars['CLUB_ADDRESS'] = null;
   $addr = $_POST['CLUB_ADDRESS'];
