@@ -158,7 +158,7 @@ include "galaMenu.php";
 
         <?php if ($row['ProcessingFee']) { ?>
         <p>
-          Your entry will include a processing fee of £<?= htmlspecialchars(MoneyHelpers::intToDecimal($row['ProcessingFee'])) ?>
+          Your entry fee includes a processing fee of £<?= htmlspecialchars(MoneyHelpers::intToDecimal($row['ProcessingFee'])) ?>
         </p>
         <?php } ?>
 

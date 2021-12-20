@@ -135,10 +135,10 @@ if (isset($_POST['is-select-sessions']) && bool($_POST['is-select-sessions'])) {
         $approved = 0;
       }
 
-      $insert = $db->prepare("INSERT INTO `galaEntries` (EntryProcessed, Charged, `MemberID`, `GalaID`, `Approved`, " . $swims . ", `TimesRequired`, `FeeToPay`) VALUES (?, ?, ?, ?, ?, " . $values . ", ?, ?)");
+      $insert = $db->prepare("INSERT INTO `galaEntries` (EntryProcessed, Charged, `MemberID`, `GalaID`, `Approved`, " . $swims . ", `TimesRequired`, `FeeToPay`, `ProcessingFee`) VALUES (?, ?, ?, ?, ?, " . $values . ", ?, ?, ?)");
 
       $array = array_merge([0, 0, $_POST['swimmer'], $_POST['gala'], $approved], $entriesArray);
-      $array = array_merge($array, [0, $fee]);
+      $array = array_merge($array, [0, $fee, $row['ProcessingFee']]);
 
       $insert->execute($array);
 

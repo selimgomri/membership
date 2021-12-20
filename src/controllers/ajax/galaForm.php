@@ -318,7 +318,7 @@ if (!$coachEnters && (isset($_REQUEST["galaID"])) && (isset($_REQUEST["swimmer"]
 		</div>
 
 		<p>
-			Your entry fee is <strong>&pound;<span id="total-field" data-total="<?= htmlspecialchars($gala['ProcessingFee']) ?>" data-count="0"><?= htmlspecialchars(MoneyHelpers::intToDecimal($gala['ProcessingFee'])) ?></span></strong><span id="entries-field"></span>. <?php if ($gala['ProcessingFee'] > 0) { ?>This excludes the processing fee of £<?= htmlspecialchars(MoneyHelpers::intToDecimal($gala['ProcessingFee'])) ?>.<?php } ?>
+			Your entry fee is <strong>&pound;<span id="total-field" data-total="<?= htmlspecialchars($gala['ProcessingFee']) ?>" data-count="0"><?= htmlspecialchars(MoneyHelpers::intToDecimal($gala['ProcessingFee'])) ?></span></strong><span id="entries-field"></span>. <?php if ($gala['ProcessingFee'] > 0) { ?>This includes the processing fee of £<?= htmlspecialchars(MoneyHelpers::intToDecimal($gala['ProcessingFee'])) ?>.<?php } ?>
 		</p>
 
 	<?php } ?>
