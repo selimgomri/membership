@@ -35,7 +35,7 @@ $rowArray = [1, null, null, null, null, null, 2, 1,  null, null, 2, 1, null, nul
 $rowArrayText = ["Freestyle", null, null, null, null, null, 2, "Backstroke",  null, null, 2, "Breaststroke", null, null, 2, "Butterfly", null, null, 2, "Individual Medley", null, null, 2];
 
 try {
-  $entries = $db->prepare("SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE members.UserID = ? AND (NOT RequiresApproval OR (RequiresApproval AND Approved)) AND NOT Charged AND FeeToPay > 0 AND galas.GalaDate >= ?");
+  $entries = $db->prepare("SELECT *, galaEntries.ProcessingFee pFee FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE members.UserID = ? AND (NOT RequiresApproval OR (RequiresApproval AND Approved)) AND NOT Charged AND FeeToPay > 0 AND galas.GalaDate >= ?");
   $entries->execute([$_SESSION['TENANT-' . app()->tenant->getId()]['UserID'], $date->format("Y-m-d")]);
 } catch (Exception $e) {
   pre($e);
@@ -134,6 +134,17 @@ include BASE_PATH . "controllers/galas/galaMenu.php";
                           </li>
                         <?php } ?>
                       <?php } ?>
+                    </ul>
+                    <?php if ($entry['pFee'] > 0) { ?>
+                      <div class="row mb-0 mt-3">
+                        <div class="col">
+                          Processing fee
+                        </div>
+                        <div class="col">
+                          <?= htmlspecialchars(MoneyHelpers::formatCurrency(MoneyHelpers::intToDecimal($entry['pFee']), 'GBP')) ?>
+                        </div>
+                      </div>
+                    <?php } ?>
                   </div>
                   <div class="col">
                     <div class="d-sm-none mb-3"></div>

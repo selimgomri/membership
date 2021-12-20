@@ -1,5 +1,8 @@
 <?php
-$pagetitle = "Add a Gala";
+
+$tenant = app()->tenant;
+
+$pagetitle = "Add a gala";
 
 $today = new DateTime('now', new DateTimeZone('Europe/London'));
 $today->setTime(23, 59, 59);
@@ -92,6 +95,17 @@ include "galaMenu.php";
           </div>
           <small id="galaFeeHelp" class="form-text text-muted">Enter the <strong>most common</strong> price for swims at this gala. You can adjust individual events next.</small>
         </div>
+
+        <div class="mb-3">
+          <label for="per-entry-fee" class="form-label">Per gala entry processing fee</label>
+          <div class="input-group">
+            <span class="input-group-text">&pound;</span>
+            <input type="number" min="0" step="0.01" class="form-control" id="per-entry-fee" name="per-entry-fee" aria-describedby="per-entry-fee-help" placeholder="0.00" required value="<?= htmlspecialchars(MoneyHelpers::intToDecimal($tenant->getKey('DEFAULT_GALA_PROCESSING_FEE'))) ?>">
+            <div class="invalid-feedback">You must enter a numeric value for the per gala entry processing fee - it can be £0</div>
+          </div>
+          <small id="per-entry-fee-help" class="form-text text-muted">To comply with the law on credit/debit card surcharges, you must charge this fee for any payment method you support - even cash or bank transfer</small>
+        </div>
+
         <div class="mb-3">
           <label for="HyTek" class="form-label">Require times?</label>
           <div class="form-check">

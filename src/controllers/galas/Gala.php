@@ -3,7 +3,7 @@
 $db = app()->db;
 $tenant = app()->tenant;
 
-$galas = $db->prepare("SELECT GalaName, `Description`, ClosingDate, GalaDate, GalaVenue, CourseLength, CoachEnters, RequiresApproval FROM galas WHERE Tenant = ? AND GalaID = ?");
+$galas = $db->prepare("SELECT GalaName, `Description`, ClosingDate, GalaDate, GalaVenue, CourseLength, CoachEnters, RequiresApproval, ProcessingFee FROM galas WHERE Tenant = ? AND GalaID = ?");
 $galas->execute([
   $tenant->getId(),
   $id
@@ -243,9 +243,16 @@ include "galaMenu.php";
 
       <div class="col-sm-6 col-md-4">
         <h3 class="h6"><?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent') { ?>Total refunded to you<?php } else { ?>Total refunded to parents<?php } ?></h3>
-        <p>&pound;<?= number_format($amountRefunded / 100, 2) ?></p>
+        <p>&pound;<?= htmlspecialchars(MoneyHelpers::intToDecimal($amountRefunded)) ?></p>
       </div>
 
+    <?php } ?>
+
+    <?php if ($gala['ProcessingFee'] > 0) { ?>
+      <div class="col-sm-6 col-md-4">
+        <h3 class="h6">Per entry processing fee</h3>
+        <p>&pound;<?= htmlspecialchars(MoneyHelpers::intToDecimal($gala['ProcessingFee'])) ?></p>
+      </div>
     <?php } ?>
   </div>
 

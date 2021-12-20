@@ -51,11 +51,15 @@ for ($i = 0; $i < sizeof($entriesArray); $i++) {
   }
 }
 
+if ($row['ProcessingFee'] > 0) {
+  $price += $row['ProcessingFee'];
+}
+
 $galaFee = (string) (\Brick\Math\BigInteger::of((string) $price))->toBigDecimal()->withPointMovedLeft(2);
 
 try {
-  $update = $db->prepare("UPDATE galaEntries SET 25Free = ?, 50Free = ?, 100Free = ?, 200Free = ?, 400Free = ?, 800Free = ?, 1500Free = ?, 25Back = ?, 50Back = ?, 100Back = ?, 200Back = ?, 25Breast = ?, 50Breast = ?, 100Breast = ?, 200Breast = ?, 25Fly = ?, 50Fly = ?, 100Fly = ?, 200Fly = ?, 100IM = ?, 150IM = ?, 200IM = ?, 400IM = ?, FeeToPay = ? WHERE EntryID = ?");
-  $updateArray = array_merge($entriesArray, [$galaFee, $id]);
+  $update = $db->prepare("UPDATE galaEntries SET 25Free = ?, 50Free = ?, 100Free = ?, 200Free = ?, 400Free = ?, 800Free = ?, 1500Free = ?, 25Back = ?, 50Back = ?, 100Back = ?, 200Back = ?, 25Breast = ?, 50Breast = ?, 100Breast = ?, 200Breast = ?, 25Fly = ?, 50Fly = ?, 100Fly = ?, 200Fly = ?, 100IM = ?, 150IM = ?, 200IM = ?, 400IM = ?, FeeToPay = ?, ProcessingFee = ? WHERE EntryID = ?");
+  $updateArray = array_merge($entriesArray, [$galaFee, $row['ProcessingFee'], $id]);
   $update->execute($updateArray);
 
   $sql = $db->prepare("SELECT * FROM ((galaEntries INNER JOIN members ON galaEntries.MemberID = members.MemberID) INNER JOIN galas ON galaEntries.GalaID = galas.GalaID) WHERE `EntryID` = ? ORDER BY `galas`.`GalaDate` DESC;");
@@ -70,6 +74,9 @@ try {
   $message .= "<p>Here are the swims selected for " . htmlspecialchars($row['MForename'] . " " . $row['MSurname']) . "'s updated " . htmlspecialchars($row['GalaName']) . " entry.</p>";
   $message .= "<ul>" . $entryList . "</ul>";
   $message .= "<p>You have entered " . (new NumberFormatter("en", NumberFormatter::SPELLOUT))->format($numEntered) . " events. The <strong>total fee payable is &pound;" . $galaFee . "</strong>.</p>";
+  if ($row['ProcessingFee'] > 0) {
+    $message .= "<p>Your entry includes a processing fee of <strong>&pound;" . htmlspecialchars(MoneyHelpers::intToDecimal($row['ProcessingFee'])) . "</strong>.</p>";
+  }
   $message .= '<p>If you have any questions, please contact the ' . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . ' gala team as soon as possible.</p>';
   $notify = "INSERT INTO notify (`UserID`, `Status`, `Subject`, `Message`,
   `ForceSend`, `EmailType`) VALUES (?, 'Queued', ?, ?, 1, 'Galas')";

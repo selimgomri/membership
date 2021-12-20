@@ -53,8 +53,13 @@ if ($galaFeeConstant == 0 || $galaFeeConstant == null) {
   $galaFee = 0.00;
 }
 
+$processingFee = 0;
+if (isset($_POST['per-entry-fee'])) {
+  $processingFee = MoneyHelpers::decimalToInt($_POST['per-entry-fee']);
+}
+
 try {
-  $update  = $db->prepare("UPDATE `galas` SET  GalaName = ?, `Description` = ?, CourseLength = ?, GalaVenue = ?, ClosingDate = ?, GalaDate = ?, HyTek = ?, CoachEnters = ?, RequiresApproval = ? WHERE GalaID = ?");
+  $update  = $db->prepare("UPDATE `galas` SET  GalaName = ?, `Description` = ?, CourseLength = ?, GalaVenue = ?, ClosingDate = ?, GalaDate = ?, HyTek = ?, CoachEnters = ?, RequiresApproval = ?, ProcessingFee = ? WHERE GalaID = ?");
   $update->execute([
     $galaName,
     $description,
@@ -65,7 +70,8 @@ try {
     $hyTek,
     $coachEnters,
     $approvalNeeded,
-    $id
+    $processingFee,
+    $id,
   ]);
 
   AuditLog::new('Galas-Updated', 'Updated ' . $galaName . ', #' . $id);

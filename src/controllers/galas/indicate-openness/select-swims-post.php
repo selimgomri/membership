@@ -37,7 +37,7 @@ if (isset($_POST['lock-entry']) && $_POST['lock-entry']) {
 $db = app()->db;
 $tenant = app()->tenant;
 
-$galaDetails = $db->prepare("SELECT GalaName `name`, GalaDate `ends`, CoachEnters, GalaFee fee, GalaFeeConstant gfc, HyTek FROM galas WHERE GalaID = ? AND Tenant = ?");
+$galaDetails = $db->prepare("SELECT GalaName `name`, GalaDate `ends`, CoachEnters, GalaFee fee, GalaFeeConstant gfc, HyTek, ProcessingFee FROM galas WHERE GalaID = ? AND Tenant = ?");
 $galaDetails->execute([
   $id,
   $tenant->getId()
@@ -120,11 +120,16 @@ try {
         $insert->bindValue('val' . $ev, $entering[$ev], PDO::PARAM_BOOL);
       }
 
+      if ($gala['ProcessingFee']) {
+        $price += $gala['ProcessingFee'];
+      }
+
       $entering['fee'] = (string) (\Brick\Math\BigInteger::of((string) $price))->toBigDecimal()->withPointMovedLeft(2)->toScale(2);
 
       $insert->bindValue('gala', $entering['gala'], PDO::PARAM_INT);
       $insert->bindValue('member', $member, PDO::PARAM_INT);
-      $insert->bindValue('fee', $entering['fee'], PDO::PARAM_STR);
+      $insert->bindValue('fee', $entering['fee'], PDO::PARAM_INT);
+      $insert->bindValue('processFee', $gals['ProcessingFee'], PDO::PARAM_INT);
       $insert->bindValue('processed', false, PDO::PARAM_BOOL);
       $insert->bindValue('charged', $entering['charged'], PDO::PARAM_BOOL);
       $insert->bindValue('locked', $entering['locked'], PDO::PARAM_BOOL);
@@ -179,6 +184,10 @@ try {
 
     if (sizeof($entries) > 1) {
       $message .= '<p>The total cost of your swimmer\'s entries is <strong>&pound;' . (string) $totalCost->toScale(2) . '</strong>.<p>';
+    }
+
+    if ($gala['ProcessingFee'] > 0) {
+      $message .= "<p>For this gala there is a per entry processing fee of <strong>&pound;" . htmlspecialchars(MoneyHelpers::intToDecimal($gala['ProcessingFee'])) . "</strong>.</p>";
     }
 
     if (bool($gala['HyTek'])) {

@@ -76,13 +76,18 @@ if (isset($_POST['approvalNeeded']) && bool($_POST['approvalNeeded'])) {
   $approvalNeeded = 1;
 }
 
+$processingFee = 0;
+if (isset($_POST['per-entry-fee'])) {
+  $processingFee = MoneyHelpers::decimalToInt($_POST['per-entry-fee']);
+}
+
 //$sql = "INSERT INTO `galas` (`GalaName`, `CourseLength`, `GalaVenue`, `ClosingDate`, `GalaDate`, `GalaFeeConstant`, `GalaFee`, `HyTek`) VALUES ('$galaName', '$length', '$venue', '$closingDate', '$lastDate', '$galaFeeConstant', '$galaFee', '$hyTek');";
 //echo $sql;
 
 if ($status) {
   $id = null;
   try {
-    $query = $db->prepare("INSERT INTO `galas` (`GalaName`, `Description`, `CourseLength`, `GalaVenue`, `ClosingDate`, `GalaDate`, `GalaFeeConstant`, `GalaFee`, `HyTek`, `CoachEnters`, `RequiresApproval`, Tenant) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $query = $db->prepare("INSERT INTO `galas` (`GalaName`, `Description`, `CourseLength`, `GalaVenue`, `ClosingDate`, `GalaDate`, `GalaFeeConstant`, `GalaFee`, `HyTek`, `CoachEnters`, `RequiresApproval`, `ProcessingFee`, Tenant) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
     $query->execute([
       $galaName,
       $description,
@@ -95,6 +100,7 @@ if ($status) {
       $hyTek,
       $coachDoesEntries,
       $approvalNeeded,
+      $processingFee,
       $tenant->getId()
     ]);
     $added = true;
