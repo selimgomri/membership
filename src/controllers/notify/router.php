@@ -32,6 +32,10 @@ define('REP_BLOCKED', $repBlocked);
 
 $access = $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'];
 
+$this->post('/save-user-settings', function() {
+	include 'save-user-settings.php';
+});
+
 if ($access != "Admin" && $access != "Coach" && $access != "Galas" && !$rep) {
 	$this->get('/', function() {
 		
@@ -48,6 +52,15 @@ if ($access == "Admin" || $access == "Coach" || $access == "Galas" || $rep) {
 		include 'FileUploads.php';
 	});
 
+	$this->post('/send-email', function() {
+		$access = $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'];
+		if (!($access == "Admin" || $access == "Coach" || $access == "Galas") && REP_BLOCKED) {
+			halt(404);
+		} else {
+			include 'send-email.php';
+		}
+	});
+
   $this->group(['/new', '/newemail'], function() {
 
 		$access = $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'];
@@ -59,10 +72,6 @@ if ($access == "Admin" || $access == "Coach" || $access == "Galas" || $rep) {
 
   	$this->get('/', function() {
   		include 'Email.php';
-  	});
-
-		$this->get('/react', function() {
-  		include 'EmailReact.php';
   	});
 
 		$this->get('/react-data', function() {

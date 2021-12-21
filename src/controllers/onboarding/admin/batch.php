@@ -40,7 +40,7 @@ $member = $getMembers->fetch(PDO::FETCH_OBJ);
 $getCurrentMemberships = $db->prepare("SELECT `Name` `name`, `Description` `description`, `Type` `type`, `memberships`.`Amount` `paid`, `clubMembershipClasses`.`Fees` `expectPaid` FROM `memberships` INNER JOIN clubMembershipClasses ON memberships.Membership = clubMembershipClasses.ID WHERE `Member` = ? AND `Year` = ?");
 $hasMembership = $db->prepare("SELECT COUNT(*) FROM memberships WHERE `Member` = ? AND `Year` = ? AND `Membership` = ?");
 
-$pagetitle = "New batch for " . htmlspecialchars($info['Forename'] . ' ' . $info['Surname']) . " - " . htmlspecialchars($year['Name']) . " - Membership Centre";
+$pagetitle = "New batch for " . htmlspecialchars(\SCDS\Formatting\Names::format($info['Forename'], $info['Surname'])) . " - " . htmlspecialchars($year['Name']) . " - Membership Centre";
 include BASE_PATH . "views/header.php";
 
 ?>
@@ -60,7 +60,7 @@ include BASE_PATH . "views/header.php";
     <div class="row align-items-center">
       <div class="col-lg-8">
         <h1>
-          Membership fees for <?= htmlspecialchars($info['Forename'] . ' ' . $info['Surname']) ?>
+          Membership fees for <?= htmlspecialchars(\SCDS\Formatting\Names::format($info['Forename'], $info['Surname'])) ?>
         </h1>
         <p class="lead mb-0">
           For <?= htmlspecialchars($year['Name']) ?>
@@ -112,7 +112,7 @@ include BASE_PATH . "views/header.php";
 
             ?>
               <li class="list-group-item">
-                <h2><?= htmlspecialchars($member->fn . ' ' . $member->sn) ?></h2>
+                <h2><?= htmlspecialchars(\SCDS\Formatting\Names::format($member->fn, $member->sn)) ?></h2>
 
                 <h3>Current Memberships for <?= htmlspecialchars($year['Name']) ?></h3>
                 <?php if ($membership) { ?>

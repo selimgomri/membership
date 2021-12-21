@@ -40,12 +40,12 @@ if (!empty($_POST['venue'])) {
   }
 }
 
-if (!empty($_POST['closingDate']) && v::date()->validate($_POST['closingDate'])) {
-  $date = strtotime($_POST['closingDate']);
-  $closingDate = date("Y-m-d", $date);
+if (!empty($_POST['closingDate']) && !empty($_POST['closingTime']) && v::date()->validate($_POST['closingDate']) && v::time('H:i')->validate($_POST['closingTime'])) {
+  $date = DateTime::createFromFormat('Y-m-d H:i', $_POST['closingDate'] . ' ' . $_POST['closingTime'], new DateTimeZone('Europe/London'));
+  $closingDate = $date->format('Y-m-d H:i:s');
 } else {
   $status = false;
-  $statusInfo .= "<li>The closing date was malformed and not understood clearly by the system</li>";
+  $statusInfo .= "<li>The closing date and time was malformed and not understood clearly by the system</li>";
 }
 
 if (!empty($_POST['lastDate']) && v::date()->validate($_POST['lastDate'])) {
@@ -76,13 +76,18 @@ if (isset($_POST['approvalNeeded']) && bool($_POST['approvalNeeded'])) {
   $approvalNeeded = 1;
 }
 
+$processingFee = 0;
+if (isset($_POST['per-entry-fee'])) {
+  $processingFee = MoneyHelpers::decimalToInt($_POST['per-entry-fee']);
+}
+
 //$sql = "INSERT INTO `galas` (`GalaName`, `CourseLength`, `GalaVenue`, `ClosingDate`, `GalaDate`, `GalaFeeConstant`, `GalaFee`, `HyTek`) VALUES ('$galaName', '$length', '$venue', '$closingDate', '$lastDate', '$galaFeeConstant', '$galaFee', '$hyTek');";
 //echo $sql;
 
 if ($status) {
   $id = null;
   try {
-    $query = $db->prepare("INSERT INTO `galas` (`GalaName`, `Description`, `CourseLength`, `GalaVenue`, `ClosingDate`, `GalaDate`, `GalaFeeConstant`, `GalaFee`, `HyTek`, `CoachEnters`, `RequiresApproval`, Tenant) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $query = $db->prepare("INSERT INTO `galas` (`GalaName`, `Description`, `CourseLength`, `GalaVenue`, `ClosingDate`, `GalaDate`, `GalaFeeConstant`, `GalaFee`, `HyTek`, `CoachEnters`, `RequiresApproval`, `ProcessingFee`, Tenant) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
     $query->execute([
       $galaName,
       $description,
@@ -95,6 +100,7 @@ if ($status) {
       $hyTek,
       $coachDoesEntries,
       $approvalNeeded,
+      $processingFee,
       $tenant->getId()
     ]);
     $added = true;

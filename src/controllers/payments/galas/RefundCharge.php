@@ -147,7 +147,7 @@ include BASE_PATH . 'views/header.php';
 							<form id="refund-form-<?= htmlspecialchars($entry['EntryID']) ?>" novalidate autocomplete="off">
 								<div class="row">
 									<div class="col-sm-5 col-md-4 col-lg-6">
-										<h3><?= htmlspecialchars($entry['MForename'] . ' ' . $entry['MSurname']) ?></h3>
+										<h3><?= htmlspecialchars(\SCDS\Formatting\Names::format($entry['MForename'], $entry['MSurname'])) ?></h3>
 
 										<?php if (!$entry['activeMember']) { ?>
 											<p>
@@ -222,9 +222,9 @@ include BASE_PATH . 'views/header.php';
 										if ($hasNoDD && $entry['Intent'] == null) {
 											$refundSource = 'manual refund. No direct debit or payment card is available to issue an automatic refund';
 										} else if ($entry['Intent'] != null && $amountRefundable > 0 && bool($entry['StripePaid'])) {
-											$refundSource = $entry['Forename'] . ' ' . $entry['Surname'] . '\'s ' . getCardBrand($entry['Brand']) . ' ' . $entry['Funding'] . ' card ending ' . $entry['Last4'];
+											$refundSource = \SCDS\Formatting\Names::format($entry['Forename'], $entry['Surname']) . '\'s ' . getCardBrand($entry['Brand']) . ' ' . $entry['Funding'] . ' card ending ' . $entry['Last4'];
 										} else if ($amountRefundable > 0) {
-											$refundSource = 'This gala will be credited to ' . $entry['Forename'] . ' ' . $entry['Surname'] . '\'s account and discounted from their next direct debit payment';
+											$refundSource = 'This gala will be credited to ' . \SCDS\Formatting\Names::format($entry['Forename'], $entry['Surname']) . '\'s account and discounted from their next direct debit payment';
 										}
 
 										?>
@@ -266,7 +266,7 @@ include BASE_PATH . 'views/header.php';
 												<div class="col-12 mt-3">
 													<span id="<?= $entry['EntryID'] ?>-refund-error-warning-box"></span>
 													<p class="mb-0">
-														<button type="button" id="<?= $entry['EntryID'] ?>-refund-button" class="refund-button btn btn-primary" data-entry-id="<?= $entry['EntryID'] ?>" data-refund-location="<?= htmlspecialchars($refundSource) ?>" data-swimmer-name="<?= htmlspecialchars($entry['MForename'] . ' ' . $entry['MSurname']) ?>">
+														<button type="button" id="<?= $entry['EntryID'] ?>-refund-button" class="refund-button btn btn-primary" data-entry-id="<?= $entry['EntryID'] ?>" data-refund-location="<?= htmlspecialchars($refundSource) ?>" data-swimmer-name="<?= htmlspecialchars(\SCDS\Formatting\Names::format($entry['MForename'], $entry['MSurname'])) ?>">
 															Refund
 														</button>
 													</p>

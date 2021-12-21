@@ -7,9 +7,7 @@ $swimsArray = ['25Free', '50Free', '100Free', '200Free', '400Free', '800Free', '
 $swimsTextArray = ['25&nbsp;Free', '50&nbsp;Free', '100&nbsp;Free', '200&nbsp;Free', '400&nbsp;Free', '800&nbsp;Free', '1500&nbsp;Free', '25&nbsp;Back', '50&nbsp;Back', '100&nbsp;Back', '200&nbsp;Back', '25&nbsp;Breast', '50&nbsp;Breast', '100&nbsp;Breast', '200&nbsp;Breast', '25&nbsp;Fly', '50&nbsp;Fly', '100&nbsp;Fly', '200&nbsp;Fly', '100&nbsp;IM', '150&nbsp;IM', '200&nbsp;IM', '400&nbsp;IM',];
 $swimsTimeArray = ['25FreeTime', '50FreeTime', '100FreeTime', '200FreeTime', '400FreeTime', '800FreeTime', '1500FreeTime', '25BackTime', '50BackTime', '100BackTime', '200BackTime', '25BreastTime', '50BreastTime', '100BreastTime', '200BreastTime', '25FlyTime', '50FlyTime', '100FlyTime', '200FlyTime', '100IMTime', '150IMTime', '200IMTime', '400IMTime',];
 
-$sql = $db->prepare("SELECT * FROM ((`galaEntries` INNER JOIN `members` ON
-`members`.`MemberID` = `galaEntries`.`MemberID`) INNER JOIN `galas` ON
-galaEntries.GalaID = galas.GalaID) WHERE members.Tenant = ? AND `EntryID` = ?;");
+$sql = $db->prepare("SELECT * FROM ((`galaEntries` INNER JOIN `members` ON `members`.`MemberID` = `galaEntries`.`MemberID`) INNER JOIN `galas` ON galaEntries.GalaID = galas.GalaID) WHERE members.Tenant = ? AND `EntryID` = ?;");
 $sql->execute([
 	$tenant->getId(),
 	$id
@@ -66,7 +64,7 @@ if ($row['CourseLength'] == 'LONG') {
 		</nav>
 
 
-		<h1>Add Manual Times for <?= htmlspecialchars($row['MForename'] . ' ' . $row['MSurname']) ?></h1>
+		<h1>Add Manual Times for <?= htmlspecialchars(\SCDS\Formatting\Names::format($row['MForename'], $row['MSurname'])) ?></h1>
 		<p class="lead mb-0">
 			<?= htmlspecialchars($row['GalaName']) ?>
 		</p>

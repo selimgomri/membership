@@ -36,7 +36,7 @@ if (!$coachEnters && (isset($_REQUEST["galaID"])) && (isset($_REQUEST["swimmer"]
 	}
 
 	// Get gala info
-	$getGala = $db->prepare("SELECT GalaFeeConstant flatfee, GalaFee fee, HyTek, GalaName `name`, GalaVenue venue, RequiresApproval, `Description` FROM galas WHERE GalaID = ? AND Tenant = ?");
+	$getGala = $db->prepare("SELECT GalaFeeConstant flatfee, GalaFee fee, HyTek, GalaName `name`, GalaVenue venue, RequiresApproval, `Description`, ProcessingFee FROM galas WHERE GalaID = ? AND Tenant = ?");
 	$getGala->execute([
 		$_GET["galaID"],
 		$tenant->getId()
@@ -76,7 +76,7 @@ if (!$coachEnters && (isset($_REQUEST["galaID"])) && (isset($_REQUEST["swimmer"]
 		]);
 		$numReps = $getReps->fetchColumn();
 
-		if ($gala['Description'] || bool($gala['HyTek']) || (bool($gala['RequiresApproval']) && $numReps > 0)) { ?>
+		if ($gala['Description'] || bool($gala['HyTek']) || (bool($gala['RequiresApproval']) && $numReps > 0) || $gala['ProcessingFee'] > 0) { ?>
 			<h2>About this gala</h2>
 
 			<?php
@@ -96,7 +96,15 @@ if (!$coachEnters && (isset($_REQUEST["galaID"])) && (isset($_REQUEST["swimmer"]
 				<p>This entry must be approved by a squad rep before the gala team will submit it to the host club.</p>
 			<?php } else if (bool($gala['RequiresApproval'])) { ?>
 				<p>There is no squad rep assigned to <?= htmlspecialchars($swimmer['fn']) ?>'s squad. This means nobody will be able to review your entry before it goes to the gala team.</p>
-		<?php }
+			<?php } ?>
+
+			<?php if ($gala['ProcessingFee'] > 0) { ?>
+				<p>
+					This gala includes a per entry processing fee of £<?= htmlspecialchars(MoneyHelpers::intToDecimal($gala['ProcessingFee'])) ?>.
+				</p>
+			<?php } ?>
+
+		<?php
 		}
 
 		$swimsArray = ['25Free', '50Free', '100Free', '200Free', '400Free', '800Free', '1500Free', '25Back', '50Back', '100Back', '200Back', '25Breast', '50Breast', '100Breast', '200Breast', '25Fly', '50Fly', '100Fly', '200Fly', '100IM', '150IM', '200IM', '400IM',];
@@ -310,7 +318,7 @@ if (!$coachEnters && (isset($_REQUEST["galaID"])) && (isset($_REQUEST["swimmer"]
 		</div>
 
 		<p>
-			Your entry fee is <strong>&pound;<span id="total-field" data-total="0" data-count="0">0.00</span></strong><span id="entries-field"></span>.
+			Your entry fee is <strong>&pound;<span id="total-field" data-total="<?= htmlspecialchars($gala['ProcessingFee']) ?>" data-count="0"><?= htmlspecialchars(MoneyHelpers::intToDecimal($gala['ProcessingFee'])) ?></span></strong><span id="entries-field"></span>. <?php if ($gala['ProcessingFee'] > 0) { ?>This includes the processing fee of £<?= htmlspecialchars(MoneyHelpers::intToDecimal($gala['ProcessingFee'])) ?>.<?php } ?>
 		</p>
 
 	<?php } ?>

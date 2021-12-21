@@ -54,7 +54,7 @@ $date18 = $date18->format('Y-m-d');
 
 // AuditLog::new('Members-Edited', 'Edited ' . $forename . ' ' . $surname . ' (#' . $id . ')');
 
-$pagetitle = "Edit " . htmlspecialchars($row['MForename'] . " " . $row['MSurname']) . " - Members";
+$pagetitle = "Edit " . htmlspecialchars(\SCDS\Formatting\Names::format($row['MForename'], $row['MSurname'])) . " - Members";
 
 $date = new DateTime('now', new DateTimeZone('Europe/London'));
 
@@ -76,7 +76,7 @@ include BASE_PATH . "views/swimmersMenu.php";
 
     <div class="row align-items-center">
       <div class="col-md-8">
-        <h1>Editing <?= htmlspecialchars($row['MForename'] . ' ' . $row['MSurname']) ?> </h1>
+        <h1>Editing <?= htmlspecialchars(\SCDS\Formatting\Names::format($row['MForename'], $row['MSurname'])) ?> </h1>
       </div>
       <div class="col text-md-end">
         <button type="submit" class="btn btn-success" form="edit-form">Save</button>
@@ -531,7 +531,7 @@ include BASE_PATH . "views/swimmersMenu.php";
             By deleting this member, we will remove all personal information. Some information will be retained for the completeness of your club's records.
           </p>
           <p class="mb-0">
-            <button data-ajax-url="<?= htmlspecialchars(autoUrl("members/delete")) ?>" data-members-url="<?= htmlspecialchars(autoUrl("members")) ?>" data-member-id="<?= htmlspecialchars($id) ?>" data-member-name="<?= htmlspecialchars($row['MForename'] . ' ' . $row['MSurname']) ?>" id="delete-button" class="btn btn-danger">
+            <button data-ajax-url="<?= htmlspecialchars(autoUrl("members/delete")) ?>" data-members-url="<?= htmlspecialchars(autoUrl("members")) ?>" data-member-id="<?= htmlspecialchars($id) ?>" data-member-name="<?= htmlspecialchars(\SCDS\Formatting\Names::format($row['MForename'], $row['MSurname'])) ?>" id="delete-button" class="btn btn-danger">
               Delete member
             </button>
           </p>

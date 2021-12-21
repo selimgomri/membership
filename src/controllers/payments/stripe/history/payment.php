@@ -128,6 +128,11 @@ $payment = \Stripe\PaymentIntent::retrieve([
   'stripe_account' => $tenant->getStripeAccount()
 ]);
 
+$refunds = null;
+if (isset($payment->charges->data[0]->refunds)) {
+  $refunds = $payment->charges->data[0]->refunds;
+}
+
 $getGalaEntries = $db->prepare("SELECT * FROM ((galaEntries INNER JOIN galas ON galas.GalaID = galaEntries.GalaID) INNER JOIN members ON members.MemberID = galaEntries.MemberID) WHERE StripePayment = ?");
 $getGalaEntries->execute([
   $id
@@ -167,7 +172,7 @@ $countries = getISOAlpha2Countries();
 
     <div class="row">
       <div class="col-lg-8">
-        <h1><?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') { ?><?= htmlspecialchars($pm['Forename'] . ' ' . $pm['Surname'] . ':') ?> <?php } ?>Card payment #<?= htmlspecialchars($id) ?></h1>
+        <h1><?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') { ?><?= htmlspecialchars(\SCDS\Formatting\Names::format($pm['Forename'], $pm['Surname']) . ':') ?> <?php } ?>Card payment #<?= htmlspecialchars($id) ?></h1>
         <p class="lead mb-0">At <?= $date->format("H:i \o\\n j F Y") ?></p>
       </div>
     </div>
@@ -220,7 +225,7 @@ $countries = getISOAlpha2Countries();
           <?php } ?>
         </dl>
 
-        <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') { ?>
+        <?php if (app()->user->hasPermission('Admin')) { ?>
           <h2>Transaction security information</h2>
           <dl class="row">
             <?php if (isset($payment->charges->data[0]->outcome->risk_level) && $payment->charges->data[0]->outcome->risk_level) { ?>
@@ -247,6 +252,21 @@ $countries = getISOAlpha2Countries();
               <dt class="col-sm-5 col-md-4">Stripe receipt</dt>
               <dd class="col-sm-7 col-md-8"><a target="_blank" href="<?= htmlspecialchars($payment->charges->data[0]->receipt_url) ?>">View receipt</a></dd>
             <?php } ?>
+
+            <dt class="col-sm-5 col-md-4">Stripe PaymentIntent ID</dt>
+            <dd class="col-sm-7 col-md-8">
+              <a href="<?= htmlspecialchars('https://dashboard.stripe.com/payments/' . urlencode($pm['Intent'])) ?>" target="_blank"><?= htmlspecialchars($pm['Intent']) ?></a>
+            </dd>
+
+            <dt class="col-sm-5 col-md-4">Stripe Balance Transaction</dt>
+            <dd class="col-sm-7 col-md-8">
+              <?= htmlspecialchars($payment->charges->data[0]->balance_transaction) ?>
+            </dd>
+
+            <dt class="col-sm-5 col-md-4">Statement Descriptor</dt>
+            <dd class="col-sm-7 col-md-8">
+              <?= htmlspecialchars($payment->charges->data[0]->calculated_statement_descriptor) ?>
+            </dd>
           </dl>
 
           <p>
@@ -384,8 +404,43 @@ $countries = getISOAlpha2Countries();
 
       <?php if (isset($payment->charges->data[0]->amount_refunded) && $payment->charges->data[0]->amount_refunded > 0) { ?>
         <h2>Payment refunds</h2>
-        <p>&pound;<?= (string) \Brick\Math\BigDecimal::of((string) $payment->charges->data[0]->amount_refunded)->withPointMovedLeft(2)->toScale(2) ?> refunded to <?= htmlspecialchars(getCardBrand($card->brand)) ?> **** <?= htmlspecialchars($card->last4) ?></p>
-      <?php } else if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') { ?>
+        <p>&pound;<?= (string) \Brick\Math\BigDecimal::of((string) $payment->charges->data[0]->amount_refunded)->withPointMovedLeft(2)->toScale(2) ?> refunded to <?= htmlspecialchars(getCardBrand($card->brand)) ?> &middot;&middot;&middot;&middot; <?= htmlspecialchars($card->last4) ?></p>
+
+        <?php if ($refunds && sizeof($refunds->data) > 0) { ?>
+          <?php foreach ($refunds->data as $refund) {
+            $created = DateTime::createFromFormat('U', $refund->created, new DateTimeZone('UTC'));
+            $created->setTimezone(new DateTimeZone('Europe/London'));
+          ?>
+            <div class="card">
+              <div class="card-header">
+                Refund <?= htmlspecialchars($refund->id) ?>
+              </div>
+              <div class="card-body">
+                <dl class="row mb-0">
+                  <dt class="col-sm-5 col-md-4">Amount</dt>
+                  <dd class="col-sm-7 col-md-8"><?= htmlspecialchars(MoneyHelpers::formatCurrency(MoneyHelpers::intToDecimal($refund->amount), $refund->currency)) ?></dd>
+
+                  <dt class="col-sm-5 col-md-4">Date and Time</dt>
+                  <dd class="col-sm-7 col-md-8"><?= htmlspecialchars($created->format('H:i:s, j F Y (T e)')) ?></dd>
+
+                  <?php if (app()->user->hasPermission('Admin')) { ?>
+                    <dt class="col-sm-5 col-md-4">Stripe Status</dt>
+                    <dd class="col-sm-7 col-md-8"><?= htmlspecialchars($refund->status) ?></dd>
+
+                    <dt class="col-sm-5 col-md-4">Stripe Balance Transaction</dt>
+                    <dd class="col-sm-7 col-md-8"><?= htmlspecialchars($refund->status) ?></dd>
+
+                    <?php if ($refund->reason) { ?>
+                      <dt class="col-sm-5 col-md-4">Reason</dt>
+                      <dd class="col-sm-7 col-md-8"><?= htmlspecialchars($refund->reason) ?></dd>
+                    <?php } ?>
+                  <?php } ?>
+                </dl>
+              </div>
+            </div>
+          <?php } ?>
+        <?php } ?>
+      <?php } else if (app()->user->hasPermission('Admin')) { ?>
         <h2>Refund this transaction</h2>
         <p>To refund gala entries, use the gala refunds system. Non gala fees may be refunded via this page.</p>
       <?php } ?>
@@ -399,7 +454,7 @@ $countries = getISOAlpha2Countries();
         <ul class="list-group mb-3">
           <?php do { ?>
             <li class="list-group-item">
-              <h3><?= htmlspecialchars($ents['GalaName']) ?><br><small><?= htmlspecialchars($ents['MForename'] . ' ' . $ents['MSurname']) ?></small></h3>
+              <h3><?= htmlspecialchars($ents['GalaName']) ?><br><small><?= htmlspecialchars(\SCDS\Formatting\Names::format($ents['MForename'], $ents['MSurname'])) ?></small></h3>
 
               <p>Fee &pound;<?= (string) \Brick\Math\BigDecimal::of((string) $ents['FeeToPay'])->toScale(2) ?></p>
               <?php if (bool($ents['Refunded']) && $ents['AmountRefunded'] > 0) { ?>

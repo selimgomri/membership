@@ -103,7 +103,7 @@ if (!function_exists('chesterStandardMenu')) {
                     <h6 class="dropdown-header">My members</h6>
                     <?php do { ?>
                       <a class="dropdown-item" href="<?= autoUrl("swimmers/" . $swimmer['ID']) ?>">
-                        <?= htmlspecialchars($swimmer['Name'] . " " . $swimmer['Surname']) ?>
+                        <?= htmlspecialchars(\SCDS\Formatting\Names::format($swimmer['Name'], $swimmer['Surname'])) ?>
                       </a>
                     <?php } while ($swimmer = $getSwimmers->fetch(PDO::FETCH_ASSOC)); ?>
                   <?php } else { ?>

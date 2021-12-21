@@ -115,7 +115,7 @@ include BASE_PATH . "views/header.php";
             $onboardingSession = \SCDS\Onboarding\Session::retrieve($session->id);
           ?>
             <a href="<?= htmlspecialchars(autoUrl('onboarding/sessions/a/' . $session->id)) ?>" class="list-group-item list-group-item-action">
-              <h2><?= htmlspecialchars($session->firstName . ' ' . $session->lastName) ?></h2>
+              <h2><?= htmlspecialchars(\SCDS\Formatting\Names::format($session->firstName, $session->lastName)) ?></h2>
 
               <?php if ($onboardingSession->renewal) { ?>
                 <p>
@@ -149,7 +149,7 @@ include BASE_PATH . "views/header.php";
                   <?= htmlspecialchars(\SCDS\Onboarding\Session::getStates()[$onboardingSession->status]) ?>
                 </dd>
 
-                <?php if ($onboardingSession->status != 'complete') { ?>
+                <?php if ($onboardingSession->status != 'complete' && isset(\SCDS\Onboarding\Session::stagesOrder()[$onboardingSession->getCurrentTask()])) { ?>
                   <dt class="col-md-3">
                     Next stage
                   </dt>

@@ -87,109 +87,112 @@ foreach ($swimsArray as $col => $name) {
 
 $pagetitle = $gala['GalaName'] . ' Information';
 
-ob_start();?>
+ob_start(); ?>
 
 <!DOCTYPE html>
 <html>
-  <head>
+
+<head>
   <meta charset='utf-8'>
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i" rel="stylesheet" type="text/css">
   <!--<link href="https://fonts.googleapis.com/css?family=Open+Sans:700,700i" rel="stylesheet" type="text/css">-->
   <?php include BASE_PATH . 'helperclasses/PDFStyles/Main.php'; ?>
-  <title><?=$pagetitle?></title>
-  </head>
-  <body>
-    <?php include BASE_PATH . 'helperclasses/PDFStyles/Letterhead.php'; ?>
+  <title><?= $pagetitle ?></title>
+</head>
 
-    <div class="row mb-3 text-end">
-      <div class="split-50">
-      </div>
-      <div class="split-50">
-        <p>
-          <?=date("d/m/Y")?>
-        </p>
-      </div>
+<body>
+  <?php include BASE_PATH . 'helperclasses/PDFStyles/Letterhead.php'; ?>
+
+  <div class="row mb-3 text-end">
+    <div class="split-50">
     </div>
-
-    <div class="primary-box mb-3" id="title">
-      <h1 class="mb-0">
-        <?=htmlspecialchars($gala['GalaName'])?>
-      </h1>
-      <p class="lead mb-0">
-        Gala Entry Report
+    <div class="split-50">
+      <p>
+        <?= date("d/m/Y") ?>
       </p>
     </div>
+  </div>
 
-    <h2>Entries</h2>
-    <p>
-      There are <?=$numEntries?> entries to this gala
+  <div class="primary-box mb-3" id="title">
+    <h1 class="mb-0">
+      <?= htmlspecialchars($gala['GalaName']) ?>
+    </h1>
+    <p class="lead mb-0">
+      Gala Entry Report
     </p>
+  </div>
 
-    <?php
+  <h2>Entries</h2>
+  <p>
+    There are <?= $numEntries ?> entries to this gala
+  </p>
 
-    if ($entry != null) { ?>
+  <?php
+
+  if ($entry != null) { ?>
 
     <div style="">
 
       <?php do { ?>
-      <div class="">
-        <div class="mb-3" style="border: 1pt solid #ddd; background: #fff; padding: 10pt;">
-          <div class="row">
-            <div class="split-50">
-              <h3 style="">
-                <?=htmlspecialchars($entry['MForename'] . ' ' . $entry['MSurname'])?>
-              </h3>
+        <div class="">
+          <div class="mb-3" style="border: 1pt solid #ddd; background: #fff; padding: 10pt;">
+            <div class="row">
+              <div class="split-50">
+                <h3 style="">
+                  <?= htmlspecialchars(\SCDS\Formatting\Names::format($entry['MForename'], $entry['MSurname'])) ?>
+                </h3>
 
-              <p class="mb-0" style="">
-                <strong>Year of birth:</strong>&nbsp;<?=date('Y', strtotime($entry['DateOfBirth']))?>
-              </p>
-              <p class="mb-0">
-                <strong>Swim&nbsp;England Number:</strong>&nbsp;<?=htmlspecialchars($entry['ASANumber'])?>
-              </p>
-            </div>
-            <div class="split-50">
-              <table style="border: none;">
-                <tbody style="border: none;">
-                <?php $count = 0; ?>
-                <?php foreach ($swimsArray as $event => $name) { ?>
-                <?php if ($entry[$event]) { ?>
-                <?php if ($count%2 == 0) { ?>
-                  <tr style="border: none;">
-                <?php } ?>
-                  <td style="border: none; padding: 0pt;">
-                    <?=$name?>
-                  </td>
-                <?php if ($count%2 == 1) { ?>
-                  </tr>
-                <?php } ?>
-                <?php $count++; ?>
-                <?php } ?>
-                <?php } ?>
-                <?php if ($count > 0 && $count%2 == 0) { ?>
-                  </tr>
-                <?php } ?>
-                </tbody>
-              </table>
+                <p class="mb-0" style="">
+                  <strong>Year of birth:</strong>&nbsp;<?= date('Y', strtotime($entry['DateOfBirth'])) ?>
+                </p>
+                <p class="mb-0">
+                  <strong>Swim&nbsp;England Number:</strong>&nbsp;<?= htmlspecialchars($entry['ASANumber']) ?>
+                </p>
+              </div>
+              <div class="split-50">
+                <table style="border: none;">
+                  <tbody style="border: none;">
+                    <?php $count = 0; ?>
+                    <?php foreach ($swimsArray as $event => $name) { ?>
+                      <?php if ($entry[$event]) { ?>
+                        <?php if ($count % 2 == 0) { ?>
+                          <tr style="border: none;">
+                          <?php } ?>
+                          <td style="border: none; padding: 0pt;">
+                            <?= $name ?>
+                          </td>
+                          <?php if ($count % 2 == 1) { ?>
+                          </tr>
+                        <?php } ?>
+                        <?php $count++; ?>
+                      <?php } ?>
+                    <?php } ?>
+                    <?php if ($count > 0 && $count % 2 == 0) { ?>
+                      </tr>
+                    <?php } ?>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
-      </div>
       <?php } while ($entry = $entries->fetch(PDO::FETCH_ASSOC)); ?>
 
     </div>
 
   <?php } ?>
 
-    <div class="page-break"></div>
+  <div class="page-break"></div>
 
-    <img src="<?=BASE_PATH?>public/img/corporate/scds.png" style="height:1.5cm;" class="mb-3" alt="Swimming Club Data Systems Logo">
+  <img src="<?= BASE_PATH ?>public/img/corporate/scds.png" style="height:1.5cm;" class="mb-3" alt="Swimming Club Data Systems Logo">
 
-    <h2 id="about">Gala Reports</h2>
+  <h2 id="about">Gala Reports</h2>
 
-    <p>&copy; Swimming Club Data Systems <?=date("Y")?>. Produced for <?=htmlspecialchars(app()->tenant->getKey('CLUB_NAME'))?>.</p>
+  <p>&copy; Swimming Club Data Systems <?= date("Y") ?>. Produced for <?= htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) ?>.</p>
 
-    <?php include BASE_PATH . 'helperclasses/PDFStyles/PageNumbers.php'; ?>
-  </body>
+  <?php include BASE_PATH . 'helperclasses/PDFStyles/PageNumbers.php'; ?>
+</body>
+
 </html>
 
 <?php

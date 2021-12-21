@@ -22,7 +22,7 @@ if (!$info) {
 $_SESSION['TENANT-' . app()->tenant->getId()]['UserSimulation'] = [
 	'RealUser'    => $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'],
 	'SimUser'     => $info['UserID'],
-	'SimUserName' => $info['Forename'] . ' ' . $info['Surname']
+	'SimUserName' => \SCDS\Formatting\Names::format($info['Forename'], $info['Surname'])
 ];
 
 $_SESSION['TENANT-' . app()->tenant->getId()]['Username'] =     $info['Username'];

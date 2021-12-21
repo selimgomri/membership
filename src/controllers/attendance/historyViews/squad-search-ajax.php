@@ -62,7 +62,7 @@ try {
 
           <li class="list-group-item">
 
-            <h3><?= htmlspecialchars($member['MForename'] . ' ' . $member['MSurname']) ?></h3>
+            <h3><?= htmlspecialchars(\SCDS\Formatting\Names::format($member['MForename'], $member['MSurname'])) ?></h3>
 
             <div class="row">
               <div class="col-md">

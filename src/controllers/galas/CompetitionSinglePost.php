@@ -2,6 +2,7 @@
 
 $db = app()->db;
 $tenant = app()->tenant;
+use Respect\Validation\Validator as v;
 
 // Verify comp
 $galaCount = $db->prepare("SELECT COUNT(*) FROM galas WHERE Tenant = ? AND GalaID = ?");
@@ -30,8 +31,9 @@ if (!empty($_POST['length'])) {
 if (!empty($_POST['venue'])) {
   $galaVenue = trim($_POST['venue']);
 }
-if (!empty($_POST['closingDate'])) {
-  $closingDate = $_POST['closingDate'];
+if (!empty($_POST['closingDate']) && !empty($_POST['closingTime']) && v::date()->validate($_POST['closingDate']) && v::time('H:i')->validate($_POST['closingTime'])) {
+  $date = DateTime::createFromFormat('Y-m-d H:i', $_POST['closingDate'] . ' ' . $_POST['closingTime'], new DateTimeZone('Europe/London'));
+  $closingDate = $date->format('Y-m-d H:i:s');
 }
 if (!empty($_POST['galaDate'])) {
   $galaDate = $_POST['galaDate'];
@@ -51,8 +53,13 @@ if ($galaFeeConstant == 0 || $galaFeeConstant == null) {
   $galaFee = 0.00;
 }
 
+$processingFee = 0;
+if (isset($_POST['per-entry-fee'])) {
+  $processingFee = MoneyHelpers::decimalToInt($_POST['per-entry-fee']);
+}
+
 try {
-  $update  = $db->prepare("UPDATE `galas` SET  GalaName = ?, `Description` = ?, CourseLength = ?, GalaVenue = ?, ClosingDate = ?, GalaDate = ?, HyTek = ?, CoachEnters = ?, RequiresApproval = ? WHERE GalaID = ?");
+  $update  = $db->prepare("UPDATE `galas` SET  GalaName = ?, `Description` = ?, CourseLength = ?, GalaVenue = ?, ClosingDate = ?, GalaDate = ?, HyTek = ?, CoachEnters = ?, RequiresApproval = ?, ProcessingFee = ? WHERE GalaID = ?");
   $update->execute([
     $galaName,
     $description,
@@ -63,7 +70,8 @@ try {
     $hyTek,
     $coachEnters,
     $approvalNeeded,
-    $id
+    $processingFee,
+    $id,
   ]);
 
   AuditLog::new('Galas-Updated', 'Updated ' . $galaName . ', #' . $id);

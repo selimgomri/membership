@@ -247,7 +247,7 @@ include BASE_PATH . 'views/header.php';
                   <dd class="col-sm-9">
                     <ul class="list-unstyled mb-0">
                       <?php for ($i = 0; $i < sizeof($coaches); $i++) { ?>
-                        <li><strong><?= htmlspecialchars($coaches[$i]['fn'] . ' ' . $coaches[$i]['sn']) ?></strong>, <?= htmlspecialchars(coachTypeDescription($coaches[$i]['code'])) ?></li>
+                        <li><strong><?= htmlspecialchars(\SCDS\Formatting\Names::format($coaches[$i]['fn'], $coaches[$i]['sn'])) ?></strong>, <?= htmlspecialchars(coachTypeDescription($coaches[$i]['code'])) ?></li>
                       <?php } ?>
                       <?php if (sizeof($coaches) == 0) { ?>
                         <li>None assigned</li>
@@ -281,7 +281,7 @@ include BASE_PATH . 'views/header.php';
                   <dd class="col-sm-9">
                     <ul class="list-unstyled mb-0">
                       <?php foreach ($attendees['1'] as $member) { ?>
-                        <li><?= htmlspecialchars($member['fn'] . ' ' . $member['sn']) ?></li>
+                        <li><?= htmlspecialchars(\SCDS\Formatting\Names::format($member['fn'], $member['sn'])) ?></li>
                       <?php } ?>
                     </ul>
                   </dd>
@@ -292,7 +292,7 @@ include BASE_PATH . 'views/header.php';
                   <dd class="col-sm-9">
                     <ul class="list-unstyled mb-0">
                       <?php foreach ($attendees['0'] as $member) { ?>
-                        <li><?= htmlspecialchars($member['fn'] . ' ' . $member['sn']) ?></li>
+                        <li><?= htmlspecialchars(\SCDS\Formatting\Names::format($member['fn'], $member['sn'])) ?></li>
                       <?php } ?>
                     </ul>
                   </dd>
@@ -303,7 +303,7 @@ include BASE_PATH . 'views/header.php';
                   <dd class="col-sm-9">
                     <ul class="list-unstyled mb-0">
                       <?php foreach ($attendees['2'] as $member) { ?>
-                        <li><?= htmlspecialchars($member['fn'] . ' ' . $member['sn']) ?></li>
+                        <li><?= htmlspecialchars(\SCDS\Formatting\Names::format($member['fn'], $member['sn'])) ?></li>
                       <?php } ?>
                     </ul>
                   </dd>

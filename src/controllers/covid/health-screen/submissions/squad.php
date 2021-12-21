@@ -86,10 +86,10 @@ include BASE_PATH . 'views/header.php';
             <li class="list-group-item">
               <div class="row align-items-center">
                 <div class="col-sm">
-                  <h3 class="h6 mb-1"><?= htmlspecialchars($member['MForename'] . ' ' . $member['MSurname']) ?></h3>
+                  <h3 class="h6 mb-1"><?= htmlspecialchars(\SCDS\Formatting\Names::format($member['MForename'], $member['MSurname'])) ?></h3>
                   <?php if ($latest && $latest['Document']) { ?>
                     <p class="mb-0 font-weight-bold">
-                      <?php if (bool($latest['OfficerApproval'])) { ?> <span class="text-success"><i class="fa fa-check-circle" aria-hidden="true"></i> Approved by <?= htmlspecialchars($latest['Forename'] . ' ' . $latest['Surname']) ?></span><?php } ?><?php if (!bool($latest['OfficerApproval']) && !$latest['ApprovedBy']) { ?> <span class="text-warning"><i class="fa fa-minus-circle" aria-hidden="true"></i> Awaiting approval</span><?php } else if (!bool($latest['OfficerApproval']) && $latest['ApprovedBy']) { ?> <span class="text-danger"><i class="fa fa-times-circle" aria-hidden="true"></i> Rejected by <?= htmlspecialchars($latest['Forename'] . ' ' . $latest['Surname']) ?></span><?php } ?>
+                      <?php if (bool($latest['OfficerApproval'])) { ?> <span class="text-success"><i class="fa fa-check-circle" aria-hidden="true"></i> Approved by <?= htmlspecialchars(\SCDS\Formatting\Names::format($latest['Forename'], $latest['Surname'])) ?></span><?php } ?><?php if (!bool($latest['OfficerApproval']) && !$latest['ApprovedBy']) { ?> <span class="text-warning"><i class="fa fa-minus-circle" aria-hidden="true"></i> Awaiting approval</span><?php } else if (!bool($latest['OfficerApproval']) && $latest['ApprovedBy']) { ?> <span class="text-danger"><i class="fa fa-times-circle" aria-hidden="true"></i> Rejected by <?= htmlspecialchars(\SCDS\Formatting\Names::format($latest['Forename'], $latest['Surname'])) ?></span><?php } ?>
                     </p>
                   <?php } ?>
                   <?php if ($latest && $latest['Document']) {
@@ -101,7 +101,7 @@ include BASE_PATH . 'views/header.php';
                     </p>
                     <?php if (!bool($latest['OfficerApproval'])) { ?>
                       <p class="mt-3 mb-0">
-                        <button class="btn btn-primary review-button" type="button" data-review-id="<?= htmlspecialchars($latest['ID']) ?>" data-review-document="<?= htmlspecialchars($latest['Document']) ?>" data-member-name="<?= htmlspecialchars($member['MForename'] . ' ' . $member['MSurname']) ?>">
+                        <button class="btn btn-primary review-button" type="button" data-review-id="<?= htmlspecialchars($latest['ID']) ?>" data-review-document="<?= htmlspecialchars($latest['Document']) ?>" data-member-name="<?= htmlspecialchars(\SCDS\Formatting\Names::format($member['MForename'], $member['MSurname'])) ?>">
                           Review<?php if ($latest['ApprovedBy']) { ?> again<?php } ?>
                         </button>
                       </p>
@@ -111,7 +111,7 @@ include BASE_PATH . 'views/header.php';
                     $time->setTimezone(new DateTimeZone('Europe/London'));
                   ?>
                     <p class="mb-0 text-danger font-weight-bold">
-                      <i class="fa fa-times-circle" aria-hidden="true"></i> New Health Survey requested from <?= htmlspecialchars($member['MForename'])?> at <?= htmlspecialchars($time->format('H:i, j F Y')) ?><?php if ($latest['ApprovedBy']) { ?> by <?= htmlspecialchars($latest['Forename'] . ' ' . $latest['Surname']) ?></span><?php } ?>
+                      <i class="fa fa-times-circle" aria-hidden="true"></i> New Health Survey requested from <?= htmlspecialchars($member['MForename'])?> at <?= htmlspecialchars($time->format('H:i, j F Y')) ?><?php if ($latest['ApprovedBy']) { ?> by <?= htmlspecialchars(\SCDS\Formatting\Names::format($latest['Forename'], $latest['Surname'])) ?></span><?php } ?>
                     </p>
                   <?php } else { ?>
                     <p class="mb-0">
@@ -124,7 +124,7 @@ include BASE_PATH . 'views/header.php';
                   <div class="btn-group">
                     <?php if ($latest) { ?>
                       <?php if (bool($latest['OfficerApproval'])) { ?>
-                        <button class="btn btn-warning" data-member-name="<?= htmlspecialchars($member['MForename'] . ' ' . $member['MSurname']) ?>" data-form-submission-id="<?= htmlspecialchars($latest['ID']) ?>" data-action="void" title="Require that <?= htmlspecialchars($member['MForename']) ?> submits a new health survey">
+                        <button class="btn btn-warning" data-member-name="<?= htmlspecialchars(\SCDS\Formatting\Names::format($member['MForename'], $member['MSurname'])) ?>" data-form-submission-id="<?= htmlspecialchars($latest['ID']) ?>" data-action="void" title="Require that <?= htmlspecialchars($member['MForename']) ?> submits a new health survey">
                           Void survey
                         </button>
                       <?php } ?>

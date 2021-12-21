@@ -150,7 +150,7 @@ include BASE_PATH . 'views/header.php';
             <div class="row align-items-center">
               <div class="col-md-6">
                 <h2>
-                  <?= htmlspecialchars($info[0]['sn'] . ', ' . $info[0]['fn']) ?>
+                  <?= htmlspecialchars(\SCDS\Formatting\Names::format($info[0]['sn'], $info[0]['fn'])) ?>
                 </h2>
                 <p class="mb-0">
                   <strong>

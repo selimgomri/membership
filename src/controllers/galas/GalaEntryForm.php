@@ -35,11 +35,10 @@ if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent') {
 }
 
 $now = new DateTime('now', new DateTimeZone('Europe/London'));
-$nowDay = $now->format('Y-m-d');
 $galas = $db->prepare("SELECT GalaID id, GalaName `name` FROM `galas` WHERE Tenant = ? AND ClosingDate >= ? ORDER BY `galas`.`ClosingDate` ASC");
 $galas->execute([
   $tenant->getId(),
-  $nowDay
+  $now->format('Y-m-d H:i:s')
 ]);
 
 $mySwimmer = $mySwimmers->fetch(PDO::FETCH_ASSOC);
@@ -107,7 +106,7 @@ include "galaMenu.php";
             <option value="null" <?php if ($swimmerCount > 1) { ?>selected<?php } ?> disabled>Select a swimmer</option>
             <?php do { ?>
               <option value="<?= htmlspecialchars($mySwimmer['id']) ?>" <?php if ($swimmerCount == 1) { ?>selected<?php } ?>>
-                <?= htmlspecialchars($mySwimmer['fn'] . " " . $mySwimmer['sn']) ?>
+                <?= htmlspecialchars(\SCDS\Formatting\Names::format($mySwimmer['fn'], $mySwimmer['sn'])) ?>
               </option>
             <?php } while ($mySwimmer = $mySwimmers->fetch(PDO::FETCH_ASSOC)); ?>
           </select>

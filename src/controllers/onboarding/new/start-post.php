@@ -124,6 +124,20 @@ if ($user) {
       $hasMembers = true;
     }
   }
+
+  // Fetch current members
+  $getMembers = $db->prepare("SELECT MemberID id FROM members WHERE UserID = ? AND Active ORDER BY MForename ASC, MSurname ASC");
+  $getMembers->execute([
+    $user,
+  ]);
+  while ($swimmer = $getMembers->fetch(PDO::FETCH_ASSOC)) {
+    if ($_POST['exisiting-member-' . $swimmer['id']]) {
+      $selectedSwimmers[] = $swimmer['id'];
+      // Already set parent here!
+
+      $hasMembers = true;
+    }
+  }
 }
 
 http_response_code(302);
@@ -144,8 +158,13 @@ if (!$hasMembers || !$status) {
   $now = new DateTime('now', new DateTimeZone('UTC'));
   $today = new DateTime('now', new DateTimeZone('Europe/London'));
   $welcomeText = null;
-  $stages = \SCDS\Onboarding\Session::getDefaultStages();
+  $stages = json_decode(json_encode(\SCDS\Onboarding\Session::getDefaultStages()));
   $metadata = [];
+
+  if ($user) {
+    // Don't go through set password step (account_details)
+    $stages->account_details->required = false;
+  }
 
   // Add to db
   $add = $db->prepare("INSERT INTO onboardingSessions (`id`,  `user`, `created`, `creator`, `start`, `charge_outstanding`, `charge_pro_rata`, `welcome_text`, `token`, `token_on`, `status`, `due_date`, `completed_at`, `stages`, `metadata`, `batch`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");

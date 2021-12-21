@@ -268,9 +268,9 @@ include BASE_PATH . 'views/header.php';
         <p>
           Latest submission <?= htmlspecialchars($time->format('H:i, j F Y')) ?><br>
           <?php if (bool($latestCovidSurvey['OfficerApproval'])) { ?>
-            <span class="text-success"><i class="fa fa-check-circle" aria-hidden="true"></i> Approved by <?= htmlspecialchars($latestCovidSurvey['Forename'] . ' ' . $latestCovidSurvey['Surname']) ?></span>
+            <span class="text-success"><i class="fa fa-check-circle" aria-hidden="true"></i> Approved by <?= htmlspecialchars(\SCDS\Formatting\Names::format($latestCovidSurvey['Forename'], $latestCovidSurvey['Surname'])) ?></span>
           <?php } else if (!bool($latestCovidSurvey['OfficerApproval']) && $latestCovidSurvey['ApprovedBy']) { ?>
-            <span class="text-danger"><i class="fa fa-times-circle" aria-hidden="true"></i> Rejected by <?= htmlspecialchars($latestCovidSurvey['Forename'] . ' ' . $latestCovidSurvey['Surname']) ?></span>
+            <span class="text-danger"><i class="fa fa-times-circle" aria-hidden="true"></i> Rejected by <?= htmlspecialchars(\SCDS\Formatting\Names::format($latestCovidSurvey['Forename'], $latestCovidSurvey['Surname'])) ?></span>
           <?php } else if (!bool($latestCovidSurvey['OfficerApproval'])) { ?>
             <span class="text-warning"><i class="fa fa-minus-circle" aria-hidden="true"></i> Awaiting approval</span>
           <?php } ?>
@@ -296,7 +296,7 @@ include BASE_PATH . 'views/header.php';
         $time->setTimezone(new DateTimeZone('Europe/London'));
       ?>
         <?php if (bool($latestCovidRAForm['MemberAgreement'])) { ?>
-          <span class="text-success"><i class="fa fa-check-circle" aria-hidden="true"></i> Signed at <?= htmlspecialchars($time->format('H:i, j F Y')) ?><?php if ($latestCovidRAForm['Guardian']) { ?> with <?= htmlspecialchars($latestCovidRAForm['Forename'] . ' ' . $latestCovidRAForm['Surname']) ?> as parent/guardian<?php } ?></span>
+          <span class="text-success"><i class="fa fa-check-circle" aria-hidden="true"></i> Signed at <?= htmlspecialchars($time->format('H:i, j F Y')) ?><?php if ($latestCovidRAForm['Guardian']) { ?> with <?= htmlspecialchars(\SCDS\Formatting\Names::format($latestCovidRAForm['Forename'], $latestCovidRAForm['Surname'])) ?> as parent/guardian<?php } ?></span>
         <?php } else { ?>
           <span class="text-warning"><i class="fa fa-minus-circle" aria-hidden="true"></i> A new declaration form is required</span>
         <?php } ?>

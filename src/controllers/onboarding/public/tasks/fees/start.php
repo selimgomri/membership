@@ -250,6 +250,20 @@ include BASE_PATH . "views/head.php";
               <strong>There are no memberships to display for the selected period</strong>
             </p>
           </div>
+
+          <?php if (!$batch->completed && $batch->total == 0) { ?>
+            <form method="post" class="needs-validation" novalidate>
+              <p>
+                If you're sure there's nothing to pay, confirm to complete onboarding.
+              </p>
+
+              <p>
+                <button type="submit" class="btn btn-success">
+                  Confirm
+                </button>
+              </p>
+            </form>
+          <?php } ?>
         <?php } ?>
 
         <h2>Membership Batch Details</h2>

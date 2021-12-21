@@ -3,7 +3,7 @@
 $db = app()->db;
 $tenant = app()->tenant;
 
-$galas = $db->prepare("SELECT GalaName, `Description`, ClosingDate, GalaDate, GalaVenue, CourseLength, CoachEnters, RequiresApproval FROM galas WHERE Tenant = ? AND GalaID = ?");
+$galas = $db->prepare("SELECT GalaName, `Description`, ClosingDate, GalaDate, GalaVenue, CourseLength, CoachEnters, RequiresApproval, ProcessingFee FROM galas WHERE Tenant = ? AND GalaID = ?");
 $galas->execute([
   $tenant->getId(),
   $id
@@ -90,6 +90,9 @@ $markdown->setSafeMode(false);
 
 // Get price and event information
 $galaData = new GalaPrices($db, $id);
+
+$closingDate = new DateTime($gala['ClosingDate'], new DateTimeZone('Europe/London'));
+$finishesBy = new DateTime($gala['GalaDate'], new DateTimeZone('Europe/London'));
 
 $pagetitle = htmlspecialchars($gala['GalaName']) . " - Galas";
 include BASE_PATH . "views/header.php";
@@ -185,12 +188,12 @@ include "galaMenu.php";
 
     <div class="col-sm-6 col-md-4">
       <h3 class="h6">Closing date</h3>
-      <p><?= date("j F Y", strtotime($gala['ClosingDate'])) ?></p>
+      <p><?= htmlspecialchars($closingDate->format("H:i, j F Y")) ?></p>
     </div>
 
     <div class="col-sm-6 col-md-4">
       <h3 class="h6">Finishes by</h3>
-      <p><?= date("j F Y", strtotime($gala['GalaDate'])) ?></p>
+      <p><?= htmlspecialchars($finishesBy->format("j F Y")) ?></p>
     </div>
 
     <?php if ($gala['CoachEnters']) { ?>
@@ -240,9 +243,16 @@ include "galaMenu.php";
 
       <div class="col-sm-6 col-md-4">
         <h3 class="h6"><?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent') { ?>Total refunded to you<?php } else { ?>Total refunded to parents<?php } ?></h3>
-        <p>&pound;<?= number_format($amountRefunded / 100, 2) ?></p>
+        <p>&pound;<?= htmlspecialchars(MoneyHelpers::intToDecimal($amountRefunded)) ?></p>
       </div>
 
+    <?php } ?>
+
+    <?php if ($gala['ProcessingFee'] > 0) { ?>
+      <div class="col-sm-6 col-md-4">
+        <h3 class="h6">Per entry processing fee</h3>
+        <p>&pound;<?= htmlspecialchars(MoneyHelpers::intToDecimal($gala['ProcessingFee'])) ?></p>
+      </div>
     <?php } ?>
   </div>
 
@@ -322,7 +332,7 @@ include "galaMenu.php";
       <?php do { ?>
         <div class="col-md-6 col-lg-4">
           <h3>
-            <?= htmlspecialchars($entry['MForename'] . ' ' . $entry['MSurname']) ?>
+            <?= htmlspecialchars(\SCDS\Formatting\Names::format($entry['MForename'], $entry['MSurname'])) ?>
           </h3>
 
           <p>

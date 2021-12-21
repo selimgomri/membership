@@ -26,7 +26,7 @@ $swimsTimeArray = ['25FreeTime', '50FreeTime', '100FreeTime', '200FreeTime', '40
 $rowArray = [1, null, null, null, null, null, 2, 1,  null, null, 2, 1, null, null, 2, 1, null, null, 2, 1, null, null, 2];
 $rowArrayText = ["Freestyle", null, null, null, null, null, 2, "Backstroke",  null, null, 2, "Breaststroke", null, null, 2, "Butterfly", null, null, 2, "Individual Medley", null, null, 2];
 
-$pagetitle = htmlspecialchars($row['MForename'] . " " . $row['MSurname']) . " - " . htmlspecialchars($row['GalaName']);
+$pagetitle = htmlspecialchars(\SCDS\Formatting\Names::format($row['MForename'], $row['MSurname'])) . " - " . htmlspecialchars($row['GalaName']);
 
 include BASE_PATH . 'views/header.php';
 
@@ -34,7 +34,7 @@ include BASE_PATH . 'views/header.php';
 
 <div class="bg-light mt-n3 py-3 mb-3">
   <div class="container-xl">
-    <h1><?= htmlspecialchars($row['MForename'] . " " . $row['MSurname']) ?></h1>
+    <h1><?= htmlspecialchars(\SCDS\Formatting\Names::format($row['MForename'], $row['MSurname'])) ?></h1>
     <p class="lead mb-0">For <?= htmlspecialchars($row['GalaName']) ?>, Closing Date: <?= htmlspecialchars(date('j F Y', strtotime($row['ClosingDate']))) ?></p>
   </div>
 </div>

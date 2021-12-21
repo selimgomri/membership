@@ -87,7 +87,7 @@ include BASE_PATH . 'views/header.php';
             <li class="list-group-item <?php if ($i % 2 == 1) { ?>bg-light<?php } ?>">
               <div class="row align-items-center">
                 <div class="col-md">
-                  <h2><?= htmlspecialchars($swimmer['fn'] . " " . $swimmer['sn']) ?></h2>
+                  <h2><?= htmlspecialchars(\SCDS\Formatting\Names::format($swimmer['fn'], $swimmer['sn'])) ?></h2>
                   <p class="lead mb-0">
                     <?php for ($y = 0; $y < sizeof($s); $y++) {
                       if ($y > 0) {

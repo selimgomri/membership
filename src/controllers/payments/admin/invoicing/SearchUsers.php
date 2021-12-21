@@ -36,21 +36,20 @@ try {
 
   ob_start();
 
-  ?>
-  
+?>
+
   <?php if ($user = $users->fetch(PDO::FETCH_ASSOC)) { ?>
     <option value="none">Select a user...</option>
     <?php do { ?>
-      <option value="<?= htmlspecialchars($user['UserID']) ?>"><?= htmlspecialchars($user['Forename'] . ' ' . $user['Surname']) ?> (<?= htmlspecialchars($user['EmailAddress']) ?>)</option>
+      <option value="<?= htmlspecialchars($user['UserID']) ?>"><?= htmlspecialchars(\SCDS\Formatting\Names::format($user['Forename'], $user['Surname'])) ?> (<?= htmlspecialchars($user['EmailAddress']) ?>)</option>
     <?php } while ($user = $users->fetch(PDO::FETCH_ASSOC)); ?>
   <?php } else {
     $disabled = true; ?>
     <option value="none">No matches</option>
   <?php } ?>
 
-  <?php
+<?php
   $html = ob_get_clean();
-
 } catch (Exception $e) {
   $status = 500;
   $disabled = true;

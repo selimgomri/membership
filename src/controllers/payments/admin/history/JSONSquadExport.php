@@ -81,7 +81,7 @@ if ($row != null) {
 
   	if ($row['UserID'] != null) {
   		if ($user_id_last != $user_id) {
-  			$parent['Name'] = $row['Forename'] . " " . $row['Surname'];
+  			$parent['Name'] = \SCDS\Formatting\Names::format($row['Forename'], $row['Surname']);
   			$parent['FamilyTotal'] = monthlyFeeCost(null, $user_id, "int");
   			$parent['FamilyTotalString'] = '£' . number_format(monthlyFeeCost(null, $user_id, "decimal"),2,'.','');
   			$parent['PaymentStatus'] = $row['Status'];
@@ -95,7 +95,7 @@ if ($row != null) {
   	}
 
   	$swimmer = [
-  		'Name'				=> $row['MForename'] . " " . $row['MSurname'],
+  		'Name'				=> \SCDS\Formatting\Names::format($row['MForename'], $row['MSurname']),
   		'Description'	=> $row['Description'],
   		'Amount'			=> (int) $row['Amount'],
   		'AmountString'=> '£' . (string) (\Brick\Math\BigDecimal::of((string) $row['Amount']))->withPointMovedLeft(2)->toScale(2),

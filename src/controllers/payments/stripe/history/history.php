@@ -95,7 +95,7 @@ include BASE_PATH . 'views/header.php';
         ?>
           <a href="<?= htmlspecialchars(autoUrl("payments/card-transactions/" . $pm['ID'])) ?>" class="list-group-item list-group-item-action">
             <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') { ?>
-              <p class="h3 mb-3"><?= htmlspecialchars($pm['Forename'] . ' ' . $pm['Surname']) ?></p>
+              <p class="h3 mb-3"><?= htmlspecialchars(\SCDS\Formatting\Names::format($pm['Forename'], $pm['Surname'])) ?></p>
             <?php } ?>
             <?php if (isset($pm['Brand'])) { ?>
               <div class="row align-items-center mb-2">

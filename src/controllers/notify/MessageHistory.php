@@ -97,8 +97,7 @@ include BASE_PATH . "views/notifyMenu.php"; ?>
           $info = json_decode($row['JSONData']);
           $sender = null;
           if ($row['Forename'] != "" && $row['Surname'] != "") {
-            $sender = "<dt class=\"col-sm-3\">Sent by</dt><dd class=\"col-sm-9\">" . htmlspecialchars($row['Forename'] . " " .
-              $row['Surname']) . "</dd>";
+            $sender = "<dt class=\"col-sm-3\">Sent by</dt><dd class=\"col-sm-9\">" . htmlspecialchars(\SCDS\Formatting\Names::format($row['Forename'], $row['Surname'])) . "</dd>";
             if ($row['ForceSend']) {
               $sender .= "<dt class=\"col-sm-3\">Force Sent</dt><dd class=\"col-sm-9\">True</dd>";
             }

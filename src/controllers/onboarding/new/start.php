@@ -16,6 +16,7 @@ $getSquads = $db->prepare("SELECT SquadName FROM squads INNER JOIN squadMembers 
 $swimmer = $swimmers->fetch(PDO::FETCH_ASSOC);
 
 $user = null;
+$getMembers = $member = null;
 
 if (isset($_GET['user'])) {
   $getUser = $db->prepare("SELECT Forename firstName, Surname lastName, EmailAddress email, Mobile phone FROM users WHERE UserID = ? AND Tenant = ? AND Active");
@@ -24,6 +25,17 @@ if (isset($_GET['user'])) {
     $tenant->getId(),
   ]);
   $user = $getUser->fetch(PDO::FETCH_OBJ);
+
+  if (!$user) {
+    halt(404);
+  }
+
+  // Fetch current members
+  $getMembers = $db->prepare("SELECT MForename firstName, MSurname lastName, MemberID id FROM members WHERE UserID = ? AND Active ORDER BY MForename ASC, MSurname ASC");
+  $getMembers->execute([
+    $_GET['user'],
+  ]);
+  $member = $getMembers->fetch(PDO::FETCH_OBJ);
 }
 
 $email = $first = $last = $mobile = '';
@@ -68,7 +80,7 @@ include BASE_PATH . "views/header.php";
 
       </div>
 
-      <?php if ($swimmer) { ?>
+      <?php if ($swimmer || ($user && $member)) { ?>
 
         <form method="post" class="" novalidate id="form">
 
@@ -166,7 +178,7 @@ include BASE_PATH . "views/header.php";
           <?php } ?>
 
           <div id="select-members" class="<?php if (!$user) { ?>collapse<?php } ?>">
-            <h2>Select members</h2>
+            <h2>Select members (not not linked to an account)</h2>
 
             <div class="alert alert-warning">
               <p class="mb-0">
@@ -176,42 +188,87 @@ include BASE_PATH . "views/header.php";
               </p>
             </div>
 
-            <?php do {
-              $getSquads->execute([
-                $swimmer['id']
-              ]);
-            ?>
-              <div class="card card-body mb-3">
-                <div class="form-check mb-0">
-                  <input class="form-check-input" type="checkbox" id="member-<?= htmlspecialchars($swimmer['id']) ?>" name="member-<?= htmlspecialchars($swimmer['id']) ?>" data-collapse="member-<?= htmlspecialchars($swimmer['id']) ?>-collapse" value="1" autocomplete="off">
-                  <label class="form-check-label" for="member-<?= htmlspecialchars($swimmer['id']) ?>">
-                    <p class="mb-0 fw-bold">
-                      <?= htmlspecialchars($swimmer['first'] . ' ' . $swimmer['last']) ?>
-                    </p>
-                    <ul class="mb-0 list-unstyled">
-                      <?php if ($squad = $getSquads->fetch(PDO::FETCH_ASSOC)) {
-                        do { ?>
-                          <li><?= htmlspecialchars($squad['SquadName']) ?></li>
-                        <?php } while ($squad = $getSquads->fetch(PDO::FETCH_ASSOC));
-                      } else { ?>
-                        <li>No squads</li>
-                      <?php } ?>
-                    </ul>
-                  </label>
+            <?php if ($swimmer) { ?>
+              <?php do {
+                $getSquads->execute([
+                  $swimmer['id']
+                ]);
+              ?>
+                <div class="card card-body mb-3">
+                  <div class="form-check mb-0">
+                    <input class="form-check-input" type="checkbox" id="member-<?= htmlspecialchars($swimmer['id']) ?>" name="member-<?= htmlspecialchars($swimmer['id']) ?>" data-collapse="member-<?= htmlspecialchars($swimmer['id']) ?>-collapse" value="1" autocomplete="off">
+                    <label class="form-check-label" for="member-<?= htmlspecialchars($swimmer['id']) ?>">
+                      <p class="mb-0 fw-bold">
+                        <?= htmlspecialchars($swimmer['first'] . ' ' . $swimmer['last']) ?>
+                      </p>
+                      <ul class="mb-0 list-unstyled">
+                        <?php if ($squad = $getSquads->fetch(PDO::FETCH_ASSOC)) {
+                          do { ?>
+                            <li><?= htmlspecialchars($squad['SquadName']) ?></li>
+                          <?php } while ($squad = $getSquads->fetch(PDO::FETCH_ASSOC));
+                        } else { ?>
+                          <li>No squads</li>
+                        <?php } ?>
+                      </ul>
+                    </label>
+                  </div>
+
+                  <div class="collapse" id="member-<?= htmlspecialchars($swimmer['id']) ?>-collapse">
+                    <div class="form-check custom-control-inline mt-2">
+                      <input type="radio" id="member-rr-yes-<?= htmlspecialchars($swimmer['id']) ?>" name="member-rr-<?= htmlspecialchars($swimmer['id']) ?>" class="form-check-input" checked value="yes">
+                      <label class="form-check-label" for="member-rr-yes-<?= htmlspecialchars($swimmer['id']) ?>">Require registration</label>
+                    </div>
+                    <div class="form-check custom-control-inline mb-0">
+                      <input type="radio" id="member-rr-no-<?= htmlspecialchars($swimmer['id']) ?>" name="member-rr-<?= htmlspecialchars($swimmer['id']) ?>" class="form-check-input" value="no">
+                      <label class="form-check-label" for="member-rr-no-<?= htmlspecialchars($swimmer['id']) ?>">Add to account quietly</label>
+                    </div>
+                  </div>
+                </div>
+              <?php } while ($swimmer = $swimmers->fetch(PDO::FETCH_ASSOC)); ?>
+            <?php } ?>
+
+            <?php if ($user && $member) { ?>
+              <h2>Select members linked to <?= htmlspecialchars($user->firstName) ?>'s account</h2>
+
+              <?php do {
+                $getSquads->execute([
+                  $member->id
+                ]);
+              ?>
+                <div class="card card-body mb-3">
+                  <div class="form-check mb-0">
+                    <input class="form-check-input" type="checkbox" id="exisiting-member-<?= htmlspecialchars($member->id) ?>" name="exisiting-member-<?= htmlspecialchars($member->id) ?>" data-collapse="exisiting-member-<?= htmlspecialchars($member->id) ?>-collapse" value="1" autocomplete="off">
+                    <label class="form-check-label" for="exisiting-member-<?= htmlspecialchars($member->id) ?>">
+                      <p class="mb-0 fw-bold">
+                        <?= htmlspecialchars($member->firstName . ' ' . $member->lastName) ?>
+                      </p>
+                      <ul class="mb-0 list-unstyled">
+                        <?php if ($squad = $getSquads->fetch(PDO::FETCH_ASSOC)) {
+                          do { ?>
+                            <li><?= htmlspecialchars($squad['SquadName']) ?></li>
+                          <?php } while ($squad = $getSquads->fetch(PDO::FETCH_ASSOC));
+                        } else { ?>
+                          <li>No squads</li>
+                        <?php } ?>
+                      </ul>
+                    </label>
+                  </div>
+
+                  <div class="collapse" id="exisiting-member-<?= htmlspecialchars($member->id) ?>-collapse">
+                    <div class="form-check custom-control-inline mt-2">
+                      <input type="radio" id="exisiting-member-rr-yes-<?= htmlspecialchars($member->id) ?>" name="exisiting-member-rr-<?= htmlspecialchars($member->id) ?>" class="form-check-input" checked value="yes">
+                      <label class="form-check-label" for="exisiting-member-rr-yes-<?= htmlspecialchars($member->id) ?>">Require registration</label>
+                    </div>
+                    <div class="form-check custom-control-inline mb-0">
+                      <input type="radio" id="exisiting-member-rr-no-<?= htmlspecialchars($member->id) ?>" name="exisiting-member-rr-<?= htmlspecialchars($member->id) ?>" class="form-check-input" value="no">
+                      <label class="form-check-label" for="exisiting-member-rr-no-<?= htmlspecialchars($member->id) ?>">Add to account quietly</label>
+                    </div>
+                  </div>
                 </div>
 
-                <div class="collapse" id="member-<?= htmlspecialchars($swimmer['id']) ?>-collapse">
-                  <div class="form-check custom-control-inline mt-2">
-                    <input type="radio" id="member-rr-yes-<?= htmlspecialchars($swimmer['id']) ?>" name="member-rr-<?= htmlspecialchars($swimmer['id']) ?>" class="form-check-input" checked value="yes">
-                    <label class="form-check-label" for="member-rr-yes-<?= htmlspecialchars($swimmer['id']) ?>">Require registration</label>
-                  </div>
-                  <div class="form-check custom-control-inline mb-0">
-                    <input type="radio" id="member-rr-no-<?= htmlspecialchars($swimmer['id']) ?>" name="member-rr-<?= htmlspecialchars($swimmer['id']) ?>" class="form-check-input" value="no">
-                    <label class="form-check-label" for="member-rr-no-<?= htmlspecialchars($swimmer['id']) ?>">Add to account quietly</label>
-                  </div>
-                </div>
-              </div>
-            <?php } while ($swimmer = $swimmers->fetch(PDO::FETCH_ASSOC)); ?>
+              <?php } while ($member = $getMembers->fetch(PDO::FETCH_OBJ)); ?>
+
+            <?php } ?>
 
             <p>
               <button type="submit" class="btn btn-success">

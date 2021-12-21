@@ -199,7 +199,7 @@ include BASE_PATH . 'views/header.php';
               <li class="list-group-item <?php if ($booking) { ?>bg-light text-muted user-select-none<?php } ?>" id="<?= htmlspecialchars('member-box-for-member-' . $member['id']) ?>">
                 <div class="form-check">
                   <input class="form-check-input" type="checkbox" name="<?= htmlspecialchars('member-checkbox-' . $member['id']) ?>" id="<?= htmlspecialchars('member-checkbox-' . $member['id']) ?>" <?php if ($booking) { ?>checked disabled<?php } ?>>
-                  <label class="form-check-label" for="<?= htmlspecialchars('member-checkbox-' . $member['id']) ?>"><?= htmlspecialchars($member['fn'] . ' ' . $member['sn']) ?></label>
+                  <label class="form-check-label" for="<?= htmlspecialchars('member-checkbox-' . $member['id']) ?>"><?= htmlspecialchars(\SCDS\Formatting\Names::format($member['fn'], $member['sn'])) ?></label>
                 </div>
               </li>
             <?php } ?>
