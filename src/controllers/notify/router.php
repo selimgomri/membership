@@ -70,9 +70,11 @@ if ($access == "Admin" || $access == "Coach" || $access == "Galas" || $rep) {
 			});
 		}
 
+		/*
   	$this->get('/', function() {
   		include 'Email.php';
   	});
+		*/
 
 		$this->get('/react-data', function() {
   		include 'EmailAPIData.php';
@@ -82,9 +84,11 @@ if ($access == "Admin" || $access == "Coach" || $access == "Galas" || $rep) {
   		include 'ImageUpload.php';
   	});
 
+		/*
   	$this->post('/', function() {
   		include 'EmailQueuer.php';
   	});
+		*/
 
     $this->get('/individual/{user}?:int/', function($user = null) {
   		
