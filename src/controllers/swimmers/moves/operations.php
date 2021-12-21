@@ -59,7 +59,7 @@ try {
           $message .= 'joining ' . $join->getName();
         }
         $message .= ') has been cancelled.</p>';
-        if (!$tenant->getBooleanOption('HIDE_MOVE_FEE_INFO')) {
+        if (!$tenant->getBooleanKey('HIDE_MOVE_FEE_INFO')) {
           $message .= '<p>The fee for ' . htmlspecialchars($join->getName()) . ' is &pound;' . htmlspecialchars($join->getFee(false)) . '.</p>';
         }
         $message .= '<p>If you have any questions, please contact your coach or a member of club staff.</p>';
