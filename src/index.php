@@ -395,32 +395,67 @@ if (getenv('MAIN_DOMAIN') && getenv('DOMAIN_TYPE') == 'SUBDOMAIN') {
   // Else use main domain
   // Get the club
 
-  $clubObject = Tenant::fromDomain(app('request')->hostname);
+  // Check for tenant redirects
+  $checkRedirect = $db->prepare("SELECT `Tenant`, `Target` FROM `tenantRedirect` WHERE `Source` = ? ORDER BY `Created` ASC;");
+  $checkRedirect->execute([
+    app('request')->hostname
+  ]);
 
-  if (!$clubObject) {
-    $uuid = str_replace('.' . getenv('MAIN_DOMAIN'), '', app('request')->hostname);
-    $clubObject = Tenant::fromUUID($uuid);
-  }
+  if ($redirect = $checkRedirect->fetch(PDO::FETCH_OBJ)) {
 
-  if (!$clubObject) {
-    // Send to main page
-    $route->any(['/', '/*'], function () {
-      http_response_code(302);
-      header('location: https://myswimmingclub.uk');
-    });
+    http_response_code(302);
+    if ($redirect->Target) {
+      $route->any(['/', '/*'], function () {
+        global $redirect;
+        header('location: ' . $redirect->Target);
+      });
+    } else {
+      $clubObject = Tenant::fromId($redirect->Tenant);
+      if ($clubObject) {
+        $link = $clubObject->getDomain();
+        if (!$link) {
+          $link = $clubObject->getUuid() . '.' . getenv('MAIN_DOMAIN');
+        }
+        $link = 'https://' . $link . app()->request->path;
+        $route->any(['/', '/*'], function () {
+          global $link;
+          header('location: ' . $link);
+        });
+      } else {
+        $route->any(['/', '/*'], function () {
+          header('location: https://myswimmingclub.uk');
+        });
+      }
+    }
   } else {
-    app()->club = $clubObject->getCodeID();
-    app()->tenant = $clubObject;
 
-    // pre($clubObject);
+    $clubObject = Tenant::fromDomain(app('request')->hostname);
 
-    // $route->get('/', function() {
-    //   pre(app()->request);
-    // });
+    if (!$clubObject) {
+      $uuid = str_replace('.' . getenv('MAIN_DOMAIN'), '', app('request')->hostname);
+      $clubObject = Tenant::fromUUID($uuid);
+    }
 
-    $route->group('/', function () {
-      include BASE_PATH . 'routes/club/routes.php';
-    });
+    if (!$clubObject) {
+      // Send to main page
+      $route->any(['/', '/*'], function () {
+        http_response_code(302);
+        header('location: https://myswimmingclub.uk');
+      });
+    } else {
+      app()->club = $clubObject->getCodeID();
+      app()->tenant = $clubObject;
+
+      // pre($clubObject);
+
+      // $route->get('/', function() {
+      //   pre(app()->request);
+      // });
+
+      $route->group('/', function () {
+        include BASE_PATH . 'routes/club/routes.php';
+      });
+    }
   }
 } else {
   $route->group('/{club}:int', function ($club) {
