@@ -63,7 +63,7 @@ class Login
 
     try {
       $reader = new \GeoIp2\Database\Reader(BASE_PATH . 'storage/geoip/GeoLite2-City.mmdb');
-      $record = $reader->city(app('request')->ip());
+      $record = $reader->city(getUserIp());
       $city = '';
       if ($record->city->name != "") {
         $city = $record->city->name . ', ';
@@ -111,7 +111,7 @@ class Login
 
     $login_details = [
       $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'],
-      app('request')->ip(),
+      getUserIp(),
       $geo_string,
       $browser,
       $browser_details->os->toString(),
@@ -156,7 +156,7 @@ class Login
     // Test if we've seen a login from here before
     $login_before_data = [
       $_SESSION['TENANT-' . app()->tenant->getId()]['UserID'],
-      app('request')->ip(),
+      getUserIp(),
       ucwords(app('request')->browser()),
       ucwords(app('request')->platform())
     ];

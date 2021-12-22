@@ -19,7 +19,7 @@ $captchaStatus = null;
 $post_data = http_build_query([
   'secret' => getenv('GOOGLE_RECAPTCHA_SECRET'),
   'response' => $_POST['g-recaptcha-response'],
-  'remoteip' => $_SERVER['REMOTE_ADDR']
+  'remoteip' => getUserIp()
 ]);
 $opts = array('http' => [
   'method'  => 'POST',
