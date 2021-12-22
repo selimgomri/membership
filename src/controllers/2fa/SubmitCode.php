@@ -54,7 +54,7 @@ if (($_POST['auth'] == $_SESSION['TENANT-' . app()->tenant->getId()]['TWO_FACTOR
     if ($auth_via_google_authenticator) {
       $event = 'UserLogin-2FA-App';
     }
-    AuditLog::new($event, 'Signed in from ' . $_SERVER['REMOTE_ADDR'], $currentUser->getId());
+    AuditLog::new($event, 'Signed in from ' . getUserIp(), $currentUser->getId());
   } catch (Exception $e) {
     halt(403);
   }

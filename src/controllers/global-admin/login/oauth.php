@@ -87,7 +87,7 @@ if (!isset($_GET['code'])) {
 
     try {
       $reader = new \GeoIp2\Database\Reader(BASE_PATH . 'storage/geoip/GeoLite2-City.mmdb');
-      $record = $reader->city(app('request')->ip());
+      $record = $reader->city(getUserIp());
       $city = '';
       if ($record->city->name != "") {
         $city = $record->city->name . ', ';
@@ -135,7 +135,7 @@ if (!isset($_GET['code'])) {
 
     $login_details = [
       $userDetails['ID'],
-      app('request')->ip(),
+      getUserIp(),
       $geo_string,
       $browser,
       $browser_details->os->toString(),

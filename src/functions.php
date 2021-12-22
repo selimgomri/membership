@@ -1931,6 +1931,21 @@ function getCompiledAsset($filename)
   closedir($openHandler);
 }
 
+/**
+ * Returns an IP address, checking for proxy/LB headers
+ */
+function getUserIp() {
+  if (isset($_SERVER['CF-Connecting-IP'])) {
+    return $_SERVER['CF-Connecting-IP'];
+  }
+
+  if (isset($_SERVER['REMOTE_ADDR'])) {
+    return $_SERVER['REMOTE_ADDR'];
+  }
+
+  return '';
+}
+
 include BASE_PATH . 'includes/ErrorReporting.php';
 include BASE_PATH . 'includes/Colours.php';
 include BASE_PATH . 'includes/direct-debit/BankLogos.php';

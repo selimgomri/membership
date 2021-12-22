@@ -37,7 +37,7 @@ try {
 
     try {
       $reader = new \GeoIp2\Database\Reader(BASE_PATH . 'storage/geoip/GeoLite2-City.mmdb');
-      $record = $reader->city(app('request')->ip());
+      $record = $reader->city(getUserIp());
       $city = '';
       if ($record->city->name != "") {
         $city = $record->city->name . ', ';
@@ -85,7 +85,7 @@ try {
 
     $login_details = [
       $_SESSION['SCDS-SU-Login2FA']['User'],
-      app('request')->ip(),
+      getUserIp(),
       $geo_string,
       $browser,
       $browser_details->os->toString(),
