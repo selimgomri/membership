@@ -97,7 +97,7 @@ include BASE_PATH . 'views/header.php';
       } ?>
 
       <?php if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['ErrorStatus']) && $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorStatus']) { ?>
-        <div class="alert alert-success">
+        <div class="alert alert-danger">
           <p class="mb-0"><strong>An error occurred</strong></p>
           <p class="mb-0">We've rolled back all changes.</p>
         </div>

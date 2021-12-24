@@ -66,7 +66,7 @@ $getAvailableSwimmers->execute([$id, true]);
 $swimmers = $getAvailableSwimmers->fetchAll(PDO::FETCH_GROUP|PDO::FETCH_ASSOC);
 
 // Insert entry to database
-$insert = $db->prepare("INSERT INTO galaEntries (GalaID, MemberID, FeeToPay, Charged, Locked, Vetoable, EntryProcessed, 25Free, 50Free, 100Free, 200Free, 400Free, 800Free, 1500Free, 25Back, 50Back, 100Back, 200Back, 25Breast, 50Breast, 100Breast, 200Breast, 25Fly, 50Fly, 100Fly, 200Fly, 100IM, 150IM, 200IM, 400IM) VALUES (:gala, :member, :fee, :charged, :locked, :vetoable, :processed, :val25Free, :val50Free, :val100Free, :val200Free, :val400Free, :val800Free, :val1500Free, :val25Back, :val50Back, :val100Back, :val200Back, :val25Breast, :val50Breast, :val100Breast, :val200Breast, :val25Fly, :val50Fly, :val100Fly, :val200Fly, :val100IM, :val150IM, :val200IM, :val400IM)");
+$insert = $db->prepare("INSERT INTO galaEntries (GalaID, MemberID, FeeToPay, Charged, Locked, Vetoable, EntryProcessed, ProcessingFee, 25Free, 50Free, 100Free, 200Free, 400Free, 800Free, 1500Free, 25Back, 50Back, 100Back, 200Back, 25Breast, 50Breast, 100Breast, 200Breast, 25Fly, 50Fly, 100Fly, 200Fly, 100IM, 150IM, 200IM, 400IM) VALUES (:gala, :member, :fee, :charged, :locked, :vetoable, :processed, :processFee, :val25Free, :val50Free, :val100Free, :val200Free, :val400Free, :val800Free, :val1500Free, :val25Back, :val50Back, :val100Back, :val200Back, :val25Breast, :val50Breast, :val100Breast, :val200Breast, :val25Fly, :val50Fly, :val100Fly, :val200Fly, :val100IM, :val150IM, :val200IM, :val400IM)");
 
 $addToNotify = $db->prepare("INSERT INTO notify (`UserID`, `Status`, `Subject`, `Message`, `ForceSend`, `EmailType`) VALUES (?, ?, ?, ?, ?, ?)");
 
@@ -222,6 +222,7 @@ try {
   $db->commit();
   $_SESSION['TENANT-' . app()->tenant->getId()]['SuccessStatus'] = true;
 } catch (Exception $e) {
+  reportError($e);
   $db->rollBack();
   $_SESSION['TENANT-' . app()->tenant->getId()]['ErrorStatus'] = true;
 }
