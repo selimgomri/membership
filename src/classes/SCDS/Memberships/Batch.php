@@ -226,7 +226,7 @@ class Batch
           $insert->execute([
             $date,
             'Pending',
-            app()->user->getId(),
+            $batch->user,
             mb_strimwidth($description, 0, 255),
             $item->amount,
             'GBP',
