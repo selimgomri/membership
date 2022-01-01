@@ -119,7 +119,10 @@ class Session
 
   public function getUser()
   {
-    return new \User($this->user);
+    if ($this->user) {
+      return new \User($this->user);
+    }
+    return null;
   }
 
   public function getCreator()
