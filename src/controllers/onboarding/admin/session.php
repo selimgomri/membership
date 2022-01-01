@@ -69,10 +69,12 @@ include BASE_PATH . "views/header.php";
           <input type="text" class="form-control" id="session-id" name="session-id" value="<?= htmlspecialchars($session->id) ?>" readonly>
         </div>
 
-        <div class="mb-3">
-          <label for="creator-name" class="form-label">Onboarding Creator Name</label>
-          <input type="text" class="form-control" id="creator-name" name="creator-name" value="<?= htmlspecialchars($session->getCreator()->getName()) ?>" readonly>
-        </div>
+        <?php if ($session->getCreator()) { ?>
+          <div class="mb-3">
+            <label for="creator-name" class="form-label">Onboarding Creator Name</label>
+            <input type="text" class="form-control" id="creator-name" name="creator-name" value="<?= htmlspecialchars($session->getCreator()->getName()) ?>" readonly>
+          </div>
+        <?php } ?>
 
         <div class="mb-3">
           <label for="start-date" class="form-label">Start Date</label>
