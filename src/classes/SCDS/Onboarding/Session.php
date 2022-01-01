@@ -127,7 +127,10 @@ class Session
 
   public function getCreator()
   {
-    return new \User($this->creator);
+    if ($this->creator) {
+      return new \User($this->creator);
+    }
+    return null;
   }
 
   private function getUrl()
