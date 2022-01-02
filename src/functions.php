@@ -63,7 +63,7 @@ function notifySend($to, $subject, $emailMessage, $name = null, $emailaddress = 
 
   // Create an SesClient.
   $client = new Aws\SesV2\SesV2Client([
-    'region' => 'eu-west-2',
+    'region' => getenv('AWS_S3_REGION'),
     'version' => 'latest'
   ]);
 
