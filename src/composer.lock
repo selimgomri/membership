@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "48db5c3f5c9431df45cced90f4309879",
+    "content-hash": "af618e417eb5148f7332e37fff01fa42",
     "packages": [
         {
             "name": "adoy/oauth2",
@@ -102,16 +102,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.204.6",
+            "version": "3.208.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "59d4d6a58ed7da541aa0ed75cc1944f8d6ca2d1c"
+                "reference": "41a800dd7cf5c4ac0ef9bf8db01e838ab6a3698c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/59d4d6a58ed7da541aa0ed75cc1944f8d6ca2d1c",
-                "reference": "59d4d6a58ed7da541aa0ed75cc1944f8d6ca2d1c",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/41a800dd7cf5c4ac0ef9bf8db01e838ab6a3698c",
+                "reference": "41a800dd7cf5c4ac0ef9bf8db01e838ab6a3698c",
                 "shasum": ""
             },
             "require": {
@@ -187,9 +187,9 @@
             "support": {
                 "forum": "https://forums.aws.amazon.com/forum.jspa?forumID=80",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.204.6"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.208.7"
             },
-            "time": "2021-11-26T19:18:52+00:00"
+            "time": "2021-12-21T19:16:39+00:00"
         },
         {
             "name": "bacon/bacon-qr-code",
