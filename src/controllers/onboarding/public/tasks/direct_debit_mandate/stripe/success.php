@@ -14,7 +14,7 @@ $stages = $session->stages;
 
 $tasks = \SCDS\Onboarding\Session::stagesOrder();
 
-if (!app()->tenant->getBooleanKey('ALLOW_STRIPE_DIRECT_DEBIT_SET_UP') || !app()->tenant->getBooleanKey('USE_STRIPE_DIRECT_DEBIT') || !getenv('STRIPE')) halt(403);
+if (!app()->tenant->getBooleanKey('ALLOW_STRIPE_DIRECT_DEBIT_SET_UP') || !getenv('STRIPE')) halt(403);
 
 \Stripe\Stripe::setApiKey(getenv('STRIPE'));
 
