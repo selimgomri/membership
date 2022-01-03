@@ -73,7 +73,7 @@ function notifySend($to, $subject, $emailMessage, $name = null, $emailaddress = 
   //echo $mailObject->getFormattedPlain();
 
   if (!isset($from['Email'])) {
-    $from['Email'] = "noreply@" . getenv('EMAIL_DOMAIN');
+    $from['Email'] = "noreply@transactional." . getenv('EMAIL_DOMAIN');
   }
   if (!isset($from['Name']) && isset(app()->tenant)) {
     $from['Name'] = app()->tenant->getKey('CLUB_NAME');

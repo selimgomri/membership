@@ -114,8 +114,8 @@ class CreateMail
         <table style=\"width:100%;max-width:700px;border:0px;text-align:center;background:#ffffff;padding:0px 0px 0px 0px;\"><tr><td>";
     if (isset(app()->tenant) && $logos = app()->tenant->getKey('LOGO_DIR')) {
       $head .= "<img src=\"" . getUploadedAssetUrl($logos . 'logo-75.png') . "\" srcset=\"" .
-      getUploadedAssetUrl($logos . 'logo-75@2x.png') . " 2x, " .
-      getUploadedAssetUrl($logos . 'logo-75@3x.png') . " 3x\" style=\"max-width:100%;max-height:75px;\" alt=\"" . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . " Logo\">";
+        getUploadedAssetUrl($logos . 'logo-75@2x.png') . " 2x, " .
+        getUploadedAssetUrl($logos . 'logo-75@3x.png') . " 3x\" style=\"max-width:100%;max-height:75px;\" alt=\"" . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . " Logo\">";
     } else if (isset(app()->tenant)) {
       $head .= htmlspecialchars(app()->tenant->getKey('CLUB_NAME'));
     } else {
@@ -200,6 +200,7 @@ class CreateMail
       $foot .= "\r\nThis email was sent automatically by the " . app()->tenant->getKey('CLUB_NAME') . " Membership System.\r\n\r\n";
       $foot .= "Have questions? Contact us at " . app()->tenant->getKey('CLUB_EMAIL') . ".\r\n\r\n";
       $foot .= "To control your email options go to My Account at " . autoUrl("myaccount") . ".\r\n\r\n";
+      $foot .= "Report email abuse at https://forms.office.com/Pages/ResponsePage.aspx?id=eUyplshmHU2mMHhet4xottqTRsfDlXxPnyldf9tMT9ZUODZRTFpFRzJWOFpQM1pLQ0hDWUlXRllJVS4u.\r\n\r\n";
       if ($this->allowUnsubscribe) {
         $foot .= "Unsubscribe at -unsub_link-\r\n\r\n";
       }

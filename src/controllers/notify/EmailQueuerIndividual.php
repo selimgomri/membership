@@ -46,7 +46,7 @@ try {
   $userEmail = $userInfo['EmailAddress'];
   $myName = $curUserInfo['Forename'] . ' ' . $curUserInfo['Surname'];
 
-  $from = "noreply@" . getenv('EMAIL_DOMAIN');
+  $from = "noreply@transactional." . getenv('EMAIL_DOMAIN');
   $fromName = app()->tenant->getKey('CLUB_NAME');
   if ($_POST['from'] == "current-user") {
     $fromName = $myName;
@@ -96,7 +96,6 @@ try {
         // Store uploaded files in filestore, if exists
         $collectiveSize += $_FILES['file-upload']['size'][$i];
         $attachments[] = [
-          'encoded' => base64_encode(file_get_contents($_FILES['file-upload']['tmp_name'][$i])),
           'mime' => mime_content_type($_FILES['file-upload']['tmp_name'][$i]),
           'filename' => $_FILES['file-upload']['name'][$i],
           'disposition' => 'attachment',
@@ -123,12 +122,19 @@ try {
   //$plain_text = str_replace(';', '', $plain_text);
   $plainTextContent = new \SendGrid\Mail\PlainTextContent($plain_text);;
 
-  $email = new \SendGrid\Mail\Mail();
-  $email->setFrom($from, $fromName);
-  $email->setSubject($subject);
-  $email->addTo($userEmail, $name);
-  $email->addContent("text/plain", $plain_text);
-  $email->setReplyTo($replyAddress, $replyName);
+  // Create an SesClient.
+  $client = new Aws\SesV2\SesV2Client([
+    'region' => getenv('AWS_S3_REGION'),
+    'version' => 'latest'
+  ]);
+
+  $mail = new PHPMailer\PHPMailer\PHPMailer(true);
+
+  $mail->setFrom($from, $fromName);
+  $mail->Subject = $subject;
+  $mail->addAddress($userEmail, $name);
+  $mail->Body = $plain_text;
+  $mail->addReplyTo($replyAddress, $replyName);
 
   // reportError([
   //   $_POST,
@@ -137,12 +143,7 @@ try {
   // ]);
 
   foreach ($attachments as $attachment) {
-    $email->addAttachment(
-      $attachment['encoded'],
-      $attachment['mime'],
-      $attachment['filename'],
-      $attachment['disposition']
-    );
+    $mail->addAttachment($attachment['tmp_name'], $attachment['filename']);
   }
 
   // Get coaches
@@ -169,17 +170,39 @@ try {
         $bccEmails[$coach['EmailAddress']] = $coach['Forename'] . ' ' . $coach['Surname'];
       }
     }
-    
-    $email->addBccs($bccEmails);
+
+    foreach ($bccEmails as $email => $name) {
+      $mail->addBCC($email, $name);
+    }
   }
 
-  $sendgrid = new \SendGrid(getenv('SENDGRID_API_KEY'));
-  $response = $sendgrid->send($email);
-
-  if ($response->statusCode() == "202") {
-    $_SESSION['TENANT-' . app()->tenant->getId()]['NotifyIndivSuccess'] = true;
+  // Attempt to assemble the above components into a MIME message.
+  if (!$mail->preSend()) {
+    throw new Exception($mail->ErrorInfo);
   } else {
-    throw new Exception('Invalid request to SendGrid');
+    // Create a new variable that contains the MIME message.
+    $message = $mail->getSentMIMEMessage();
+  }
+
+  // Try to send the message.
+  try {
+    $result = $client->sendEmail([
+      'Content' => [
+        'Raw' => [
+          'Data' => $message
+        ]
+      ]
+    ]);
+    // If the message was sent, show the message ID.
+    $messageId = $result->get('MessageId');
+    // echo ("Email sent! Message ID: $messageId" . "\n");
+    $_SESSION['TENANT-' . app()->tenant->getId()]['NotifyIndivSuccess'] = true;
+  } catch (Aws\Ses\Exception\SesException $error) {
+    // If the message was not sent, show a message explaining what went wrong.
+    // pre($error->getAwsErrorMessage());
+    // exit();
+    throw new Exception("The email was not sent. Error message: "
+      . $error->getAwsErrorMessage() . "\n");
   }
 
   AuditLog::new('Notify-SentIndividual', 'Sent to ' . $name);

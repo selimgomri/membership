@@ -375,12 +375,12 @@ try {
     }
 
     $from = [
-      "email" => "noreply@" . getenv('EMAIL_DOMAIN'),
+      "email" => "noreply@notify." . getenv('EMAIL_DOMAIN'),
       "name" => app()->tenant->getKey('CLUB_NAME')
     ];
     if (isset($jsonData->NamedSender->Email) && isset($jsonData->NamedSender->Name)) {
       $from = [
-        "email" => "noreply@" . getenv('EMAIL_DOMAIN'),
+        "email" => "noreply@notify." . getenv('EMAIL_DOMAIN'),
         "name" => $jsonData->NamedSender->Name
       ];
     }
