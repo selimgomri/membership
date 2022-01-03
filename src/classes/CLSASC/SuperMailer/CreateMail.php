@@ -156,7 +156,8 @@ class CreateMail
       $foot .= "<p class=\"small\" align=\"center\">Have questions? Contact us at <a
     href=\"mailto:" . htmlspecialchars(app()->tenant->getKey('CLUB_EMAIL')) . "\">" . htmlspecialchars(app()->tenant->getKey('CLUB_EMAIL')) . "</a>.</p>
     <p class=\"small\" align=\"center\">To control your email options, go to <a href=\"" .
-        autoUrl("myaccount/email") . "\">My Account</a>.</p>";
+        autoUrl("myaccount/email") . "\">My Account</a>.</p>
+    <p class=\"small\" align=\"center\">Unwanted email? <a href=\"https://forms.office.com/Pages/ResponsePage.aspx?id=eUyplshmHU2mMHhet4xottqTRsfDlXxPnyldf9tMT9ZUODZRTFpFRzJWOFpQM1pLQ0hDWUlXRllJVS4u\" target=\"_blank\" title=\"Report email abuse\">Report email abuse</a>.</p>";
       if ($this->allowUnsubscribe) {
         $foot .= '<p class="small" align="center"><a href="-unsub_link-">Click to Unsubscribe</a></p>';
       }

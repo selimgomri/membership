@@ -48,6 +48,11 @@ $time = new DateTime('now', new DateTimeZone('Europe/London'));
                     </a>
                   </li>
                   <li>
+                    <a href="https://forms.office.com/Pages/ResponsePage.aspx?id=eUyplshmHU2mMHhet4xottqTRsfDlXxPnyldf9tMT9ZUODZRTFpFRzJWOFpQM1pLQ0hDWUlXRllJVS4u" target="_blank" title="Report email abuse">
+                      Report mail abuse
+                    </a>
+                  </li>
+                  <li>
                     <a href="https://membership.git.myswimmingclub.uk/whats-new/" target="_blank" title="New membership system features">
                       What's new?
                     </a>
@@ -114,9 +119,9 @@ $script = autoUrl(getCompiledAsset('main.js'));
 <?php if (isset($this->js)) { ?>
   <!-- Load per page JS -->
   <?php foreach ($this->js as $script) {
-  ?><script <?php if ($script['module']) { ?>type="module"<?php } ?> src="<?= htmlspecialchars($script['url']) ?>"></script><?php
-                                                          }
-                                                        } ?>
+  ?><script <?php if ($script['module']) { ?>type="module" <?php } ?> src="<?= htmlspecialchars($script['url']) ?>"></script><?php
+                                                                                                                            }
+                                                                                                                          } ?>
 
 </body>
 
