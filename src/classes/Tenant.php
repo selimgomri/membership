@@ -496,6 +496,12 @@ class Tenant
         "name" => $this->getName(),
         "description" => "Customer for Tenant " . $this->getCodeId(),
         'email' => $this->getEmail(),
+        "invoice_settings" => [
+          "custom_fields" => [
+            "name" => "Tenant ID",
+            "value" => $this->getUuid(),
+          ]
+        ]
       ]);
 
       // YOUR CODE: Save the customer ID and other info in a database for later.
@@ -513,7 +519,7 @@ class Tenant
       );
 
       // Check whether we should update user details
-      if ($customer->name != $this->getName() || $customer->email != $this->getEmail()) {
+      if (false && ($customer->name != $this->getName() || $customer->email != $this->getEmail())) {
         // Some details are not the same so let's update the stripe customer
         $customer = \Stripe\Customer::update(
           $customer->id,
@@ -524,6 +530,24 @@ class Tenant
         );
       }
     }
+
+    $customer = \Stripe\Customer::update(
+      $customer->id,
+      [
+        "invoice_settings" => [
+          "custom_fields" => [
+            [
+              "name" => "Tenant ID",
+              "value" => $this->getId(),
+            ],
+            [
+              "name" => "Swim England Club Code",
+              "value" => $this->getKey('ASA_CLUB_CODE'),
+            ]
+          ]
+        ]
+      ]
+    );
 
     return $customer;
   }
