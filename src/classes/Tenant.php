@@ -496,12 +496,6 @@ class Tenant
         "name" => $this->getName(),
         "description" => "Customer for Tenant " . $this->getCodeId(),
         'email' => $this->getEmail(),
-        "invoice_settings" => [
-          "custom_fields" => [
-            "name" => "Tenant ID",
-            "value" => $this->getUuid(),
-          ]
-        ]
       ]);
 
       // YOUR CODE: Save the customer ID and other info in a database for later.
