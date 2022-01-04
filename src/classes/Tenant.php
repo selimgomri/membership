@@ -496,6 +496,18 @@ class Tenant
         "name" => $this->getName(),
         "description" => "Customer for Tenant " . $this->getCodeId(),
         'email' => $this->getEmail(),
+        "invoice_settings" => [
+          "custom_fields" => [
+            [
+              "name" => "Tenant ID",
+              "value" => $this->getId(),
+            ],
+            [
+              "name" => "Swim England Club Code",
+              "value" => $this->getKey('ASA_CLUB_CODE'),
+            ]
+          ]
+        ]
       ]);
 
       // YOUR CODE: Save the customer ID and other info in a database for later.
