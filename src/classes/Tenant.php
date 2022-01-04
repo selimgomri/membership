@@ -498,8 +498,14 @@ class Tenant
         'email' => $this->getEmail(),
         "invoice_settings" => [
           "custom_fields" => [
-            "name" => "Tenant ID",
-            "value" => $this->getUuid(),
+            [
+              "name" => "Tenant ID",
+              "value" => $this->getId(),
+            ],
+            [
+              "name" => "Swim England Club Code",
+              "value" => $this->getKey('ASA_CLUB_CODE'),
+            ]
           ]
         ]
       ]);
