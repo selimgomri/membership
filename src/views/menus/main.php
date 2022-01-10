@@ -26,22 +26,6 @@ if (!function_exists('chesterStandardMenu')) {
       $canPayByCard = true;
     }
 
-    $renewalOpen = false;
-    $renewalYear = null;
-    if (isset($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel']) && $_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Parent') {
-      $date = new DateTime('now', new DateTimeZone('Europe/London'));
-      $getRenewals = $db->prepare("SELECT COUNT(*) AS `Count`, `Year` FROM renewals WHERE Tenant = :tenant AND StartDate <= :today AND EndDate >= :today;");
-      $getRenewals->execute([
-        'tenant' => app()->tenant->getId(),
-        'today' => $date->format('Y-m-d')
-      ]);
-      $renewals = $getRenewals->fetch(PDO::FETCH_ASSOC);
-      if ($renewals['Count'] == 1) {
-        $renewalOpen = true;
-        $renewalYear = $renewals['Year'];
-      }
-    }
-
     $haveSquadReps = false;
     $getRepCount = $db->prepare("SELECT COUNT(*) FROM squadReps INNER JOIN users ON squadReps.User = users.UserID WHERE users.Tenant = ?");
     $getRepCount->execute([
@@ -123,21 +107,12 @@ if (!function_exists('chesterStandardMenu')) {
                   </a>
                 </li>
               <?php } ?>
-              <?php if (app()->tenant->getKey('ASA_CLUB_CODE') != 'UOSZ') { ?>
                 <li class="nav-item">
                   <a class="nav-link" href="<?= htmlspecialchars(autoUrl("log-books")) ?>">Log Books</a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link" href="<?= autoUrl("emergency-contacts") ?>">Emergency Contacts</a>
                 </li>
-              <?php } ?>
-              <?php if ($renewalOpen) { ?>
-                <li class="nav-item">
-                  <a class="nav-link" href="<?= htmlspecialchars(autoUrl("renewal")) ?>">
-                    Renewal
-                  </a>
-                </li>
-              <?php } ?>
             <?php } else { ?>
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="swimmerDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -204,9 +179,6 @@ if (!function_exists('chesterStandardMenu')) {
                     </a>
                     <a class="dropdown-item" href="<?= autoUrl("users/add") ?>">
                       Add a user (admin, coach, volunteer)
-                    </a>
-                    <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("assisted-registration")) ?>">
-                      Assisted account registration <span class="badge bg-danger">Deprecated</span>
                     </a>
                     <?php if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') { ?>
                       <a class="dropdown-item" href="<?= autoUrl("payments/user-mandates") ?>">

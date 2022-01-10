@@ -42,9 +42,6 @@ include BASE_PATH . "views/header.php";
         <dl class="row mb-0">
           <dt class="col-sm-3">Email</dt>
           <dd class="col-sm-9 text-truncate"><a href="mailto:support@myswimmingclub.uk" title="Support Hotline">support@myswimmingclub.uk</a></dd>
-
-          <dt class="col-sm-3">Call</dt>
-          <dd class="col-sm-9 text-truncate mb-0"><a href="tel:+441912494320" title="Support Hotline">+44 191 249 4320</a></dd>
         </dl>
       </div>
 
