@@ -150,7 +150,7 @@ include BASE_PATH . "views/root/header.php";
   </div>
 </div>
 
-<div class="front-page-alternate-section py-5 mb-n3">
+<div class="front-page-alternate-section py-5">
   <div class="container-xl">
     <div class="row">
       <div class="col">
@@ -188,6 +188,23 @@ include BASE_PATH . "views/root/header.php";
             </a>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="front-page-purple-section bg-success py-5 mb-n3">
+  <div class="container-xl">
+    <div class="row align-items-center">
+      <div class="col">
+        <h2>Our operations aren't just carbon neutral<br> We contribute 0.5% of our revenue to carbon removal</h2>
+        <p class="lead"><a class="text-white fw-normal" href="https://climate.stripe.com/pkIT9H">Learn more about our membership of Stripe Climate</a>.</p>
+
+        <p class="small mb-0">Removal contribution starts February 2022</p>
+      </div>
+
+      <div class="col-auto ms-auto d-none d-sm-flex">
+        <a href="https://climate.stripe.com/pkIT9H" title="Stripe Climate Badge" target="_blank"><img class="img-fluid" style="width: 10rem;" src="<?= htmlspecialchars(autoUrl('img/stripe/climate/badge.svg')) ?>" alt="Stripe Climate Badge"></a>
       </div>
     </div>
   </div>

@@ -65,6 +65,7 @@ $time = new DateTime('now', new DateTimeZone('Europe/London'));
                   <li><a title="British Swimming" target="_blank" href="https://www.swimming.org/britishswimming/">British
                       Swimming</a></li>
                   <li><a title="the Amateur Swimming Association" target="_blank" href="https://www.swimming.org/swimengland/">Swim England</a></li>
+                  <li><img class="fa fa-fw" src="<?= htmlspecialchars(autoUrl('img/stripe/climate/badge.svg')) ?>" alt=""> <a title="SCDS is a Stripe Climate Member contributing to remove CO2 from the atmosphere" href="https://climate.stripe.com/pkIT9H" target="_blank">Carbon Removal</a></li>
                 </ul>
 
               </div>
