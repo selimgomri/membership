@@ -8,6 +8,10 @@ $this->get('/go-to-session', function () {
   include 'go-to-session.php';
 });
 
+$this->get('/view-sessions', function () {
+  include 'admin/view-sessions.php';
+});
+
 $this->group('/new', function () {
   $this->get('/', function () {
     include 'new/start.php';

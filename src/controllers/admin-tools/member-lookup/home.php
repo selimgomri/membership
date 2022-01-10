@@ -12,7 +12,7 @@ if (isset($_GET['member-id'])) {
   } catch (\RankingsDb\exceptions\ConnectionException $e) {
     $error = 'Unable to connect to the rankings.';
   } catch (\RankingsDb\exceptions\MemberNotFound $e) {
-    $error = 'We could not find a member with ' . app()->tenant->getKey('NGB_NAME') ' . number ' . trim($_GET['member-id']) . '.';
+    $error = 'We could not find a member with ' . app()->tenant->getKey('NGB_NAME') . ' number ' . trim($_GET['member-id']) . '.';
   } catch (\RankingsDb\exceptions\InvalidPersonalKey $e) {
     $error = 'The personal key provided is invalid.';
   } catch (Exception $e) {
@@ -94,7 +94,7 @@ include BASE_PATH . 'views/header.php';
             <dd class="col-sm-9"><?= htmlspecialchars($member->Age(new DateTime('last day of December this year', new DateTimeZone('Europe/London')))) ?></dd>
 
             <dt class="col-sm-3">Sex</dt>
-            <dd class="col-sm-9"><?= htmlspecialchars($member->Sex()) ?></dd>
+            <dd class="col-sm-9"><?= htmlspecialchars((string) $member->Sex()) ?></dd>
 
             <dt class="col-sm-3">Country</dt>
             <dd class="col-sm-9"><?= htmlspecialchars($member->CountryCode()) ?></dd>
