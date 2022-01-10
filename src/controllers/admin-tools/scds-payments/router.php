@@ -7,3 +7,13 @@ $this->get('/', function() {
     include 'no-access.php';
   }
 });
+
+$this->group('/setup-direct-debit', function() {
+  $this->get('/', function() {
+    include 'direct-debit-setup.php';
+  });
+
+  $this->get('/success', function() {
+    include 'direct-debit-setup-success.php';
+  });
+});
