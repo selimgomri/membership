@@ -1,6 +1,6 @@
 <?php
 
-$this->get('/', function() {
+$this->get('/', function () {
   if (app()->user->hasPermission('SCDSPaymentsManager')) {
     include 'redirect.php';
   } else {
@@ -8,12 +8,20 @@ $this->get('/', function() {
   }
 });
 
-$this->group('/setup-direct-debit', function() {
-  $this->get('/', function() {
-    include 'direct-debit-setup.php';
+$this->group('/setup-direct-debit', function () {
+  $this->get('/', function () {
+    if (app()->user->hasPermission('SCDSPaymentsManager')) {
+      include 'direct-debit-setup.php';
+    } else {
+      include 'no-access.php';
+    }
   });
 
-  $this->get('/success', function() {
-    include 'direct-debit-setup-success.php';
+  $this->get('/success', function () {
+    if (app()->user->hasPermission('SCDSPaymentsManager')) {
+      include 'direct-debit-setup-success.php';
+    } else {
+      include 'no-access.php';
+    }
   });
 });
