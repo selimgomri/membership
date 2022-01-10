@@ -11,7 +11,6 @@ $session = $stripe->billingPortal->sessions->create([
   'customer' => $tenant->getStripeCustomer(),
   'return_url' => autoUrl('admin'),
   'locale' => 'en-GB',
-  
 ]);
 
 http_response_code(302);
