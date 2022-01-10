@@ -52,7 +52,7 @@ include BASE_PATH . "views/swimmersMenu.php";
 			<strong>This is the legacy renewal system which has been deprecated</strong>
 		</p>
 		<p class="">
-			You will soon be unable to create new renewal periods in this system.
+			You can no longer create new renewal periods in this system.
 		</p>
 
 		<p class="mb-0">
@@ -75,10 +75,6 @@ include BASE_PATH . "views/swimmersMenu.php";
 				Membership renewal ensures all our information about members is up to
 				date.
 			</p>
-			<div class="alert alert-danger">
-				<strong>There is no open Renewal Period right now</strong> <br>
-				You'll need to add one first
-			</div>
 		<?php } ?>
 		<h2>Recent renewals</h2>
 		<ol>
@@ -97,13 +93,6 @@ include BASE_PATH . "views/swimmersMenu.php";
 				</li>
 			<?php } ?>
 		</ol>
-
-		<p>
-			<a href="<?php echo autoUrl("renewal/new"); ?>" class="btn
-			btn-success">
-				Add new Renewal Period
-			</a>
-		</p>
 	</div>
 </div>
 
