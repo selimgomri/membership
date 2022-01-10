@@ -72,9 +72,9 @@ if (!isset($distances[(int) $_GET['stroke']][(int) $_GET['distance']][$_GET['cou
 
 $getTime = null;
 if ($order == 'time') {
-  $getTime = $db->prepare("SELECT `Time`, `Date`, `Round`, `Stroke`, `Distance`, `Name`, `City`, `GalaName` FROM ((meetResults INNER JOIN meetsWithResults ON meetResults.Meet = meetsWithResults.Meet) LEFT JOIN galas ON meetsWithResults.Gala = galas.GalaID) WHERE Member = ? AND Stroke = ? AND Distance = ? AND meetResults.Course = ? ORDER BY IntTime ASC");
+  $getTime = $db->prepare("SELECT `Time`, `Date`, `Round`, `Stroke`, `Distance`, `Name`, `City`, `GalaName` FROM ((meetResults INNER JOIN meetsWithResults ON meetResults.Meet = meetsWithResults.Meet) LEFT JOIN galas ON meetsWithResults.Gala = galas.GalaID) WHERE `Time` NOT IN ('NT', 'NS', 'DNF', 'DQ', 'SCR')  AND Member = ? AND Stroke = ? AND Distance = ? AND meetResults.Course = ? ORDER BY IntTime ASC");
 } else {
-  $getTime = $db->prepare("SELECT `Time`, `Date`, `Round`, `Stroke`, `Distance`, `Name`, `City`, `GalaName` FROM ((meetResults INNER JOIN meetsWithResults ON meetResults.Meet = meetsWithResults.Meet) LEFT JOIN galas ON meetsWithResults.Gala = galas.GalaID) WHERE Member = ? AND Stroke = ? AND Distance = ? AND meetResults.Course = ? ORDER BY `Date` DESC");
+  $getTime = $db->prepare("SELECT `Time`, `Date`, `Round`, `Stroke`, `Distance`, `Name`, `City`, `GalaName` FROM ((meetResults INNER JOIN meetsWithResults ON meetResults.Meet = meetsWithResults.Meet) LEFT JOIN galas ON meetsWithResults.Gala = galas.GalaID) WHERE `Time` NOT IN ('NT', 'NS', 'DNF', 'DQ', 'SCR')  AND Member = ? AND Stroke = ? AND Distance = ? AND meetResults.Course = ? ORDER BY `Date` DESC");
 }
 $getTime->execute([$id, (int) $_GET['stroke'], (int) $_GET['distance'], $_GET['course']]);
 $result = $getTime->fetch(PDO::FETCH_ASSOC);
