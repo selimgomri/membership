@@ -31,13 +31,6 @@ $squads = $db->prepare("SELECT SquadName FROM squads INNER JOIN squadMembers ON 
 
 $markdown = new ParsedownExtra();
 
-$mobile = null;
-try {
-  $mobile = PhoneNumber::parse(strval($swimmer['Mobile']));
-} catch (PhoneNumberParseException | Exception $e) {
-  // Do nothing we'll test for null later
-}
-
 $pagetitle = htmlspecialchars($gala['name']) . " Swimmer Information";
 
 include BASE_PATH . 'views/header.php';
@@ -83,6 +76,13 @@ include BASE_PATH . 'views/header.php';
 
             $member = new Member($swimmer['id']);
             $medical = $member->getMedicalNotes();
+
+            $mobile = null;
+            try {
+              $mobile = PhoneNumber::parse(strval($swimmer['Mobile']));
+            } catch (PhoneNumberParseException | Exception $e) {
+              // Do nothing we'll test for null later
+            }
           ?>
             <li class="list-group-item <?php if ($i % 2 == 1) { ?>bg-light<?php } ?>">
               <div class="row align-items-center">

@@ -33,15 +33,15 @@ class MedicalNotes
       $this->medication = null;
     }
 
-    if ($row['GPName']) {
+    if (isset($row['GPName']) && $row['GPName']) {
       $this->gpName = $row['GPName'];
     }
 
-    if ($row['GPPhone']) {
+    if (isset($row['GPPhone']) && $row['GPPhone']) {
       $this->gpPhone = $row['GPPhone'];
     }
 
-    if ($row['GPAddress']) {
+    if (isset($row['GPAddress']) && $row['GPAddress']) {
       try {
         $this->gpAddress = json_decode($row['GPAddress']);
       } catch (\Exception | \Error $e) {
