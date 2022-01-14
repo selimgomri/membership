@@ -28,6 +28,10 @@ $this->group('/shared-services', function() {
   include BASE_PATH . 'controllers/shared-services/routes.php';
 });
 
+$this->group('/cloudflare-error-pages', function() {
+  include 'cloudflare-error-pages.php';
+});
+
 $this->group(['/tenants', '/clubs'], function() {
   include 'tenants.php';
 });
