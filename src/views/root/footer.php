@@ -70,6 +70,7 @@ $time = new DateTime('now', new DateTimeZone('Europe/London'));
                   <li><a title="British Swimming" target="_blank" href="https://www.swimming.org/britishswimming/">British
                       Swimming</a></li>
                   <li><a title="the Amateur Swimming Association" target="_blank" href="https://www.swimming.org/swimengland/">Swim England</a></li>
+                  <li><img class="fa fa-fw" src="<?= htmlspecialchars(autoUrl('img/stripe/climate/badge.svg')) ?>" alt=""> <a title="SCDS is a Stripe Climate Member contributing to remove CO2 from the atmosphere" href="https://climate.stripe.com/pkIT9H" target="_blank">Carbon Removal</a></li>
                 </ul>
 
               </div>
@@ -122,6 +123,11 @@ $script = autoUrl(getCompiledAsset('main.js'));
   ?><script <?php if ($script['module']) { ?>type="module" <?php } ?> src="<?= htmlspecialchars($script['url']) ?>"></script><?php
                                                                                                                             }
                                                                                                                           } ?>
+
+<?php if (!bool(getenv('IS_DEV'))) { ?>
+  <!-- Cloudflare Web Analytics -->
+  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "579ac2dc2ea54799918144a5e7d894ef"}'></script><!-- End Cloudflare Web Analytics -->
+<?php } ?>
 
 </body>
 

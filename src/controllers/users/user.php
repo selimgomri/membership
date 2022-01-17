@@ -500,6 +500,10 @@ include BASE_PATH . "views/header.php";
             <a href="<?= htmlspecialchars(autoUrl("onboarding/new?user=$id")) ?>" class="btn btn-primary">Repeat onboarding forms</a>
           </p>
 
+          <p class="">
+            <a href="<?= htmlspecialchars(autoUrl("onboarding/view-sessions?user=$id")) ?>" class="btn btn-primary">View current onboarding sessions</a>
+          </p>
+
         </div>
 
         <hr>

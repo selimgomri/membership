@@ -25,7 +25,7 @@ if (isset($_SESSION['SetupMandateSuccess'])) {
 }
 
 $ddi = null;
-if (app()->tenant->getBooleanKey('ALLOW_STRIPE_DIRECT_DEBIT_SET_UP') && app()->tenant->getBooleanKey('USE_STRIPE_DIRECT_DEBIT')) {
+if (app()->tenant->getBooleanKey('ALLOW_STRIPE_DIRECT_DEBIT_SET_UP')) {
   // Get DD details
   // Get mandates
   $getMandates = $db->prepare("SELECT ID, Mandate, Last4, SortCode, `Address`, Reference, `URL`, `Status` FROM stripeMandates WHERE Customer = ? AND (`Status` = 'accepted' OR `Status` = 'pending') ORDER BY CreationTime DESC");
@@ -128,7 +128,7 @@ include BASE_PATH . "views/head.php";
             </div>
           <?php } ?>
 
-          <?php if (getenv('STRIPE') && app()->tenant->getBooleanKey('ALLOW_STRIPE_DIRECT_DEBIT_SET_UP') && app()->tenant->getBooleanKey('USE_STRIPE_DIRECT_DEBIT') && !$good) { ?>
+          <?php if (getenv('STRIPE') && app()->tenant->getBooleanKey('ALLOW_STRIPE_DIRECT_DEBIT_SET_UP') && !$good) { ?>
             <!-- STRIPE -->
             <p>
               <a href="<?= htmlspecialchars(autoUrl('onboarding/go/direct-debit/stripe/set-up')) ?>" class="btn btn-success">Set up now</a>

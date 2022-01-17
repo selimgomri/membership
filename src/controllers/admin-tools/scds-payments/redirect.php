@@ -4,14 +4,13 @@ $db = app()->db;
 $user = app()->user;
 $tenant = app()->tenant;
 
-$_SESSION['SCDS-Payments-Admin'] = [
-  'user' => $user->getId(),
-  'userNames' => [
-    $user->getForename(),
-    $user->getSurname(),
-  ],
-  'tenant' => $tenant->getId(),
-];
+$stripe = new \Stripe\StripeClient(getenv('STRIPE'));
+
+$session = $stripe->billingPortal->sessions->create([
+  'customer' => $tenant->getStripeCustomer(),
+  'return_url' => autoUrl('admin'),
+  'locale' => 'en-GB',
+]);
 
 http_response_code(302);
-header("location: " . autoUrl('payments-admin', false));
+header("location: " . $session->url);

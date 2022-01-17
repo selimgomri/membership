@@ -389,10 +389,6 @@ if (empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) {
   //   include BASE_PATH . 'controllers/registration/RegAuth.php';
   // });
 
-  $this->group('/assisted-registration', function () {
-    include BASE_PATH . 'controllers/assisted-registration/setup/router.php';
-  });
-
   // Locked Out Password Reset
   $this->get('/resetpassword', function () {
 
@@ -636,12 +632,11 @@ if (empty($_SESSION['TENANT-' . app()->tenant->getId()]['LoggedIn'])) {
   });
 
   $this->group('/assisted-registration', function () {
-    include BASE_PATH . 'controllers/assisted-registration/router.php';
+    $this->get(['/', '/*'], function () {
+      http_response_code(302);
+      header("location: " . autoUrl("onboarding/new"));
+    });
   });
-
-  // $this->group('/registration-and-renewal', function () {
-  //   include BASE_PATH . 'controllers/registration-and-renewal/router.php';
-  // });
 
   $this->group('/resources', function () {
     include BASE_PATH . 'controllers/resources/router.php';

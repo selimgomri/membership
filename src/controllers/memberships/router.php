@@ -34,6 +34,10 @@ $this->group('/renewal', function() {
       include 'renewal/edit.php';
     });
 
+    $this->get('/sudo-reset', function($id) {
+      include 'renewal/period-reset.php';
+    });
+
     $this->post('/edit', function($id) {
       include 'renewal/edit-post.php';
     });

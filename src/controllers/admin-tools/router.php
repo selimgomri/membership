@@ -87,6 +87,10 @@ if ($_SESSION['TENANT-' . app()->tenant->getId()]['AccessLevel'] == 'Admin') {
     include 'scds-payments/router.php';
   });
 
+  $this->group('/billing', function () {
+    include 'billing/router.php';
+  });
+
   $this->group('/audit', function () {
     include 'audit/router.php';
   });

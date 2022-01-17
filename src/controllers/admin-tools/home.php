@@ -28,7 +28,7 @@ include BASE_PATH . 'views/header.php';
         <p class="lead">Set a system-wide emergency message.</p>
 
         <p>
-          <a href="<?=htmlspecialchars(autoUrl("emergency-message"))?>" class="btn btn-danger">
+          <a href="<?= htmlspecialchars(autoUrl("emergency-message")) ?>" class="btn btn-danger">
             Set message
           </a>
         </p>
@@ -38,8 +38,8 @@ include BASE_PATH . 'views/header.php';
 
     <div class="col">
       <?php
-        $list = new \CLSASC\BootstrapComponents\ListGroup(file_get_contents(BASE_PATH . 'controllers/admin-tools/list.json'));
-        echo $list->render('admin-home');
+      $list = new \CLSASC\BootstrapComponents\ListGroup(file_get_contents(BASE_PATH . 'controllers/admin-tools/list.json'));
+      echo $list->render('admin-home');
       ?>
     </div>
   </div>

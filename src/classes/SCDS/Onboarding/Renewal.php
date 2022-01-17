@@ -229,10 +229,10 @@ class Renewal
 
           $count = $getCountClassMembers->fetchColumn();
 
-          if ($count > 0) {
+          if ($count > 0 && $fees->type == "NSwimmers") {
 
             $amount = 0;
-            if (isset($fees->fees[max($count, sizeof($fees->fees)) - 1])) $amount = (int) $fees->fees[max($count, sizeof($fees->fees)) - 1];
+            if (isset($fees->fees[min($count, sizeof($fees->fees)) - 1])) $amount = (int) $fees->fees[min($count, sizeof($fees->fees)) - 1];
             $total += $amount;
 
             $getClassMembers->execute([
@@ -259,6 +259,29 @@ class Renewal
               ];
 
               $done = true;
+            }
+          } else if ($count > 0) {
+            $amount = 0;
+            if (isset($fees->fees[0])) $amount = (int) $fees->fees[0];
+
+            $getClassMembers->execute([
+              $user,
+              $classId,
+              0,
+            ]);
+
+            while ($member = $getClassMembers->fetchColumn()) {
+              $total += $amount;
+
+              $batchItems[] = [
+                \Ramsey\Uuid\Uuid::uuid4(),
+                $batch,
+                $classId,
+                $member,
+                $amount,
+                null,
+                $this->clubYear->id,
+              ];
             }
           }
 
