@@ -3,7 +3,7 @@
 namespace CLSASC\SuperMailer;
 
 /**
- * A PHP Class to extend SendGrid
+ * A PHP Class to extend Mail formats
  *
  * @copyright Chester-le-Street ASC https://github.com/Chester-le-Street-ASC
  * @author Chris Heppell https://github.com/clheppell

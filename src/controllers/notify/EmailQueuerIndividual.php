@@ -119,8 +119,6 @@ try {
   $mailObject = new \CLSASC\SuperMailer\CreateMail();
   $mailObject->setHtmlContent($messagePlain);
   $plain_text = $mailObject->getFormattedPlain();
-  //$plain_text = str_replace(';', '', $plain_text);
-  $plainTextContent = new \SendGrid\Mail\PlainTextContent($plain_text);;
 
   // Create an SesClient.
   $client = new Aws\SesV2\SesV2Client([

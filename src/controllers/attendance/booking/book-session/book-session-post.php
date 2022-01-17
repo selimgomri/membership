@@ -285,20 +285,21 @@ try {
       $mailObject = new \CLSASC\SuperMailer\CreateMail();
       $mailObject->setHtmlContent($content);
 
-      $from = new \SendGrid\Mail\From("noreply@" . getenv('EMAIL_DOMAIN'), app()->tenant->getKey('CLUB_NAME'));
-      $to = new \SendGrid\Mail\To($emailAddress, $username);
+      $client = new Aws\SesV2\SesV2Client([
+        'region' => getenv('AWS_S3_REGION'),
+        'version' => 'latest'
+      ]);
 
-      $plain_text = $mailObject->getFormattedPlain();
-      $plainTextContent = new \SendGrid\Mail\PlainTextContent($plain_text);
-      $htmlContent = new \SendGrid\Mail\HtmlContent($mailObject->getFormattedHtml());
+      $mail = new PHPMailer\PHPMailer\PHPMailer(true);
 
-      $email = new \SendGrid\Mail\Mail(
-        $from,
-        $to,
-        $subject,
-        $plainTextContent,
-        $htmlContent
-      );
+      $mail->setFrom("noreply@transactional." . getenv('EMAIL_DOMAIN'), app()->tenant->getKey('CLUB_NAME'));
+      $mail->addReplyTo(app()->tenant->getKey('CLUB_EMAIL'), app()->tenant->getKey('CLUB_NAME')  . ' Enquiries');
+      $mail->Subject = $subject;
+      $mail->addAddress($emailAddress, $username);
+
+      $mail->isHTML(true);
+      $mail->Body = $mailObject->getFormattedHtml();
+      $mail->AltBody = $mailObject->getFormattedPlain();
 
       $sessionICalId = 'booking-' . mb_strtolower($sessionDateTime->format('Y-m-d') . '-S' . $session['SessionID']) . '@membership.myswimmingclub.uk';
       if (bool(getenv("IS_DEV"))) {
@@ -315,33 +316,61 @@ try {
         'uid' => $sessionICalId,
       ]);
 
-      try {
-        $email->addAttachment(
-          base64_encode($ics->to_string()),
-          'text/calendar',
-          'booking.ics',
-          'attachment'
-        );
-      } catch (Exception $e) {
-        reportError($e);
+      // $email->addAttachment(
+      //   base64_encode($ics->to_string()),
+      //   'text/calendar',
+      //   'booking.ics',
+      //   'attachment'
+      // );
+
+      $mail->addStringAttachment(
+        $ics->to_string(),
+        'booking.ics',
+        PHPMailer\PHPMailer\PHPMailer::ENCODING_BASE64,
+        'text/calendar',
+        'attachment'
+      );
+
+      // Attempt to assemble the above components into a MIME message.
+      if (!$mail->preSend()) {
+        throw new Exception($mail->ErrorInfo);
+      } else {
+        // Create a new variable that contains the MIME message.
+        $message = $mail->getSentMIMEMessage();
       }
 
-      $email->setReplyTo(app()->tenant->getKey('CLUB_EMAIL'), app()->tenant->getKey('CLUB_NAME') . ' Enquiries');
-
-      $sendgrid = new \SendGrid(getenv('SENDGRID_API_KEY'));
-      $response = $sendgrid->send($email);
+      // Try to send the message.
+      try {
+        $result = $client->sendEmail([
+          'Content' => [
+            'Raw' => [
+              'Data' => $message
+            ]
+          ]
+        ]);
+        // If the message was sent, show the message ID.
+        $messageId = $result->get('MessageId');
+        // echo ("Email sent! Message ID: $messageId" . "\n");
+      } catch (Aws\Ses\Exception\SesException $error) {
+        // If the message was not sent, show a message explaining what went wrong.
+        // pre($error->getAwsErrorMessage());
+        // exit();
+        throw new Exception("The email was not sent. Error message: "
+          . $error->getAwsErrorMessage() . "\n");
+      }
 
       // reportError($response);
 
       // notifySend(null, $subject, $content, $username, $emailAddress);
     } catch (Exception $e) {
       // Ignore failed send
+      throw($e);
       // reportError($e);
     }
   }
 } catch (Exception $e) {
 
-  // reportError($e);
+  reportError($e);
 
   $message = $e->getMessage();
   if (get_class($e) == 'PDOException') {
