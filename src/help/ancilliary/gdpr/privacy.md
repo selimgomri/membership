@@ -18,7 +18,9 @@ SCDS only use absolutely nessecary cookies.
 
 ## Data Sharing
 
-Where appropriate we may share data with service providers such as Stripe, GoCardless, Twilio, Twilio SendGrid or Amazon Web Services.
+Where appropriate we may share data with service providers such as Stripe, GoCardless, Twilio, Twilio SendGrid or Amazon Web Services (AWS).
+
+We currently use AWS services for blob storage and email delivery.
 
 ## Data Retention
 

@@ -241,17 +241,8 @@ include BASE_PATH . 'views/header.php';
               <span class="input-group-text">@</span>
               <input class="form-control" type="text" name="EMAIL_DOMAIN" id="EMAIL_DOMAIN" value="<?= htmlspecialchars($vars['EMAIL_DOMAIN']) ?>" <?= $disabled['EMAIL_DOMAIN'] ?> aria-describedby="EMAIL_DOMAIN_HELP">
             </div>
-            <small id="EMAIL_DOMAIN_HELP" class="form-text text-muted">Your email domain must be listed in your Twilio SendGrid account.</small>
+            <small id="EMAIL_DOMAIN_HELP" class="form-text text-muted">The system sends emails to members under a subdomain of the above domain.</small>
           </div>
-
-          <?php if (!getenv('SENDGRID_API_KEY')) { ?>
-            <div class="mb-3">
-              <label class="form-label" for="EMAIL_DOMAIN">Twilio SendGrid API Key</label>
-              <input class="form-control font-monospace" type="text" name="SENDGRID_API_KEY" id="SENDGRID_API_KEY" value="<?= htmlspecialchars($vars['SENDGRID_API_KEY']) ?>" <?= $disabled['SENDGRID_API_KEY'] ?>>
-            </div>
-          <?php } else { ?>
-            <p>Your <a href="https://sendgrid.com/">Twilio SendGrid API key</a> is set at system level and cannot be viewed or modified here.</p>
-          <?php } ?>
 
           <div class="mb-3">
             <div class="form-switch mb-2">
@@ -365,9 +356,9 @@ include BASE_PATH . 'views/header.php';
             <input class="form-control font-monospace" type="text" readonly value="<?= htmlspecialchars(webhookUrl("payments/webhooks")) ?>">
           </div>
 
-          <h2>Stripe API keys (for card payments)</h2>
+          <h2>Stripe Setup</h2>
 
-          <p>Stripe API keys and webhooks are not required in Membership MT. Instead you can grant SCDS access to your Stripe account quickly and easily by going to <a href="<?= htmlspecialchars(autoUrl("settings/stripe")) ?>">Stripe Settings</a>.</p>
+          <p>Connect to SCDS without API keys or webhooks in <a href="<?= htmlspecialchars(autoUrl("settings/stripe")) ?>">Stripe Settings</a>.</p>
 
           <p>
             We will soon also be moving direct debit payments to Stripe. We will be in touch when this transition starts.

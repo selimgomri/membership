@@ -56,13 +56,24 @@ function verifyUser($user, $password)
 function notifySend($to, $subject, $emailMessage, $name = null, $emailaddress = null, $from = null)
 {
 
-  $email = new \SendGrid\Mail\Mail();
+  // use PHPMailer\PHPMailer\PHPMailer;
+  // use Aws\Ses\SesClient;
+  // use Aws\Ses\Exception\SesException;
+
+
+  // Create an SesClient.
+  $client = new Aws\SesV2\SesV2Client([
+    'region' => getenv('AWS_S3_REGION'),
+    'version' => 'latest'
+  ]);
+
   $mailObject = new \CLSASC\SuperMailer\CreateMail();
+  $mail = new PHPMailer\PHPMailer\PHPMailer(true);
   //echo $mailObject->getFormattedHtml();
   //echo $mailObject->getFormattedPlain();
 
   if (!isset($from['Email'])) {
-    $from['Email'] = "noreply@" . getenv('EMAIL_DOMAIN');
+    $from['Email'] = "noreply@transactional." . getenv('EMAIL_DOMAIN');
   }
   if (!isset($from['Name']) && isset(app()->tenant)) {
     $from['Name'] = app()->tenant->getKey('CLUB_NAME');
@@ -89,11 +100,15 @@ function notifySend($to, $subject, $emailMessage, $name = null, $emailaddress = 
   // }
 
   if (isset($from['CC']) && $from['CC'] != null) {
-    $email->addCcs($from['CC']);
+    foreach ($from['CC'] as $ccEmailAddress => $ccName) {
+      $mail->addCC($ccEmailAddress, $ccName);
+    }
   }
 
   if (isset($from['BCC']) && $from['BCC'] != null) {
-    $email->addBccs($from['BCC']);
+    foreach ($from['BCC'] as $bccEmailAddress => $bccName) {
+      $mail->addBCC($bccEmailAddress, $bccName);
+    }
   }
 
   $plain = $mailObject->getFormattedPlain();
@@ -105,32 +120,53 @@ function notifySend($to, $subject, $emailMessage, $name = null, $emailaddress = 
     $html = str_replace('-unsub_link-', $unsubLink, $html);
   }
 
-  if (getenv('SENDGRID_API_KEY') && $emailaddress != null && $name != null) {
+  if ($client) {
     if (isset($from['ReplyTo'])) {
-      $email->setReplyTo($from['ReplyTo']['Email'], $from['ReplyTo']['Name']);
+      $mail->addReplyTo($from['ReplyTo']['Email'], $from['ReplyTo']['Name']);
     } else if (isset(app()->tenant)) {
-      $email->setReplyTo(app()->tenant->getKey('CLUB_EMAIL'), app()->tenant->getKey('CLUB_NAME'));
+      $mail->addReplyTo(app()->tenant->getKey('CLUB_EMAIL'), app()->tenant->getKey('CLUB_NAME'));
     }
-    $email->setFrom($from['Email'], $from['Name']);
-    $email->setSubject($subject);
-    $email->addTo($emailaddress, $name);
-    $email->addContent("text/plain", $plain);
+    $mail->setFrom($from['Email'], $from['Name']);
+    $mail->Subject = $subject;
+    $mail->addAddress($emailaddress, $name);
     if (!(isset($from['PlainTextOnly']) && $from['PlainTextOnly'])) {
-      $email->addContent(
-        "text/html",
-        $html
-      );
+      $mail->isHTML(true);
+      $mail->Body = $html;
+    } else {
+      $mail->Body = $plain;
+    }
+    $mail->AltBody = $plain;
+
+    $mail->XMailer = 'Membership by Swimming Club Data Systems';
+
+    // Attempt to assemble the above components into a MIME message.
+    if (!$mail->preSend()) {
+      throw new Exception($mail->ErrorInfo);
+    } else {
+      // Create a new variable that contains the MIME message.
+      $message = $mail->getSentMIMEMessage();
     }
 
-    $sendgrid = new \CLSASC\SuperMailer\SuperMailer(getenv('SENDGRID_API_KEY'));
+    // Try to send the message.
     try {
-      $response = $sendgrid->send($email);
-    } catch (Exception $e) {
-      //echo $e;
-      return false;
-      reportError($e);
+      $result = $client->sendEmail([
+        'Content' => [
+          'Raw' => [
+            'Data' => $message
+          ]
+        ]
+      ]);
+      // If the message was sent, show the message ID.
+      $messageId = $result->get('MessageId');
+      // echo ("Email sent! Message ID: $messageId" . "\n");
+      return true;
+    } catch (Aws\Ses\Exception\SesException $error) {
+      // If the message was not sent, show a message explaining what went wrong.
+      // pre($error->getAwsErrorMessage());
+      // exit();
+      throw new Exception("The email was not sent. Error message: "
+        . $error->getAwsErrorMessage() . "\n");
     }
-    return true;
   } else {
     throw new Exception('Mailer failed');
   }
@@ -1124,7 +1160,8 @@ function isSubscribed($user, $email_type)
   return false;
 }
 
-function isAbsolutelySubscribed($user, $type) {
+function isAbsolutelySubscribed($user, $type)
+{
   $db = app()->db;
   $tenant = app()->tenant;
 
@@ -1934,7 +1971,8 @@ function getCompiledAsset($filename)
 /**
  * Returns an IP address, checking for proxy/LB headers
  */
-function getUserIp() {
+function getUserIp()
+{
   if (isset($_SERVER['CF-Connecting-IP'])) {
     return $_SERVER['CF-Connecting-IP'];
   }

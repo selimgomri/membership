@@ -64,13 +64,13 @@ try {
   for ($i = 0; $i < sizeof($attachmentsList); $i++) {
     try {
       if ($filesystem->fileExists($attachmentsList[$i]->s3_key)) {
-        $file = $filesystem->read($attachmentsList[$i]->s3_key);
+        // $file = $filesystem->read($attachmentsList[$i]->s3_key);
         $filesize = $filesystem->filesize($attachmentsList[$i]->s3_key);
         $mimetype = $filesystem->mimeType($attachmentsList[$i]->s3_key);
 
         $collectiveSize += $filesize;
         $attachments[] = [
-          'encoded' => base64_encode($file),
+          // 'encoded' => base64_encode($file),
           'mime' => $mimetype,
           'filename' => $attachmentsList[$i]->filename,
           'disposition' => 'attachment',
@@ -92,16 +92,16 @@ try {
     throw new Exception();
   }
 
-  if (false && getenv('AWS_S3_BUCKET')) {
-    for ($i = 0; $i < sizeof($attachments); $i++) {
+  // if (false && getenv('AWS_S3_BUCKET')) {
+  //   for ($i = 0; $i < sizeof($attachments); $i++) {
 
-      try {
-        $filesystem->write($attachments[$i]['store_name'], file_get_contents($attachments[$i]['tmp_name']), ['visibility' => 'private']);
-        $attachments[$i]['uploaded'] = true;
-      } catch (League\Flysystem\FilesystemException | League\Flysystem\UnableToWriteFile $exception) {
-      }
-    }
-  }
+  //     try {
+  //       $filesystem->write($attachments[$i]['store_name'], file_get_contents($attachments[$i]['tmp_name']), ['visibility' => 'private']);
+  //       $attachments[$i]['uploaded'] = true;
+  //     } catch (League\Flysystem\FilesystemException | League\Flysystem\UnableToWriteFile $exception) {
+  //     }
+  //   }
+  // }
 
   // reportError($attachments);
 
@@ -374,33 +374,50 @@ try {
       $mailObject->setUnsubscribable();
     }
 
-    $from = new \SendGrid\Mail\From("noreply@" . getenv('EMAIL_DOMAIN'), app()->tenant->getKey('CLUB_NAME'));
+    $from = [
+      "email" => "noreply@notify." . getenv('EMAIL_DOMAIN'),
+      "name" => app()->tenant->getKey('CLUB_NAME')
+    ];
     if (isset($jsonData->NamedSender->Email) && isset($jsonData->NamedSender->Name)) {
-      $from = new \SendGrid\Mail\From("noreply@" . getenv('EMAIL_DOMAIN'), $jsonData->NamedSender->Name);
+      $from = [
+        "email" => "noreply@notify." . getenv('EMAIL_DOMAIN'),
+        "name" => $jsonData->NamedSender->Name
+      ];
     }
     $tos = [];
     while ($user = $getUsersForEmail->fetch(PDO::FETCH_ASSOC)) {
       if (($sendingCategory == 'Notify' && ($currentMessage['ForceSend'] || isSubscribed($user['UserID'], $sendingCategory))) || ($sendingCategory != 'Notify' && ($currentMessage['ForceSend'] || isAbsolutelySubscribed($user['UserID'], $sendingCategory)))) {
-        $tos[] = new \SendGrid\Mail\To(
-          $user['EmailAddress'],
-          $user['Forename'] . ' ' . $user['Surname'],
-          [
-            '-name-' => $user['Forename'] . ' ' . $user['Surname'],
-            '-unsub_link-' => autoUrl("notify/unsubscribe/" . dechex($user['UserID']) .  "/" . urlencode($user['EmailAddress']) . "/Notify")
+        $tos[$user['EmailAddress']] = [
+          'email' => $user['EmailAddress'],
+          'name' => $user['Forename'] . ' ' . $user['Surname'],
+          'replacements' => [
+            [
+              "search" => '-name-',
+              "replacement" => $user['Forename'] . ' ' . $user['Surname']
+            ],
+            [
+              "search" => '-unsub_link-',
+              "replacement" => autoUrl("notify/unsubscribe/" . dechex($user['UserID']) .  "/" . urlencode($user['EmailAddress']) . "/Notify")
+            ]
           ]
-        );
+        ];
         if ($sendingCategory == 'Notify') {
           $getExtraEmails->execute([$user['UserID']]);
           while ($extraEmails = $getExtraEmails->fetch(PDO::FETCH_ASSOC)) {
-            $tos[] = new \SendGrid\Mail\To(
-              $extraEmails['EmailAddress'],
-              $extraEmails['Name'],
-              [
-                '-name-' => $extraEmails['Name'],
-                '-unsub_link-' => autoUrl("cc/" . dechex($extraEmails['ID']) .  "/" . hash('sha256', $extraEmails['ID']) . "/unsubscribe")
+            $tos[$extraEmails['EmailAddress']] = [
+              'email' => $extraEmails['EmailAddress'],
+              'name' => $extraEmails['Name'],
+              'replacements' => [
+                [
+                  "search" => '-name-',
+                  "replacement" => $extraEmails['Name']
+                ],
+                [
+                  "search" => '-unsub_link-',
+                  "replacement" => autoUrl("cc/" . dechex($extraEmails['ID']) .  "/" . hash('sha256', $extraEmails['ID']) . "/unsubscribe")
+                ]
               ]
-            );
-            $ccEmails[$extraEmails['EmailAddress']] = $extraEmails['Name'];
+            ];
           }
         }
         // $completed->execute(['Sent', $user['EmailID']]);
@@ -412,39 +429,63 @@ try {
     $globalSubstitutions = [];
     $plain_text = $mailObject->getFormattedPlain();
     //$plain_text = str_replace(';', '', $plain_text);
-    $plainTextContent = new \SendGrid\Mail\PlainTextContent($plain_text);
-    $htmlContent = new \SendGrid\Mail\HtmlContent($mailObject->getFormattedHtml());
+    $plainTextContent = $plain_text;
+    $htmlContent = $mailObject->getFormattedHtml();
 
-    $email = new \SendGrid\Mail\Mail(
-      $from,
-      $tos,
-      $subject,
-      $plainTextContent,
-      $htmlContent,
-      $globalSubstitutions
-    );
-
-    foreach ($attachments as $attachment) {
-      $email->addAttachment(
-        $attachment['encoded'],
-        $attachment['mime'],
-        $attachment['filename'],
-        $attachment['disposition']
-      );
+    // Ensure we only send once
+    $recipients = [];
+    foreach ($tos as $value) {
+      $recipients[] = $value;
     }
+
+    $apiRequest = [
+      "from" => $from,
+      "recipients" => $recipients,
+      "subject" => $subject,
+      "plain" => $plainTextContent,
+      "html" => $htmlContent,
+      "global_substitutions" => $globalSubstitutions
+    ];
+
+    $apiAttachments = [];
+    foreach ($attachments as $attachment) {
+      $apiAttachments[] = [
+        "bucket" => getenv('AWS_S3_BUCKET'),
+        "key" => $attachment['store_name'],
+        "filename" => $attachment['filename'],
+      ];
+    }
+    $apiRequest['attachments'] = $apiAttachments;
 
     if (isset($jsonData->ReplyToMe->Email) && isset($jsonData->ReplyToMe->Name)) {
       try {
-        $email->setReplyTo($jsonData->ReplyToMe->Email, $jsonData->ReplyToMe->Name);
+        $apiRequest['replyTo'] = [
+          "email" => $jsonData->ReplyToMe->Email,
+          "name" => $jsonData->ReplyToMe->Name
+        ];
       } catch (Exception $e) {
-        $email->setReplyTo(app()->tenant->getKey('CLUB_EMAIL'), app()->tenant->getKey('CLUB_NAME') . ' Enquiries');
+        $apiRequest['replyTo'] = [
+          "email" => app()->tenant->getKey('CLUB_EMAIL'),
+          "name" => app()->tenant->getKey('CLUB_NAME') . ' Enquiries'
+        ];
       }
     } else {
-      $email->setReplyTo(app()->tenant->getKey('CLUB_EMAIL'), app()->tenant->getKey('CLUB_NAME') . ' Enquiries');
+      $apiRequest['replyTo'] = [
+        "email" => app()->tenant->getKey('CLUB_EMAIL'),
+        "name" => app()->tenant->getKey('CLUB_NAME') . ' Enquiries'
+      ];
     }
 
-    $sendgrid = new \SendGrid(getenv('SENDGRID_API_KEY'));
-    $response = $sendgrid->send($email);
+    $lambda = new Aws\Lambda\LambdaClient([
+      'region' => 'eu-west-2',
+      'version' => '2015-03-31',
+    ]);
+
+    $res = $lambda->invoke([
+      'FunctionName' => 'arn:aws:lambda:eu-west-2:684636513987:function:Email-Queue',
+      'InvocationType' => 'Event',
+      'Payload' => json_encode($apiRequest),
+    ]);
 
     AuditLog::new('Notify-SentGroup', 'Sent email ' . $id);
   }
@@ -457,27 +498,6 @@ try {
   echo json_encode([
     'success' => true,
   ]);
-
-  try {
-
-    if (!app()->user->getUserBooleanOption('BeenSentReactNotifyEmail')) {
-      $name = app()->user->getForename() . " " . app()->user->getSurname();
-      $email = app()->user->getEmail();
-      $subject = "Thank you for trying the new Notify Composer";
-
-      $message = "<p>Hello " . htmlspecialchars(app()->user->getForename()) . ",</p>";
-      $message .= "<p>We would love to get your feedback on the new Notify Composer.</p>";
-      $message .= "<p>Please send feedback on the new Notify Composer to <a href=\"mailto:support@myswimmingclub.uk\">support@myswimmingclub.uk</a>. It is your chance to ensure any changes to the new version, that you think are required, are made before it replaces the existing editor.</p>";
-      $message .= "<p>Thank you.</p>";
-
-      $message .= "<p><em>PS: We won't send you this email again.</em></p>";
-
-      notifySend(null, $subject, $message, $name, $email, ['Name' => 'SCDS User Research', 'ReplyTo' => ['Name' => 'SCDS Support', 'Email' => 'support@myswimmingclub.uk']]);
-
-      app()->user->setUserOption('BeenSentReactNotifyEmail', true);
-    }
-  } catch (Exception $e) {
-  }
 } catch (Exception $e) {
   $db->rollback();
 

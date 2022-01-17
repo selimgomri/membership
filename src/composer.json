@@ -18,7 +18,7 @@
         "clsasc/equivalent-time": "^1.1",
         "clsasc/sdif-parser": "dev-master",
         "geoip2/geoip2": "^2.0",
-        "whichbrowser/parser": "^2.0",
+        "whichbrowser/parser": "^2.1",
         "stripe/stripe-php": "^7.0",
         "pragmarx/google2fa": "^4.0",
         "dompdf/dompdf": "^1.0.0",
@@ -38,11 +38,12 @@
         "intervention/image": "^2.5",
         "intervention/imagecache": "^2.4",
         "symfony/yaml": "^5.2",
-        "aws/aws-sdk-php": "^3.178",
+        "aws/aws-sdk-php": "^3.208",
         "league/flysystem": "^2.0",
         "league/flysystem-aws-s3-v3": "^2.0",
         "stefangabos/zebra_pagination": "^2.4",
         "league/oauth2-client": "^2.6",
-        "microsoft/microsoft-graph": "^1.42"
+        "microsoft/microsoft-graph": "^1.42",
+        "phpmailer/phpmailer": "^6.5"
     }
 }
