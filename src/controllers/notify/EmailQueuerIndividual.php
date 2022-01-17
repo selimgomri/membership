@@ -174,6 +174,8 @@ try {
     }
   }
 
+  $mail->XMailer = 'Membership by Swimming Club Data Systems';
+
   // Attempt to assemble the above components into a MIME message.
   if (!$mail->preSend()) {
     throw new Exception($mail->ErrorInfo);
