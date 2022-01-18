@@ -34,7 +34,7 @@ if ($type == "member-list") {
   $getCount->execute([
     $id
   ]);
-  $getMembers = $db->prepare("SELECT members.MemberID memberId, members.MForename `firstName`, members.MSurname `lastName`, users.Forename uFirstName, users.Surname uLastName, onboardingSessions.completed_at completedAt, onboardingSessions.id sessionId, membershipBatch.Total FROM onboardingMembers INNER JOIN members ON onboardingMembers.member = members.MemberID INNER JOIN onboardingSessions ON onboardingMembers.session = onboardingSessions.id LEFT JOIN users ON members.UserID = users.UserID LEFT JOIN membershipBatch ON onboardingSessions.batch = membershipBatch.ID WHERE onboardingSessions.renewal = :sessionId ORDER BY onboardingSessions.completed_at DESC, MSurname ASC, MForename ASC");
+  $getMembers = $db->prepare("SELECT members.MemberID memberId, members.MForename `firstName`, members.MSurname `lastName`, users.Forename uFirstName, users.Surname uLastName, onboardingSessions.completed_at completedAt, onboardingSessions.id sessionId, membershipBatch.Total FROM (onboardingMembers INNER JOIN members ON onboardingMembers.member = members.MemberID INNER JOIN onboardingSessions ON onboardingMembers.session = onboardingSessions.id) LEFT JOIN users ON members.UserID = users.UserID LEFT JOIN membershipBatch ON onboardingSessions.batch = membershipBatch.ID WHERE onboardingSessions.renewal = :sessionId ORDER BY onboardingSessions.completed_at DESC, MSurname ASC, MForename ASC");
   $getMembers->bindValue(':sessionId', $id, PDO::PARAM_INT);
   $getMembers->execute();
   $pagetitle = "Members in this renewal - " . $basePageTitle;
