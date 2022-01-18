@@ -10,6 +10,8 @@ $today = new DateTime('now', new DateTimeZone('Europe/London'));
 
 $renewal = \SCDS\Onboarding\Renewal::retrieve($id);
 
+$fluidContainer = true;
+
 if (!$renewal) halt(404);
 
 // $startDate = new DateTime($renewal->start, new DateTimeZone('Europe/London'));
@@ -22,11 +24,6 @@ $stageNames = SCDS\Onboarding\Session::stagesOrder();
 $memberStages = SCDS\Onboarding\Member::getDefaultStages();
 $memberStageNames = SCDS\Onboarding\Member::stagesOrder();
 
-$perPage = 15;
-
-$pagination = new \SCDS\Pagination();
-$pagination->records_per_page($perPage);
-
 $basePageTitle = htmlspecialchars($renewal->start->format('j M Y') . " - " . $renewal->end->format('j M Y')) . " - Renewal - Membership Centre";
 $pagetitle = "Member List - " . $basePageTitle;
 
@@ -37,10 +34,8 @@ if ($type == "member-list") {
   $getCount->execute([
     $id
   ]);
-  $getMembers = $db->prepare("SELECT members.MForename `firstName`, members.MSurname `lastName` FROM onboardingMembers INNER JOIN members ON onboardingMembers.member = members.MemberID INNER JOIN onboardingSessions ON onboardingMembers.session = onboardingSessions.id WHERE onboardingSessions.renewal = :sessionId ORDER BY MSurname ASC, MForename ASC LIMIT :offset, :num");
+  $getMembers = $db->prepare("SELECT members.MemberID memberId, members.MForename `firstName`, members.MSurname `lastName`, users.Forename uFirstName, users.Surname uLastName, onboardingSessions.completed_at completedAt, onboardingSessions.id sessionId, membershipBatch.Total FROM onboardingMembers INNER JOIN members ON onboardingMembers.member = members.MemberID INNER JOIN onboardingSessions ON onboardingMembers.session = onboardingSessions.id LEFT JOIN users ON members.UserID = users.UserID LEFT JOIN membershipBatch ON onboardingSessions.batch = membershipBatch.ID WHERE onboardingSessions.renewal = :sessionId ORDER BY onboardingSessions.completed_at DESC, MSurname ASC, MForename ASC");
   $getMembers->bindValue(':sessionId', $id, PDO::PARAM_INT);
-  $getMembers->bindValue(':offset', $pagination->get_limit_start(), PDO::PARAM_INT);
-  $getMembers->bindValue(':num', $perPage, PDO::PARAM_INT);
   $getMembers->execute();
   $pagetitle = "Members in this renewal - " . $basePageTitle;
 } else if ($type = "current-members-not-in-renewal-list") {
@@ -49,19 +44,17 @@ if ($type == "member-list") {
   halt(404);
 }
 
+$getBatchItems = $db->prepare("SELECT membershipBatchItems.Amount, membershipYear.Name yearName, clubMembershipClasses.Name, clubMembershipClasses.Description, clubMembershipClasses.Fees, clubMembershipClasses.Type FROM membershipBatchItems INNER JOIN clubMembershipClasses ON membershipBatchItems.Membership = clubMembershipClasses.ID INNER JOIN membershipYear ON  membershipBatchItems.Year = membershipYear.ID WHERE Member = ? AND Batch = ?");
+
 $count = $getCount->fetchColumn();
 $member = $getMembers->fetch(PDO::FETCH_OBJ);
-
-if ($pagination->get_limit_start() > 1 && $pagination->get_limit_start() >= $count) halt(404);
-
-$pagination->records($count);
 
 include BASE_PATH . "views/header.php";
 
 ?>
 
 <div class="bg-light mt-n3 py-3 mb-3">
-  <div class="container-xl">
+  <div class="container-fluid">
 
     <!-- Page header -->
     <nav aria-label="breadcrumb">
@@ -86,10 +79,10 @@ include BASE_PATH . "views/header.php";
   </div>
 </div>
 
-<div class="container-xl">
+<div class="container-fluid">
 
   <div class="row">
-    <div class="col-lg-8">
+    <div class="col">
       <main>
 
         <?php if ($member) { ?>
@@ -104,15 +97,85 @@ include BASE_PATH . "views/header.php";
             </p>
           <?php } ?>
 
-          <div class="list-group mb-3">
-            <?php do { ?>
-              <a href="<?= htmlspecialchars(autoUrl("members/")) ?>" class="list-group-item list-group-item-action">
-                <h2><?= htmlspecialchars(\SCDS\Formatting\Names::format($member->firstName, $member->lastNamee)) ?></h2>
-              </a>
-            <?php } while ($member = $getMembers->fetch(PDO::FETCH_OBJ)); ?>
-          </div>
+          <table class="table table-sm table-striped">
+            <thead>
+              <tr>
+                <th>
+                  Completed At
+                </th>
+                <th>
+                  User Name
+                </th>
+                <th>
+                  Member Name
+                </th>
+                <th>
+                  Memberships
+                </th>
+                <th class="text-end">
+                  Total Payment
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php do {
+                $session = null;
+                $memberOnboarding = null;
+                $batchItem = null;
+                try {
+                  $session = SCDS\Onboarding\Session::retrieve($member->sessionId);
+                  $memberOnboarding = SCDS\Onboarding\Member::retrieve($member->memberId, $member->sessionId);
+                  $getBatchItems->execute([
+                    $member->memberId,
+                    $session->batch,
+                  ]);
+                  $batchItem = $getBatchItems->fetch(PDO::FETCH_OBJ);
+                } catch (Exception $e) {
+                  // Ignore
+                }
+              ?>
+                <tr>
+                  <td>
+                    <?php if ($member->completedAt) {
+                      $time = new DateTime($member->completedAt, new DateTimeZone('UTC'));
+                      $time->setTimezone(new DateTimeZone('Europe/London'));
+                    ?>
+                      <?= htmlspecialchars($time->format("H:i d/m/y")) ?>
+                    <?php } else { ?>
+                      Incomplete
+                    <?php } ?>
+                  </td>
+                  <td>
+                    <?php if ($member->uFirstName) { ?>
+                      <?= htmlspecialchars(\SCDS\Formatting\Names::format($member->uFirstName, $member->uLastName)) ?>
+                    <?php } else { ?>
+                      No user currently assigned
+                    <?php } ?>
+                  </td>
+                  <td>
+                    <?= htmlspecialchars(\SCDS\Formatting\Names::format($member->firstName, $member->lastName)) ?>
+                  </td>
+                  <td>
+                    <?php if ($batchItem) { ?>
+                    <ul class="mb-0 list-unstyled">
+                      <?php do { ?>
+                      <li><?= htmlspecialchars($batchItem->Name) ?> (<?= htmlspecialchars($batchItem->yearName) ?>), <?= htmlspecialchars(MoneyHelpers::formatCurrency(MoneyHelpers::intToDecimal($batchItem->Amount), 'gbp')) ?></li>
+                      <?php } while ($batchItem = $getBatchItems->fetch(PDO::FETCH_OBJ)); ?>
+                    </ul>
+                    <?php } else { ?>
+                      -
+                    <?php } ?>
+                  </td>
+                  <td class="font-monospace text-end">
+                    <?php if ($member->completedAt && $member->Total) { ?>
+                      <?= htmlspecialchars(MoneyHelpers::formatCurrency(MoneyHelpers::intToDecimal($member->Total), 'gbp')) ?>
+                    <?php } ?>
+                  </td>
+                </tr>
+              <?php } while ($member = $getMembers->fetch(PDO::FETCH_OBJ)); ?>
+            </tbody>
+          </table>
 
-          <?= $pagination->render(); ?>
         <?php } else { ?>
           <div class="alert alert-warning">
             No records to display
@@ -129,5 +192,6 @@ include BASE_PATH . "views/header.php";
 <?php
 
 $footer = new \SCDS\Footer();
+$footer->useFluidContainer();
 $footer->addJs('js/NeedsValidation.js');
 $footer->render();
