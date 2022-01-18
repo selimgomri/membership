@@ -47,11 +47,10 @@ include BASE_PATH . "views/header.php";
 				The Membership Centre lets clubs track which memberships their members hold in a given year.
 			</p>
 
-			<h2>Memberships pending payment</h2>
-
 			<?php if ($pending = $getPending->fetch(PDO::FETCH_OBJ)) { ?>
+				<h2>Your memberships pending payment</h2>
 
-				<p>
+				<p class="lead">
 					Here are your pending membership fee payments. Please view the batch to review and pay.
 				</p>
 
@@ -109,49 +108,124 @@ include BASE_PATH . "views/header.php";
 
 				<div class="alert alert-info">
 					<p class="mb-0">
-						<strong>You have no membership fees to pay</strong>
+						<strong>You currently have no additional membership fees to pay</strong>
+					</p>
+					<p class="mb-0">
+						Speak to a member of club staff if you expected to see a payment here.
 					</p>
 				</div>
 
 			<?php } ?>
 
-			<?php if (app()->user->hasPermission('Admin')) { ?>
-				<h2>Membership Years</h2>
-				<p>
-					<a href="<?= htmlspecialchars(autoUrl('memberships/years')) ?>" class="btn btn-primary">
-						Show years/periods
-					</a>
-				</p>
+		</div>
+	</div>
 
-				<h2>Membership Renewal</h2>
-				<p>
-					<a href="<?= htmlspecialchars(autoUrl('memberships/renewal')) ?>" class="btn btn-primary">
-						View, add or edit renewal periods
-					</a>
-				</p>
+	<?php if (app()->user->hasPermission('Admin')) { ?>
 
-				<h2>Onboarding Sessions</h2>
-				<p>
-					<a href="<?= htmlspecialchars(autoUrl('onboarding/all')) ?>" class="btn btn-primary">
-						View, create or edit onboarding sessions
-					</a>
-				</p>
+		<h2>Membership administration</h2>
+		<p class="lead">
+			Registration, renewal and additional fees are now all in one place.
+		</p>
 
-				<h2>Membership Batches</h2>
-				<p>
-					<a href="<?= htmlspecialchars(autoUrl('memberships/batches')) ?>" class="btn btn-primary">
-						View or edit batches
-					</a>
-				</p>
+		<div class="row mb-0">
 
-				<p>
-					Create a new membership batch by navigating to the user you want to issue a batch for.
-				</p>
+			<div class="col-md-6 col-lg-4 pb-3">
+				<div class="card card-body h-100" style="display: grid;">
+					<div>
+						<h3>
+							Onboard a new user or member
+						</h3>
+						<p class="lead">
+							This replaces Assisted Registration.
+						</p>
+					</div>
+					<p class="mb-0 mt-auto d-flex">
+						<a href="<?= htmlspecialchars(autoUrl('onboarding')) ?>" class="btn btn-primary">
+							Go
+						</a>
+					</p>
+				</div>
+			</div>
 
+			<div class="col-md-6 col-lg-4 pb-3">
+				<div class="card card-body h-100" style="display: grid;">
+					<div>
+						<h3>
+							Membership Renewal
+						</h3>
+						<p class="lead">
+							Manage renewal period.
+						</p>
+					</div>
+					<p class="mb-0 mt-auto d-flex">
+						<a href="<?= htmlspecialchars(autoUrl('memberships/renewal')) ?>" class="btn btn-primary">
+							Go
+						</a>
+					</p>
+				</div>
+			</div>
+
+			<div class="col-md-6 col-lg-4 pb-3">
+				<div class="card card-body h-100" style="display: grid;">
+					<div>
+						<h3>
+							Onboarding Sessions
+						</h3>
+						<p class="lead">
+							View, edit or create onboarding sessions.
+						</p>
+					</div>
+					<p class="mb-0 mt-auto d-flex">
+						<a href="<?= htmlspecialchars(autoUrl('onboarding/all')) ?>" class="btn btn-primary">
+							Go
+						</a>
+					</p>
+				</div>
+			</div>
+
+			<div class="col-md-6 col-lg-4 pb-3">
+				<div class="card card-body h-100" style="display: grid;">
+					<div>
+						<h3>
+							Membership Batches
+						</h3>
+						<p class="lead">
+							Bill a member for new membership types.
+						</p>
+					</div>
+					<p class="mb-0 mt-auto d-flex">
+						<a href="<?= htmlspecialchars(autoUrl('memberships/batches')) ?>" class="btn btn-primary">
+							Go
+						</a>
+					</p>
+				</div>
+			</div>
+
+			<div class="col-md-6 col-lg-4 pb-3">
+				<div class="card card-body h-100" style="display: grid;">
+					<div>
+						<h3>
+							Membership Years and Periods
+						</h3>
+						<p class="lead">
+							Add or edit periods.
+						</p>
+					</div>
+					<p class="mb-0 mt-auto d-flex">
+						<a href="<?= htmlspecialchars(autoUrl('memberships/years')) ?>" class="btn btn-primary">
+							Go
+						</a>
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-lg-8">
 				<h2>Legacy Membership Renewal</h2>
 
 				<p>
-					The legacy membership renewal system is deprecated and eventually will be removed.
+					The legacy membership renewal system is deprecated. You cannot create, edit or complete a legacy renewal or assisted registration session anymore as the functionality has been removed. You can however view remaining data from these renewals.
 				</p>
 
 				<p>
@@ -159,9 +233,9 @@ include BASE_PATH . "views/header.php";
 						View legacy renewal periods
 					</a>
 				</p>
-			<?php } ?>
+			</div>
 		</div>
-	</div>
+	<?php } ?>
 
 </div>
 

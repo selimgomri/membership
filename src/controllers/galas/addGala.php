@@ -27,7 +27,7 @@ include "galaMenu.php";
   <p class="lead">Add a gala for members to enter</p>
   <form method="post" action="<?= htmlspecialchars(autoUrl("galas/addgala")) ?>" class="needs-validation" novalidate>
     <div class="row">
-      <div class="col-md-10 col-lg-8">
+      <div class="col-lg-8">
         <div class="mb-3">
           <label for="galaname" class="form-label">Gala Name</label>
           <input type="text" class="form-control" id="galaname" name="galaname" placeholder="eg Chester-le-Street Open" required>
@@ -57,7 +57,7 @@ include "galaMenu.php";
     </div>
 
     <div class="row">
-      <div class="col-md-10 col-lg-8">
+      <div class="col-lg-8">
         <div class="row">
           <div class="col">
             <div class="mb-3">
@@ -73,21 +73,26 @@ include "galaMenu.php";
           </div>
         </div>
       </div>
-      <div class="col">
-        <div class="alert alert-info">
-          23:59 represents the end of the day. A closing time of 00:00 would mean the gala closes immediately at the start of the closing date.
+      <div class="col-lg">
+        <div class="border-start border-info border-5 p-2 mb-3">
+          <p class="mb-0">
+            <strong><i class="fa fa-info-circle" aria-hidden="true"></i> About closing dates</strong>
+          </p>
+          <p class="mb-0">
+            23:59 represents the end of the day. A closing time of 00:00 would mean the gala closes immediately at the start of the closing date.
+          </p>
         </div>
       </div>
     </div>
 
     <div class="row">
-      <div class="col-md-10 col-lg-8">
+      <div class="col-lg-8">
         <div class="mb-3">
           <label for="lastDate" class="form-label">Last day of gala</label>
           <input type="date" class="form-control" id="lastDate" name="lastDate" placeholder="YYYY-MM-DD" value="<?= htmlspecialchars($today->format('Y-m-d')) ?>" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}" required>
         </div>
         <div class="mb-3">
-          <label for="galaFee" class="form-label">Default entry fee</label>
+          <label for="galaFee" class="form-label">Default per swim fee</label>
           <div class="input-group">
             <span class="input-group-text">&pound;</span>
             <input type="num" min="0" step="0.01" class="form-control" id="galaFee" name="galaFee" aria-describedby="galaFeeHelp" placeholder="eg 5.00" required>
@@ -103,7 +108,7 @@ include "galaMenu.php";
             <input type="number" min="0" step="0.01" class="form-control" id="per-entry-fee" name="per-entry-fee" aria-describedby="per-entry-fee-help" placeholder="0.00" required value="<?= htmlspecialchars(MoneyHelpers::intToDecimal($tenant->getKey('DEFAULT_GALA_PROCESSING_FEE'))) ?>">
             <div class="invalid-feedback">You must enter a numeric value for the per gala entry processing fee - it can be £0</div>
           </div>
-          <small id="per-entry-fee-help" class="form-text text-muted">To comply with the law on credit/debit card surcharges, you must charge this fee for any payment method you support - even cash or bank transfer</small>
+          <small id="per-entry-fee-help" class="form-text text-muted">This is the amount added per swimmer entered, not per swim entered. If you apply a processing fee for each swim, add the amount to the fee per swim. To comply with the law on credit/debit card surcharges, you must charge this fee for any payment method you support - even cash or bank transfer</small>
         </div>
 
         <div class="mb-3">
