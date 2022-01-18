@@ -100,7 +100,7 @@ include "galaMenu.php"; ?>
             <input type="number" min="0" step="0.01" class="form-control" id="per-entry-fee" name="per-entry-fee" aria-describedby="per-entry-fee-help" placeholder="0.00" required value="<?= htmlspecialchars(MoneyHelpers::intToDecimal($row['ProcessingFee'])) ?>">
             <div class="invalid-feedback">You must enter a numeric value for the per gala entry processing fee - it can be £0</div>
           </div>
-          <small id="per-entry-fee-help" class="form-text text-muted">To comply with the law on credit/debit card surcharges, you must charge this fee for any payment method you support - even cash or bank transfer</small>
+          <small id="per-entry-fee-help" class="form-text text-muted">This is the amount added per swimmer entered, not per swim entered. If you apply a processing fee for each swim, add the amount to the fee per swim. To comply with the law on credit/debit card surcharges, you must charge this fee for any payment method you support - even cash or bank transfer</small>
         </div>
 
         <?php if ($row['HyTek'] == 1) { ?>
