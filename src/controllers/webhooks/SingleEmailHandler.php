@@ -137,3 +137,9 @@ while ($row = $pending->fetch(PDO::FETCH_ASSOC)) {
 		$completed->execute(['No_Sub', $emailid]);
 	}
 }
+
+header("content-type: application/json");
+echo json_encode([
+	'success' => true,
+	'status' => 200,
+]);

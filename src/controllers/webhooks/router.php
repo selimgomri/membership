@@ -1,7 +1,6 @@
 <?php
 
 $this->any('/sumpayments', function () {
-
 	require 'sumpayments.php';
 });
 

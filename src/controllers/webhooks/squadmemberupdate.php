@@ -69,3 +69,9 @@ while ($id = $getRenewals->fetchColumn()) {
     // Ignore
   }
 }
+
+header("content-type: application/json");
+echo json_encode([
+	'success' => true,
+	'status' => 200,
+]);

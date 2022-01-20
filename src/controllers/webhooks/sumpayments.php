@@ -3,6 +3,8 @@
 ignore_user_abort(true);
 set_time_limit(0);
 
+header("content-type: application/json");
+
 use Brick\Math\BigDecimal;
 use Brick\Math\RoundingMode;
 
@@ -410,11 +412,22 @@ if ($tenant->getBooleanKey('ENABLE_BILLING_SYSTEM')) {
 
     // Commit operations
     $db->commit();
-    echo "Operation Successful";
+    echo json_encode([
+      'success' => true,
+      'message' => "Operation Successful"
+    ]);
   } catch (Exception $e) {
     $db->rollBack();
     reportError($e);
+
+    echo json_encode([
+      'success' => false,
+      'message' => $e->getMessage(),
+    ]);
   }
 } else {
-  echo "Billing system disabled";
+  echo json_encode([
+    'success' => false,
+    'message' => "Billing system disabled"
+  ]);
 }

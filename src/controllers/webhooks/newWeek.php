@@ -33,3 +33,9 @@ if ($latestWeekDB != null) {
 else {
 	insertWeekStart($week_start);
 }
+
+header("content-type: application/json");
+echo json_encode([
+	'success' => true,
+	'status' => 200,
+]);
