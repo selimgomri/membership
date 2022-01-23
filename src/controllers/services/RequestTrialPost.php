@@ -148,7 +148,7 @@ $email_parent = '
 <p>Hello ' . $parent . '</p>
 <p>Thanks for your interest in a trial ' . $forText . ' at ' . htmlspecialchars(app()->tenant->getKey('CLUB_NAME')) . '. We\'re working through your request and will get back to you as soon as we can.</p>';
 
-$to_club = notifySend(null, 'New Trial Request', $email_club, 'Club Admins', htmlspecialchars(app()->tenant->getKey('CLUB_TRIAL_EMAIL')), ["Email" => "join@" . getenv('EMAIL_DOMAIN'), "Name" => app()->tenant->getKey('CLUB_NAME'), 'Reply-To' => $_POST['email-addr']]);
+$to_club = notifySend(null, 'New Trial Request', $email_club, 'Club Admins', htmlspecialchars(app()->tenant->getKey('CLUB_TRIAL_EMAIL')), ["Email" => "noreply@transactional." . getenv('EMAIL_DOMAIN'), "Name" => app()->tenant->getKey('CLUB_NAME'), 'Reply-To' => $_POST['email-addr']]);
 
 $to_parent = notifySend(null, 'Your Trial Request', $email_parent, $parent, $_POST['email-addr']);
 

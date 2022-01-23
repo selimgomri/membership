@@ -1849,12 +1849,7 @@ function handleCompletedGalaPayments($paymentIntent, $onSession = false)
         $email = $user['EmailAddress'];
         $name = $user['Forename'] . ' ' . $user['Surname'];
       }
-      $sendingEmail = null;
-      if (app()->tenant->isCLS()) {
-        $sendingEmail = "payments@" . getenv('EMAIL_DOMAIN');
-      } else {
-        $sendingEmail = mb_strtolower(trim(app()->tenant->getKey('ASA_CLUB_CODE'))) . "-payments@" . getenv('EMAIL_DOMAIN');
-      }
+      $sendingEmail = "noreply@transactional." . getenv('EMAIL_DOMAIN');
       notifySend(null, 'Payment Receipt', $message, $name, $email, [
         "Email" => $sendingEmail,
         "Name" => app()->tenant->getKey('CLUB_NAME'),

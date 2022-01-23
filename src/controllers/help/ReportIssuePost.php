@@ -45,7 +45,7 @@ if (v::url()->validate($target) && \SCDS\CSRF::verify()) {
 	$message .= "<p>Reported on " . date("l j F Y") . ".</p>";
 	$message .= "<p>Sent Automatically by Swimming Club Data Systems.</p>";
 
-	notifySend("", "Website Error Report", $message, "Website Admin Team", "support@myswimmingclub.uk", ["Email" => "report-an-issue@" . getenv('EMAIL_DOMAIN'), "Name" => 'User Error Report - SCDS']);
+	notifySend("", "Website Error Report", $message, "Website Admin Team", "support@myswimmingclub.uk", ["Email" => "noreply@transactional." . getenv('EMAIL_DOMAIN'), "Name" => 'User Error Report - SCDS']);
 
 	$_SESSION['TENANT-' . app()->tenant->getId()]['ErrorReportStatus'] = true;
 	$_SESSION['TENANT-' . app()->tenant->getId()]['ErrorReportTarget'] = $target;

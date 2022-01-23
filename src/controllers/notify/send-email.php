@@ -273,22 +273,9 @@ try {
 
   if ($data->state->from == "fromMe") {
     $senderNames = explode(' ', $userSending);
-    $fromEmail = "";
-    for ($i = 0; $i < sizeof($senderNames); $i++) {
-      $fromEmail .= urlencode(strtolower($senderNames[$i]));
-      if ($i < sizeof($senderNames) - 1) {
-        $fromEmail .= '.';
-      }
-    }
-
-    if (!app()->tenant->isCLS()) {
-      $fromEmail .= '.' . urlencode(strtolower(str_replace(' ', '', app()->tenant->getKey("ASA_CLUB_CODE"))));
-    }
-
-    $fromEmail .= '@' . getenv('EMAIL_DOMAIN');
 
     $recipientGroups["NamedSender"] = [
-      "Email" => $fromEmail,
+      "Email" => "noreply@notify." . getenv('EMAIL_DOMAIN'),
       "Name" => $userSending
     ];
   }
