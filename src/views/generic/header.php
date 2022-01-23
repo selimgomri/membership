@@ -41,10 +41,18 @@ if (isset($customBackground) && $customBackground) {
     </div>
   <?php } ?>
 
-  <?php if (app()->tenant->getBooleanKey('PAYMENT_OVERDUE')) { ?>
+  <?php if (app()->tenant->getBooleanKey('PAYMENT_OVERDUE') && app()->user && app()->user->hasPermission('Admin')) { ?>
     <div class="bg-danger text-light text-light-d bg-striped py-1 d-print-none">
       <div class="<?= $container_class ?>">
         <small><strong>PAYMENT TO SCDS IS OVERDUE</strong> THIS TENANT MAY SOON BE SUSPENDED</small>
+      </div>
+    </div>
+  <?php } ?>
+
+  <?php if (app()->tenant->getBooleanKey('PAYMENT_METHOD_INVALID') && app()->user && app()->user->hasPermission('Admin')) { ?>
+    <div class="bg-danger text-light text-light-d bg-striped py-1 d-print-none">
+      <div class="<?= $container_class ?>">
+        <small><strong>PAYMENT METHOD MISSING OR UNUSABLE</strong> CORRECT YOUR PAYMENT INFORMATION FOR SCDS AS SOON AS POSSIBLE. FAILURE TO DO SO MAY RESULT IN TENANT SUSPENSION.</small>
       </div>
     </div>
   <?php } ?>
@@ -54,32 +62,9 @@ if (isset($customBackground) && $customBackground) {
     <?php if (app()->tenant->getKey('EMERGENCY_MESSAGE_TYPE') != 'NONE' && app()->tenant->getKey('EMERGENCY_MESSAGE')) {
       $markdown = new ParsedownExtra();
     ?>
-      <!-- Yes, this is quick and nasty, but it's an emergency -->
-      <style>
-        .text-white .emergency-message a {
-          color: #fff;
-          font-weight: bold;
-          text-decoration: underline;
-        }
 
-        .text-body .emergency-message a {
-          color: #212529;
-          font-weight: bold;
-          text-decoration: underline;
-        }
-
-        .text-white .emergency-message thead {
-          color: #212529;
-        }
-
-        .emergency-message p:last-child {
-          margin-bottom: 0 !important;
-          padding-bottom: 0 !important;
-        }
-      </style>
-
-      <div class="py-3 <?php if (app()->tenant->getKey('EMERGENCY_MESSAGE_TYPE') == 'DANGER') { ?>bg-danger text-white<?php } ?> <?php if (app()->tenant->getKey('EMERGENCY_MESSAGE_TYPE') == 'WARN') { ?>bg-warning text-body<?php } ?> <?php if (app()->tenant->getKey('EMERGENCY_MESSAGE_TYPE') == 'SUCCESS') { ?>bg-success text-white<?php } ?>">
-        <div class="<?= $container_class ?> emergency-message">
+      <div class="top-alert <?php if (app()->tenant->getKey('EMERGENCY_MESSAGE_TYPE') == 'DANGER') { ?>top-alert-danger<?php } ?> <?php if (app()->tenant->getKey('EMERGENCY_MESSAGE_TYPE') == 'WARN') { ?>top-alert-warning<?php } ?> <?php if (app()->tenant->getKey('EMERGENCY_MESSAGE_TYPE') == 'SUCCESS') { ?>top-alert-success<?php } ?>">
+        <div class="<?= $container_class ?>">
           <?php try { ?>
             <?= $markdown->text(app()->tenant->getKey('EMERGENCY_MESSAGE')) ?>
           <?php } catch (Exception $e) { ?>

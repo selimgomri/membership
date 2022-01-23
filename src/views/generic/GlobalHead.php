@@ -62,7 +62,6 @@ Chester-le-Street ASC is a non profit unincorporated association.
   <link rel="stylesheet preload" href="<?= htmlspecialchars($stylesheet) ?>">
   <meta name="color-scheme" content="dark light">
   <link rel="stylesheet preload" href="<?= htmlspecialchars($stylesheetDarkMode) ?>" media="(prefers-color-scheme: dark)">
-  <link rel="stylesheet preload" href="<?= htmlspecialchars(autoUrl("public/css/colour.css")) ?>">
   <?php if (app()->tenant->getKey('SYSTEM_COLOUR')) { ?>
     <meta name="theme-color" content="<?= htmlspecialchars(app()->tenant->getKey('SYSTEM_COLOUR')) ?>" media="(prefers-color-scheme: light)">
   <?php } else { ?>
