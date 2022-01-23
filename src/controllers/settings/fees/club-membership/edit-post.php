@@ -51,10 +51,41 @@ try {
     }
   }
 
+  $values = [];
+  $percents = [];
+
+  for ($i = 1; $i < 13; $i++) {
+    $date = new DateTime("2020-$i-01", new DateTimeZone('Europe/London'));
+
+    if (isset($_POST["value-" . $date->format("m")])) {
+      try {
+        $values[] = MoneyHelpers::decimalToInt($_POST["value-" . $date->format("m")]);
+      } catch (Exception $e) {
+        $values[] = null;
+      }
+    } else {
+      $values[] = null;
+    }
+
+    if (isset($_POST["percent-" . $date->format("m")])) {
+      try {
+        $percents[] = number_format($_POST["percent-" . $date->format("m")], 2);
+      } catch (Exception $e) {
+        $percents[] = null;
+      }
+    } else {
+      $percents[] = null;
+    }
+  }
+
   $newObject = [
     'type' => $type,
     'upgrade_type' => $upgrade,
     'fees' => $fees,
+    'discounts' => [
+      'value' => $values,
+      'percent' => $percents,
+    ]
   ];
 
   $json = json_encode($newObject);
