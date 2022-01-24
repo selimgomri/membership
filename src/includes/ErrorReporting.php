@@ -12,8 +12,8 @@ function reportError($e)
 
       $emailMessage .= '<p><strong>Path:</strong> ' . htmlspecialchars(app('request')->path) . '</p>';
       $emailMessage .= '<p><strong>Host:</strong> ' . htmlspecialchars(app('request')->hostname) . '</p>';
-      $emailMessage .= '<p><strong>Browser:</strong> ' . htmlspecialchars(app('request')->browser()) . '</p>';
-      $emailMessage .= '<p><strong>Platform:</strong> ' . htmlspecialchars(app('request')->platform()) . '</p>';
+      $emailMessage .= '<p><strong>Router Browser:</strong> ' . htmlspecialchars(app('request')->browser()) . '</p>';
+      $emailMessage .= '<p><strong>Router Platform:</strong> ' . htmlspecialchars(app('request')->platform()) . '</p>';
       $emailMessage .= '<p><strong>IP:</strong> ' . htmlspecialchars(getUserIp()) . '</p>';
       if (isset($_SERVER["HTTP_CF_IPCOUNTRY"])) {
         $emailMessage .= '<p><strong>Cloudflare:</strong> YES</p>';
@@ -26,7 +26,7 @@ function reportError($e)
       try {
         $browser = new \WhichBrowser\Parser(getallheaders());
 
-        $emailMessage .= '<p><strong>Browser/Platform:</strong> ' . htmlspecialchars($browser->toString()) . '</p>';
+        $emailMessage .= '<p><strong>Sniffed Browser/Platform:</strong> ' . htmlspecialchars($browser->toString()) . '</p>';
       } catch (Exception $e) {
         $emailMessage .= '<p><strong>U/A Info:</strong> Not Available</p>';
       }
@@ -36,12 +36,10 @@ function reportError($e)
         pre($e);
         $error = ob_get_clean();
         $emailMessage .= $error;
-
-        notifySend(null, 'System Error Report', $emailMessage, "System Admin", getenv('ERROR_REPORTING_EMAIL'));
-        $reportedError = true;
-      } else {
-        $reportedError = false;
       }
+
+      notifySend(null, 'System Error Report', $emailMessage, "System Admin", getenv('ERROR_REPORTING_EMAIL'));
+      $reportedError = true;
     } catch (Exception $f) {
       $reportedError = false;
     }
