@@ -91,7 +91,7 @@ ob_start();
                 $originalFee = Brick\Math\BigDecimal::of(MoneyHelpers::intToDecimal($feeData->fees[0]));
 
                 $discountPercentage = Brick\Math\BigDecimal::of($feeData->discounts->percent[$month])->dividedBy(Brick\Math\BigDecimal::of(100));
-                $discountAmount = $thisFee->multipliedBy($discountPercentage)->toScale(2, Brick\Math\RoundingMode::HALF_UP);
+                $discountAmount = $originalFee->multipliedBy($discountPercentage)->toScale(2, Brick\Math\RoundingMode::HALF_UP);
 
                 $discountAmount = $originalFee->multipliedBy($discountPercentage)->toScale(2, Brick\Math\RoundingMode::HALF_UP);
                 $fee = $originalFee->minus($discountAmount);
