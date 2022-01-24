@@ -117,6 +117,43 @@ include BASE_PATH . 'views/header.php';
             </p>
           </div>
 
+          <h2>Month Discounts</h2>
+
+          <p class="lead">
+            If your club applies discounts on a depending on when a member joins, set the total here.
+          </p>
+
+          <p>
+            Please only choose a percentage discount or defined value discount for a given month. You can however mix and match throughout the year. The behaviour of the membership system is undefined if you supply values for both percentage and defined value.
+          </p>
+
+          <p>
+            For N Members classes, value discounts would be applied on a per person basis. It is recommended to use a percentage discount in this case. For example a £5 discount and two members would mean £10 is taken off the total.
+          </p>
+
+          <p>
+            Discounts are applied only when fees are calculated. This means if you add a new member in August, but they don't complete payment until September, they would pay the August amount unless you manually amend it.
+          </p>
+
+          <?php for ($i = 1; $i < 13; $i++) {
+            $date = new DateTime("2020-$i-01", new DateTimeZone('Europe/London')); ?>
+            <h3><?= htmlspecialchars($date->format('F')) ?></h3>
+            <div class="row">
+              <div class="col">
+                <div class="mb-3">
+                  <label for="<?= htmlspecialchars("value-" . $date->format("m")) ?>" class="form-label"><span class="sr-only"><?= htmlspecialchars($date->format("F")) ?></span> Discount Value</label>
+                  <input type="num" class="form-control" id="<?= htmlspecialchars("value-" . $date->format("m")) ?>" name="<?= htmlspecialchars("value-" . $date->format("m")) ?>" <?php if (isset($json->discounts->value[$i-1])) { ?>value="<?= htmlspecialchars(MoneyHelpers::intToDecimal($json->discounts->value[$i-1])) ?>"<?php } ?>>
+                </div>
+              </div>
+              <div class="col">
+                <div class="mb-3">
+                  <label for="<?= htmlspecialchars("percent-" . $date->format("m")) ?>" class="form-label"><span class="sr-only"><?= htmlspecialchars($date->format("F")) ?></span> Discount Percentage</label>
+                  <input type="num" class="form-control" id="<?= htmlspecialchars("percent-" . $date->format("m")) ?>" name="<?= htmlspecialchars("percent-" . $date->format("m")) ?>" <?php if (isset($json->discounts->percent[$i-1])) { ?>value="<?= htmlspecialchars($json->discounts->percent[$i-1]) ?>"<?php } ?>>
+                </div>
+              </div>
+            </div>
+          <?php } ?>
+
           <?= \SCDS\CSRF::write(); ?>
 
           <p>

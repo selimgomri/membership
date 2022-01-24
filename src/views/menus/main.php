@@ -81,7 +81,8 @@ if (!function_exists('chesterStandardMenu')) {
                   My Members
                 </a>
                 <div class="dropdown-menu" aria-labelledby="swimmersDropdown">
-                  <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("swimmers")) ?>">Members home</a>
+                  <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("members")) ?>">Members Home</a>
+                  <a class="dropdown-item" href="<?= htmlspecialchars(autoUrl("memberships")) ?>">Membership Centre</a>
                   <?php if ($swimmer = $getSwimmers->fetch(PDO::FETCH_ASSOC)) { ?>
                     <div class="dropdown-divider"></div>
                     <h6 class="dropdown-header">My members</h6>

@@ -63,16 +63,107 @@ ob_start();
       <?php do { ?>
         <?php
         $fee = 0;
-        if (isset(($membership->fees)->fees[0])) {
-          $fee = MoneyHelpers::intToDecimal(json_decode($membership->fees)->fees[0]);
+        $feeData = null;
+        $discountMessage = "";
+        try {
+          $feeData = json_decode($membership->fees);
+        } catch (Exception $e) {
+          // Ignore
+        }
+        if ($feeData) {
+          // reportError($feeData);
+          if (isset($feeData->type) && $feeData->type == "PerPerson" && isset($feeData->fees[0])) {
+            $fee = MoneyHelpers::intToDecimal($feeData->fees[0]);
+
+            // Current month
+            $date = new DateTime('now', new DateTimeZone('Europe/London'));
+            $month = (int) $date->format('n') - 1;
+
+            // Ignore discounts if set on both as undefined behaviour
+            if (!(isset($feeData->discounts->value) && $feeData->discounts->value[$month] && isset($feeData->discounts->percent) && $feeData->discounts->percent[$month])) {
+              // Reduce if discount applies
+              if (isset($feeData->discounts->value) && $feeData->discounts->value[$month]) {
+                $fee = MoneyHelpers::intToDecimal($feeData->fees[0] - $feeData->discounts->value[$month]);
+                $discountMessage = "<p class=\"mb-0\">We have automatically applied a discount of <strong>" . htmlspecialchars(MoneyHelpers::formatCurrency(MoneyHelpers::intToDecimal($feeData->discounts->value[$month]), 'GBP')) . "</strong> to this membership. The original value was " . htmlspecialchars(MoneyHelpers::formatCurrency(MoneyHelpers::intToDecimal($feeData->fees[0]), 'GBP')) . ".</p>";
+              }
+
+              if (isset($feeData->discounts->percent) && $feeData->discounts->percent[$month]) {
+                $originalFee = Brick\Math\BigDecimal::of(MoneyHelpers::intToDecimal($feeData->fees[0]));
+
+                $discountPercentage = Brick\Math\BigDecimal::of($feeData->discounts->percent[$month])->dividedBy(Brick\Math\BigDecimal::of(100));
+                $discountAmount = $originalFee->multipliedBy($discountPercentage)->toScale(2, Brick\Math\RoundingMode::HALF_UP);
+
+                $discountAmount = $originalFee->multipliedBy($discountPercentage)->toScale(2, Brick\Math\RoundingMode::HALF_UP);
+                $fee = $originalFee->minus($discountAmount);
+                $discountMessage = "<p class=\"mb-0\">We have automatically applied a <strong>" . htmlspecialchars(number_format($feeData->discounts->percent[$month], 2)) . "%</strong> discount of <strong>" . htmlspecialchars(MoneyHelpers::formatCurrency($discountAmount, 'GBP')) . "</strong> to this membership. The original value was " . htmlspecialchars(MoneyHelpers::formatCurrency($originalFee, 'GBP')) . ".</p>";
+              }
+            }
+          } else if (isset($feeData->type) && $feeData->type == "NSwimmers" && isset($feeData->fees[0])) {
+            $discountMessage = "<p class=\"mb-0\"><strong>Help with fees</strong></p><p>The following standard and discounted (by month) fees apply for this fee;</p>";
+
+            if (!(isset($feeData->discounts->value) && $feeData->discounts->value[$month] && isset($feeData->discounts->percent) && $feeData->discounts->percent[$month])) {
+              $discountMessage .= "<table class=\"table\"><thead class=\"table-info\"><tr><th>Number of members</th><th>Normal Price</th><th>Discount</th><th>Discounted Total</th></tr></thead><tbody>";
+
+              // Reduce if discount applies
+              if (isset($feeData->discounts->value) && $feeData->discounts->value[$month]) {
+                for ($i = 0; $i < sizeof($feeData->fees); $i++) {
+                  $thisFee = Brick\Math\BigDecimal::of(MoneyHelpers::intToDecimal($feeData->fees[$i]));
+                  $perSwimmerDiscount = Brick\Math\BigDecimal::of(MoneyHelpers::intToDecimal($feeData->discounts->value[$month]));
+                  // $discount = MoneyHelpers::formatCurrency($perSwimmerDiscount, 'GBP');
+                  $totalDiscount = $perSwimmerDiscount->multipliedBy(Brick\Math\BigDecimal::of($i + 1));
+                  $discount = MoneyHelpers::formatCurrency($totalDiscount, 'GBP');
+                  $discountedTotal = $thisFee->minus($totalDiscount);
+                  $discountAmount = MoneyHelpers::formatCurrency($discountedTotal, 'GBP');
+
+                  $discountMessage .= "<tr><td>" . htmlspecialchars($i + 1) . "</td><td>" . htmlspecialchars(MoneyHelpers::formatCurrency($thisFee, 'GBP')) . "</td><td>" . htmlspecialchars($discount) . "</td><td>" . htmlspecialchars($discountAmount) . "</td></tr>";
+                }
+              }
+
+              if (isset($feeData->discounts->percent) && $feeData->discounts->percent[$month]) {
+                for ($i = 0; $i < sizeof($feeData->fees); $i++) {
+                  $thisFee = Brick\Math\BigDecimal::of(MoneyHelpers::intToDecimal($feeData->fees[$i]));
+
+                  $discountPercentage = Brick\Math\BigDecimal::of($feeData->discounts->percent[$month])->dividedBy(Brick\Math\BigDecimal::of(100));
+                  $perSwimmerDiscount = $thisFee->multipliedBy($discountPercentage)->toScale(2, Brick\Math\RoundingMode::HALF_UP);
+
+                  $totalDiscount = $perSwimmerDiscount->multipliedBy(Brick\Math\BigDecimal::of($i + 1));
+                  $discount = MoneyHelpers::formatCurrency($totalDiscount, 'GBP');
+                  $discountedTotal = $thisFee->minus($totalDiscount);
+                  $discountAmount = MoneyHelpers::formatCurrency($discountedTotal, 'GBP');
+
+                  $discountMessage .= "<tr><td>" . htmlspecialchars($i + 1) . "</td><td>" . htmlspecialchars(MoneyHelpers::formatCurrency($thisFee, 'GBP')) . "</td><td>" . htmlspecialchars(number_format($feeData->discounts->percent[$month], 2) . "% (" . $discount) . ")</td><td>" . htmlspecialchars($discountAmount) . "</td></tr>";
+                }
+              }
+
+              $discountMessage .= "</tbody></table>";
+            }
+
+            $discountMessage .= "<p>As the value of this fee varies according to the number of members in a family, you only need to charge the difference between the amount already paid for this membership and the total which should be paid for it.</p>";
+
+            // Calculate paid total
+            $getTotal = $db->prepare("SELECT COUNT(`Amount`) AS `count`, SUM(`Amount`) AS `total` FROM memberships INNER JOIN members ON members.MemberID = memberships.Member WHERE members.UserID = ? AND memberships.Year = ?");
+            $getTotal->execute([
+              $batch->user,
+              $year,
+            ]);
+            $total = $getTotal->fetch(PDO::FETCH_OBJ);
+
+            if ($total) {
+              $discountMessage .= "<p class=\"mb-0\"><strong>" . htmlspecialchars(MoneyHelpers::formatCurrency(MoneyHelpers::intToDecimal((int) $total->total), 'GBP')) . "</strong> has already been paid for " . htmlspecialchars($total->count) . " members on the user's account with this membership class.</p>";
+            } else {
+              $discountMessage .= "<p class=\"mb-0\">Total already paid information is currently unavailable.</p>";
+            }
+          }
         }
         ?>
-        <option value="<?= htmlspecialchars($membership->id) ?>" data-id="<?= htmlspecialchars($membership->id) ?>" data-name="<?= htmlspecialchars($membership->name) ?>" data-description="<?= htmlspecialchars($membership->description) ?>" data-fee="<?= htmlspecialchars($fee) ?>" data-fees="<?= htmlspecialchars($membership->fees) ?>" data-type="<?= htmlspecialchars($membership->type) ?>"><?= htmlspecialchars($membership->name) ?></option>
+        <option value="<?= htmlspecialchars($membership->id) ?>" data-id="<?= htmlspecialchars($membership->id) ?>" data-name="<?= htmlspecialchars($membership->name) ?>" data-description="<?= htmlspecialchars($membership->description) ?>" data-fee="<?= htmlspecialchars($fee) ?>" data-fees="<?= htmlspecialchars($membership->fees) ?>" data-type="<?= htmlspecialchars($membership->type) ?>" data-discount-message="<?= htmlspecialchars($discountMessage) ?>"><?= htmlspecialchars($membership->name) ?></option>
       <?php } while ($membership = $getMemberships->fetch(PDO::FETCH_OBJ)); ?>
     </select>
   </div>
 
   <div id="add-membership-form-details-opts" class="collapse">
+
+    <div id="membership-info-box"></div>
 
     <div class="pt-3">
       <div class="mb-3">
