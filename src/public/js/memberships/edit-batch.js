@@ -71,8 +71,14 @@ function getPossibleMemberships(ev) {
           if (ev.target.value != 'null') {
             document.getElementById('membership-amount').value = ev.target.options[ev.target.selectedIndex].dataset.fee;
 
+            if (ev.target.options[ev.target.selectedIndex].dataset.discountMessage) {
+              document.getElementById('membership-info-box').innerHTML = '<div class="alert mt-3 mb-0 alert-info">' + ev.target.options[ev.target.selectedIndex].dataset.discountMessage + '</div>';
+            } else {
+              document.getElementById('membership-info-box').innerHTML = '';
+            }
+
             // Show details
-            let collapse = new bootstrap.Collapse(document.getElementById('add-membership-form-details-opts'));
+            let collapse = new bootstrap.Collapse(document.getElementById('add-membership-form-details-opts'), { toggle: false });
             collapse.show();
 
             // Enable submission
