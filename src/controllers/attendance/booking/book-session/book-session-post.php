@@ -332,6 +332,8 @@ try {
       );
 
       $mail->XMailer = 'Membership by Swimming Club Data Systems';
+      $mail->CharSet = 'UTF-8';
+      $mail->Encoding = 'base64';
 
       // Attempt to assemble the above components into a MIME message.
       if (!$mail->preSend()) {
@@ -366,7 +368,7 @@ try {
       // notifySend(null, $subject, $content, $username, $emailAddress);
     } catch (Exception $e) {
       // Ignore failed send
-      throw($e);
+      throw ($e);
       // reportError($e);
     }
   }

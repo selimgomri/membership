@@ -45,6 +45,7 @@ include BASE_PATH . "views/root/header.php";
           <a href="<?= htmlspecialchars('help-and-support/emergency-contacts') ?>" class="list-group-item list-group-item-action">Emergency contacts</a>
           <a href="<?= htmlspecialchars('help-and-support/covid-19') ?>" class="list-group-item list-group-item-action">Coronavirus (COVID-19)</a>
           <a href="<?= htmlspecialchars('help-and-support/ancilliary') ?>" class="list-group-item list-group-item-action">GDPR and ancilliary documentation</a>
+          <a href="<?= htmlspecialchars('help-and-support/tenant-services') ?>" class="list-group-item list-group-item-action">Tenant Services</a>
           <a href="<?= htmlspecialchars('help-and-support/documentation') ?>" class="list-group-item list-group-item-action">Contributing to our documentation</a>
         </div>
       </div>
